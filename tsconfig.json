@@ -1,0 +1,21 @@
+{
+  "rootDir": ".",
+  "compilerOptions": {
+    "target": "es5",
+    "module": "none",
+    "lib": ["dom", "esnext"],
+    "sourceMap": false,
+    "outFile": "screampark.js"
+  },
+  "include": ["src/**/*.ts"],
+  "files": [
+    "bga-framework.d.ts",
+    "node_modules/bga-zoom/src/zoom-manager.ts",
+    "node_modules/bga-help/src/help-manager.ts",
+    "src/screampark.d.ts",
+    "src/template.ts",
+    "src/libs.d.ts",
+    "src/screampark.ts",
+    "src/define.ts"
+  ]
+}
