@@ -13,6 +13,36 @@
  * ScreamPark stylesheet
  *
  */
+.scp_board {
+  position: relative;
+  background-image: url("img/board.jpg");
+  background-size: cover;
+  aspect-ratio: 1;
+  width: 500px;
+}
+
 #bga-zoom-wrapper {
   direction: ltr;
+}
+
+.scp_gameArea {
+  direction: ltr;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 16px;
+  width: 100%;
+}
+
+.scp_pref-themedBg {
+  background-image: url("img/background.jpg");
+  background-size: 100% 100%;
+}
+.scp_pref-themedBg .player-board {
+  background-image: url("img/background.jpg");
+  background-size: 100% 100%;
+  background-position: bottom;
+  color: white;
 }

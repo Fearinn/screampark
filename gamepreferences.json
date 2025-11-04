@@ -1,1 +1,15 @@
-{}
+{
+  "100": {
+    "name": "Themed background",
+    "values": {
+      "0": {
+        "name": "No"
+      },
+      "1": {
+        "name": "Yes",
+        "cssPref": "scp_pref-themedBg"
+      }
+    },
+    "default": 1
+  }
+}
