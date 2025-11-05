@@ -7,7 +7,9 @@ interface SCP_Player extends Player {}
 
 interface SCP_Gamedatas extends Gamedatas<SCP_Player> {}
 
-interface Managers {}
+interface Managers {
+  zoom: ZoomManager;
+}
 
 interface Stocks {}
 
