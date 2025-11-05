@@ -16,6 +16,24 @@ class Template {
         },
         defaultZoom: window.innerWidth <= 400 ? 0.5 : 1,
       }),
+      animations: new BgaAnimations.Manager({
+        animationsActive: () => this.game.bgaAnimationsActive(),
+      }),
     };
+
+    this.game.stocks = {};
+
+    this.buildManagers();
+    this.setupStocks();
+  }
+
+  public buildManagers() {
+    const vipManager = new VipManager(this.game);
+    vipManager.build();
+  }
+
+  public setupStocks() {
+    const vipManager = new VipManager(this.game);
+    vipManager.setup();
   }
 }

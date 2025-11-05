@@ -386,6 +386,7 @@ var Template = /** @class */ (function () {
         this.game = game;
     }
     Template.prototype.setup = function () {
+        var _this = this;
         this.game.managers = {
             zoom: new ZoomManager({
                 element: document.getElementById("scp_gameArea"),
@@ -396,7 +397,21 @@ var Template = /** @class */ (function () {
                 },
                 defaultZoom: window.innerWidth <= 400 ? 0.5 : 1,
             }),
+            animations: new BgaAnimations.Manager({
+                animationsActive: function () { return _this.game.bgaAnimationsActive(); },
+            }),
         };
+        this.game.stocks = {};
+        this.buildManagers();
+        this.setupStocks();
+    };
+    Template.prototype.buildManagers = function () {
+        var vipManager = new VipManager(this.game);
+        vipManager.build();
+    };
+    Template.prototype.setupStocks = function () {
+        var vipManager = new VipManager(this.game);
+        vipManager.setup();
     };
     return Template;
 }());
@@ -550,6 +565,49 @@ var NotifManager = /** @class */ (function () {
         this.game = game;
     }
     return NotifManager;
+}());
+var VipManager = /** @class */ (function () {
+    function VipManager(game) {
+        this.game = game;
+        this.manager = this.game.managers.vips;
+        this.stocks = this.game.stocks.vips;
+    }
+    VipManager.prototype.build = function () {
+        var managers = this.game.managers;
+        var animations = managers.animations;
+        this.game.managers.vips = new BgaCards.Manager({
+            animationManager: animations,
+            type: "scp_vip",
+            cardHeight: 286,
+            cardWidth: 210,
+            cardBorderRadius: "8px",
+            setupDiv: function (card, element) {
+                element.classList.add("scp_card");
+            },
+            setupFrontDiv: function (_a, element) {
+                var vip_id = _a.type_arg;
+                element.style.backgroundImage = "url(".concat(g_gamethemeurl, "img/vip/VIP_").concat(vip_id, ".jpg)");
+            },
+            setupBackDiv: function (card, element) {
+                element.style.backgroundImage = "url(".concat(g_gamethemeurl, "img/vip/VIP_0.jpg)");
+            },
+        });
+        this.game.stocks.vips = {
+            board: new BgaCards.SlotStock(managers.vips, document.getElementById("scp_vips"), {
+                slotsIds: [1, 2, 3],
+                mapCardToSlot: function (card) {
+                    return Number(card.location_arg);
+                },
+                gap: "52px",
+            }),
+        };
+    };
+    VipManager.prototype.setup = function () {
+        var vipCards = this.game.gamedatas.vipCards;
+        var board = this.stocks.board;
+        board.addCards(vipCards);
+    };
+    return VipManager;
 }());
 var StateManager = /** @class */ (function () {
     function StateManager(game) {

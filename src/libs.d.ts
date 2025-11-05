@@ -419,7 +419,7 @@ declare namespace BgaAnimations {
    * The animation class, giving access to many type of animations, and the possibility to run multiple animation with a delta or sync/async.
    * Instanciate only one for all your game animations.
    */
-  class AnimationManager {
+  class Manager {
     base: BaseAnimationManager;
     private animationSettings;
     /**
@@ -612,7 +612,7 @@ declare namespace BgaAnimations {
   }
 
   const BgaAnimations: {
-    Manager: typeof AnimationManager;
+    Manager: typeof Manager;
   };
 }
 
@@ -660,12 +660,12 @@ declare namespace BgaCards {
    * A card counter for card stocks, visible if the card stock defines the counter property.
    */
   class CardCounter<T> {
-    protected manager: CardManager<T>;
+    protected manager: Manager<T>;
     protected element: HTMLElement;
     protected settings?: CardCounterSettings;
     protected counterDiv: HTMLDivElement | null;
     constructor(
-      manager: CardManager<T>,
+      manager: Manager<T>,
       element: HTMLElement,
       settings?: CardCounterSettings
     );
@@ -788,7 +788,7 @@ declare namespace BgaCards {
    * The abstract stock. It shouldn't be used directly, use stocks that extends it.
    */
   class CardStock<T> {
-    protected manager: CardManager<T>;
+    protected manager: Manager<T>;
     protected element: HTMLElement;
     protected settings?: CardStockSettings<T>;
     protected cards: T[];
@@ -836,7 +836,7 @@ declare namespace BgaCards {
      * @param settings the optional stock settings
      */
     constructor(
-      manager: CardManager<T>,
+      manager: Manager<T>,
       element: HTMLElement,
       settings?: CardStockSettings<T>
     );
@@ -1076,7 +1076,7 @@ declare namespace BgaCards {
     ): void;
   }
 
-  type AnimationManager = any;
+  type AnimationManager = BgaAnimations.Manager;
   /**
    * selectable: only send card click event when the card is selectable.
    * stock-selectable: only send card click event when the stock is selectable (but the card might be disabled).
@@ -1101,7 +1101,7 @@ declare namespace BgaCards {
      */
     removeSettings?: (card: T) => RemoveCardSettings | undefined;
   }
-  interface CardManagerSettings<T> {
+  interface ManagerSettings<T> {
     /**
      * The type of cards, if you game has multiple cards types (each card manager should have a different type).
      * Default `${yourgamename}-card`.
@@ -1265,7 +1265,8 @@ declare namespace BgaCards {
      */
     updateBackDelay?: number;
   }
-  class CardManager<T> {
+
+  class Manager<T> {
     private settings;
     animationManager: AnimationManager;
     private stocks;
@@ -1273,9 +1274,9 @@ declare namespace BgaCards {
     private updateFrontTimeoutId;
     private updateBackTimeoutId;
     /**
-     * @param settings a `CardManagerSettings` object
+     * @param settings a `ManagerSettings` object
      */
-    constructor(settings: CardManagerSettings<T>);
+    constructor(settings: ManagerSettings<T>);
     addStock(stock: CardStock<T>): void;
     removeStock(stock: CardStock<T>): void;
     /**
@@ -1471,10 +1472,10 @@ declare namespace BgaCards {
    * Stock to represent a deck, where the player can see all cards by hovering or pressing it.
    */
   class AllVisibleDeck<T> extends CardStock<T> {
-    protected manager: CardManager<T>;
+    protected manager: Manager<T>;
     protected element: HTMLElement;
     constructor(
-      manager: CardManager<T>,
+      manager: Manager<T>,
       element: HTMLElement,
       settings: AllVisibleDeckSettings<T>
     );
@@ -1559,7 +1560,7 @@ declare namespace BgaCards {
    * Stock to represent a deck. (pile of cards, with a fake 3d effect of thickness).
    */
   class Deck<T> extends CardStock<T> {
-    protected manager: CardManager<T>;
+    protected manager: Manager<T>;
     protected element: HTMLElement;
     protected cardNumber: number;
     protected autoUpdateCardNumber: boolean;
@@ -1567,7 +1568,7 @@ declare namespace BgaCards {
     protected fakeCardGenerator?: (deckId: string) => T;
     protected thicknesses: number[];
     constructor(
-      manager: CardManager<T>,
+      manager: Manager<T>,
       element: HTMLElement,
       settings: DeckSettings<T>
     );
@@ -1627,13 +1628,13 @@ declare namespace BgaCards {
    * you can control the disalignment by setting the values of the `DiscardDeckSettings`.
    */
   class DiscardDeck<T> extends CardStock<T> {
-    protected manager: CardManager<T>;
+    protected manager: Manager<T>;
     protected element: HTMLElement;
     protected maxHorizontalShift: number;
     protected maxVerticalShift: number;
     protected maxRotation: number;
     constructor(
-      manager: CardManager<T>,
+      manager: Manager<T>,
       element: HTMLElement,
       settings?: DiscardDeckSettings<T>
     );
@@ -1667,7 +1668,7 @@ declare namespace BgaCards {
    * A basic stock for a list of cards, based on flex.
    */
   class LineStock<T> extends CardStock<T> {
-    protected manager: CardManager<T>;
+    protected manager: Manager<T>;
     protected element: HTMLElement;
     /**
      * @param manager the card manager
@@ -1675,7 +1676,7 @@ declare namespace BgaCards {
      * @param settings a `LineStockSettings` object
      */
     constructor(
-      manager: CardManager<T>,
+      manager: Manager<T>,
       element: HTMLElement,
       settings?: LineStockSettings<T>
     );
@@ -1718,7 +1719,7 @@ declare namespace BgaCards {
    * A stock with fixed slots (some can be empty)
    */
   class SlotStock<T> extends LineStock<T> {
-    protected manager: CardManager<T>;
+    protected manager: Manager<T>;
     protected element: HTMLElement;
     protected slotsIds: SlotId[];
     protected slots: HTMLDivElement[];
@@ -1748,7 +1749,7 @@ declare namespace BgaCards {
      * @param settings a `SlotStockSettings` object
      */
     constructor(
-      manager: CardManager<T>,
+      manager: Manager<T>,
       element: HTMLElement,
       settings: SlotStockSettings<T>
     );
@@ -1882,7 +1883,7 @@ declare namespace BgaCards {
    * A grid stock with fixed slots (some can be empty)
    */
   class GridStock<T> extends SlotStock<T> {
-    protected manager: CardManager<T>;
+    protected manager: Manager<T>;
     protected element: HTMLElement;
     protected minX: number | null;
     protected minY: number | null;
@@ -1895,7 +1896,7 @@ declare namespace BgaCards {
      * @param settings a `GridStockSettings` object
      */
     constructor(
-      manager: CardManager<T>,
+      manager: Manager<T>,
       element: HTMLElement,
       settings: GridStockSettings<T>
     );
@@ -2013,7 +2014,7 @@ declare namespace BgaCards {
    * If the stock is not visible because it is under the viewport, it will be floating at the bottom of the viewport.
    */
   class HandStock<T> extends CardStock<T> {
-    protected manager: CardManager<T>;
+    protected manager: Manager<T>;
     protected settings: HandStockSettings<T>;
     protected minOverlap: number;
     protected fanShaped: boolean;
@@ -2025,7 +2026,7 @@ declare namespace BgaCards {
     protected lastHandWidth: number;
     protected emptyHandDiv: HTMLElement | null;
     constructor(
-      manager: CardManager<T>,
+      manager: Manager<T>,
       element: HTMLElement,
       settings: HandStockSettings<T>
     );
@@ -2062,7 +2063,7 @@ declare namespace BgaCards {
    * A stock with manually placed cards
    */
   class ManualPositionStock<T> extends CardStock<T> {
-    protected manager: CardManager<T>;
+    protected manager: Manager<T>;
     protected element: HTMLElement;
     protected updateDisplay: (
       element: HTMLElement,
@@ -2075,7 +2076,7 @@ declare namespace BgaCards {
      * @param element the stock element (should be an empty HTML Element)
      */
     constructor(
-      manager: CardManager<T>,
+      manager: Manager<T>,
       element: HTMLElement,
       settings: CardStockSettings<T>,
       updateDisplay: (
@@ -2140,7 +2141,7 @@ declare namespace BgaCards {
    * A stock with button to scroll left/right if content is bigger than available width
    */
   class ScrollableStock<T> extends CardStock<T> {
-    protected manager: CardManager<T>;
+    protected manager: Manager<T>;
     protected scrollStep: number;
     protected element: HTMLElement;
     /**
@@ -2149,7 +2150,7 @@ declare namespace BgaCards {
      * @param settings a `SlotStockSettings` object
      */
     constructor(
-      manager: CardManager<T>,
+      manager: Manager<T>,
       elementWrapper: HTMLElement,
       settings: ScrollableStockSettings<T>
     );
@@ -2172,7 +2173,7 @@ declare namespace BgaCards {
    * A stock to make cards disappear (to automatically remove discarded cards, or to represent a bag)
    */
   class VoidStock<T> extends CardStock<T> {
-    protected manager: CardManager<T>;
+    protected manager: Manager<T>;
     protected element: HTMLElement;
     protected settings?: CardStockSettings<T>;
     /**
@@ -2181,7 +2182,7 @@ declare namespace BgaCards {
      * @param settings the optional stock settings
      */
     constructor(
-      manager: CardManager<T>,
+      manager: Manager<T>,
       element: HTMLElement,
       settings?: CardStockSettings<T>
     );
@@ -2194,6 +2195,22 @@ declare namespace BgaCards {
      */
     addCard(card: T, settings?: AddCardToVoidStockSettings): Promise<boolean>;
   }
+
+  const BgaCards: {
+    Manager: typeof Manager;
+    sort: typeof sort;
+    AllVisibleDeck: typeof AllVisibleDeck;
+    CardStock: typeof CardStock;
+    Deck: typeof Deck;
+    DiscardDeck: typeof DiscardDeck;
+    GridStock: typeof GridStock;
+    HandStock: typeof HandStock;
+    LineStock: typeof LineStock;
+    ManualPositionStock: typeof ManualPositionStock;
+    ScrollableStock: typeof ScrollableStock;
+    SlotStock: typeof SlotStock;
+    VoidStock: typeof VoidStock;
+  };
 }
 
 declare namespace BgaScoreSheet {

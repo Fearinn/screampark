@@ -67,8 +67,21 @@
   position: relative;
   background-image: url("img/board.jpg");
   background-size: cover;
+  box-shadow: 0 0 16px 1px #808080;
   aspect-ratio: 1;
   width: 1000px;
+}
+
+.scp_vips {
+  position: absolute;
+  top: 14%;
+}
+
+.scp_card {
+  background-size: cover;
+}
+.scp_card .bga-cards_card-side {
+  background-size: cover;
 }
 
 #bga-zoom-wrapper {
