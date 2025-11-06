@@ -72,6 +72,15 @@
   width: 1000px;
 }
 
+.scp_smIcon {
+  position: relative;
+  top: 5px;
+  display: inline-block;
+  background-size: cover;
+  aspect-ratio: 1;
+  width: 20px;
+}
+
 .scp_vips {
   position: absolute;
   top: 14%;

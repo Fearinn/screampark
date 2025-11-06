@@ -6,13 +6,14 @@ interface SCP extends GameGui<SCP_Gamedatas> {
 interface SCP_Player extends Player {}
 
 interface SCP_Gamedatas extends Gamedatas<SCP_Player> {
+  VIPS: VIP[];
   vipCards: VipCard[];
 }
 
 interface Managers {
   zoom: ZoomManager;
   animations: BgaAnimations.Manager;
-  vips?: BgaCards.CardManager<SCP_Card>;
+  vips?: BgaCards.Manager<SCP_Card>;
 }
 
 interface Stocks {

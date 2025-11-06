@@ -2,11 +2,13 @@ class VipManager {
   private readonly game: SCP;
   private stocks: VipStocks;
   private manager: BgaCards.Manager<SCP_Card>;
+  private VIPS: VIP[];
 
   constructor(game: SCP) {
     this.game = game;
     this.manager = this.game.managers.vips;
     this.stocks = this.game.stocks.vips;
+    this.VIPS = this.game.gamedatas.VIPS;
   }
 
   public build(): void {
@@ -19,8 +21,26 @@ class VipManager {
       cardHeight: 286,
       cardWidth: 210,
       cardBorderRadius: "8px",
-      setupDiv: (card, element) => {
+      setupDiv: ({ type_arg: vip_id }, element) => {
         element.classList.add("scp_card");
+
+        const { label: vip_label, description: vip_description } =
+          this.VIPS[vip_id];
+
+        this.game.addTooltip(
+          element.id,
+          this.game.format_string_recursive(
+            _("${vip_label}: ${vip_description}"),
+            {
+              vip_label,
+              vip_description: {
+                log: vip_description,
+                args: {},
+              },
+            }
+          ),
+          ""
+        );
       },
       setupFrontDiv: ({ type_arg: vip_id }, element) => {
         element.style.backgroundImage = `url(${g_gamethemeurl}img/vip/VIP_${vip_id}.jpg)`;
@@ -54,6 +74,12 @@ class VipManager {
 }
 
 interface VipCard extends SCP_Card {}
+
+interface VIP {
+  id: number;
+  label: string;
+  description: string;
+}
 
 interface VipStocks {
   board: BgaCards.SlotStock<SCP_Card>;

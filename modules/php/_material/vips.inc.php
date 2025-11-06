@@ -47,7 +47,7 @@ $this->VIPS = [
         "id" => 8,
         "name" => "Secret Shopper",
         "label" => clienttranslate('Secret Shopper'),
-        "description" => clienttranslate('Advance if the next scene has any ${staffing_icon}'),
+        "description" => clienttranslate('Advance if the next scene has any ${staffCost_icon}'),
     ],
     9 => [
         "id" => 9,
