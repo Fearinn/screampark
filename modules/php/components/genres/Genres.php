@@ -26,15 +26,5 @@ class Genres extends Cards
             ];
         }
         $this->deck->createCards($cards);
-
-        foreach ($this->GENRES as $genre_id => $genre) {
-            $card_id = $this->game->getUniqueValueFromDB("SELECT card_id FROM {$this->dbTable} 
-            WHERE card_type_arg={$genre_id} AND card_location='box' LIMIT 1");
-
-            $this->deck->moveCard($card_id, "deck");
-        }
-
-        $this->deck->shuffle("box");
-        $this->deck->shuffle("deck");
     }
 }

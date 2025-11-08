@@ -14,9 +14,10 @@ trait Gamedatas
         $Vips->getPublic();
 
         $gamedatas = [
-            "VIPS" => $game->VIPS,
             "players" => $game->getCollectionFromDb("SELECT `player_id` `id`, `player_score` `score` FROM `player`"),
+            "VIPS" => $game->VIPS,
             "vipCards" => $Vips->getPublic(),
+            "GENRES" => $game->GENRES,
         ];
 
         return $gamedatas;

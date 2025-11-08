@@ -22,18 +22,14 @@ class Template {
     };
 
     this.game.stocks = {};
-
-    this.buildManagers();
     this.setupStocks();
-  }
-
-  public buildManagers() {
-    const vipManager = new VipManager(this.game);
-    vipManager.build();
   }
 
   public setupStocks() {
     const vipManager = new VipManager(this.game);
     vipManager.setup();
+
+    const genreManager = new GenreManager(this.game);
+    genreManager.setup();
   }
 }

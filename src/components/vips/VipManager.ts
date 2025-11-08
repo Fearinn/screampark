@@ -11,7 +11,7 @@ class VipManager {
     this.VIPS = this.game.gamedatas.VIPS;
   }
 
-  public build(): void {
+  private build(): void {
     const { managers } = this.game;
     const { animations } = managers;
 
@@ -49,6 +49,7 @@ class VipManager {
         element.style.backgroundImage = `url(${g_gamethemeurl}img/vip/VIP_0.jpg)`;
       },
     });
+    this.manager = this.game.managers.vips;
 
     this.game.stocks.vips = {
       board: new BgaCards.SlotStock(
@@ -63,9 +64,12 @@ class VipManager {
         }
       ),
     };
+    this.stocks = this.game.stocks.vips;
   }
 
   public setup(): void {
+    this.build();
+
     const { vipCards } = this.game.gamedatas;
     const { board } = this.stocks;
 
