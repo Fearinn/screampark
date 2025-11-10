@@ -42,7 +42,6 @@ class Game extends \Bga\GameFramework\Table
         $this->initGameStateLabels([]);
 
         $this->vip_cards = $this->deckFactory->createDeck("vips");
-        $this->genre_cards = $this->deckFactory->createDeck("genres");
     }
 
     public function getGameProgression()

@@ -38,9 +38,6 @@ trait SetupNewGame
         $Vips = new Vips($this);
         $Vips->setup();
 
-        $Genres = new Genres($this);
-        $Genres->setup();
-
         return PlayerTurn::class;
     }
 }
