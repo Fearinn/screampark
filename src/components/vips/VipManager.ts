@@ -24,17 +24,16 @@ class VipManager {
       setupDiv: ({ type_arg: vip_id }, element) => {
         element.classList.add("scp_card");
 
-        const { label: vip_label, description: vip_description } =
-          this.VIPS[vip_id];
+        const { label, description } = this.VIPS[vip_id];
 
         this.game.addTooltip(
           element.id,
           this.game.format_string_recursive(
             _("${vip_label}: ${vip_description}"),
             {
-              vip_label,
+              vip_label: _(label),
               vip_description: {
-                log: vip_description,
+                log: _(description),
                 args: {},
               },
             }

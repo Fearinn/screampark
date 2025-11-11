@@ -409,6 +409,8 @@ var Template = /** @class */ (function () {
         vipManager.setup();
         var genreManager = new GenreManager(this.game);
         genreManager.setup();
+        var sceneManager = new SceneManager(this.game);
+        sceneManager.setup();
     };
     return Template;
 }());
@@ -653,6 +655,60 @@ var GenreManager = /** @class */ (function () {
     };
     return GenreManager;
 }());
+var SceneManager = /** @class */ (function () {
+    function SceneManager(game) {
+        this.game = game;
+        var _a = this.game, managers = _a.managers, stocks = _a.stocks, gamedatas = _a.gamedatas;
+        this.manager = managers.scenes;
+        this.stocks = stocks.scenes;
+        this.GENRES = gamedatas.GENRES;
+        this.SCENES = gamedatas.SCENES;
+    }
+    SceneManager.prototype.build = function () {
+        var _this = this;
+        var managers = this.game.managers;
+        var animations = managers.animations;
+        this.game.managers.scenes = new BgaCards.Manager({
+            animationManager: animations,
+            type: "scp_scene",
+            cardHeight: 285,
+            cardWidth: 150,
+            cardBorderRadius: "8px",
+            setupDiv: function (_a, element) {
+                var scene_id = _a.type_arg;
+                element.classList.add("scp_card");
+                if (!scene_id) {
+                    return;
+                }
+                var _b = _this.SCENES[scene_id], up = _b.up, down = _b.down;
+                _this.game.addTooltip(element.id, _this.game.format_string_recursive(_("${up_label} / ${down_label}"), {
+                    up_label: _(up.label),
+                    down_label: _(down.label),
+                }), "");
+            },
+            setupFrontDiv: function (_a, element) {
+                var scene_id = _a.type_arg;
+                element.style.backgroundImage = "url(".concat(g_gamethemeurl, "img/scenes/scene_").concat(scene_id, ".jpg)");
+            },
+            setupBackDiv: function (_a, element) {
+                var scene_id = _a.type_arg;
+                element.style.backgroundImage = "url(".concat(g_gamethemeurl, "img/scenes/scene_0.jpg)");
+            },
+        });
+        this.manager = this.game.managers.vips;
+        this.game.stocks.scenes = {
+            deck: new BgaCards.Deck(managers.scenes, document.getElementById("scp_sceneDeck"), {}),
+        };
+        this.stocks = this.game.stocks.scenes;
+    };
+    SceneManager.prototype.setup = function () {
+        this.build();
+        var deck = this.stocks.deck;
+        var sceneDeckCount = this.game.gamedatas.sceneDeckCount;
+        deck.setCardNumber(sceneDeckCount);
+    };
+    return SceneManager;
+}());
 var VipManager = /** @class */ (function () {
     function VipManager(game) {
         this.game = game;
@@ -673,11 +729,11 @@ var VipManager = /** @class */ (function () {
             setupDiv: function (_a, element) {
                 var vip_id = _a.type_arg;
                 element.classList.add("scp_card");
-                var _b = _this.VIPS[vip_id], vip_label = _b.label, vip_description = _b.description;
+                var _b = _this.VIPS[vip_id], label = _b.label, description = _b.description;
                 _this.game.addTooltip(element.id, _this.game.format_string_recursive(_("${vip_label}: ${vip_description}"), {
-                    vip_label: vip_label,
+                    vip_label: _(label),
                     vip_description: {
-                        log: vip_description,
+                        log: _(description),
                         args: {},
                     },
                 }), "");

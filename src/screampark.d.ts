@@ -9,6 +9,8 @@ interface SCP_Gamedatas extends Gamedatas<SCP_Player> {
   VIPS: VIP[];
   vipCards: VipCard[];
   GENRES: GENRE[];
+  SCENES: SCENE[];
+  sceneDeckCount: number;
 }
 
 interface Managers {
@@ -16,11 +18,13 @@ interface Managers {
   animations: BgaAnimations.Manager;
   vips?: BgaCards.Manager<SCP_Card>;
   genres?: BgaCards.Manager<SCP_Card>;
+  scenes?: BgaCards.Manager<SCP_Card>;
 }
 
 interface Stocks {
   vips?: VipStocks;
   genres?: GenreStocks;
+  scenes?: SceneStocks;
 }
 
 type ActionName = "";

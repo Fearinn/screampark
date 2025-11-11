@@ -92,6 +92,12 @@
   bottom: 11%;
 }
 
+.scp_sceneDeck {
+  position: absolute !important;
+  left: 13%;
+  bottom: 11%;
+}
+
 .scp_card {
   background-size: cover;
 }
