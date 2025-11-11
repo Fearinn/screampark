@@ -2,7 +2,7 @@
 
 namespace Bga\Games\ScreamPark;
 
-use Bga\Games\ScreamPark\components\genres\Genres;
+use Bga\Games\ScreamPark\components\scenes\Scenes;
 use Bga\Games\ScreamPark\components\vips\Vips;
 use Bga\Games\ScreamPark\Game;
 use Bga\Games\ScreamPark\States\PlayerTurn;
@@ -37,6 +37,9 @@ trait SetupNewGame
 
         $Vips = new Vips($this);
         $Vips->setup();
+
+        $Scenes = new Scenes($this);
+        $Scenes->setup();
 
         return PlayerTurn::class;
     }
