@@ -63,7 +63,7 @@ class SCP extends GameGui<SCP_Gamedatas> implements SCP {
         args.staffCost_icon = `<span class="scp_smIcon scp_genreIcon" style="background-image: ${backgroundImage};"></span>`;
       }
 
-      if (log.includes("$lightning_icon")) {
+      if (log.includes("${lightning_icon}")) {
         const backgroundImage = `url(${g_gamethemeurl}img/icons/lightning.png)`;
         args.lightning_icon = `<span class="scp_smIcon scp_genreIcon" style="background-image: ${backgroundImage};"></span>`;
       }

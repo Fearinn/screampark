@@ -515,7 +515,7 @@ var SCP = /** @class */ (function (_super) {
                 var backgroundImage = "url(".concat(g_gamethemeurl, "img/icons/staffCost.png)");
                 args.staffCost_icon = "<span class=\"scp_smIcon scp_genreIcon\" style=\"background-image: ".concat(backgroundImage, ";\"></span>");
             }
-            if (log.includes("$lightning_icon")) {
+            if (log.includes("${lightning_icon}")) {
                 var backgroundImage = "url(".concat(g_gamethemeurl, "img/icons/lightning.png)");
                 args.lightning_icon = "<span class=\"scp_smIcon scp_genreIcon\" style=\"background-image: ".concat(backgroundImage, ";\"></span>");
             }
