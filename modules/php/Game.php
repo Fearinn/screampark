@@ -29,11 +29,13 @@ class Game extends \Bga\GameFramework\Table
     use Gamedatas;
     use SetupNewGame;
 
-    public readonly Deck $vip_cards;
-    public readonly Deck $scene_cards;
     public readonly array $VIPS;
+    public readonly Deck $vip_cards;
     public readonly array $GENRES;
     public readonly array $SCENES;
+    public readonly Deck $scene_cards;
+    public readonly array $THEMES;
+    public readonly Deck $theme_cards;
 
     public function __construct()
     {
@@ -44,6 +46,7 @@ class Game extends \Bga\GameFramework\Table
 
         $this->vip_cards = $this->deckFactory->createDeck("vips");
         $this->scene_cards = $this->deckFactory->createDeck("scenes");
+        $this->theme_cards = $this->deckFactory->createDeck("themes");
     }
 
     public function getGameProgression()
