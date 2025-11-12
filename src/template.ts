@@ -29,9 +29,6 @@ class Template {
     const vipManager = new VipManager(this.game);
     vipManager.setup();
 
-    const genreManager = new GenreManager(this.game);
-    genreManager.setup();
-
     const sceneManager = new SceneManager(this.game);
     sceneManager.setup();
   }

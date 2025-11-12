@@ -1,7 +1,7 @@
 class SceneManager {
   private readonly game: SCP;
   private stocks: SceneStocks;
-  private manager: BgaCards.Manager<SCP_Card>;
+  private manager: BgaCards.Manager<SceneCard>;
   private readonly GENRES: GENRE[];
   private readonly SCENES: SCENE[];
 
@@ -16,22 +16,42 @@ class SceneManager {
   }
 
   private build(): void {
-    const { managers } = this.game;
+    const { managers, gamedatas } = this.game;
     const { animations } = managers;
 
-    this.game.managers.scenes = new BgaCards.Manager({
+    managers.scenes = new BgaCards.Manager<SceneCard>({
       animationManager: animations,
       type: "scp_scene",
       cardHeight: 285,
       cardWidth: 150,
       cardBorderRadius: "8px",
-      setupDiv: ({ type_arg: scene_id }, element) => {
+      setupDiv: ({ type }, element) => {
         element.classList.add("scp_card");
+
+        if (type === "genre") {
+          element.classList.add("scp_genre");
+        }
+      },
+      setupFrontDiv: ({ type, type_arg: scene_id }, element) => {
+        if (type === "genre") {
+          element.style.backgroundImage = `url(${g_gamethemeurl}img/genres/genre_${scene_id}.jpg)`;
+
+          const { label: genre_label } = this.GENRES[scene_id];
+          this.game.addTooltip(
+            element.id,
+            this.game.format_string_recursive(_("${genre_label}"), {
+              genre_label,
+            }),
+            ""
+          );
+          return;
+        }
 
         if (!scene_id) {
           return;
         }
 
+        element.style.backgroundImage = `url(${g_gamethemeurl}img/scenes/scene_${scene_id}.jpg)`;
         const { up, down } = this.SCENES[scene_id];
 
         this.game.addTooltip(
@@ -43,19 +63,25 @@ class SceneManager {
           ""
         );
       },
-      setupFrontDiv: ({ type_arg: scene_id }, element) => {
-        element.style.backgroundImage = `url(${g_gamethemeurl}img/scenes/scene_${scene_id}.jpg)`;
-      },
-      setupBackDiv: ({ type_arg: scene_id }, element) => {
+      setupBackDiv: (card, element) => {
         element.style.backgroundImage = `url(${g_gamethemeurl}img/scenes/scene_0.jpg)`;
       },
     });
-    this.manager = this.game.managers.vips;
+    this.manager = this.game.managers.scenes;
+
+    const { sceneDeckCount } = gamedatas;
 
     this.game.stocks.scenes = {
       deck: new BgaCards.Deck(
-        managers.scenes,
+        this.manager,
         document.getElementById("scp_sceneDeck"),
+        {
+          cardNumber: sceneDeckCount,
+        }
+      ),
+      genres: new BgaCards.Deck(
+        this.manager,
+        document.getElementById("scp_genreDeck"),
         {}
       ),
     };
@@ -64,9 +90,17 @@ class SceneManager {
 
   public setup(): void {
     this.build();
-    const { deck } = this.stocks;
-    const { sceneDeckCount } = this.game.gamedatas;
-    deck.setCardNumber(sceneDeckCount);
+    const { deck, genres } = this.stocks;
+
+    Object.keys(this.GENRES).forEach((genre_id) => {
+      genres.addCard({
+        id: Number(genre_id),
+        type: "genre",
+        type_arg: Number(genre_id),
+        location: "deck",
+        location_arg: Math.floor(Math.random() * 5) + 1,
+      });
+    });
   }
 }
 
@@ -87,5 +121,15 @@ interface SCENE {
 }
 
 interface SceneStocks {
-  deck: BgaCards.Deck<SCP_Card>;
+  deck: BgaCards.Deck<SceneCard>;
+  genres: BgaCards.Deck<SceneCard>;
+}
+
+interface SceneCard extends SCP_Card {
+  type: "scene" | "genre";
+}
+
+interface GENRE {
+  id: number;
+  label: string;
 }

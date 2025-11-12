@@ -17,13 +17,11 @@ interface Managers {
   zoom: ZoomManager;
   animations: BgaAnimations.Manager;
   vips?: BgaCards.Manager<SCP_Card>;
-  genres?: BgaCards.Manager<SCP_Card>;
-  scenes?: BgaCards.Manager<SCP_Card>;
+  scenes?: BgaCards.Manager<SceneCard>;
 }
 
 interface Stocks {
   vips?: VipStocks;
-  genres?: GenreStocks;
   scenes?: SceneStocks;
 }
 

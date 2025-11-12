@@ -407,8 +407,6 @@ var Template = /** @class */ (function () {
     Template.prototype.setupStocks = function () {
         var vipManager = new VipManager(this.game);
         vipManager.setup();
-        var genreManager = new GenreManager(this.game);
-        genreManager.setup();
         var sceneManager = new SceneManager(this.game);
         sceneManager.setup();
     };
@@ -600,61 +598,6 @@ var NotifManager = /** @class */ (function () {
     }
     return NotifManager;
 }());
-var GenreManager = /** @class */ (function () {
-    function GenreManager(game) {
-        this.game = game;
-        this.manager = this.game.managers.genres;
-        this.stocks = this.game.stocks.genres;
-        this.GENRES = this.game.gamedatas.GENRES;
-    }
-    GenreManager.prototype.build = function () {
-        var _this = this;
-        var managers = this.game.managers;
-        var animations = managers.animations;
-        this.game.managers.genres = new BgaCards.Manager({
-            animationManager: animations,
-            type: "scp_genre",
-            cardHeight: 285,
-            cardWidth: 150,
-            cardBorderRadius: "8px",
-            setupDiv: function (_a, element) {
-                var genre_id = _a.type_arg;
-                element.classList.add("scp_card");
-                var genre_label = _this.GENRES[genre_id].label;
-                _this.game.addTooltip(element.id, _this.game.format_string_recursive(_("${genre_label}"), {
-                    genre_label: genre_label,
-                }), "");
-            },
-            setupFrontDiv: function (_a, element) {
-                var genre_id = _a.type_arg;
-                element.style.backgroundImage = "url(".concat(g_gamethemeurl, "img/genres/genre_").concat(genre_id, ".jpg)");
-            },
-        });
-        this.manager = this.game.managers.vips;
-        this.game.stocks.genres = {
-            deck: new BgaCards.Deck(managers.genres, document.getElementById("scp_genreDeck"), {
-                sort: function (a, b) {
-                    return a.location_arg - b.location_arg;
-                },
-            }),
-        };
-        this.stocks = this.game.stocks.genres;
-    };
-    GenreManager.prototype.setup = function () {
-        this.build();
-        var deck = this.stocks.deck;
-        Object.keys(this.GENRES).forEach(function (genre_id) {
-            deck.addCard({
-                id: Number(genre_id),
-                type: "".concat(genre_id),
-                type_arg: Number(genre_id),
-                location: "deck",
-                location_arg: Math.floor(Math.random() * 5) + 1,
-            });
-        });
-    };
-    return GenreManager;
-}());
 var SceneManager = /** @class */ (function () {
     function SceneManager(game) {
         this.game = game;
@@ -666,46 +609,67 @@ var SceneManager = /** @class */ (function () {
     }
     SceneManager.prototype.build = function () {
         var _this = this;
-        var managers = this.game.managers;
+        var _a = this.game, managers = _a.managers, gamedatas = _a.gamedatas;
         var animations = managers.animations;
-        this.game.managers.scenes = new BgaCards.Manager({
+        managers.scenes = new BgaCards.Manager({
             animationManager: animations,
             type: "scp_scene",
             cardHeight: 285,
             cardWidth: 150,
             cardBorderRadius: "8px",
             setupDiv: function (_a, element) {
-                var scene_id = _a.type_arg;
+                var type = _a.type;
                 element.classList.add("scp_card");
+                if (type === "genre") {
+                    element.classList.add("scp_genre");
+                }
+            },
+            setupFrontDiv: function (_a, element) {
+                var type = _a.type, scene_id = _a.type_arg;
+                if (type === "genre") {
+                    element.style.backgroundImage = "url(".concat(g_gamethemeurl, "img/genres/genre_").concat(scene_id, ".jpg)");
+                    var genre_label = _this.GENRES[scene_id].label;
+                    _this.game.addTooltip(element.id, _this.game.format_string_recursive(_("${genre_label}"), {
+                        genre_label: genre_label,
+                    }), "");
+                    return;
+                }
                 if (!scene_id) {
                     return;
                 }
+                element.style.backgroundImage = "url(".concat(g_gamethemeurl, "img/scenes/scene_").concat(scene_id, ".jpg)");
                 var _b = _this.SCENES[scene_id], up = _b.up, down = _b.down;
                 _this.game.addTooltip(element.id, _this.game.format_string_recursive(_("${up_label} / ${down_label}"), {
                     up_label: _(up.label),
                     down_label: _(down.label),
                 }), "");
             },
-            setupFrontDiv: function (_a, element) {
-                var scene_id = _a.type_arg;
-                element.style.backgroundImage = "url(".concat(g_gamethemeurl, "img/scenes/scene_").concat(scene_id, ".jpg)");
-            },
-            setupBackDiv: function (_a, element) {
-                var scene_id = _a.type_arg;
+            setupBackDiv: function (card, element) {
                 element.style.backgroundImage = "url(".concat(g_gamethemeurl, "img/scenes/scene_0.jpg)");
             },
         });
-        this.manager = this.game.managers.vips;
+        this.manager = this.game.managers.scenes;
+        var sceneDeckCount = gamedatas.sceneDeckCount;
         this.game.stocks.scenes = {
-            deck: new BgaCards.Deck(managers.scenes, document.getElementById("scp_sceneDeck"), {}),
+            deck: new BgaCards.Deck(this.manager, document.getElementById("scp_sceneDeck"), {
+                cardNumber: sceneDeckCount,
+            }),
+            genres: new BgaCards.Deck(this.manager, document.getElementById("scp_genreDeck"), {}),
         };
         this.stocks = this.game.stocks.scenes;
     };
     SceneManager.prototype.setup = function () {
         this.build();
-        var deck = this.stocks.deck;
-        var sceneDeckCount = this.game.gamedatas.sceneDeckCount;
-        deck.setCardNumber(sceneDeckCount);
+        var _a = this.stocks, deck = _a.deck, genres = _a.genres;
+        Object.keys(this.GENRES).forEach(function (genre_id) {
+            genres.addCard({
+                id: Number(genre_id),
+                type: "genre",
+                type_arg: Number(genre_id),
+                location: "deck",
+                location_arg: Math.floor(Math.random() * 5) + 1,
+            });
+        });
     };
     return SceneManager;
 }());
