@@ -4,6 +4,12 @@
   bottom: 11%;
 }
 
+.scp_scenes {
+  &:empty {
+    display: none;
+  }
+}
+
 .scp_genreDeck {
   position: absolute !important;
   right: 13%;

@@ -76,6 +76,7 @@
   display: flex;
   align-items: start;
   gap: 24px;
+  flex-wrap: wrap;
 }
 
 .scp_playerZone {
@@ -83,8 +84,21 @@
   display: flex;
   flex-direction: column;
   border-radius: 8px;
-  padding: 0 16px 16px 16px;
   box-shadow: 0 0 8px #808080;
+}
+.scp_playerZone .scp_title {
+  font-size: 20px;
+  text-shadow: black 0 0 1px, black 0 0 1px, black 0 0 1px, black 0 0 1px, black 0 0 1px, black 0 0 1px;
+  border-top-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  padding: 4px 8px;
+  width: fit-content;
+}
+
+.scp_zoneContent {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
 }
 
 h3,
@@ -122,6 +136,10 @@ p {
   bottom: 11%;
 }
 
+.scp_scenes:empty {
+  display: none;
+}
+
 .scp_genreDeck {
   position: absolute !important;
   right: 13%;
@@ -153,8 +171,9 @@ p {
   direction: ltr;
   position: relative;
   display: flex;
-  align-items: center;
-  flex-direction: column;
+  align-items: start;
+  justify-content: center;
+  flex-wrap: wrap;
   gap: 32px;
   padding: 8px 16px;
   width: 100%;

@@ -74,6 +74,7 @@ class ThemeManager {
         this.manager,
         document.getElementById(`scp_themes-${player_id}`),
         {
+          wrap: "nowrap",
           gap: "16px",
           autoPlace: ({ location, location_arg }) => {
             return (

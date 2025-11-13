@@ -410,8 +410,8 @@ var Template = /** @class */ (function () {
         var players = gamedatas.players;
         var zones = document.getElementById("scp_playerZones");
         keysToNumbers(players).forEach(function (player_id) {
-            var _a = players[player_id], name = _a.name, color = _a.color;
-            zones.insertAdjacentHTML("beforeend", "<div id=\"scp_playerZone-".concat(player_id, "\" class=\"scp_playerZone\">\n            <h3 class=\"scp_title scp_zoneTitle\" style=\"color: #").concat(color, "\">").concat(name, "</h3>\n            <div id=\"scp_themes-").concat(player_id, "\" class=\"scp_themes\"></div>\n            <div id=\"scp_scenes-").concat(player_id, "\" class=\"scp_scenes\"></div>\n          </div>"));
+            var _a = players[player_id], player_name = _a.name, player_color = _a.color;
+            zones.insertAdjacentHTML("beforeend", "<div id=\"scp_playerZone-".concat(player_id, "\" class=\"scp_playerZone\">\n            <h3 class=\"scp_title\" style=\"color: #").concat(player_color, "; background-color: #").concat(player_color, "44\">").concat(player_name, "</h3>\n            <div class=\"scp_zoneContent\">\n              <div id=\"scp_themes-").concat(player_id, "\" class=\"scp_themes\"></div>\n              <div id=\"scp_scenes-").concat(player_id, "\" class=\"scp_scenes\"></div>\n            </div>\n          </div>"));
         });
     };
     Template.prototype.setupStocks = function () {
@@ -748,6 +748,7 @@ var ThemeManager = /** @class */ (function () {
         var boards = {};
         keysToNumbers(players).forEach(function (player_id) {
             boards[player_id] = new BgaCards.LineStock(_this.manager, document.getElementById("scp_themes-".concat(player_id)), {
+                wrap: "nowrap",
                 gap: "16px",
                 autoPlace: function (_a) {
                     var location = _a.location, location_arg = _a.location_arg;
