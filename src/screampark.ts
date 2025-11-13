@@ -176,4 +176,10 @@ class SCP extends GameGui<SCP_Gamedatas> implements SCP {
   public removeConfirmation() {
     document.getElementById(`scp_confirmationBtn`)?.remove();
   }
+
+  public keysToNumbers(object: Record<number, any>) {
+    return Object.keys(object).map((key) => {
+      return Number(key);
+    });
+  }
 }

@@ -6,3 +6,18 @@
   aspect-ratio: 1;
   width: 1000px;
 }
+
+.scp_playerZones {
+  display: flex;
+  align-items: start;
+  gap: 24px;
+}
+
+.scp_playerZone {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  padding: 0 16px 16px 16px;
+  box-shadow: 0 0 8px #808080;
+}

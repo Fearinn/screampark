@@ -402,13 +402,25 @@ var Template = /** @class */ (function () {
             }),
         };
         this.game.stocks = {};
+        this.setupZones();
         this.setupStocks();
+    };
+    Template.prototype.setupZones = function () {
+        var _a = this.game, gamedatas = _a.gamedatas, keysToNumbers = _a.keysToNumbers;
+        var players = gamedatas.players;
+        var zones = document.getElementById("scp_playerZones");
+        keysToNumbers(players).forEach(function (player_id) {
+            var _a = players[player_id], name = _a.name, color = _a.color;
+            zones.insertAdjacentHTML("beforeend", "<div id=\"scp_playerZone-".concat(player_id, "\" class=\"scp_playerZone\">\n            <h3 class=\"scp_title scp_zoneTitle\" style=\"color: #").concat(color, "\">").concat(name, "</h3>\n            <div id=\"scp_themes-").concat(player_id, "\" class=\"scp_themes\"></div>\n            <div id=\"scp_scenes-").concat(player_id, "\" class=\"scp_scenes\"></div>\n          </div>"));
+        });
     };
     Template.prototype.setupStocks = function () {
         var vipManager = new VipManager(this.game);
         vipManager.setup();
         var sceneManager = new SceneManager(this.game);
         sceneManager.setup();
+        var themeManager = new ThemeManager(this.game);
+        themeManager.setup();
     };
     return Template;
 }());
@@ -576,6 +588,11 @@ var SCP = /** @class */ (function (_super) {
         var _a;
         (_a = document.getElementById("scp_confirmationBtn")) === null || _a === void 0 ? void 0 : _a.remove();
     };
+    SCP.prototype.keysToNumbers = function (object) {
+        return Object.keys(object).map(function (key) {
+            return Number(key);
+        });
+    };
     return SCP;
 }(GameGui));
 define([
@@ -672,6 +689,67 @@ var SceneManager = /** @class */ (function () {
         });
     };
     return SceneManager;
+}());
+var ThemeManager = /** @class */ (function () {
+    function ThemeManager(game) {
+        this.game = game;
+        this.manager = this.game.managers.themes;
+        this.stocks = this.game.stocks.themes;
+        this.THEMES = this.game.gamedatas.THEMES;
+    }
+    ThemeManager.prototype.build = function () {
+        var _this = this;
+        var _a = this.game, managers = _a.managers, stocks = _a.stocks, gamedatas = _a.gamedatas, keysToNumbers = _a.keysToNumbers;
+        var animations = managers.animations;
+        managers.themes = new BgaCards.Manager({
+            animationManager: animations,
+            type: "scp_theme",
+            cardHeight: 286,
+            cardWidth: 210,
+            cardBorderRadius: "8px",
+            setupDiv: function (_a, element) {
+                var theme_id = _a.type_arg;
+                element.classList.add("scp_card");
+            },
+            setupFrontDiv: function (_a, element) {
+                var theme_id = _a.type_arg;
+                if (!theme_id) {
+                    return;
+                }
+                element.style.backgroundImage = "url(".concat(g_gamethemeurl, "img/themes/theme_").concat(theme_id, ".jpg)");
+                var label = _this.THEMES[theme_id].label;
+                _this.game.addTooltip(element.id, _this.game.format_string_recursive(_("${theme_label}"), {
+                    theme_label: _(label),
+                }), "");
+            },
+            setupBackDiv: function (card, element) {
+                element.style.backgroundImage = "url(".concat(g_gamethemeurl, "img/themes/theme_0.jpg)");
+            },
+        });
+        this.manager = managers.themes;
+        var players = gamedatas.players;
+        var boards = {};
+        keysToNumbers(players).forEach(function (player_id) {
+            boards[player_id] = new BgaCards.LineStock(_this.manager, document.getElementById("scp_themes-".concat(player_id)), {
+                gap: "16px",
+                autoPlace: function (_a) {
+                    var location = _a.location, location_arg = _a.location_arg;
+                    return ((location === "hand" || location === "board") &&
+                        location_arg == player_id);
+                },
+            });
+        });
+        stocks.themes = {
+            boards: boards,
+        };
+        this.stocks = stocks.themes;
+    };
+    ThemeManager.prototype.setup = function () {
+        this.build();
+        var _a = this.game.gamedatas, themeHands = _a.themeHands, themeCards = _a.themeCards;
+        this.manager.placeCards(__spreadArray(__spreadArray([], themeHands, true), themeCards, true));
+    };
+    return ThemeManager;
 }());
 var VipManager = /** @class */ (function () {
     function VipManager(game) {

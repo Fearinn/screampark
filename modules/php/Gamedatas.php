@@ -3,6 +3,7 @@
 namespace Bga\Games\ScreamPark;
 
 use Bga\Games\ScreamPark\components\scenes\Scenes;
+use Bga\Games\ScreamPark\components\themes\Themes;
 use Bga\Games\ScreamPark\components\vips\Vips;
 use Bga\Games\ScreamPark\Game;
 
@@ -11,8 +12,11 @@ trait Gamedatas
 
     public function getGamedatas(Game $game)
     {
+        $player_id = $game->getCurrentPlayerId();
+
         $Vips = new Vips($game);
         $Scenes = new Scenes($game);
+        $Themes = new Themes($game);
 
         $gamedatas = [
             "players" => $game->getCollectionFromDb("SELECT `player_id` `id`, `player_score` `score` FROM `player`"),
@@ -21,6 +25,9 @@ trait Gamedatas
             "GENRES" => $game->GENRES,
             "SCENES" => $game->SCENES,
             "sceneDeckCount" => $Scenes->getDeckCount(),
+            "THEMES" => $game->THEMES,
+            "themeCards" => $Themes->getPublic(),
+            "themeHands" => $Themes->getHands($player_id),
         ];
 
         return $gamedatas;

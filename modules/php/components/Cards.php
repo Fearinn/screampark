@@ -62,7 +62,7 @@ class Cards
     public function getPublic(): array
     {
         $cards = $this->game->getObjectListFromDB("SELECT {$this->cardFields} FROM {$this->dbTable} 
-        WHERE card_location<>'deck'");
+        WHERE card_location<>'deck' AND card_location<>'hand'");
         return $cards;
     }
 }

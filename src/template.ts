@@ -22,7 +22,27 @@ class Template {
     };
 
     this.game.stocks = {};
+    this.setupZones();
     this.setupStocks();
+  }
+
+  public setupZones() {
+    const { gamedatas, keysToNumbers } = this.game;
+    const { players } = gamedatas;
+
+    const zones = document.getElementById(`scp_playerZones`);
+    keysToNumbers(players).forEach((player_id) => {
+      const { name, color } = players[player_id];
+
+      zones.insertAdjacentHTML(
+        "beforeend",
+        `<div id="scp_playerZone-${player_id}" class="scp_playerZone">
+            <h3 class="scp_title scp_zoneTitle" style="color: #${color}">${name}</h3>
+            <div id="scp_themes-${player_id}" class="scp_themes"></div>
+            <div id="scp_scenes-${player_id}" class="scp_scenes"></div>
+          </div>`
+      );
+    });
   }
 
   public setupStocks() {
@@ -31,5 +51,8 @@ class Template {
 
     const sceneManager = new SceneManager(this.game);
     sceneManager.setup();
+
+    const themeManager = new ThemeManager(this.game);
+    themeManager.setup();
   }
 }

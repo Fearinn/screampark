@@ -33,4 +33,24 @@ class Themes extends Cards
             $this->deck->pickCards(2, "deck", $player_id);
         }
     }
+
+    public function getHands(int $current_player_id): array
+    {
+        $hands = [];
+
+        $players = $this->game->loadPlayersBasicInfos();
+        foreach ($players as $player_id => $player) {
+            if ($current_player_id === $player_id) {
+                $hand = $this->getHand($player_id);
+            } else {
+                $sql = "SELECT card_id id, card_location location, card_location_arg location_arg FROM {$this->dbTable} 
+                WHERE card_location='hand' AND card_location_arg={$player_id}";
+                $hand = $this->game->getObjectListFromDB($sql);
+            }
+
+           $hands = array_merge($hands, $hand);
+        }
+
+        return $hands;
+    }
 }
