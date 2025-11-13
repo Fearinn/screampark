@@ -16,7 +16,10 @@ class SCP extends GameGui<SCP_Gamedatas> implements SCP {
 
     this.setupNotifications();
   }
-  public onEnteringState(stateName: StateName, args: { args: any }) {
+  public onEnteringState(
+    stateName: StateName,
+    args: { args: Record<string, any> }
+  ) {
     const stateManager = new StateManager(this);
     stateManager.onEntering(stateName, args.args);
   }
@@ -26,66 +29,16 @@ class SCP extends GameGui<SCP_Gamedatas> implements SCP {
     stateManager.onLeaving(stateName);
   }
 
-  public onUpdateActionButtons(stateName: StateName, args: any) {
+  public onUpdateActionButtons(
+    stateName: StateName,
+    args: Record<string, any>
+  ) {
     const stateManager = new StateManager(this);
     stateManager.onUpdate(stateName, args);
   }
 
   public setupNotifications() {
     this.bgaSetupPromiseNotifications({ handlers: [new NotifManager(this)] });
-  }
-
-  public bgaFormatText(log: string, args: any): { log: string; args: any } {
-    try {
-      if (log.includes("${randomGenre_icon}")) {
-        const backgroundImage = `url(${g_gamethemeurl}img/icons/genre_0.png)`;
-        args.randomGenre_icon = `<span class="scp_smIcon scp_genreIcon" style="background-image: ${backgroundImage};"></span>`;
-      }
-
-      if (log.includes("${candlestick_icon}")) {
-        args.candlestick_icon = this.getScenicIcon("candlestick");
-      }
-
-      if (log.includes("${light_icon}")) {
-        args.light_icon = this.getScenicIcon("light");
-      }
-
-      if (log.includes("${sound_icon}")) {
-        args.sound_icon = this.getScenicIcon("sound");
-      }
-
-      if (log.includes("${skull_icon}")) {
-        args.skull_icon = this.getScenicIcon("skull");
-      }
-
-      if (log.includes("${staffCost_icon}")) {
-        const backgroundImage = `url(${g_gamethemeurl}img/icons/staffCost.png)`;
-        args.staffCost_icon = `<span class="scp_smIcon scp_genreIcon" style="background-image: ${backgroundImage};"></span>`;
-      }
-
-      if (log.includes("${lightning_icon}")) {
-        const backgroundImage = `url(${g_gamethemeurl}img/icons/lightning.png)`;
-        args.lightning_icon = `<span class="scp_smIcon scp_genreIcon" style="background-image: ${backgroundImage};"></span>`;
-      }
-    } catch (error) {
-      console.error(error);
-    }
-
-    return { log, args };
-  }
-
-  private getScenicIcon(scenicName: string): string {
-    const scenicSymbols = {
-      candlestick: 1,
-      light: 2,
-      sound: 3,
-      skull: 4,
-    };
-
-    const scenic_id = scenicSymbols[scenicName];
-    const backgroundImage = `url(${g_gamethemeurl}img/icons/scenic_${scenic_id}.png)`;
-
-    return `<span class="scp_smIcon scp_genreIcon" style="background-image: ${backgroundImage};"></span>`;
   }
 
   public async performAction(
@@ -181,5 +134,70 @@ class SCP extends GameGui<SCP_Gamedatas> implements SCP {
     return Object.keys(object).map((key) => {
       return Number(key);
     });
+  }
+
+  public bgaFormatText(
+    log: string,
+    args: Record<string, any>
+  ): { log: string; args: Record<string, any> } {
+    try {
+      this.addIcons(log, args);
+    } catch (error) {
+      console.error(error);
+    }
+
+    return { log, args };
+  }
+
+  private addIcons(log: string, args: Record<string, any>) {
+    if (log.includes("${randomGenre_icon}")) {
+      const backgroundImage = `url(${g_gamethemeurl}img/icons/genre_0.png)`;
+      args.randomGenre_icon = `<span class="scp_smIcon scp_genreIcon" style="background-image: ${backgroundImage};"></span>`;
+    }
+
+    if (log.includes("${genre_icon}") && args.genre_id) {
+      const backgroundImage = `url(${g_gamethemeurl}img/icons/genre_${args.genre_id}.png)`;
+      args.genre_icon = `<span class="scp_smIcon scp_genreIcons" style="background-image: ${backgroundImage};"></span>`;
+    }
+
+    if (log.includes("${candlestick_icon}")) {
+      args.candlestick_icon = this.getScenicIcon("candlestick");
+    }
+
+    if (log.includes("${light_icon}")) {
+      args.light_icon = this.getScenicIcon("light");
+    }
+
+    if (log.includes("${sound_icon}")) {
+      args.sound_icon = this.getScenicIcon("sound");
+    }
+
+    if (log.includes("${skull_icon}")) {
+      args.skull_icon = this.getScenicIcon("skull");
+    }
+
+    if (log.includes("${staffCost_icon}")) {
+      const backgroundImage = `url(${g_gamethemeurl}img/icons/staffCost.png)`;
+      args.staffCost_icon = `<span class="scp_smIcon scp_genreIcon" style="background-image: ${backgroundImage};"></span>`;
+    }
+
+    if (log.includes("${lightning_icon}")) {
+      const backgroundImage = `url(${g_gamethemeurl}img/icons/lightning.png)`;
+      args.lightning_icon = `<span class="scp_smIcon scp_genreIcon" style="background-image: ${backgroundImage};"></span>`;
+    }
+  }
+
+  private getScenicIcon(scenicName: string): string {
+    const scenicSymbols = {
+      candlestick: 1,
+      light: 2,
+      sound: 3,
+      skull: 4,
+    };
+
+    const scenic_id = scenicSymbols[scenicName];
+    const backgroundImage = `url(${g_gamethemeurl}img/icons/scenic_${scenic_id}.png)`;
+
+    return `<span class="scp_smIcon scp_genreIcon" style="background-image: ${backgroundImage};"></span>`;
   }
 }

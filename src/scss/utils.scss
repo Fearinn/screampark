@@ -1,8 +1,23 @@
+h3,
+h4,
+p {
+  margin: 0;
+}
+
+.scp_flexWrapper {
+  display: flex;
+  flex-direction: var(--direction);
+  gap: var(--gap);
+}
+
 .scp_smIcon {
-  position: relative;
-  top: 5px;
   display: inline-block;
   background-size: cover;
+  vertical-align: middle;
   aspect-ratio: 1;
-  width: 20px;
+  width: 1.1em;
+}
+
+.scp_tooltip {
+  font-size: 20px;
 }

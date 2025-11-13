@@ -505,49 +505,6 @@ var SCP = /** @class */ (function (_super) {
     SCP.prototype.setupNotifications = function () {
         this.bgaSetupPromiseNotifications({ handlers: [new NotifManager(this)] });
     };
-    SCP.prototype.bgaFormatText = function (log, args) {
-        try {
-            if (log.includes("${randomGenre_icon}")) {
-                var backgroundImage = "url(".concat(g_gamethemeurl, "img/icons/genre_0.png)");
-                args.randomGenre_icon = "<span class=\"scp_smIcon scp_genreIcon\" style=\"background-image: ".concat(backgroundImage, ";\"></span>");
-            }
-            if (log.includes("${candlestick_icon}")) {
-                args.candlestick_icon = this.getScenicIcon("candlestick");
-            }
-            if (log.includes("${light_icon}")) {
-                args.light_icon = this.getScenicIcon("light");
-            }
-            if (log.includes("${sound_icon}")) {
-                args.sound_icon = this.getScenicIcon("sound");
-            }
-            if (log.includes("${skull_icon}")) {
-                args.skull_icon = this.getScenicIcon("skull");
-            }
-            if (log.includes("${staffCost_icon}")) {
-                var backgroundImage = "url(".concat(g_gamethemeurl, "img/icons/staffCost.png)");
-                args.staffCost_icon = "<span class=\"scp_smIcon scp_genreIcon\" style=\"background-image: ".concat(backgroundImage, ";\"></span>");
-            }
-            if (log.includes("${lightning_icon}")) {
-                var backgroundImage = "url(".concat(g_gamethemeurl, "img/icons/lightning.png)");
-                args.lightning_icon = "<span class=\"scp_smIcon scp_genreIcon\" style=\"background-image: ".concat(backgroundImage, ";\"></span>");
-            }
-        }
-        catch (error) {
-            console.error(error);
-        }
-        return { log: log, args: args };
-    };
-    SCP.prototype.getScenicIcon = function (scenicName) {
-        var scenicSymbols = {
-            candlestick: 1,
-            light: 2,
-            sound: 3,
-            skull: 4,
-        };
-        var scenic_id = scenicSymbols[scenicName];
-        var backgroundImage = "url(".concat(g_gamethemeurl, "img/icons/scenic_").concat(scenic_id, ".png)");
-        return "<span class=\"scp_smIcon scp_genreIcon\" style=\"background-image: ".concat(backgroundImage, ";\"></span>");
-    };
     SCP.prototype.performAction = function (actionName, args, params) {
         return __awaiter(this, void 0, void 0, function () {
             var _this = this;
@@ -592,6 +549,56 @@ var SCP = /** @class */ (function (_super) {
         return Object.keys(object).map(function (key) {
             return Number(key);
         });
+    };
+    SCP.prototype.bgaFormatText = function (log, args) {
+        try {
+            this.addIcons(log, args);
+        }
+        catch (error) {
+            console.error(error);
+        }
+        return { log: log, args: args };
+    };
+    SCP.prototype.addIcons = function (log, args) {
+        if (log.includes("${randomGenre_icon}")) {
+            var backgroundImage = "url(".concat(g_gamethemeurl, "img/icons/genre_0.png)");
+            args.randomGenre_icon = "<span class=\"scp_smIcon scp_genreIcon\" style=\"background-image: ".concat(backgroundImage, ";\"></span>");
+        }
+        if (log.includes("${genre_icon}") && args.genre_id) {
+            var backgroundImage = "url(".concat(g_gamethemeurl, "img/icons/genre_").concat(args.genre_id, ".png)");
+            args.genre_icon = "<span class=\"scp_smIcon scp_genreIcons\" style=\"background-image: ".concat(backgroundImage, ";\"></span>");
+        }
+        if (log.includes("${candlestick_icon}")) {
+            args.candlestick_icon = this.getScenicIcon("candlestick");
+        }
+        if (log.includes("${light_icon}")) {
+            args.light_icon = this.getScenicIcon("light");
+        }
+        if (log.includes("${sound_icon}")) {
+            args.sound_icon = this.getScenicIcon("sound");
+        }
+        if (log.includes("${skull_icon}")) {
+            args.skull_icon = this.getScenicIcon("skull");
+        }
+        if (log.includes("${staffCost_icon}")) {
+            var backgroundImage = "url(".concat(g_gamethemeurl, "img/icons/staffCost.png)");
+            args.staffCost_icon = "<span class=\"scp_smIcon scp_genreIcon\" style=\"background-image: ".concat(backgroundImage, ";\"></span>");
+        }
+        if (log.includes("${lightning_icon}")) {
+            var backgroundImage = "url(".concat(g_gamethemeurl, "img/icons/lightning.png)");
+            args.lightning_icon = "<span class=\"scp_smIcon scp_genreIcon\" style=\"background-image: ".concat(backgroundImage, ";\"></span>");
+        }
+    };
+    SCP.prototype.getScenicIcon = function (scenicName) {
+        var scenicSymbols = {
+            candlestick: 1,
+            light: 2,
+            sound: 3,
+            skull: 4,
+        };
+        var scenic_id = scenicSymbols[scenicName];
+        var backgroundImage = "url(".concat(g_gamethemeurl, "img/icons/scenic_").concat(scenic_id, ".png)");
+        return "<span class=\"scp_smIcon scp_genreIcon\" style=\"background-image: ".concat(backgroundImage, ";\"></span>");
     };
     return SCP;
 }(GameGui));
@@ -699,9 +706,10 @@ var SceneManager = /** @class */ (function () {
 var ThemeManager = /** @class */ (function () {
     function ThemeManager(game) {
         this.game = game;
-        this.manager = this.game.managers.themes;
-        this.stocks = this.game.stocks.themes;
-        this.THEMES = this.game.gamedatas.THEMES;
+        var _a = this.game, managers = _a.managers, stocks = _a.stocks, gamedatas = _a.gamedatas;
+        this.manager = managers.themes;
+        this.stocks = stocks.themes;
+        this.THEMES = gamedatas.THEMES;
     }
     ThemeManager.prototype.build = function () {
         var _this = this;
@@ -713,8 +721,7 @@ var ThemeManager = /** @class */ (function () {
             cardHeight: 286,
             cardWidth: 210,
             cardBorderRadius: "8px",
-            setupDiv: function (_a, element) {
-                var theme_id = _a.type_arg;
+            setupDiv: function (card, element) {
                 element.classList.add("scp_card");
             },
             setupFrontDiv: function (_a, element) {
@@ -723,10 +730,14 @@ var ThemeManager = /** @class */ (function () {
                     return;
                 }
                 element.style.backgroundImage = "url(".concat(g_gamethemeurl, "img/themes/theme_").concat(theme_id, ".jpg)");
-                var label = _this.THEMES[theme_id].label;
-                _this.game.addTooltip(element.id, _this.game.format_string_recursive(_("${theme_label}"), {
+                var _b = _this.THEMES[theme_id], label = _b.label, genres = _b.genres;
+                _this.game.addTooltipHtml(element.id, "<div class=\"scp_tooltip scp_themeTooltip\">\n            <h4 class=\"scp_title scp_tooltipTitle\">".concat(_(label), "</h4>\n            <div class=\"scp_flexWrapper\" style=\"--direction: column; --gap: 4px\">\n                <p>End of round/day:</p>\n                <p class=\"scp_tooltipContent\">\n                ").concat(_this.game.format_string_recursive(_("1 point for each scene with any ${genre_icon}"), {
                     theme_label: _(label),
-                }), "");
+                    genre_id: genres[0],
+                }), "\n                </p>\n                <p class=\"scp_tooltipContent\">\n                ").concat(_this.game.format_string_recursive(_("1 point for each scene with any ${genre_icon}"), {
+                    theme_label: _(label),
+                    genre_id: genres[1],
+                }), "\n                </p>\n            </div>\n          </div>"));
             },
             setupBackDiv: function (card, element) {
                 element.style.backgroundImage = "url(".concat(g_gamethemeurl, "img/themes/theme_0.jpg)");

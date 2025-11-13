@@ -1,0 +1,10 @@
+.scp_themeTooltip {
+  display: flex;
+  flex-direction: column;
+  padding: 0 2px;
+
+  .scp_title {
+    text-align: center;
+    margin-bottom: 4px;
+  }
+}

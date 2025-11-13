@@ -6,9 +6,10 @@ class ThemeManager {
 
   constructor(game: SCP) {
     this.game = game;
-    this.manager = this.game.managers.themes;
-    this.stocks = this.game.stocks.themes;
-    this.THEMES = this.game.gamedatas.THEMES;
+    const { managers, stocks, gamedatas } = this.game;
+    this.manager = managers.themes;
+    this.stocks = stocks.themes;
+    this.THEMES = gamedatas.THEMES;
   }
 
   private build(): void {
@@ -21,22 +22,43 @@ class ThemeManager {
       cardHeight: 286,
       cardWidth: 210,
       cardBorderRadius: "8px",
-      setupDiv: ({ type_arg: theme_id }, element) => {
+      setupDiv: (card, element) => {
         element.classList.add("scp_card");
       },
       setupFrontDiv: ({ type_arg: theme_id }, element) => {
         if (!theme_id) {
           return;
         }
+
         element.style.backgroundImage = `url(${g_gamethemeurl}img/themes/theme_${theme_id}.jpg)`;
 
-        const { label } = this.THEMES[theme_id];
-        this.game.addTooltip(
+        const { label, genres } = this.THEMES[theme_id];
+        this.game.addTooltipHtml(
           element.id,
-          this.game.format_string_recursive(_("${theme_label}"), {
-            theme_label: _(label),
-          }),
-          ""
+          `<div class="scp_tooltip scp_themeTooltip">
+            <h4 class="scp_title scp_tooltipTitle">${_(label)}</h4>
+            <div class="scp_flexWrapper" style="--direction: column; --gap: 4px">
+                <p>End of round/day:</p>
+                <p class="scp_tooltipContent">
+                ${this.game.format_string_recursive(
+                  _("1 point for each scene with any ${genre_icon}"),
+                  {
+                    theme_label: _(label),
+                    genre_id: genres[0],
+                  }
+                )}
+                </p>
+                <p class="scp_tooltipContent">
+                ${this.game.format_string_recursive(
+                  _("1 point for each scene with any ${genre_icon}"),
+                  {
+                    theme_label: _(label),
+                    genre_id: genres[1],
+                  }
+                )}
+                </p>
+            </div>
+          </div>`
         );
       },
       setupBackDiv: (card, element) => {
