@@ -643,15 +643,15 @@ var SceneManager = /** @class */ (function () {
             },
             setupFrontDiv: function (_a, element) {
                 var type = _a.type, scene_id = _a.type_arg;
+                if (!(scene_id > 0)) {
+                    return;
+                }
                 if (type === "genre") {
                     element.style.backgroundImage = "url(".concat(g_gamethemeurl, "img/genres/genre_").concat(scene_id, ".jpg)");
                     var genre_label = _this.GENRES[scene_id].label;
                     _this.game.addTooltip(element.id, _this.game.format_string_recursive(_("${genre_label}"), {
                         genre_label: genre_label,
                     }), "");
-                    return;
-                }
-                if (!scene_id) {
                     return;
                 }
                 element.style.backgroundImage = "url(".concat(g_gamethemeurl, "img/scenes/scene_").concat(scene_id, ".jpg)");
@@ -661,8 +661,12 @@ var SceneManager = /** @class */ (function () {
                     down_label: _(down.label),
                 }), "");
             },
-            setupBackDiv: function (card, element) {
-                element.style.backgroundImage = "url(".concat(g_gamethemeurl, "img/scenes/scene_0.jpg)");
+            setupBackDiv: function (_a, element) {
+                var type = _a.type, type_arg = _a.type_arg;
+                if (!type) {
+                    type = type_arg === -1 ? "scene" : "genre";
+                }
+                element.style.backgroundImage = "url(".concat(g_gamethemeurl, "img/").concat(type, "s/").concat(type, "_0.jpg)");
             },
         });
         this.manager = this.game.managers.scenes;
@@ -670,23 +674,25 @@ var SceneManager = /** @class */ (function () {
         this.game.stocks.scenes = {
             deck: new BgaCards.Deck(this.manager, document.getElementById("scp_sceneDeck"), {
                 cardNumber: sceneDeckCount,
+                fakeCardGenerator: function (deckId) {
+                    var fakeCard = _this.manager.getFakeCardGenerator()(deckId);
+                    fakeCard.type_arg = -1;
+                    return fakeCard;
+                },
             }),
-            genres: new BgaCards.Deck(this.manager, document.getElementById("scp_genreDeck"), {}),
+            genres: new BgaCards.Deck(this.manager, document.getElementById("scp_genreDeck"), {
+                cardNumber: 20,
+                fakeCardGenerator: function (deckId) {
+                    var fakeCard = _this.manager.getFakeCardGenerator()(deckId);
+                    fakeCard.type_arg = -2;
+                    return fakeCard;
+                },
+            }),
         };
         this.stocks = this.game.stocks.scenes;
     };
     SceneManager.prototype.setup = function () {
         this.build();
-        var _a = this.stocks, deck = _a.deck, genres = _a.genres;
-        Object.keys(this.GENRES).forEach(function (genre_id) {
-            genres.addCard({
-                id: Number(genre_id),
-                type: "genre",
-                type_arg: Number(genre_id),
-                location: "deck",
-                location_arg: Math.floor(Math.random() * 5) + 1,
-            });
-        });
     };
     return SceneManager;
 }());

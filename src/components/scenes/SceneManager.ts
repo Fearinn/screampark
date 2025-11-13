@@ -33,6 +33,10 @@ class SceneManager {
         }
       },
       setupFrontDiv: ({ type, type_arg: scene_id }, element) => {
+        if (!(scene_id > 0)) {
+          return;
+        }
+
         if (type === "genre") {
           element.style.backgroundImage = `url(${g_gamethemeurl}img/genres/genre_${scene_id}.jpg)`;
 
@@ -44,10 +48,6 @@ class SceneManager {
             }),
             ""
           );
-          return;
-        }
-
-        if (!scene_id) {
           return;
         }
 
@@ -63,8 +63,11 @@ class SceneManager {
           ""
         );
       },
-      setupBackDiv: (card, element) => {
-        element.style.backgroundImage = `url(${g_gamethemeurl}img/scenes/scene_0.jpg)`;
+      setupBackDiv: ({ type, type_arg }, element) => {
+        if (!type) {
+          type = type_arg === -1 ? "scene" : "genre";
+        }
+        element.style.backgroundImage = `url(${g_gamethemeurl}img/${type}s/${type}_0.jpg)`;
       },
     });
     this.manager = this.game.managers.scenes;
@@ -77,12 +80,24 @@ class SceneManager {
         document.getElementById("scp_sceneDeck"),
         {
           cardNumber: sceneDeckCount,
+          fakeCardGenerator: (deckId) => {
+            const fakeCard = this.manager.getFakeCardGenerator()(deckId);
+            fakeCard.type_arg = -1;
+            return fakeCard;
+          },
         }
       ),
       genres: new BgaCards.Deck(
         this.manager,
         document.getElementById("scp_genreDeck"),
-        {}
+        {
+          cardNumber: 20,
+          fakeCardGenerator: (deckId) => {
+            const fakeCard = this.manager.getFakeCardGenerator()(deckId);
+            fakeCard.type_arg = -2;
+            return fakeCard;
+          },
+        }
       ),
     };
     this.stocks = this.game.stocks.scenes;
@@ -90,17 +105,6 @@ class SceneManager {
 
   public setup(): void {
     this.build();
-    const { deck, genres } = this.stocks;
-
-    Object.keys(this.GENRES).forEach((genre_id) => {
-      genres.addCard({
-        id: Number(genre_id),
-        type: "genre",
-        type_arg: Number(genre_id),
-        location: "deck",
-        location_arg: Math.floor(Math.random() * 5) + 1,
-      });
-    });
   }
 }
 
