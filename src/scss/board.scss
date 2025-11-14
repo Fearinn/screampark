@@ -1,17 +1,22 @@
+:root {
+  --board-width: 1000px;
+}
+
 .scp_board {
   position: relative;
   background-image: url("img/board.jpg");
   background-size: cover;
   box-shadow: 0 0 16px 1px #808080;
   aspect-ratio: 1;
-  width: 1000px;
+  width: var(--board-width);
 }
 
 .scp_playerZones {
   display: flex;
-  align-items: start;
-  gap: 24px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
 }
 
 .scp_playerZone {
@@ -20,11 +25,13 @@
   flex-direction: column;
   border-radius: 8px;
   box-shadow: 0 0 8px #808080;
+  width: 100%;
+  overflow: visible;
 
   .scp_title {
     font-size: 20px;
-    text-shadow: black 0 0 1px, black 0 0 1px, black 0 0 1px,
-      black 0 0 1px, black 0 0 1px, black 0 0 1px;
+    text-shadow: black 0 0 1px, black 0 0 1px, black 0 0 1px, black 0 0 1px,
+      black 0 0 1px, black 0 0 1px;
     border-top-left-radius: 8px;
     border-bottom-right-radius: 8px;
     padding: 4px 8px;
@@ -35,5 +42,5 @@
 .scp_zoneContent {
   display: flex;
   gap: 12px;
-  padding: 12px
+  padding: 12px;
 }

@@ -413,7 +413,13 @@ var Template = /** @class */ (function () {
         var zones = document.getElementById("scp_playerZones");
         keysToNumbers(players).forEach(function (player_id) {
             var player_color = players[player_id].color;
-            zones.insertAdjacentHTML("beforeend", "<div id=\"scp_playerZone-".concat(player_id, "\" class=\"scp_playerZone\">\n            <h3 class=\"scp_title\" style=\"background-color: #").concat(player_color, "44\">").concat(_this.game.getFormattedPlayerName(player_id), "</h3>\n            <div class=\"scp_zoneContent\">\n              <div id=\"scp_themes-").concat(player_id, "\" class=\"scp_themes\"></div>\n              <div id=\"scp_scenes-").concat(player_id, "\" class=\"scp_scenes\"></div>\n            </div>\n          </div>"));
+            var player_name = _this.game.getFormattedPlayerName(player_id);
+            var title = player_id === _this.game.player_id
+                ? _this.game.format_string_recursive(_("${player_name} (you)"), {
+                    player_name: player_name,
+                })
+                : player_name;
+            zones.insertAdjacentHTML("beforeend", "<div id=\"scp_playerZone-".concat(player_id, "\" class=\"scp_playerZone\">\n            <h3 class=\"scp_title\" style=\"color: #").concat(player_color, "; background-color: #").concat(player_color, "44;\">").concat(title, "</h3>\n            <div class=\"scp_zoneContent\">\n              <div id=\"scp_themes-").concat(player_id, "\" class=\"scp_themes\"></div>\n              <div id=\"scp_scenes-").concat(player_id, "\" class=\"scp_scenes\"></div>\n            </div>\n          </div>"));
         });
     };
     Template.prototype.setupStocks = function () {
