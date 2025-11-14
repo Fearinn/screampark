@@ -60,6 +60,7 @@ class VipManager {
             return Number(card.location_arg);
           },
           gap: "52px",
+          wrap: "nowrap",
         }
       ),
     };

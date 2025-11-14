@@ -22,12 +22,14 @@ interface Managers {
   vips?: BgaCards.Manager<VipCard>;
   scenes?: BgaCards.Manager<SceneCard>;
   themes?: BgaCards.Manager<ThemeCard>;
+  stars?: BgaCards.Manager<StarCard>;
 }
 
 interface Stocks {
   vips?: VipStocks;
   scenes?: SceneStocks;
   themes?: ThemeStocks;
+  stars?: StarStocks;
 }
 
 type ActionName = "";

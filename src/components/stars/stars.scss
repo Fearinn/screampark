@@ -1,0 +1,48 @@
+.scp_starTrack {
+  --star-width: calc(918px / 21);
+  position: absolute;
+  top: 4%;
+  left: 4.2%;
+  aspect-ratio: 1;
+  width: 918px;
+}
+
+.scp_stars {
+  position: absolute !important;
+  display: flex;
+  aspect-ratio: 1;
+  width: var(--star-width);
+
+  @for $points from 0 to 80 {
+    &-#{$points} {
+      @if ($points <= 20) {
+        top: 0;
+        left: calc(var(--star-width) * #{$points});
+      } @else if ($points <= 40) {
+        top: calc(var(--star-width) * (#{$points} - 20));
+        right: 0;
+      } @else if ($points <= 60) {
+        bottom: 0;
+        right: calc(var(--star-width) * (#{$points} - 40));
+      } @else {
+        bottom: calc(var(--star-width) * (#{$points} - 60));
+        left: 0;
+      }
+    }
+  }
+
+  @for $i from 1 to 5 {
+    .scp_star:nth-child(#{$i}) {
+      margin-top: ($i - 1) * 15%;
+    }
+  }
+}
+
+.scp_star {
+  position: absolute !important;
+  filter: drop-shadow(1px 1px 2px black);
+
+  * {
+    box-shadow: none !important;
+  }
+}

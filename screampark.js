@@ -404,6 +404,7 @@ var Template = /** @class */ (function () {
         this.game.stocks = {};
         this.setupZones();
         this.setupStocks();
+        this.setupStars();
     };
     Template.prototype.setupZones = function () {
         var _a = this.game, gamedatas = _a.gamedatas, keysToNumbers = _a.keysToNumbers;
@@ -421,6 +422,14 @@ var Template = /** @class */ (function () {
         sceneManager.setup();
         var themeManager = new ThemeManager(this.game);
         themeManager.setup();
+    };
+    Template.prototype.setupStars = function () {
+        var starTrack = document.getElementById("scp_starTrack");
+        for (var points = 0; points < 80; points++) {
+            starTrack.insertAdjacentHTML("beforeend", "<div id=\"scp_stars-".concat(points, "\" class=\"scp_stars scp_stars-").concat(points, "\"></div>"));
+        }
+        var starManager = new StarManager(this.game);
+        starManager.setup();
     };
     return Template;
 }());
@@ -703,6 +712,50 @@ var SceneManager = /** @class */ (function () {
     };
     return SceneManager;
 }());
+var StarManager = /** @class */ (function () {
+    function StarManager(game) {
+        this.game = game;
+        var _a = this.game, managers = _a.managers, stocks = _a.stocks;
+        this.manager = managers.stars;
+        this.stocks = stocks.stars;
+    }
+    StarManager.prototype.build = function () {
+        var _a = this.game, managers = _a.managers, stocks = _a.stocks;
+        var animations = managers.animations;
+        managers.stars = new BgaCards.Manager({
+            animationManager: animations,
+            type: "scp_star",
+            cardHeight: 40,
+            cardWidth: 40,
+            setupDiv: function (_a, element) {
+                var id = _a.id;
+                element.classList.add("scp_card");
+                element.style.backgroundImage = "url(".concat(g_gamethemeurl, "img/icons/star_").concat(id, ".png)");
+            },
+        });
+        this.manager = managers.stars;
+        var board = {};
+        for (var points = 0; points < 80; points++) {
+            board[points] = new BgaCards.LineStock(this.manager, document.getElementById("scp_stars-".concat(points)), {
+                wrap: "nowrap",
+                gap: "16px",
+            });
+        }
+        stocks.stars = { board: board };
+        this.stocks = stocks.stars;
+    };
+    StarManager.prototype.setup = function () {
+        this.build();
+        var _a = this.game, gamedatas = _a.gamedatas, keysToNumbers = _a.keysToNumbers;
+        var players = gamedatas.players;
+        var board = this.stocks.board;
+        keysToNumbers(players).forEach(function (player_id, index) {
+            var score = players[player_id].score;
+            board[score].addCard({ id: index + 1 });
+        });
+    };
+    return StarManager;
+}());
 var ThemeManager = /** @class */ (function () {
     function ThemeManager(game) {
         this.game = game;
@@ -814,6 +867,7 @@ var VipManager = /** @class */ (function () {
                     return Number(card.location_arg);
                 },
                 gap: "52px",
+                wrap: "nowrap",
             }),
         };
         this.stocks = this.game.stocks.vips;

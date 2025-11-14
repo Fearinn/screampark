@@ -24,9 +24,10 @@ class Template {
     this.game.stocks = {};
     this.setupZones();
     this.setupStocks();
+    this.setupStars();
   }
 
-  public setupZones() {
+  public setupZones(): void {
     const { gamedatas, keysToNumbers } = this.game;
     const { players } = gamedatas;
 
@@ -47,7 +48,7 @@ class Template {
     });
   }
 
-  public setupStocks() {
+  private setupStocks(): void {
     const vipManager = new VipManager(this.game);
     vipManager.setup();
 
@@ -56,5 +57,17 @@ class Template {
 
     const themeManager = new ThemeManager(this.game);
     themeManager.setup();
+  }
+
+  private setupStars(): void {
+    const starTrack = document.getElementById("scp_starTrack");
+    for (let points = 0; points < 80; points++) {
+      starTrack.insertAdjacentHTML(
+        "beforeend",
+        `<div id="scp_stars-${points}" class="scp_stars scp_stars-${points}"></div>`
+      );
+    }
+    const starManager = new StarManager(this.game);
+    starManager.setup();
   }
 }

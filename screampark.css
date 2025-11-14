@@ -126,8 +126,9 @@ p {
 }
 
 .scp_vips {
-  position: absolute;
+  position: absolute !important;
   top: 14%;
+  left: 13%;
 }
 
 .scp_sceneDeck {
@@ -156,6 +157,362 @@ p {
   margin-bottom: 4px;
 }
 
+.scp_starTrack {
+  --star-width: calc(918px / 21);
+  position: absolute;
+  top: 4%;
+  left: 4.2%;
+  aspect-ratio: 1;
+  width: 918px;
+}
+
+.scp_stars {
+  position: absolute !important;
+  display: flex;
+  aspect-ratio: 1;
+  width: var(--star-width);
+}
+.scp_stars-0 {
+  top: 0;
+  left: calc(var(--star-width) * 0);
+}
+.scp_stars-1 {
+  top: 0;
+  left: calc(var(--star-width) * 1);
+}
+.scp_stars-2 {
+  top: 0;
+  left: calc(var(--star-width) * 2);
+}
+.scp_stars-3 {
+  top: 0;
+  left: calc(var(--star-width) * 3);
+}
+.scp_stars-4 {
+  top: 0;
+  left: calc(var(--star-width) * 4);
+}
+.scp_stars-5 {
+  top: 0;
+  left: calc(var(--star-width) * 5);
+}
+.scp_stars-6 {
+  top: 0;
+  left: calc(var(--star-width) * 6);
+}
+.scp_stars-7 {
+  top: 0;
+  left: calc(var(--star-width) * 7);
+}
+.scp_stars-8 {
+  top: 0;
+  left: calc(var(--star-width) * 8);
+}
+.scp_stars-9 {
+  top: 0;
+  left: calc(var(--star-width) * 9);
+}
+.scp_stars-10 {
+  top: 0;
+  left: calc(var(--star-width) * 10);
+}
+.scp_stars-11 {
+  top: 0;
+  left: calc(var(--star-width) * 11);
+}
+.scp_stars-12 {
+  top: 0;
+  left: calc(var(--star-width) * 12);
+}
+.scp_stars-13 {
+  top: 0;
+  left: calc(var(--star-width) * 13);
+}
+.scp_stars-14 {
+  top: 0;
+  left: calc(var(--star-width) * 14);
+}
+.scp_stars-15 {
+  top: 0;
+  left: calc(var(--star-width) * 15);
+}
+.scp_stars-16 {
+  top: 0;
+  left: calc(var(--star-width) * 16);
+}
+.scp_stars-17 {
+  top: 0;
+  left: calc(var(--star-width) * 17);
+}
+.scp_stars-18 {
+  top: 0;
+  left: calc(var(--star-width) * 18);
+}
+.scp_stars-19 {
+  top: 0;
+  left: calc(var(--star-width) * 19);
+}
+.scp_stars-20 {
+  top: 0;
+  left: calc(var(--star-width) * 20);
+}
+.scp_stars-21 {
+  top: calc(var(--star-width) * (21 - 20));
+  right: 0;
+}
+.scp_stars-22 {
+  top: calc(var(--star-width) * (22 - 20));
+  right: 0;
+}
+.scp_stars-23 {
+  top: calc(var(--star-width) * (23 - 20));
+  right: 0;
+}
+.scp_stars-24 {
+  top: calc(var(--star-width) * (24 - 20));
+  right: 0;
+}
+.scp_stars-25 {
+  top: calc(var(--star-width) * (25 - 20));
+  right: 0;
+}
+.scp_stars-26 {
+  top: calc(var(--star-width) * (26 - 20));
+  right: 0;
+}
+.scp_stars-27 {
+  top: calc(var(--star-width) * (27 - 20));
+  right: 0;
+}
+.scp_stars-28 {
+  top: calc(var(--star-width) * (28 - 20));
+  right: 0;
+}
+.scp_stars-29 {
+  top: calc(var(--star-width) * (29 - 20));
+  right: 0;
+}
+.scp_stars-30 {
+  top: calc(var(--star-width) * (30 - 20));
+  right: 0;
+}
+.scp_stars-31 {
+  top: calc(var(--star-width) * (31 - 20));
+  right: 0;
+}
+.scp_stars-32 {
+  top: calc(var(--star-width) * (32 - 20));
+  right: 0;
+}
+.scp_stars-33 {
+  top: calc(var(--star-width) * (33 - 20));
+  right: 0;
+}
+.scp_stars-34 {
+  top: calc(var(--star-width) * (34 - 20));
+  right: 0;
+}
+.scp_stars-35 {
+  top: calc(var(--star-width) * (35 - 20));
+  right: 0;
+}
+.scp_stars-36 {
+  top: calc(var(--star-width) * (36 - 20));
+  right: 0;
+}
+.scp_stars-37 {
+  top: calc(var(--star-width) * (37 - 20));
+  right: 0;
+}
+.scp_stars-38 {
+  top: calc(var(--star-width) * (38 - 20));
+  right: 0;
+}
+.scp_stars-39 {
+  top: calc(var(--star-width) * (39 - 20));
+  right: 0;
+}
+.scp_stars-40 {
+  top: calc(var(--star-width) * (40 - 20));
+  right: 0;
+}
+.scp_stars-41 {
+  bottom: 0;
+  right: calc(var(--star-width) * (41 - 40));
+}
+.scp_stars-42 {
+  bottom: 0;
+  right: calc(var(--star-width) * (42 - 40));
+}
+.scp_stars-43 {
+  bottom: 0;
+  right: calc(var(--star-width) * (43 - 40));
+}
+.scp_stars-44 {
+  bottom: 0;
+  right: calc(var(--star-width) * (44 - 40));
+}
+.scp_stars-45 {
+  bottom: 0;
+  right: calc(var(--star-width) * (45 - 40));
+}
+.scp_stars-46 {
+  bottom: 0;
+  right: calc(var(--star-width) * (46 - 40));
+}
+.scp_stars-47 {
+  bottom: 0;
+  right: calc(var(--star-width) * (47 - 40));
+}
+.scp_stars-48 {
+  bottom: 0;
+  right: calc(var(--star-width) * (48 - 40));
+}
+.scp_stars-49 {
+  bottom: 0;
+  right: calc(var(--star-width) * (49 - 40));
+}
+.scp_stars-50 {
+  bottom: 0;
+  right: calc(var(--star-width) * (50 - 40));
+}
+.scp_stars-51 {
+  bottom: 0;
+  right: calc(var(--star-width) * (51 - 40));
+}
+.scp_stars-52 {
+  bottom: 0;
+  right: calc(var(--star-width) * (52 - 40));
+}
+.scp_stars-53 {
+  bottom: 0;
+  right: calc(var(--star-width) * (53 - 40));
+}
+.scp_stars-54 {
+  bottom: 0;
+  right: calc(var(--star-width) * (54 - 40));
+}
+.scp_stars-55 {
+  bottom: 0;
+  right: calc(var(--star-width) * (55 - 40));
+}
+.scp_stars-56 {
+  bottom: 0;
+  right: calc(var(--star-width) * (56 - 40));
+}
+.scp_stars-57 {
+  bottom: 0;
+  right: calc(var(--star-width) * (57 - 40));
+}
+.scp_stars-58 {
+  bottom: 0;
+  right: calc(var(--star-width) * (58 - 40));
+}
+.scp_stars-59 {
+  bottom: 0;
+  right: calc(var(--star-width) * (59 - 40));
+}
+.scp_stars-60 {
+  bottom: 0;
+  right: calc(var(--star-width) * (60 - 40));
+}
+.scp_stars-61 {
+  bottom: calc(var(--star-width) * (61 - 60));
+  left: 0;
+}
+.scp_stars-62 {
+  bottom: calc(var(--star-width) * (62 - 60));
+  left: 0;
+}
+.scp_stars-63 {
+  bottom: calc(var(--star-width) * (63 - 60));
+  left: 0;
+}
+.scp_stars-64 {
+  bottom: calc(var(--star-width) * (64 - 60));
+  left: 0;
+}
+.scp_stars-65 {
+  bottom: calc(var(--star-width) * (65 - 60));
+  left: 0;
+}
+.scp_stars-66 {
+  bottom: calc(var(--star-width) * (66 - 60));
+  left: 0;
+}
+.scp_stars-67 {
+  bottom: calc(var(--star-width) * (67 - 60));
+  left: 0;
+}
+.scp_stars-68 {
+  bottom: calc(var(--star-width) * (68 - 60));
+  left: 0;
+}
+.scp_stars-69 {
+  bottom: calc(var(--star-width) * (69 - 60));
+  left: 0;
+}
+.scp_stars-70 {
+  bottom: calc(var(--star-width) * (70 - 60));
+  left: 0;
+}
+.scp_stars-71 {
+  bottom: calc(var(--star-width) * (71 - 60));
+  left: 0;
+}
+.scp_stars-72 {
+  bottom: calc(var(--star-width) * (72 - 60));
+  left: 0;
+}
+.scp_stars-73 {
+  bottom: calc(var(--star-width) * (73 - 60));
+  left: 0;
+}
+.scp_stars-74 {
+  bottom: calc(var(--star-width) * (74 - 60));
+  left: 0;
+}
+.scp_stars-75 {
+  bottom: calc(var(--star-width) * (75 - 60));
+  left: 0;
+}
+.scp_stars-76 {
+  bottom: calc(var(--star-width) * (76 - 60));
+  left: 0;
+}
+.scp_stars-77 {
+  bottom: calc(var(--star-width) * (77 - 60));
+  left: 0;
+}
+.scp_stars-78 {
+  bottom: calc(var(--star-width) * (78 - 60));
+  left: 0;
+}
+.scp_stars-79 {
+  bottom: calc(var(--star-width) * (79 - 60));
+  left: 0;
+}
+.scp_stars .scp_star:nth-child(1) {
+  margin-top: 0%;
+}
+.scp_stars .scp_star:nth-child(2) {
+  margin-top: 15%;
+}
+.scp_stars .scp_star:nth-child(3) {
+  margin-top: 30%;
+}
+.scp_stars .scp_star:nth-child(4) {
+  margin-top: 45%;
+}
+
+.scp_star {
+  position: absolute !important;
+  filter: drop-shadow(1px 1px 2px black);
+}
+.scp_star * {
+  box-shadow: none !important;
+}
+
 .scp_card {
   background-size: cover;
 }
@@ -171,9 +528,8 @@ p {
   direction: ltr;
   position: relative;
   display: flex;
-  align-items: start;
-  justify-content: center;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
   gap: 32px;
   padding: 8px 16px;
   width: 100%;
