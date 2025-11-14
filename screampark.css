@@ -496,17 +496,21 @@ p {
   margin-top: 0%;
 }
 .scp_stars .scp_star:nth-child(2) {
-  margin-top: 15%;
+  margin-top: 10%;
 }
 .scp_stars .scp_star:nth-child(3) {
-  margin-top: 30%;
+  margin-top: 20%;
 }
 .scp_stars .scp_star:nth-child(4) {
-  margin-top: 45%;
+  margin-top: 30%;
+}
+.scp_stars .scp_star:nth-child(5) {
+  margin-top: 40%;
 }
 
 .scp_star {
   position: absolute !important;
+  top: -5%;
   filter: drop-shadow(1px 1px 2px black);
 }
 .scp_star * {

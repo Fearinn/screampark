@@ -33,12 +33,14 @@ class Template {
 
     const zones = document.getElementById(`scp_playerZones`);
     keysToNumbers(players).forEach((player_id) => {
-      const { name: player_name, color: player_color } = players[player_id];
+      const { color: player_color } = players[player_id];
 
       zones.insertAdjacentHTML(
         "beforeend",
         `<div id="scp_playerZone-${player_id}" class="scp_playerZone">
-            <h3 class="scp_title" style="color: #${player_color}; background-color: #${player_color}44">${player_name}</h3>
+            <h3 class="scp_title" style="background-color: #${player_color}44">${this.game.getFormattedPlayerName(
+          player_id
+        )}</h3>
             <div class="scp_zoneContent">
               <div id="scp_themes-${player_id}" class="scp_themes"></div>
               <div id="scp_scenes-${player_id}" class="scp_scenes"></div>

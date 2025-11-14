@@ -31,15 +31,16 @@
     }
   }
 
-  @for $i from 1 to 5 {
+  @for $i from 1 to 6 {
     .scp_star:nth-child(#{$i}) {
-      margin-top: ($i - 1) * 15%;
+      margin-top: ($i - 1) * 10%;
     }
   }
 }
 
 .scp_star {
   position: absolute !important;
+  top: -5%;
   filter: drop-shadow(1px 1px 2px black);
 
   * {

@@ -19,9 +19,19 @@ class StarManager {
       type: "scp_star",
       cardHeight: 40,
       cardWidth: 40,
-      setupDiv: ({ id }, element) => {
+      setupDiv: ({ id: player_id, player_color }, element) => {
         element.classList.add("scp_card");
-        element.style.backgroundImage = `url(${g_gamethemeurl}img/icons/star_${id}.png)`;
+        const colors = ["982fff", "008000", "ff0000", "72c3b1", "ffa500"];
+        const color_id = colors.indexOf(player_color) + 1;
+        element.style.backgroundImage = `url(${g_gamethemeurl}img/icons/star_${color_id}.png)`;
+
+        this.game.addTooltip(
+          element.id,
+          this.game.format_string_recursive(_("${player_name}'s star"), {
+            player_name: this.game.getFormattedPlayerName(player_id),
+          }),
+          ""
+        );
       },
     });
     this.manager = managers.stars;
@@ -48,16 +58,20 @@ class StarManager {
     const { players } = gamedatas;
     const { board } = this.stocks;
 
-    keysToNumbers(players).forEach((player_id, index) => {
-      const { score } = players[player_id];
-      board[score].addCard({ id: index + 1 });
+    keysToNumbers(players).forEach((player_id) => {
+      const {
+        score,
+        color: player_color,
+      } = players[player_id];
+
+      board[score].addCard({ id: player_id, player_color });
     });
   }
 }
 
-interface StarCard extends Partial<SCP_Card> {
+interface StarCard {
   id: number;
-  location: "board";
+  player_color: string;
 }
 
 interface StarStocks {

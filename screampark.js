@@ -407,12 +407,13 @@ var Template = /** @class */ (function () {
         this.setupStars();
     };
     Template.prototype.setupZones = function () {
+        var _this = this;
         var _a = this.game, gamedatas = _a.gamedatas, keysToNumbers = _a.keysToNumbers;
         var players = gamedatas.players;
         var zones = document.getElementById("scp_playerZones");
         keysToNumbers(players).forEach(function (player_id) {
-            var _a = players[player_id], player_name = _a.name, player_color = _a.color;
-            zones.insertAdjacentHTML("beforeend", "<div id=\"scp_playerZone-".concat(player_id, "\" class=\"scp_playerZone\">\n            <h3 class=\"scp_title\" style=\"color: #").concat(player_color, "; background-color: #").concat(player_color, "44\">").concat(player_name, "</h3>\n            <div class=\"scp_zoneContent\">\n              <div id=\"scp_themes-").concat(player_id, "\" class=\"scp_themes\"></div>\n              <div id=\"scp_scenes-").concat(player_id, "\" class=\"scp_scenes\"></div>\n            </div>\n          </div>"));
+            var player_color = players[player_id].color;
+            zones.insertAdjacentHTML("beforeend", "<div id=\"scp_playerZone-".concat(player_id, "\" class=\"scp_playerZone\">\n            <h3 class=\"scp_title\" style=\"background-color: #").concat(player_color, "44\">").concat(_this.game.getFormattedPlayerName(player_id), "</h3>\n            <div class=\"scp_zoneContent\">\n              <div id=\"scp_themes-").concat(player_id, "\" class=\"scp_themes\"></div>\n              <div id=\"scp_scenes-").concat(player_id, "\" class=\"scp_scenes\"></div>\n            </div>\n          </div>"));
         });
     };
     Template.prototype.setupStocks = function () {
@@ -720,6 +721,7 @@ var StarManager = /** @class */ (function () {
         this.stocks = stocks.stars;
     }
     StarManager.prototype.build = function () {
+        var _this = this;
         var _a = this.game, managers = _a.managers, stocks = _a.stocks;
         var animations = managers.animations;
         managers.stars = new BgaCards.Manager({
@@ -728,9 +730,14 @@ var StarManager = /** @class */ (function () {
             cardHeight: 40,
             cardWidth: 40,
             setupDiv: function (_a, element) {
-                var id = _a.id;
+                var player_id = _a.id, player_color = _a.player_color;
                 element.classList.add("scp_card");
-                element.style.backgroundImage = "url(".concat(g_gamethemeurl, "img/icons/star_").concat(id, ".png)");
+                var colors = ["982fff", "008000", "ff0000", "72c3b1", "ffa500"];
+                var color_id = colors.indexOf(player_color) + 1;
+                element.style.backgroundImage = "url(".concat(g_gamethemeurl, "img/icons/star_").concat(color_id, ".png)");
+                _this.game.addTooltip(element.id, _this.game.format_string_recursive(_("${player_name}'s star"), {
+                    player_name: _this.game.getFormattedPlayerName(player_id),
+                }), "");
             },
         });
         this.manager = managers.stars;
@@ -749,9 +756,9 @@ var StarManager = /** @class */ (function () {
         var _a = this.game, gamedatas = _a.gamedatas, keysToNumbers = _a.keysToNumbers;
         var players = gamedatas.players;
         var board = this.stocks.board;
-        keysToNumbers(players).forEach(function (player_id, index) {
-            var score = players[player_id].score;
-            board[score].addCard({ id: index + 1 });
+        keysToNumbers(players).forEach(function (player_id) {
+            var _a = players[player_id], score = _a.score, player_color = _a.color;
+            board[score].addCard({ id: player_id, player_color: player_color });
         });
     };
     return StarManager;
