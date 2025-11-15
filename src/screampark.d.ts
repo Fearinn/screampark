@@ -23,6 +23,7 @@ interface Managers {
   scenes?: BgaCards.Manager<SceneCard>;
   themes?: BgaCards.Manager<ThemeCard>;
   stars?: BgaCards.Manager<StarCard>;
+  meeples?: BgaCards.Manager<MeepleCard>;
 }
 
 interface Stocks {
@@ -30,6 +31,7 @@ interface Stocks {
   scenes?: SceneStocks;
   themes?: ThemeStocks;
   stars?: StarStocks;
+  meeples?: MeepleStocks;
 }
 
 type ActionName = "";

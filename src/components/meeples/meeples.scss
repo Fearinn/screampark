@@ -1,0 +1,22 @@
+:root {
+  --meeple-width: 100px;
+}
+
+.scp_meepleSteps {
+  position: relative;
+  left: calc(var(--vip-width) / 2);
+  padding: 0 16px;
+}
+
+.scp_meepleStep {
+  transform: translateX(-50%);
+  width: var(--meeple-width);
+}
+
+.scp_meeple {
+  filter: drop-shadow(0 0 2px #808080);
+
+  * {
+    box-shadow: none !important;
+  }
+}

@@ -395,7 +395,7 @@ var Template = /** @class */ (function () {
                 zoomControls: {
                     color: "white",
                 },
-                defaultZoom: window.innerWidth <= 400 ? 0.5 : 1,
+                defaultZoom: window.innerWidth <= 400 ? 0.3 : 1,
             }),
             animations: new BgaAnimations.Manager({
                 animationsActive: function () { return _this.game.bgaAnimationsActive(); },
@@ -404,7 +404,6 @@ var Template = /** @class */ (function () {
         this.game.stocks = {};
         this.setupZones();
         this.setupStocks();
-        this.setupStars();
     };
     Template.prototype.setupZones = function () {
         var _this = this;
@@ -419,7 +418,7 @@ var Template = /** @class */ (function () {
                     player_name: player_name,
                 })
                 : player_name;
-            zones.insertAdjacentHTML("beforeend", "<div id=\"scp_playerZone-".concat(player_id, "\" class=\"scp_playerZone\">\n            <h3 class=\"scp_title\" style=\"color: #").concat(player_color, "; background-color: #").concat(player_color, "44;\">").concat(title, "</h3>\n            <div class=\"scp_zoneContent\">\n              <div id=\"scp_themes-").concat(player_id, "\" class=\"scp_themes\"></div>\n              <div id=\"scp_scenes-").concat(player_id, "\" class=\"scp_scenes\"></div>\n            </div>\n          </div>"));
+            zones.insertAdjacentHTML("beforeend", "<div id=\"scp_playerZone-".concat(player_id, "\" class=\"scp_playerZone\">\n            <h3 class=\"scp_title\" style=\"color: #").concat(player_color, "; background-color: #").concat(player_color, "44;\">").concat(title, "</h3>\n            <div id=\"scp_meepleSteps-").concat(player_id, "\" class=\"scp_meepleSteps\">\n              <div id=\"scp_meepleStep-0-").concat(player_id, "\" class=\"scp_meepleStep\"></div>\n            </div>\n            <div class=\"scp_zoneContent\">\n            <div id=\"scp_themes-").concat(player_id, "\" class=\"scp_themes\"></div>\n              <div id=\"scp_scenes-").concat(player_id, "\" class=\"scp_scenes\"></div>\n            </div>\n          </div>"));
         });
     };
     Template.prototype.setupStocks = function () {
@@ -429,6 +428,9 @@ var Template = /** @class */ (function () {
         sceneManager.setup();
         var themeManager = new ThemeManager(this.game);
         themeManager.setup();
+        var meepleManager = new MeepleManager(this.game);
+        meepleManager.setup();
+        this.setupStars();
     };
     Template.prototype.setupStars = function () {
         var starTrack = document.getElementById("scp_starTrack");
@@ -637,6 +639,56 @@ var NotifManager = /** @class */ (function () {
         this.game = game;
     }
     return NotifManager;
+}());
+var MeepleManager = /** @class */ (function () {
+    function MeepleManager(game) {
+        this.game = game;
+        var _a = this.game, managers = _a.managers, stocks = _a.stocks;
+        this.manager = managers.meeples;
+        this.stocks = stocks.meeples;
+    }
+    MeepleManager.prototype.build = function () {
+        var _this = this;
+        var _a = this.game, managers = _a.managers, stocks = _a.stocks, keysToNumbers = _a.keysToNumbers, gamedatas = _a.gamedatas;
+        var animations = managers.animations;
+        managers.meeples = new BgaCards.Manager({
+            animationManager: animations,
+            type: "scp_meeple",
+            cardHeight: 100,
+            cardWidth: 100,
+            setupDiv: function (_a, element) {
+                var player_id = _a.id, player_color = _a.player_color;
+                element.classList.add("scp_card");
+                var colors = ["982fff", "008000", "ff0000", "72c3b1", "ffa500"];
+                var color_id = colors.indexOf(player_color) + 1;
+                element.style.backgroundImage = "url(".concat(g_gamethemeurl, "img/icons/meeple_").concat(color_id, ".png)");
+                _this.game.addTooltip(element.id, _this.game.format_string_recursive(_("${player_name}'s meeple"), {
+                    player_name: _this.game.getFormattedPlayerName(player_id),
+                }), "");
+            },
+        });
+        this.manager = managers.meeples;
+        var players = gamedatas.players;
+        var tracks = {};
+        keysToNumbers(players).forEach(function (player_id) {
+            tracks[player_id] = {
+                0: new BgaCards.LineStock(_this.manager, document.getElementById("scp_meepleStep-".concat(0, "-").concat(player_id))),
+            };
+        });
+        stocks.meeples = { tracks: tracks };
+        this.stocks = stocks.meeples;
+    };
+    MeepleManager.prototype.setup = function () {
+        this.build();
+        var _a = this.game, gamedatas = _a.gamedatas, keysToNumbers = _a.keysToNumbers;
+        var players = gamedatas.players;
+        var tracks = this.stocks.tracks;
+        keysToNumbers(players).forEach(function (player_id) {
+            var player_color = players[player_id].color;
+            tracks[player_id][0].addCard({ id: player_id, player_color: player_color });
+        });
+    };
+    return MeepleManager;
 }());
 var SceneManager = /** @class */ (function () {
     function SceneManager(game) {

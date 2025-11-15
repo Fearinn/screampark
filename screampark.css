@@ -105,7 +105,7 @@
 .scp_zoneContent {
   display: flex;
   gap: 12px;
-  padding: 12px;
+  padding: 0 12px 12px 12px;
 }
 
 h3,
@@ -132,10 +132,18 @@ p {
   font-size: 20px;
 }
 
+:root {
+  --vip-width: 210px;
+}
+
 .scp_vips {
   position: absolute !important;
   top: 14%;
   left: 13%;
+}
+
+:root {
+  --scene-width: 150px;
 }
 
 .scp_sceneDeck {
@@ -526,6 +534,28 @@ p {
   filter: drop-shadow(1px 1px 2px black);
 }
 .scp_star * {
+  box-shadow: none !important;
+}
+
+:root {
+  --meeple-width: 100px;
+}
+
+.scp_meepleSteps {
+  position: relative;
+  left: calc(var(--vip-width) / 2);
+  padding: 0 16px;
+}
+
+.scp_meepleStep {
+  transform: translateX(-50%);
+  width: var(--meeple-width);
+}
+
+.scp_meeple {
+  filter: drop-shadow(0 0 2px #808080);
+}
+.scp_meeple * {
   box-shadow: none !important;
 }
 

@@ -14,7 +14,7 @@ class Template {
         zoomControls: {
           color: "white",
         },
-        defaultZoom: window.innerWidth <= 400 ? 0.5 : 1,
+        defaultZoom: window.innerWidth <= 400 ? 0.3 : 1,
       }),
       animations: new BgaAnimations.Manager({
         animationsActive: () => this.game.bgaAnimationsActive(),
@@ -24,7 +24,6 @@ class Template {
     this.game.stocks = {};
     this.setupZones();
     this.setupStocks();
-    this.setupStars();
   }
 
   public setupZones(): void {
@@ -47,8 +46,11 @@ class Template {
         "beforeend",
         `<div id="scp_playerZone-${player_id}" class="scp_playerZone">
             <h3 class="scp_title" style="color: #${player_color}; background-color: #${player_color}44;">${title}</h3>
+            <div id="scp_meepleSteps-${player_id}" class="scp_meepleSteps">
+              <div id="scp_meepleStep-0-${player_id}" class="scp_meepleStep"></div>
+            </div>
             <div class="scp_zoneContent">
-              <div id="scp_themes-${player_id}" class="scp_themes"></div>
+            <div id="scp_themes-${player_id}" class="scp_themes"></div>
               <div id="scp_scenes-${player_id}" class="scp_scenes"></div>
             </div>
           </div>`
@@ -65,6 +67,11 @@ class Template {
 
     const themeManager = new ThemeManager(this.game);
     themeManager.setup();
+
+    const meepleManager = new MeepleManager(this.game);
+    meepleManager.setup();
+
+    this.setupStars();
   }
 
   private setupStars(): void {
