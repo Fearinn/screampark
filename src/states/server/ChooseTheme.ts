@@ -26,7 +26,7 @@ class ChooseTheme extends State {
       const { label } = this.THEMES[themeId];
 
       this.game.addConfirmation(
-        this.game.format_string_recursive(_('keep "${theme_label}"'), {
+        this.game.format_string_recursive(_("keep ${theme_label}"), {
           theme_label: _(label),
         }),
         () => {
@@ -41,5 +41,15 @@ class ChooseTheme extends State {
   private onInactiveUpdate(): void {
     const { player_id: playerId } = this.game;
     this.themeManager.setSelection(playerId, null);
+
+    this.game.addButton(
+      _("change mind"),
+      () => {
+        this.game.performAction("actUndoChooseTheme", undefined, {
+          checkAction: false,
+        });
+      },
+      { color: "secondary" }
+    );
   }
 }

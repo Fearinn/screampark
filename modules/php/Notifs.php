@@ -28,7 +28,7 @@ trait Notifs
     private function decoratePlayerId(string $message, array &$args)
     {
         if (!isset($args["player_id"])) {
-            $args["player_id"] = $this->getCurrentPlayerId();
+            $args["player_id"] = (int) $this->getCurrentPlayerId();
         }
     }
 

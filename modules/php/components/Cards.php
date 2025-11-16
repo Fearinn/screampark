@@ -9,8 +9,8 @@ class Cards
 {
     protected readonly Game $game;
     public readonly Deck $deck;
-    protected readonly string $dbTable;
-    protected string $cardFields;
+    public readonly string $dbTable;
+    public string $cardFields;
 
     public function __construct(
         Game $game,
@@ -62,7 +62,7 @@ class Cards
     public function getPublic(): array
     {
         $cards = $this->game->getObjectListFromDB("SELECT {$this->cardFields} FROM {$this->dbTable} 
-        WHERE card_location<>'deck' AND card_location<>'hand'");
+        WHERE card_location<>'deck' AND card_location<>'hand' AND card_location<>'box'");
         return $cards;
     }
 }

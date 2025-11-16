@@ -398,7 +398,9 @@ var Template = /** @class */ (function () {
                 defaultZoom: window.innerWidth <= 400 ? 0.3 : 1,
             }),
             animations: new BgaAnimations.Manager({
-                animationsActive: function () { return _this.game.bgaAnimationsActive(); },
+                animationsActive: function () {
+                    return _this.game.bgaAnimationsActive();
+                },
             }),
         };
         this.game.stocks = {};
@@ -521,7 +523,9 @@ var SCP = /** @class */ (function (_super) {
         stateManager.onUpdate(stateName, args);
     };
     SCP.prototype.setupNotifications = function () {
-        this.bgaSetupPromiseNotifications({ handlers: [new NotifManager(this)] });
+        var notifManager = new NotifManager(this);
+        notifManager.setIgnoreChecks();
+        this.bgaSetupPromiseNotifications({ handlers: [notifManager] });
     };
     SCP.prototype.performAction = function (actionName, args, params) {
         return __awaiter(this, void 0, void 0, function () {
@@ -535,11 +539,11 @@ var SCP = /** @class */ (function (_super) {
             });
         });
     };
-    SCP.prototype.addBtn = function (label, callback, params) {
+    SCP.prototype.addButton = function (label, callback, params) {
         var _a;
-        if (params === void 0) { params = {}; }
+        if (params === void 0) { params = { type: "default" }; }
         var id = params.id ||
-            "scp_btn-".concat(Date.now().toString(36)).concat(Math.random()
+            "scp_button-".concat(Date.now().toString(36)).concat(Math.random()
                 .toString(36)
                 .slice(2));
         (_a = document.getElementById(id)) === null || _a === void 0 ? void 0 : _a.remove();
@@ -555,7 +559,7 @@ var SCP = /** @class */ (function (_super) {
         document.getElementById("scp_alertActions").innerHTML = "";
     };
     SCP.prototype.addConfirmation = function (label, callback, params) {
-        this.addBtn(label, function () {
+        this.addButton(label, function () {
             callback();
         }, __assign({ id: "scp_confirmationBtn" }, params));
     };
@@ -639,7 +643,14 @@ var NotifManager = /** @class */ (function () {
         this.game = game;
         this.themeManager = new ThemeManager(this.game);
     }
-    NotifManager.prototype.notif_chooseTheme = function (args) {
+    NotifManager.prototype.setIgnoreChecks = function () {
+        var _a = this.game, notifqueue = _a.notifqueue, player_id = _a.player_id;
+        notifqueue.setIgnoreNotificationCheck("getTheme", function (notif) {
+            var playerId = notif.args.player_id;
+            return playerId === player_id;
+        });
+    };
+    NotifManager.prototype.notif_discardTheme = function (args) {
         return __awaiter(this, void 0, void 0, function () {
             var playerId, cardId, boards, board;
             return __generator(this, function (_a) {
@@ -649,6 +660,44 @@ var NotifManager = /** @class */ (function () {
                         boards = this.themeManager.stocks.boards;
                         board = boards[playerId];
                         return [4 /*yield*/, board.removeCard({ id: cardId }, { fadeOut: true, slideTo: document.getElementById("player_boards") })];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    NotifManager.prototype.notif_getTheme = function (args) {
+        return __awaiter(this, void 0, void 0, function () {
+            var playerId, cardId, boards, board;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        playerId = args.player_id, cardId = args.cardId;
+                        boards = this.themeManager.stocks.boards;
+                        board = boards[playerId];
+                        return [4 /*yield*/, board.addCard({ id: cardId }, {
+                                fromElement: document.getElementById("player_boards"),
+                            })];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    NotifManager.prototype.notif_privateGetTheme = function (args) {
+        return __awaiter(this, void 0, void 0, function () {
+            var playerId, card, boards, board;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        playerId = args.player_id, card = args.card;
+                        boards = this.themeManager.stocks.boards;
+                        board = boards[playerId];
+                        return [4 /*yield*/, board.addCard(card, {
+                                fromElement: document.getElementById("player_boards"),
+                            })];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];
@@ -857,6 +906,9 @@ var ThemeManager = /** @class */ (function () {
             cardHeight: 286,
             cardWidth: 210,
             cardBorderRadius: "8px",
+            isCardVisible: function (card) {
+                return !!card.type_arg;
+            },
             setupDiv: function (card, element) {
                 element.classList.add("scp_card");
             },
@@ -1030,7 +1082,7 @@ var ChooseTheme = /** @class */ (function (_super) {
             }
             var cardId = card.id, themeId = card.type_arg;
             var label = _this.THEMES[themeId].label;
-            _this.game.addConfirmation(_this.game.format_string_recursive(_('keep "${theme_label}"'), {
+            _this.game.addConfirmation(_this.game.format_string_recursive(_("keep ${theme_label}"), {
                 theme_label: _(label),
             }), function () {
                 _this.game.performAction("actChooseTheme", {
@@ -1040,8 +1092,14 @@ var ChooseTheme = /** @class */ (function (_super) {
         });
     };
     ChooseTheme.prototype.onInactiveUpdate = function () {
+        var _this = this;
         var playerId = this.game.player_id;
         this.themeManager.setSelection(playerId, null);
+        this.game.addButton(_("change mind"), function () {
+            _this.game.performAction("actUndoChooseTheme", undefined, {
+                checkAction: false,
+            });
+        }, { color: "secondary" });
     };
     return ChooseTheme;
 }(State));

@@ -38,7 +38,9 @@ class SCP extends GameGui<SCP_Gamedatas> implements SCP {
   }
 
   public setupNotifications() {
-    this.bgaSetupPromiseNotifications({ handlers: [new NotifManager(this)] });
+    const notifManager = new NotifManager(this);
+    notifManager.setIgnoreChecks();
+    this.bgaSetupPromiseNotifications({ handlers: [notifManager] });
   }
 
   public async performAction(
@@ -57,7 +59,7 @@ class SCP extends GameGui<SCP_Gamedatas> implements SCP {
     });
   }
 
-  public addBtn(
+  public addButton(
     label: string,
     callback: () => void,
     params: {
@@ -65,16 +67,15 @@ class SCP extends GameGui<SCP_Gamedatas> implements SCP {
       color?: "primary" | "secondary" | "alert";
       destination?: HTMLElement;
       classes?: string[];
-      autoclick?: boolean;
       disabled?: boolean;
       order?: number;
       confirm?: string;
       type?: "alert" | "default";
-    } = {}
+    } = { type: "default" }
   ) {
     const id =
       params.id ||
-      `scp_btn-${Date.now().toString(36)}${Math.random()
+      `scp_button-${Date.now().toString(36)}${Math.random()
         .toString(36)
         .slice(2)}`;
 
@@ -114,7 +115,7 @@ class SCP extends GameGui<SCP_Gamedatas> implements SCP {
       order?: number;
     }
   ) {
-    this.addBtn(
+    this.addButton(
       label,
       () => {
         callback();

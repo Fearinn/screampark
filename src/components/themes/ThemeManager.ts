@@ -22,6 +22,9 @@ class ThemeManager {
       cardHeight: 286,
       cardWidth: 210,
       cardBorderRadius: "8px",
+      isCardVisible: (card) => {
+        return !!card.type_arg;
+      },
       setupDiv: (card, element) => {
         element.classList.add("scp_card");
       },

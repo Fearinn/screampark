@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Bga\Games\ScreamPark\States;
 
+use Bga\GameFramework\Actions\CheckAction;
 use Bga\GameFramework\Actions\Types\IntParam;
 use Bga\GameFramework\States\GameState;
 use Bga\GameFramework\StateType;
 use Bga\GameFramework\States\PossibleAction;
 use Bga\Games\ScreamPark\Game;
-use Bga\Games\ScreamPark\Notifs;
 use Bga\Games\ScreamPark\components\themes\Themes;
 
 class ChooseTheme extends GameState
@@ -32,15 +32,13 @@ class ChooseTheme extends GameState
 
     public function getArgs(): array
     {
-        $args = [
-            "_private" => []
-        ];
+        $args = [];
 
         $players = $this->game->loadPlayersBasicInfos();
         foreach ($players as $playerId => $player) {
             $hand = $this->themes->deck->getPlayerHand($playerId);
 
-            $args["_private"][$playerId] = [
+            $args[$playerId] = [
                 "hand" => array_keys($hand),
             ];
         }
@@ -59,7 +57,7 @@ class ChooseTheme extends GameState
         #[IntParam(min: 1, max: 10)] int $cardId,
         array $args
     ): void {
-        $hand = $args["_private"][$currentPlayerId]["hand"];
+        $hand = $args[$currentPlayerId]["hand"];
 
         if (!in_array($cardId, $hand)) {
             throw new \BgaVisibleSystemException("Unexpected error: 1");
@@ -70,19 +68,54 @@ class ChooseTheme extends GameState
         }, ARRAY_FILTER_USE_BOTH);
         $otherCardId = reset($handLeft);
 
-        $this->game->notify->all(
-            "chooseTheme",
+        $this->themes->deck->moveCard($otherCardId, "box", $currentPlayerId);
+
+        $this->notify->all(
+            "discardTheme",
             "",
             [
                 "cardId" => $otherCardId
             ]
         );
 
-        $this->themes->deck->moveCard($otherCardId, "box", $currentPlayerId);
         $this->gamestate->setPlayerNonMultiactive($currentPlayerId, ChooseTheme::class);
     }
 
-    function zombie(int $playerId, array $args): void
+    #[PossibleAction]
+    #[CheckAction(false)]
+    public function actUndoChooseTheme(int $currentPlayerId)
+    {
+        if ($this->game->isSpectator()) {
+            throw new \BgaVisibleSystemException("Unexpected Error: 99");
+        }
+
+        $sql = "SELECT card_id FROM {$this->themes->dbTable} WHERE card_location='box' AND card_location_arg={$currentPlayerId}";
+        $cardId = (int) $this->game->getUniqueValueFromDB($sql);
+
+        $this->themes->deck->moveCard($cardId, "hand", $currentPlayerId);
+        $card = $this->themes->deck->getCard($cardId);
+
+        $this->notify->player(
+            $currentPlayerId,
+            "privateGetTheme",
+            "",
+            [
+                "card" => $card,
+            ]
+        );
+
+        $this->notify->all(
+            "getTheme",
+            "",
+            [
+                "cardId" => $cardId,
+            ]
+        );
+
+        $this->gamestate->setPlayersMultiactive([$currentPlayerId], ChooseTheme::class);
+    }
+
+    public function zombie(int $playerId, array $args): void
     {
         $hand = $args["_private"][$playerId]["hand"];
         $cardId = $hand[bga_rand(0, 1)];

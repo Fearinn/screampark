@@ -17,7 +17,9 @@ class Template {
         defaultZoom: window.innerWidth <= 400 ? 0.3 : 1,
       }),
       animations: new BgaAnimations.Manager({
-        animationsActive: () => this.game.bgaAnimationsActive(),
+        animationsActive: () => {
+          return this.game.bgaAnimationsActive();
+        },
       }),
     };
 

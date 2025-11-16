@@ -115,7 +115,7 @@ declare class GameNotifQueue {
    */
   setIgnoreNotificationCheck(
     notif_type: string,
-    predicate: (notif: object) => boolean
+    predicate: (notif: Notif) => boolean
   ): void;
 }
 
@@ -186,6 +186,8 @@ declare class Sounds {
 }
 
 declare class GameGui<G = Gamedatas> {
+  notifqueue: GameNotifQueue; 
+
   /**
    * Return true if the game is in realtime. Note that having a distinct behavior in realtime and turn-based should be exceptional.
    */
