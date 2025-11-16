@@ -2,17 +2,17 @@
 
 namespace Bga\Games\ScreamPark;
 
+use Bga\Games\ParksAndPotions\Notif;
 use Bga\Games\ScreamPark\components\scenes\Scenes;
 use Bga\Games\ScreamPark\components\themes\Themes;
 use Bga\Games\ScreamPark\components\vips\Vips;
-use Bga\Games\ScreamPark\Game;
-use Bga\Games\ScreamPark\States\PlayerTurn;
+use Bga\Games\ScreamPark\States\ChooseTheme;
 
 trait SetupNewGame
 {
-    public function newGame(Game $game, array $players, array $options = []): string
+    public function newGame(array $players, array $options = []): string
     {
-        $gameinfos = $game->getGameinfos();
+        $gameinfos = $this->getGameinfos();
         $default_colors = $gameinfos['player_colors'];
 
         foreach ($players as $player_id => $player) {
@@ -25,16 +25,16 @@ trait SetupNewGame
             ]);
         }
 
-        $game->DbQuery(
+        $this->DbQuery(
             sprintf(
                 "INSERT INTO player (player_id, player_color, player_canal, player_name, player_avatar) VALUES %s",
                 implode(",", $query_values)
             )
         );
 
-        $game->reattributeColorsBasedOnPreferences($players, $gameinfos["player_colors"]);
-        $game->reloadPlayersBasicInfos();
-        $game->activeNextPlayer();
+        $this->reattributeColorsBasedOnPreferences($players, $gameinfos["player_colors"]);
+        $this->reloadPlayersBasicInfos();
+        $this->activeNextPlayer();
 
         $Vips = new Vips($this);
         $Vips->setup();
@@ -45,6 +45,6 @@ trait SetupNewGame
         $Themes = new Themes($this);
         $Themes->setup();
 
-        return PlayerTurn::class;
+        return ChooseTheme::class;
     }
 }

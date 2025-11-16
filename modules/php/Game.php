@@ -28,6 +28,7 @@ class Game extends \Bga\GameFramework\Table
 {
     use Gamedatas;
     use SetupNewGame;
+    use Notifs;
 
     public readonly array $VIPS;
     public readonly Deck $vip_cards;
@@ -47,6 +48,8 @@ class Game extends \Bga\GameFramework\Table
         $this->vip_cards = $this->deckFactory->createDeck("vips");
         $this->scene_cards = $this->deckFactory->createDeck("scenes");
         $this->theme_cards = $this->deckFactory->createDeck("themes");
+
+        $this->decorateNotifs();
     }
 
     public function getGameProgression()
@@ -63,7 +66,7 @@ class Game extends \Bga\GameFramework\Table
 
     protected function setupNewGame($players, $options = [])
     {
-        return $this->newGame($this, $players, $options);
+        return $this->newGame($players, $options);
     }
 
     public function debug_goToState(int $state = 3)
