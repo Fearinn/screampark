@@ -34,12 +34,12 @@ interface Stocks {
   meeples?: MeepleStocks;
 }
 
-type ActionName = "";
-
 type SCP_Card = {
   id: number;
-  type: string;
-  type_arg: number;
-  location: string;
-  location_arg: number;
+  type?: string;
+  type_arg?: number;
+  location?: string;
+  location_arg?: number;
 };
+
+type ActionName = "actChooseTheme";

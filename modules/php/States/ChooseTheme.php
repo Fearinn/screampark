@@ -70,12 +70,16 @@ class ChooseTheme extends GameState
         }, ARRAY_FILTER_USE_BOTH);
         $otherCardId = reset($handLeft);
 
-        $this->game->notify->all("discardTheme", "", [
-            "card_id" => $otherCardId
-        ]);
+        $this->game->notify->all(
+            "chooseTheme",
+            "",
+            [
+                "cardId" => $otherCardId
+            ]
+        );
 
         $this->themes->deck->moveCard($otherCardId, "box", $currentPlayerId);
-        $this->gamestate->setPlayerNonMultiactive($currentPlayerId, NextPlayer::class);
+        $this->gamestate->setPlayerNonMultiactive($currentPlayerId, ChooseTheme::class);
     }
 
     function zombie(int $playerId, array $args): void

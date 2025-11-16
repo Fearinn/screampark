@@ -1,6 +1,6 @@
 class ThemeManager {
   private readonly game: SCP;
-  private stocks: ThemeStocks;
+  public stocks: ThemeStocks;
   private manager: BgaCards.Manager<ThemeCard>;
   private THEMES: THEME[];
 
@@ -69,17 +69,17 @@ class ThemeManager {
 
     const { players } = gamedatas;
     const boards = {};
-    keysToNumbers(players).forEach((player_id) => {
-      boards[player_id] = new BgaCards.LineStock(
+    keysToNumbers(players).forEach((playerId) => {
+      boards[playerId] = new BgaCards.LineStock(
         this.manager,
-        document.getElementById(`scp_themes-${player_id}`),
+        document.getElementById(`scp_themes-${playerId}`),
         {
           wrap: "nowrap",
           gap: "16px",
           autoPlace: ({ location, location_arg }) => {
             return (
               (location === "hand" || location === "board") &&
-              location_arg == player_id
+              location_arg == playerId
             );
           },
         }
@@ -97,12 +97,22 @@ class ThemeManager {
     const { themeHands, themeCards } = this.game.gamedatas;
     this.manager.placeCards([...themeHands, ...themeCards]);
   }
+
+  public setSelection(
+    playerId: number,
+    callback: null | ((selection: ThemeCard[], card: ThemeCard) => void)
+  ): void {
+    const { boards } = this.stocks;
+    const board = boards[playerId];
+    board.setSelectionMode(callback ? "single" : "none");
+    board.onSelectionChange = callback;
+  }
 }
 
 interface ThemeCard extends Partial<SCP_Card> {
   id: number;
-  location: "board" | "hand";
-  location_arg: number;
+  location?: "board" | "hand";
+  location_arg?: number;
 }
 
 interface THEME {

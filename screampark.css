@@ -172,11 +172,6 @@ p {
   margin-bottom: 4px;
 }
 
-.scp_themes {
-  max-width: 100%;
-  overflow-x: auto;
-}
-
 .scp_starTrack {
   --star-width: calc(918px / 21);
   position: absolute;

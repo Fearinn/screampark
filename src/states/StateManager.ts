@@ -4,23 +4,29 @@ class StateManager {
 
   constructor(game: SCP) {
     this.game = game;
-    this.states = {};
+    this.states = {
+      ChooseTheme: new ChooseTheme(this.game),
+    };
   }
 
-  onEntering(stateName: StateName, args: any): void {
+  onEntering(stateName: StateName, args: Record<string, any>): void {
     const { isSpectator, on_client_state } = this.game;
 
     if (isSpectator) {
       return;
     }
+
+    this.states[stateName].onEntering();
   }
 
-  onUpdate(stateName: StateName, args: any): void {
-    const { isSpectator, on_client_state, gamedatas } = this.game;
+  onUpdate(stateName: StateName, args: Record<string, any>): void {
+    const { isSpectator, on_client_state } = this.game;
 
     if (isSpectator) {
       return;
     }
+
+    this.states[stateName].onUpdate();
   }
 
   onLeaving(stateName: StateName): void {
@@ -29,10 +35,12 @@ class StateManager {
     if (isSpectator) {
       return;
     }
+
+    this.states[stateName].onLeaving();
   }
 }
 
-type StateName = "";
+type StateName = "ChooseTheme";
 
 class State {
   protected readonly game: SCP;
@@ -41,9 +49,9 @@ class State {
     this.game = game;
   }
 
-  public enter(args: any): void {}
+  public onEntering(args: Record<string, any>): void {}
 
-  public update(args: any): void {}
+  public onUpdate(args: Record<string, any>): void {}
 
-  public leave(): void {}
+  public onLeaving(): void {}
 }

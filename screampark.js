@@ -637,7 +637,25 @@ define([
 var NotifManager = /** @class */ (function () {
     function NotifManager(game) {
         this.game = game;
+        this.themeManager = new ThemeManager(this.game);
     }
+    NotifManager.prototype.notif_chooseTheme = function (args) {
+        return __awaiter(this, void 0, void 0, function () {
+            var playerId, cardId, boards, board;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        playerId = args.player_id, cardId = args.cardId;
+                        boards = this.themeManager.stocks.boards;
+                        board = boards[playerId];
+                        return [4 /*yield*/, board.removeCard({ id: cardId }, { fadeOut: true, slideTo: document.getElementById("player_boards") })];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
     return NotifManager;
 }());
 var MeepleManager = /** @class */ (function () {
@@ -864,14 +882,14 @@ var ThemeManager = /** @class */ (function () {
         this.manager = managers.themes;
         var players = gamedatas.players;
         var boards = {};
-        keysToNumbers(players).forEach(function (player_id) {
-            boards[player_id] = new BgaCards.LineStock(_this.manager, document.getElementById("scp_themes-".concat(player_id)), {
+        keysToNumbers(players).forEach(function (playerId) {
+            boards[playerId] = new BgaCards.LineStock(_this.manager, document.getElementById("scp_themes-".concat(playerId)), {
                 wrap: "nowrap",
                 gap: "16px",
                 autoPlace: function (_a) {
                     var location = _a.location, location_arg = _a.location_arg;
                     return ((location === "hand" || location === "board") &&
-                        location_arg == player_id);
+                        location_arg == playerId);
                 },
             });
         });
@@ -884,6 +902,12 @@ var ThemeManager = /** @class */ (function () {
         this.build();
         var _a = this.game.gamedatas, themeHands = _a.themeHands, themeCards = _a.themeCards;
         this.manager.placeCards(__spreadArray(__spreadArray([], themeHands, true), themeCards, true));
+    };
+    ThemeManager.prototype.setSelection = function (playerId, callback) {
+        var boards = this.stocks.boards;
+        var board = boards[playerId];
+        board.setSelectionMode(callback ? "single" : "none");
+        board.onSelectionChange = callback;
     };
     return ThemeManager;
 }());
@@ -948,25 +972,30 @@ var VipManager = /** @class */ (function () {
 var StateManager = /** @class */ (function () {
     function StateManager(game) {
         this.game = game;
-        this.states = {};
+        this.states = {
+            ChooseTheme: new ChooseTheme(this.game),
+        };
     }
     StateManager.prototype.onEntering = function (stateName, args) {
         var _a = this.game, isSpectator = _a.isSpectator, on_client_state = _a.on_client_state;
         if (isSpectator) {
             return;
         }
+        this.states[stateName].onEntering();
     };
     StateManager.prototype.onUpdate = function (stateName, args) {
-        var _a = this.game, isSpectator = _a.isSpectator, on_client_state = _a.on_client_state, gamedatas = _a.gamedatas;
+        var _a = this.game, isSpectator = _a.isSpectator, on_client_state = _a.on_client_state;
         if (isSpectator) {
             return;
         }
+        this.states[stateName].onUpdate();
     };
     StateManager.prototype.onLeaving = function (stateName) {
         var isSpectator = this.game.isSpectator;
         if (isSpectator) {
             return;
         }
+        this.states[stateName].onLeaving();
     };
     return StateManager;
 }());
@@ -974,8 +1003,45 @@ var State = /** @class */ (function () {
     function State(game) {
         this.game = game;
     }
-    State.prototype.enter = function (args) { };
-    State.prototype.update = function (args) { };
-    State.prototype.leave = function () { };
+    State.prototype.onEntering = function (args) { };
+    State.prototype.onUpdate = function (args) { };
+    State.prototype.onLeaving = function () { };
     return State;
 }());
+var ChooseTheme = /** @class */ (function (_super) {
+    __extends(ChooseTheme, _super);
+    function ChooseTheme(game) {
+        var _this = _super.call(this, game) || this;
+        _this.themeManager = new ThemeManager(_this.game);
+        _this.THEMES = _this.game.gamedatas.THEMES;
+        return _this;
+    }
+    ChooseTheme.prototype.onUpdate = function () {
+        var _this = this;
+        var playerId = this.game.player_id;
+        if (!this.game.isCurrentPlayerActive()) {
+            this.onInactiveUpdate();
+            return;
+        }
+        this.themeManager.setSelection(playerId, function (selection, card) {
+            if (selection.length === 0) {
+                _this.game.removeConfirmation();
+                return;
+            }
+            var cardId = card.id, themeId = card.type_arg;
+            var label = _this.THEMES[themeId].label;
+            _this.game.addConfirmation(_this.game.format_string_recursive(_('keep "${theme_label}"'), {
+                theme_label: _(label),
+            }), function () {
+                _this.game.performAction("actChooseTheme", {
+                    cardId: cardId,
+                });
+            });
+        });
+    };
+    ChooseTheme.prototype.onInactiveUpdate = function () {
+        var playerId = this.game.player_id;
+        this.themeManager.setSelection(playerId, null);
+    };
+    return ChooseTheme;
+}(State));
