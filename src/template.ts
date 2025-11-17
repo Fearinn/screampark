@@ -29,33 +29,43 @@ class Template {
   }
 
   public setupZones(): void {
-    const { gamedatas, keysToNumbers } = this.game;
+    const { gamedatas, keysToNumbers, player_id } = this.game;
     const { players } = gamedatas;
 
-    const zones = document.getElementById(`scp_playerZones`);
-    keysToNumbers(players).forEach((player_id) => {
-      const { color: player_color } = players[player_id];
-      const player_name = this.game.getFormattedPlayerName(player_id);
+    keysToNumbers(players).forEach((playerId) => {
+      const { color: player_color } = players[playerId];
+      const player_name = this.game.getFormattedPlayerName(playerId);
 
-      const title =
-        player_id === this.game.player_id
-          ? this.game.format_string_recursive(_("${player_name} (you)"), {
-              player_name,
-            })
-          : player_name;
+      const isCurrentPlayerId = player_id === playerId;
 
+      const title = isCurrentPlayerId
+        ? this.game.format_string_recursive(_("${player_name} (You)"), {
+            player_name,
+          })
+        : player_name;
+
+      const zones = document.getElementById(`scp_playerZones`);
       zones.insertAdjacentHTML(
         "beforeend",
-        `<div id="scp_playerZone-${player_id}" class="scp_playerZone">
-            <h3 class="scp_title" style="color: #${player_color}; background-color: #${player_color}44;">${title}</h3>
-            <div id="scp_meepleSteps-${player_id}" class="scp_meepleSteps">
-              <div id="scp_meepleStep-0-${player_id}" class="scp_meepleStep"></div>
-            </div>
-            <div class="scp_zoneContent">
-            <div id="scp_themes-${player_id}" class="scp_themes"></div>
-              <div id="scp_scenes-${player_id}" class="scp_scenes"></div>
-            </div>
-          </div>`
+        `<div id="scp_playerZone-${playerId}" class="scp_playerZone ${
+          isCurrentPlayerId ? "scp_playerZone-current" : ""
+        }">
+          <h3 class="scp_title" style="color: #${player_color}; background-color: #${player_color}40;">
+            ${title}
+          </h3>
+          ${
+            isCurrentPlayerId
+              ? `<div id="scp_hand" class="scp_hand"></div>`
+              : ""
+          }
+          <div id="scp_meepleSteps-${playerId}" class="scp_meepleSteps">
+            <div id="scp_meepleStep-0-${playerId}" class="scp_meepleStep"></div>
+          </div>
+          <div class="scp_playerBoard">
+            <div id="scp_themes-${playerId}" class="scp_themes"></div>
+            <div id="scp_scenes-${playerId}" class="scp_scenes"></div>
+          </div>
+        </div>`
       );
     });
   }

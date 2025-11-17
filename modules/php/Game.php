@@ -20,6 +20,7 @@ declare(strict_types=1);
 
 namespace Bga\Games\ScreamPark;
 
+use Bga\GameFramework\Components\Counters\PlayerCounter;
 use Bga\GameFramework\Components\Deck;
 use Bga\Games\ScreamPark\Gamedatas;
 use Bga\Games\ScreamPark\SetupNewGame;
@@ -35,6 +36,7 @@ class Game extends \Bga\GameFramework\Table
     public readonly array $GENRES;
     public readonly array $SCENES;
     public readonly Deck $scene_cards;
+    public readonly PlayerCounter $scene_counter;
     public readonly array $THEMES;
     public readonly Deck $theme_cards;
 

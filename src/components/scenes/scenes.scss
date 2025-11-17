@@ -14,6 +14,16 @@
   }
 }
 
+.scp_hand {
+  justify-content: start !important;
+  padding: 12px;
+  overflow: auto;
+
+  &:has(.hand-stock:empty) {
+    display: none;
+  }
+}
+
 .scp_genreDeck {
   position: absolute !important;
   right: 13%;

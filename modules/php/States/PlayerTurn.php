@@ -20,7 +20,7 @@ class PlayerTurn extends GameState
     ) {
         parent::__construct(
             $game,
-            id: 4,
+            id: 5,
             type: StateType::MULTIPLE_ACTIVE_PLAYER,
             description: clienttranslate('Other player(s) must play or discard 2 Scenes'),
             descriptionMyTurn: clienttranslate('${you} must play or discard 2 Scenes'),
@@ -45,7 +45,7 @@ class PlayerTurn extends GameState
         return $args;
     }
 
-    public function onEnteringState(): void
+    public function onEnteringState(int $activePlayerId): void
     {
         $this->gamestate->setAllPlayersMultiactive();
     }

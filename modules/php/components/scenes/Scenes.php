@@ -2,6 +2,7 @@
 
 namespace Bga\Games\ScreamPark\components\scenes;
 
+use Bga\GameFramework\Components\Counters\PlayerCounter;
 use Bga\Games\ScreamPark\components\Cards;
 use Bga\Games\ScreamPark\Game;
 
@@ -9,6 +10,7 @@ class Scenes extends Cards
 {
     private readonly array $SCENES;
     private readonly array $GENRES;
+    public readonly PlayerCounter $counter;
 
     public function __construct(Game $game)
     {
@@ -38,10 +40,17 @@ class Scenes extends Cards
             $genreCards[] = [
                 "type" => "genre",
                 "type_arg" => $genre_id,
-                "nbr" => 9 * $playerCount, 
+                "nbr" => 9 * $playerCount,
             ];
         }
 
-        $this->deck->createCards($genreCards, "genres");
+        $this->deck->createCards($genreCards, "genreDeck");
+    }
+
+    public function getPublic(): array
+    {
+        $cards = $this->game->getObjectListFromDB("SELECT {$this->cardFields} FROM {$this->dbTable} 
+        WHERE card_location<>'deck' AND card_location<>'hand' AND card_location<>'genreDeck'");
+        return $cards;
     }
 }

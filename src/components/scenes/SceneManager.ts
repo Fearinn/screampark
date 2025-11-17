@@ -1,6 +1,6 @@
 class SceneManager {
   private readonly game: SCP;
-  private stocks: SceneStocks;
+  public stocks: SceneStocks;
   private manager: BgaCards.Manager<SceneCard>;
   private readonly GENRES: GENRE[];
   private readonly SCENES: SCENE[];
@@ -16,15 +16,18 @@ class SceneManager {
   }
 
   private build(): void {
-    const { managers, gamedatas } = this.game;
+    const { managers, gamedatas, keysToNumbers, player_id } = this.game;
     const { animations } = managers;
 
     managers.scenes = new BgaCards.Manager<SceneCard>({
       animationManager: animations,
       type: "scp_scene",
-      cardHeight: 285,
+      cardHeight: 285.1,
       cardWidth: 150,
       cardBorderRadius: "8px",
+      isCardVisible: ({ type_arg }) => {
+        return !!type_arg;
+      },
       setupDiv: ({ type }, element) => {
         element.classList.add("scp_card");
 
@@ -63,10 +66,7 @@ class SceneManager {
           ""
         );
       },
-      setupBackDiv: ({ type, type_arg }, element) => {
-        if (!type) {
-          type = type_arg === -1 ? "scene" : "genre";
-        }
+      setupBackDiv: ({ type }, element) => {
         element.style.backgroundImage = `url(${g_gamethemeurl}img/${type}s/${type}_0.jpg)`;
       },
     });
@@ -75,6 +75,23 @@ class SceneManager {
     const { sceneDeckCount } = gamedatas;
 
     this.game.stocks.scenes = {
+      hand: new BgaCards.LineStock(
+        this.manager,
+        document.getElementById("scp_hand"),
+        {
+          gap: "16px",
+          wrap: "nowrap",
+          sort: (a, b) => {
+            return (
+              this.SCENES[a.type_arg].up.points -
+              this.SCENES[b.type_arg].up.points
+            );
+          },
+          autoPlace: ({ location, location_arg }) => {
+            return location === "hand" && Number(location_arg) === player_id;
+          },
+        }
+      ),
       deck: new BgaCards.Deck(
         this.manager,
         document.getElementById("scp_sceneDeck"),
@@ -82,19 +99,19 @@ class SceneManager {
           cardNumber: sceneDeckCount,
           fakeCardGenerator: (deckId) => {
             const fakeCard = this.manager.getFakeCardGenerator()(deckId);
-            fakeCard.type_arg = -1;
+            fakeCard.type = "scene";
             return fakeCard;
           },
         }
       ),
-      genres: new BgaCards.Deck(
+      genreDeck: new BgaCards.Deck(
         this.manager,
         document.getElementById("scp_genreDeck"),
         {
           cardNumber: 20,
           fakeCardGenerator: (deckId) => {
             const fakeCard = this.manager.getFakeCardGenerator()(deckId);
-            fakeCard.type_arg = -2;
+            fakeCard.type = "genre";
             return fakeCard;
           },
         }
@@ -105,6 +122,8 @@ class SceneManager {
 
   public setup(): void {
     this.build();
+    const { sceneCards, sceneHand } = this.game.gamedatas;
+    this.manager.placeCards([...sceneCards, ...sceneHand]);
   }
 }
 
@@ -126,11 +145,13 @@ interface SCENE {
 
 interface SceneStocks {
   deck: BgaCards.Deck<SceneCard>;
-  genres: BgaCards.Deck<SceneCard>;
+  genreDeck: BgaCards.Deck<SceneCard>;
+  hand: BgaCards.LineStock<SceneCard>;
 }
 
 interface SceneCard extends SCP_Card {
   type: "scene" | "genre";
+  location?: "hand" | "board" | "genreDeck";
 }
 
 interface GENRE {

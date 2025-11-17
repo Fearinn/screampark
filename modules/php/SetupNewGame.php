@@ -2,7 +2,6 @@
 
 namespace Bga\Games\ScreamPark;
 
-use Bga\Games\ParksAndPotions\Notif;
 use Bga\Games\ScreamPark\components\scenes\Scenes;
 use Bga\Games\ScreamPark\components\themes\Themes;
 use Bga\Games\ScreamPark\components\vips\Vips;

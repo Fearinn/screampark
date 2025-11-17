@@ -90,11 +90,15 @@
   flex-direction: column;
   border-radius: 8px;
   box-shadow: 0 0 8px #808080;
-  width: 100%;
+  max-width: calc(var(--board-width) * 1.5);
+  width: 95%;
   overflow: visible;
 }
+.scp_playerZone-current {
+  order: -1;
+}
 .scp_playerZone .scp_title {
-  font-size: 20px;
+  font-size: 24px;
   text-shadow: black 0 0 1px, black 0 0 1px, black 0 0 1px, black 0 0 1px, black 0 0 1px, black 0 0 1px;
   border-top-left-radius: 8px;
   border-bottom-right-radius: 8px;
@@ -102,7 +106,7 @@
   width: fit-content;
 }
 
-.scp_zoneContent {
+.scp_playerBoard {
   display: flex;
   gap: 12px;
   padding: 0 12px 12px 12px;
@@ -153,6 +157,15 @@ p {
 }
 
 .scp_scenes:empty {
+  display: none;
+}
+
+.scp_hand {
+  justify-content: start !important;
+  padding: 12px;
+  overflow: auto;
+}
+.scp_hand:has(.hand-stock:empty) {
   display: none;
 }
 

@@ -65,4 +65,15 @@ class Cards
         WHERE card_location<>'deck' AND card_location<>'hand' AND card_location<>'box'");
         return $cards;
     }
+
+    public function hideCards(array $cards, array $hiddenProperties): array
+    {
+        $cards = array_map(function ($card) use ($hiddenProperties) {
+            foreach ($hiddenProperties as $property) {
+                unset($card, $property);
+            }
+        }, $cards);
+
+        return $cards;
+    }
 }

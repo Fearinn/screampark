@@ -1,22 +1,28 @@
 class NotifManager {
   private readonly game: SCP;
   private readonly themeManager: ThemeManager;
+  private readonly sceneManager: SceneManager;
 
   constructor(game: SCP) {
     this.game = game;
     this.themeManager = new ThemeManager(this.game);
+    this.sceneManager = new SceneManager(this.game);
   }
 
   public setIgnoreChecks() {
     const { notifqueue, player_id } = this.game;
 
-    notifqueue.setIgnoreNotificationCheck(
-      "getTheme",
-      (notif: Notif<{ player_id: number }>) => {
-        const { player_id: playerId } = notif.args;
-        return playerId === player_id;
-      }
-    );
+    const notifsToIgnore = ["getTheme", "dealScenes"];
+
+    notifsToIgnore.forEach((notifName) => {
+      notifqueue.setIgnoreNotificationCheck(
+        notifName,
+        (notif: Notif<{ player_id: number }>) => {
+          const { player_id: playerId } = notif.args;
+          return playerId === player_id;
+        }
+      );
+    });
   }
 
   public async notif_discardTheme(args: {
@@ -65,5 +71,32 @@ class NotifManager {
     const { boards } = this.themeManager.stocks;
 
     boards[playerId].setCardVisible(card, true);
+  }
+
+  public async notif_privateDealScenes(args: {
+    cards: SceneCard[];
+  }): Promise<void> {
+    const { cards } = args;
+    const { hand, deck } = this.sceneManager.stocks;
+
+    hand.addCards(cards, { fromStock: deck });
+  }
+
+  public async notif_dealScenes(args: {
+    player_id: number;
+    cardCount: number;
+  }): Promise<void> {
+    const { cardCount, player_id: playerId } = args;
+    const { deck } = this.sceneManager.stocks;
+
+    const fakeCards: SceneCard[] = [];
+    for (let i = 1; i <= cardCount; i++) {
+      fakeCards.push({ id: -i, type: "scene" });
+    }
+
+    await deck.addCards(fakeCards);
+    await deck.removeCards(fakeCards, {
+      slideTo: document.getElementById(`scp_playerZone-${playerId}`),
+    });
   }
 }

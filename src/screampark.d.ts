@@ -14,6 +14,8 @@ interface SCP_Gamedatas extends Gamedatas<SCP_Player> {
   THEMES: THEME[];
   themeHands: ThemeCard[];
   themeCards: ThemeCard[];
+  sceneHand: SceneCard[];
+  sceneCards: SceneCard[];
 }
 
 interface Managers {

@@ -5,29 +5,30 @@ namespace Bga\Games\ScreamPark;
 use Bga\Games\ScreamPark\components\scenes\Scenes;
 use Bga\Games\ScreamPark\components\themes\Themes;
 use Bga\Games\ScreamPark\components\vips\Vips;
-use Bga\Games\ScreamPark\Game;
 
 trait Gamedatas
 {
-
-    public function getGamedatas(Game $game)
+    public function getGamedatas()
     {
-        $player_id = $game->getCurrentPlayerId();
+        $playerId = $this->getCurrentPlayerId();
 
-        $Vips = new Vips($game);
-        $Scenes = new Scenes($game);
-        $Themes = new Themes($game);
+        $Vips = new Vips($this);
+        $Scenes = new Scenes($this);
+        $Themes = new Themes($this);
+        $Scenes = new Scenes($this);
 
         $gamedatas = [
-            "players" => $game->getCollectionFromDb("SELECT `player_id` `id`, `player_score` `score` FROM `player`"),
-            "VIPS" => $game->VIPS,
+            "players" => $this->getCollectionFromDb("SELECT `player_id` `id`, `player_score` `score` FROM `player`"),
+            "VIPS" => $this->VIPS,
             "vipCards" => $Vips->getPublic(),
-            "GENRES" => $game->GENRES,
-            "SCENES" => $game->SCENES,
+            "GENRES" => $this->GENRES,
+            "SCENES" => $this->SCENES,
             "sceneDeckCount" => $Scenes->getDeckCount(),
-            "THEMES" => $game->THEMES,
+            "THEMES" => $this->THEMES,
             "themeCards" => $Themes->getPublic(),
-            "themeHands" => $Themes->getHands($player_id),
+            "themeHands" => $Themes->getHands($playerId),
+            "sceneHand" => !$this->isSpectator() ? $Scenes->getHand($playerId) : [],
+            "sceneCards" => $Scenes->getPublic(),
         ];
 
         return $gamedatas;

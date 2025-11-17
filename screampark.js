@@ -409,18 +409,21 @@ var Template = /** @class */ (function () {
     };
     Template.prototype.setupZones = function () {
         var _this = this;
-        var _a = this.game, gamedatas = _a.gamedatas, keysToNumbers = _a.keysToNumbers;
+        var _a = this.game, gamedatas = _a.gamedatas, keysToNumbers = _a.keysToNumbers, player_id = _a.player_id;
         var players = gamedatas.players;
-        var zones = document.getElementById("scp_playerZones");
-        keysToNumbers(players).forEach(function (player_id) {
-            var player_color = players[player_id].color;
-            var player_name = _this.game.getFormattedPlayerName(player_id);
-            var title = player_id === _this.game.player_id
-                ? _this.game.format_string_recursive(_("${player_name} (you)"), {
+        keysToNumbers(players).forEach(function (playerId) {
+            var player_color = players[playerId].color;
+            var player_name = _this.game.getFormattedPlayerName(playerId);
+            var isCurrentPlayerId = player_id === playerId;
+            var title = isCurrentPlayerId
+                ? _this.game.format_string_recursive(_("${player_name} (You)"), {
                     player_name: player_name,
                 })
                 : player_name;
-            zones.insertAdjacentHTML("beforeend", "<div id=\"scp_playerZone-".concat(player_id, "\" class=\"scp_playerZone\">\n            <h3 class=\"scp_title\" style=\"color: #").concat(player_color, "; background-color: #").concat(player_color, "44;\">").concat(title, "</h3>\n            <div id=\"scp_meepleSteps-").concat(player_id, "\" class=\"scp_meepleSteps\">\n              <div id=\"scp_meepleStep-0-").concat(player_id, "\" class=\"scp_meepleStep\"></div>\n            </div>\n            <div class=\"scp_zoneContent\">\n            <div id=\"scp_themes-").concat(player_id, "\" class=\"scp_themes\"></div>\n              <div id=\"scp_scenes-").concat(player_id, "\" class=\"scp_scenes\"></div>\n            </div>\n          </div>"));
+            var zones = document.getElementById("scp_playerZones");
+            zones.insertAdjacentHTML("beforeend", "<div id=\"scp_playerZone-".concat(playerId, "\" class=\"scp_playerZone ").concat(isCurrentPlayerId ? "scp_playerZone-current" : "", "\">\n          <h3 class=\"scp_title\" style=\"color: #").concat(player_color, "; background-color: #").concat(player_color, "40;\">\n            ").concat(title, "\n          </h3>\n          ").concat(isCurrentPlayerId
+                ? "<div id=\"scp_hand\" class=\"scp_hand\"></div>"
+                : "", "\n          <div id=\"scp_meepleSteps-").concat(playerId, "\" class=\"scp_meepleSteps\">\n            <div id=\"scp_meepleStep-0-").concat(playerId, "\" class=\"scp_meepleStep\"></div>\n          </div>\n          <div class=\"scp_playerBoard\">\n            <div id=\"scp_themes-").concat(playerId, "\" class=\"scp_themes\"></div>\n            <div id=\"scp_scenes-").concat(playerId, "\" class=\"scp_scenes\"></div>\n          </div>\n        </div>"));
         });
     };
     Template.prototype.setupStocks = function () {
@@ -642,12 +645,16 @@ var NotifManager = /** @class */ (function () {
     function NotifManager(game) {
         this.game = game;
         this.themeManager = new ThemeManager(this.game);
+        this.sceneManager = new SceneManager(this.game);
     }
     NotifManager.prototype.setIgnoreChecks = function () {
         var _a = this.game, notifqueue = _a.notifqueue, player_id = _a.player_id;
-        notifqueue.setIgnoreNotificationCheck("getTheme", function (notif) {
-            var playerId = notif.args.player_id;
-            return playerId === player_id;
+        var notifsToIgnore = ["getTheme", "dealScenes"];
+        notifsToIgnore.forEach(function (notifName) {
+            notifqueue.setIgnoreNotificationCheck(notifName, function (notif) {
+                var playerId = notif.args.player_id;
+                return playerId === player_id;
+            });
         });
     };
     NotifManager.prototype.notif_discardTheme = function (args) {
@@ -706,6 +713,42 @@ var NotifManager = /** @class */ (function () {
         var playerId = args.player_id, card = args.card;
         var boards = this.themeManager.stocks.boards;
         boards[playerId].setCardVisible(card, true);
+    };
+    NotifManager.prototype.notif_privateDealScenes = function (args) {
+        return __awaiter(this, void 0, void 0, function () {
+            var cards, _a, hand, deck;
+            return __generator(this, function (_b) {
+                cards = args.cards;
+                _a = this.sceneManager.stocks, hand = _a.hand, deck = _a.deck;
+                hand.addCards(cards, { fromStock: deck });
+                return [2 /*return*/];
+            });
+        });
+    };
+    NotifManager.prototype.notif_dealScenes = function (args) {
+        return __awaiter(this, void 0, void 0, function () {
+            var cardCount, playerId, deck, fakeCards, i;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        cardCount = args.cardCount, playerId = args.player_id;
+                        deck = this.sceneManager.stocks.deck;
+                        fakeCards = [];
+                        for (i = 1; i <= cardCount; i++) {
+                            fakeCards.push({ id: -i, type: "scene" });
+                        }
+                        return [4 /*yield*/, deck.addCards(fakeCards)];
+                    case 1:
+                        _a.sent();
+                        return [4 /*yield*/, deck.removeCards(fakeCards, {
+                                slideTo: document.getElementById("scp_playerZone-".concat(playerId)),
+                            })];
+                    case 2:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return NotifManager;
 }());
@@ -770,14 +813,18 @@ var SceneManager = /** @class */ (function () {
     }
     SceneManager.prototype.build = function () {
         var _this = this;
-        var _a = this.game, managers = _a.managers, gamedatas = _a.gamedatas;
+        var _a = this.game, managers = _a.managers, gamedatas = _a.gamedatas, keysToNumbers = _a.keysToNumbers, player_id = _a.player_id;
         var animations = managers.animations;
         managers.scenes = new BgaCards.Manager({
             animationManager: animations,
             type: "scp_scene",
-            cardHeight: 285,
+            cardHeight: 285.1,
             cardWidth: 150,
             cardBorderRadius: "8px",
+            isCardVisible: function (_a) {
+                var type_arg = _a.type_arg;
+                return !!type_arg;
+            },
             setupDiv: function (_a, element) {
                 var type = _a.type;
                 element.classList.add("scp_card");
@@ -806,29 +853,38 @@ var SceneManager = /** @class */ (function () {
                 }), "");
             },
             setupBackDiv: function (_a, element) {
-                var type = _a.type, type_arg = _a.type_arg;
-                if (!type) {
-                    type = type_arg === -1 ? "scene" : "genre";
-                }
+                var type = _a.type;
                 element.style.backgroundImage = "url(".concat(g_gamethemeurl, "img/").concat(type, "s/").concat(type, "_0.jpg)");
             },
         });
         this.manager = this.game.managers.scenes;
         var sceneDeckCount = gamedatas.sceneDeckCount;
         this.game.stocks.scenes = {
+            hand: new BgaCards.LineStock(this.manager, document.getElementById("scp_hand"), {
+                gap: "16px",
+                wrap: "nowrap",
+                sort: function (a, b) {
+                    return (_this.SCENES[a.type_arg].up.points -
+                        _this.SCENES[b.type_arg].up.points);
+                },
+                autoPlace: function (_a) {
+                    var location = _a.location, location_arg = _a.location_arg;
+                    return location === "hand" && Number(location_arg) === player_id;
+                },
+            }),
             deck: new BgaCards.Deck(this.manager, document.getElementById("scp_sceneDeck"), {
                 cardNumber: sceneDeckCount,
                 fakeCardGenerator: function (deckId) {
                     var fakeCard = _this.manager.getFakeCardGenerator()(deckId);
-                    fakeCard.type_arg = -1;
+                    fakeCard.type = "scene";
                     return fakeCard;
                 },
             }),
-            genres: new BgaCards.Deck(this.manager, document.getElementById("scp_genreDeck"), {
+            genreDeck: new BgaCards.Deck(this.manager, document.getElementById("scp_genreDeck"), {
                 cardNumber: 20,
                 fakeCardGenerator: function (deckId) {
                     var fakeCard = _this.manager.getFakeCardGenerator()(deckId);
-                    fakeCard.type_arg = -2;
+                    fakeCard.type = "genre";
                     return fakeCard;
                 },
             }),
@@ -837,6 +893,8 @@ var SceneManager = /** @class */ (function () {
     };
     SceneManager.prototype.setup = function () {
         this.build();
+        var _a = this.game.gamedatas, sceneCards = _a.sceneCards, sceneHand = _a.sceneHand;
+        this.manager.placeCards(__spreadArray(__spreadArray([], sceneCards, true), sceneHand, true));
     };
     return SceneManager;
 }());

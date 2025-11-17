@@ -25,11 +25,16 @@
   flex-direction: column;
   border-radius: 8px;
   box-shadow: 0 0 8px #808080;
-  width: 100%;
+  max-width: calc(var(--board-width) * 1.5);
+  width: 95%;
   overflow: visible;
 
+  &-current {
+    order: -1;
+  }
+
   .scp_title {
-    font-size: 20px;
+    font-size: 24px;
     text-shadow: black 0 0 1px, black 0 0 1px, black 0 0 1px, black 0 0 1px,
       black 0 0 1px, black 0 0 1px;
     border-top-left-radius: 8px;
@@ -39,7 +44,7 @@
   }
 }
 
-.scp_zoneContent {
+.scp_playerBoard {
   display: flex;
   gap: 12px;
   padding: 0 12px 12px 12px;

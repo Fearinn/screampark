@@ -53,6 +53,6 @@ class RevealThemes extends GameState
             );
         }
 
-        return PlayerTurn::class;
+        return DealScenes::class;
     }
 }
