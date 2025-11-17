@@ -20,6 +20,8 @@ CREATE TABLE IF NOT EXISTS `scenes` (
     `card_type_arg` int(3) NOT NULL,
     `card_location` varchar(16) NOT NULL,
     `card_location_arg` int(11) NOT NULL,
+    `slot` int(2) DEFAULT 0,
+    `position` int(2) DEFAULT 0,
     PRIMARY KEY (`card_id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 AUTO_INCREMENT = 1;
 CREATE TABLE IF NOT EXISTS `themes` (

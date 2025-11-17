@@ -8,6 +8,7 @@ use Bga\GameFramework\Actions\Types\IntParam;
 use Bga\GameFramework\States\GameState;
 use Bga\GameFramework\StateType;
 use Bga\GameFramework\States\PossibleAction;
+use Bga\Games\ScreamPark\components\scenes\Scene;
 use Bga\Games\ScreamPark\components\scenes\Scenes;
 use Bga\Games\ScreamPark\Game;
 
@@ -38,7 +39,7 @@ class PlayerTurn extends GameState
         $players = $this->game->loadPlayersBasicInfos();
         foreach ($players as $playerId => $player) {
             $args["_private"][$playerId] = [
-                "playableScenes" => [],
+                "playableScenes" => $this->scenes->getPlayable($playerId),
                 "attachableScenes" => [],
             ];
         }
@@ -51,7 +52,28 @@ class PlayerTurn extends GameState
     }
 
     #[PossibleAction]
-    public function actPlayScene(int $currentPlayerId, #[IntParam(min: 1, max: 120)] int $cardId): void {}
+    public function actPlayScene(
+        int $currentPlayerId,
+        array $args,
+        #[IntParam(min: 1, max: 120)] int $cardId
+    ): void {
+        $playableScenes = $args["_private"][$currentPlayerId]["playableScenes"];
+        if (!in_array($cardId, $playableScenes)) {
+            throw new \BgaVisibleSystemException("Unexpected error: 2");
+        }
+
+        $Scene = new Scene($this->game, $cardId);
+        $card = $Scene->play($currentPlayerId);
+
+        $this->notify->player(
+            $currentPlayerId,
+            "playScene",
+            "",
+            [
+                "card" => $card,
+            ]
+        );
+    }
 
     public function zombie(int $playerId, array $args): void {}
 }

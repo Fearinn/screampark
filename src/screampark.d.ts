@@ -44,4 +44,4 @@ type SCP_Card = {
   location_arg?: number;
 };
 
-type ActionName = "actChooseTheme" | "actUndoChooseTheme";
+type ActionName = "actChooseTheme" | "actUndoChooseTheme" | "actPlayScene";

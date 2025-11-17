@@ -72,9 +72,31 @@ class SceneManager {
     });
     this.manager = this.game.managers.scenes;
 
-    const { sceneDeckCount } = gamedatas;
+    const { players, sceneDeckCount } = gamedatas;
+
+    const boards = {};
+    keysToNumbers(players).forEach((playerId) => {
+      boards[playerId] = new BgaCards.SlotStock(
+        this.manager,
+        document.getElementById(`scp_scenes-${playerId}`),
+        {
+          wrap: "nowrap",
+          slotsIds: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+          mapCardToSlot: ({ slot }) => {
+            return Number(slot);
+          },
+          autoPlace: ({ location, location_arg }) => {
+            return (
+              (location === "board" || location === "played") &&
+              Number(location_arg) === playerId
+            );
+          },
+        }
+      );
+    });
 
     this.game.stocks.scenes = {
+      boards,
       hand: new BgaCards.LineStock(
         this.manager,
         document.getElementById("scp_hand"),
@@ -147,11 +169,14 @@ interface SceneStocks {
   deck: BgaCards.Deck<SceneCard>;
   genreDeck: BgaCards.Deck<SceneCard>;
   hand: BgaCards.LineStock<SceneCard>;
+  boards: Record<number, BgaCards.SlotStock<SceneCard>>;
 }
 
 interface SceneCard extends SCP_Card {
   type: "scene" | "genre";
-  location?: "hand" | "board" | "genreDeck";
+  location?: "hand" | "board" | "played";
+  slot?: number;
+  order?: number;
 }
 
 interface GENRE {

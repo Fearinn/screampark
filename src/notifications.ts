@@ -99,4 +99,13 @@ class NotifManager {
       slideTo: document.getElementById(`scp_playerZone-${playerId}`),
     });
   }
+
+  public async notif_playScene(args: {
+    player_id: number;
+    card: SceneCard;
+  }): Promise<void> {
+    const { player_id: playerId, card } = args;
+    const { boards } = this.sceneManager.stocks;
+    boards[playerId].addCard(card);
+  }
 }

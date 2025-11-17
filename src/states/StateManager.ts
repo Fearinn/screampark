@@ -6,6 +6,7 @@ class StateManager {
     this.game = game;
     this.states = {
       ChooseTheme: new ChooseTheme(this.game),
+      PlayerTurn: new PlayerTurn(this.game),
     };
   }
 
@@ -40,8 +41,6 @@ class StateManager {
   }
 }
 
-type StateName = "ChooseTheme";
-
 class State {
   protected readonly game: SCP;
 
@@ -55,3 +54,5 @@ class State {
 
   public onLeaving(): void {}
 }
+
+type StateName = "ChooseTheme" | "PlayerTurn";

@@ -22,8 +22,14 @@ class Template {
         },
       }),
     };
-
     this.game.stocks = {};
+
+    document
+      .getElementById("generalactions")
+      .insertAdjacentHTML(
+        "afterend",
+        `<div id="scp_alertActions" class="scp_alertActions"></div>`
+      );
     this.setupZones();
     this.setupStocks();
   }

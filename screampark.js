@@ -404,6 +404,9 @@ var Template = /** @class */ (function () {
             }),
         };
         this.game.stocks = {};
+        document
+            .getElementById("generalactions")
+            .insertAdjacentHTML("afterend", "<div id=\"scp_alertActions\" class=\"scp_alertActions\"></div>");
         this.setupZones();
         this.setupStocks();
     };
@@ -750,6 +753,17 @@ var NotifManager = /** @class */ (function () {
             });
         });
     };
+    NotifManager.prototype.notif_playScene = function (args) {
+        return __awaiter(this, void 0, void 0, function () {
+            var playerId, card, boards;
+            return __generator(this, function (_a) {
+                playerId = args.player_id, card = args.card;
+                boards = this.sceneManager.stocks.boards;
+                boards[playerId].addCard(card);
+                return [2 /*return*/];
+            });
+        });
+    };
     return NotifManager;
 }());
 var MeepleManager = /** @class */ (function () {
@@ -858,8 +872,25 @@ var SceneManager = /** @class */ (function () {
             },
         });
         this.manager = this.game.managers.scenes;
-        var sceneDeckCount = gamedatas.sceneDeckCount;
+        var players = gamedatas.players, sceneDeckCount = gamedatas.sceneDeckCount;
+        var boards = {};
+        keysToNumbers(players).forEach(function (playerId) {
+            boards[playerId] = new BgaCards.SlotStock(_this.manager, document.getElementById("scp_scenes-".concat(playerId)), {
+                wrap: "nowrap",
+                slotsIds: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+                mapCardToSlot: function (_a) {
+                    var slot = _a.slot;
+                    return Number(slot);
+                },
+                autoPlace: function (_a) {
+                    var location = _a.location, location_arg = _a.location_arg;
+                    return ((location === "board" || location === "played") &&
+                        Number(location_arg) === playerId);
+                },
+            });
+        });
         this.game.stocks.scenes = {
+            boards: boards,
             hand: new BgaCards.LineStock(this.manager, document.getElementById("scp_hand"), {
                 gap: "16px",
                 wrap: "nowrap",
@@ -1086,6 +1117,7 @@ var StateManager = /** @class */ (function () {
         this.game = game;
         this.states = {
             ChooseTheme: new ChooseTheme(this.game),
+            PlayerTurn: new PlayerTurn(this.game),
         };
     }
     StateManager.prototype.onEntering = function (stateName, args) {
@@ -1168,4 +1200,42 @@ var ChooseTheme = /** @class */ (function (_super) {
         this.themeManager.setSelection(playerId, null);
     };
     return ChooseTheme;
+}(State));
+var PlayerTurn = /** @class */ (function (_super) {
+    __extends(PlayerTurn, _super);
+    function PlayerTurn(game) {
+        var _this = _super.call(this, game) || this;
+        _this.sceneManager = new SceneManager(_this.game);
+        _this.SCENES = _this.game.gamedatas.SCENES;
+        return _this;
+    }
+    PlayerTurn.prototype.onUpdate = function (args) {
+        var _this = this;
+        var playerId = this.game.player_id;
+        if (!this.game.isCurrentPlayerActive()) {
+            this.onInactiveUpdate();
+            return;
+        }
+        var hand = this.sceneManager.stocks.hand;
+        hand.setSelectionMode("single");
+        hand.onSelectionChange = function (selection, card) {
+            document.getElementById("generalactions").innerHTML = "";
+            if (selection.length === 0) {
+                return;
+            }
+            var cardId = card.id;
+            _this.game.addButton(_("play as new Scene"), function () {
+                _this.game.performAction("actPlayScene", {
+                    cardId: cardId,
+                });
+            });
+        };
+    };
+    PlayerTurn.prototype.onInactiveUpdate = function () {
+        this.onLeaving();
+    };
+    PlayerTurn.prototype.onLeaving = function () {
+        var playerId = this.game.player_id;
+    };
+    return PlayerTurn;
 }(State));
