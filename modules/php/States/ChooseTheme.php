@@ -78,7 +78,7 @@ class ChooseTheme extends GameState
             ]
         );
 
-        $this->gamestate->setPlayerNonMultiactive($currentPlayerId, ChooseTheme::class);
+        $this->gamestate->setPlayerNonMultiactive($currentPlayerId, RevealThemes::class);
     }
 
     #[PossibleAction]
@@ -112,7 +112,7 @@ class ChooseTheme extends GameState
             ]
         );
 
-        $this->gamestate->setPlayersMultiactive([$currentPlayerId], ChooseTheme::class);
+        $this->gamestate->setPlayersMultiactive([$currentPlayerId], RevealThemes::class);
     }
 
     public function zombie(int $playerId, array $args): void

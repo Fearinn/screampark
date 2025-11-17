@@ -16,7 +16,7 @@ class StateManager {
       return;
     }
 
-    this.states[stateName].onEntering();
+    this.states[stateName]?.onEntering(args);
   }
 
   onUpdate(stateName: StateName, args: Record<string, any>): void {
@@ -26,7 +26,7 @@ class StateManager {
       return;
     }
 
-    this.states[stateName].onUpdate();
+    this.states[stateName]?.onUpdate(args);
   }
 
   onLeaving(stateName: StateName): void {
@@ -36,7 +36,7 @@ class StateManager {
       return;
     }
 
-    this.states[stateName].onLeaving();
+    this.states[stateName]?.onLeaving();
   }
 }
 

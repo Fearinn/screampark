@@ -652,14 +652,13 @@ var NotifManager = /** @class */ (function () {
     };
     NotifManager.prototype.notif_discardTheme = function (args) {
         return __awaiter(this, void 0, void 0, function () {
-            var playerId, cardId, boards, board;
+            var playerId, cardId, boards;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         playerId = args.player_id, cardId = args.cardId;
                         boards = this.themeManager.stocks.boards;
-                        board = boards[playerId];
-                        return [4 /*yield*/, board.removeCard({ id: cardId }, { fadeOut: true, slideTo: document.getElementById("player_boards") })];
+                        return [4 /*yield*/, boards[playerId].removeCard({ id: cardId }, { fadeOut: true, slideTo: document.getElementById("player_boards") })];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];
@@ -669,14 +668,13 @@ var NotifManager = /** @class */ (function () {
     };
     NotifManager.prototype.notif_getTheme = function (args) {
         return __awaiter(this, void 0, void 0, function () {
-            var playerId, cardId, boards, board;
+            var playerId, cardId, boards;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         playerId = args.player_id, cardId = args.cardId;
                         boards = this.themeManager.stocks.boards;
-                        board = boards[playerId];
-                        return [4 /*yield*/, board.addCard({ id: cardId }, {
+                        return [4 /*yield*/, boards[playerId].addCard({ id: cardId }, {
                                 fromElement: document.getElementById("player_boards"),
                             })];
                     case 1:
@@ -688,14 +686,13 @@ var NotifManager = /** @class */ (function () {
     };
     NotifManager.prototype.notif_privateGetTheme = function (args) {
         return __awaiter(this, void 0, void 0, function () {
-            var playerId, card, boards, board;
+            var playerId, card, boards;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         playerId = args.player_id, card = args.card;
                         boards = this.themeManager.stocks.boards;
-                        board = boards[playerId];
-                        return [4 /*yield*/, board.addCard(card, {
+                        return [4 /*yield*/, boards[playerId].addCard(card, {
                                 fromElement: document.getElementById("player_boards"),
                             })];
                     case 1:
@@ -704,6 +701,11 @@ var NotifManager = /** @class */ (function () {
                 }
             });
         });
+    };
+    NotifManager.prototype.notif_revealTheme = function (args) {
+        var playerId = args.player_id, card = args.card;
+        var boards = this.themeManager.stocks.boards;
+        boards[playerId].setCardVisible(card, true);
     };
     return NotifManager;
 }());
@@ -1029,25 +1031,28 @@ var StateManager = /** @class */ (function () {
         };
     }
     StateManager.prototype.onEntering = function (stateName, args) {
-        var _a = this.game, isSpectator = _a.isSpectator, on_client_state = _a.on_client_state;
+        var _a;
+        var _b = this.game, isSpectator = _b.isSpectator, on_client_state = _b.on_client_state;
         if (isSpectator) {
             return;
         }
-        this.states[stateName].onEntering();
+        (_a = this.states[stateName]) === null || _a === void 0 ? void 0 : _a.onEntering(args);
     };
     StateManager.prototype.onUpdate = function (stateName, args) {
-        var _a = this.game, isSpectator = _a.isSpectator, on_client_state = _a.on_client_state;
+        var _a;
+        var _b = this.game, isSpectator = _b.isSpectator, on_client_state = _b.on_client_state;
         if (isSpectator) {
             return;
         }
-        this.states[stateName].onUpdate();
+        (_a = this.states[stateName]) === null || _a === void 0 ? void 0 : _a.onUpdate(args);
     };
     StateManager.prototype.onLeaving = function (stateName) {
+        var _a;
         var isSpectator = this.game.isSpectator;
         if (isSpectator) {
             return;
         }
-        this.states[stateName].onLeaving();
+        (_a = this.states[stateName]) === null || _a === void 0 ? void 0 : _a.onLeaving();
     };
     return StateManager;
 }());
@@ -1093,13 +1098,16 @@ var ChooseTheme = /** @class */ (function (_super) {
     };
     ChooseTheme.prototype.onInactiveUpdate = function () {
         var _this = this;
-        var playerId = this.game.player_id;
-        this.themeManager.setSelection(playerId, null);
+        this.onLeaving();
         this.game.addButton(_("change mind"), function () {
             _this.game.performAction("actUndoChooseTheme", undefined, {
                 checkAction: false,
             });
         }, { color: "secondary" });
+    };
+    ChooseTheme.prototype.onLeaving = function () {
+        var playerId = this.game.player_id;
+        this.themeManager.setSelection(playerId, null);
     };
     return ChooseTheme;
 }(State));

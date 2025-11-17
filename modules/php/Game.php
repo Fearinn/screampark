@@ -80,7 +80,7 @@ class Game extends \Bga\GameFramework\Table
         while (intval($this->gamestate->getCurrentMainStateId()) < 99 && $count < $moves) {
             $count++;
             foreach ($this->gamestate->getActivePlayerList() as $playerId) {
-                $playerId = (int)$playerId;
+                $playerId = (int) $playerId;
                 $this->gamestate->runStateClassZombie($this->gamestate->getCurrentState($playerId), $playerId);
             }
         }

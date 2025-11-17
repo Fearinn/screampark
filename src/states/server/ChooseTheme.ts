@@ -39,8 +39,7 @@ class ChooseTheme extends State {
   }
 
   private onInactiveUpdate(): void {
-    const { player_id: playerId } = this.game;
-    this.themeManager.setSelection(playerId, null);
+    this.onLeaving();
 
     this.game.addButton(
       _("change mind"),
@@ -51,5 +50,10 @@ class ChooseTheme extends State {
       },
       { color: "secondary" }
     );
+  }
+
+  public onLeaving(): void {
+    const { player_id: playerId } = this.game;
+    this.themeManager.setSelection(playerId, null);
   }
 }
