@@ -114,8 +114,7 @@ class Scenes extends Cards
 
         $playableCards = [];
         foreach ($hand as $cardId => $card) {
-            $sceneId = (int) $card["type_arg"];
-            $Scene = new Scene($this->game, $sceneId);
+            $Scene = new Scene($this->game, $cardId);
 
             if ($Scene->isPlayable($playerId)) {
                 $playableCards[] = $cardId;

@@ -17,12 +17,12 @@ class PlayerTurn extends State {
     }
 
     const { hand } = this.sceneManager.stocks;
-    hand.setSelectionMode("single");
+    hand.setSelectionMode("multiple");
 
     hand.onSelectionChange = (selection, card) => {
       document.getElementById("generalactions").innerHTML = "";
 
-      if (selection.length === 0) {
+      if (selection.length !== 1) {
         return;
       }
 
@@ -46,5 +46,7 @@ class PlayerTurn extends State {
 }
 
 interface ArgsPlayerTurn {
-  possibleNewScenes: SceneCard[];
+  _private: {
+    playableScenes: SceneCard[];
+  };
 }

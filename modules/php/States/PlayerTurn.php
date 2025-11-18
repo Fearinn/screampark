@@ -11,6 +11,7 @@ use Bga\GameFramework\States\PossibleAction;
 use Bga\Games\ScreamPark\components\scenes\Scene;
 use Bga\Games\ScreamPark\components\scenes\Scenes;
 use Bga\Games\ScreamPark\Game;
+use BgaUserException;
 
 class PlayerTurn extends GameState
 {
@@ -23,8 +24,8 @@ class PlayerTurn extends GameState
             $game,
             id: 5,
             type: StateType::MULTIPLE_ACTIVE_PLAYER,
-            description: clienttranslate('Other player(s) must play or discard 2 Scenes'),
-            descriptionMyTurn: clienttranslate('${you} must play or discard 2 Scenes'),
+            description: clienttranslate('Other player(s) must play or discard 2 scene cards'),
+            descriptionMyTurn: clienttranslate('${you} must play or discard 2 scene cards'),
         );
 
         $this->scenes = new Scenes($this->game);
@@ -58,8 +59,9 @@ class PlayerTurn extends GameState
         #[IntParam(min: 1, max: 120)] int $cardId
     ): void {
         $playableScenes = $args["_private"][$currentPlayerId]["playableScenes"];
+
         if (!in_array($cardId, $playableScenes)) {
-            throw new \BgaVisibleSystemException("Unexpected error: 2");
+            throw new BgaUserException(clienttranslate("You can't play that card as a new scene"));
         }
 
         $Scene = new Scene($this->game, $cardId);

@@ -20,7 +20,7 @@ class DealScenes extends GameState
             $game,
             id: 4,
             type: StateType::GAME,
-            description: clienttranslate('Dealing Scenes...'),
+            description: clienttranslate('Dealing scene cards...'),
         );
 
         $this->scenes = new Scenes($this->game);

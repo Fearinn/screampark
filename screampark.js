@@ -1217,10 +1217,10 @@ var PlayerTurn = /** @class */ (function (_super) {
             return;
         }
         var hand = this.sceneManager.stocks.hand;
-        hand.setSelectionMode("single");
+        hand.setSelectionMode("multiple");
         hand.onSelectionChange = function (selection, card) {
             document.getElementById("generalactions").innerHTML = "";
-            if (selection.length === 0) {
+            if (selection.length !== 1) {
                 return;
             }
             var cardId = card.id;
