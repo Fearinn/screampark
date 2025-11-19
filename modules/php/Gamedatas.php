@@ -29,6 +29,7 @@ trait Gamedatas
             "themeHands" => $Themes->getHands($playerId),
             "sceneHand" => !$this->isSpectator() ? $Scenes->getHand($playerId) : [],
             "sceneCards" => $Scenes->getPublic(),
+            "staffCounts" => $this->staffCounter->getAll(),
         ];
 
         return $gamedatas;

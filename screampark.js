@@ -381,6 +381,17 @@ var HelpManager = /** @class */ (function () {
     }
     return HelpManager;
 }());
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var Template = /** @class */ (function () {
     function Template(game) {
         this.game = game;
@@ -402,6 +413,7 @@ var Template = /** @class */ (function () {
                     return _this.game.bgaAnimationsActive();
                 },
             }),
+            counters: {},
         };
         this.game.stocks = {};
         document
@@ -409,6 +421,7 @@ var Template = /** @class */ (function () {
             .insertAdjacentHTML("afterend", "<div id=\"scp_alertActions\" class=\"scp_alertActions\"></div>");
         this.setupZones();
         this.setupStocks();
+        this.setupPanels();
     };
     Template.prototype.setupZones = function () {
         var _this = this;
@@ -448,19 +461,24 @@ var Template = /** @class */ (function () {
         var starManager = new StarManager(this.game);
         starManager.setup();
     };
+    Template.prototype.setupPanels = function () {
+        var _this = this;
+        var _a = this.game, gamedatas = _a.gamedatas, keysToNumbers = _a.keysToNumbers, managers = _a.managers;
+        var players = gamedatas.players, staffCounts = gamedatas.staffCounts;
+        var counters = {};
+        keysToNumbers(players).forEach(function (playerId) {
+            _this.game.getPlayerPanelElement(playerId).insertAdjacentHTML("beforeend", "<div id=\"scp_staffCounter-".concat(playerId, "\" class=\"scp_staffCounter\">\n          <span id=\"scp_staffCounterCount-").concat(playerId, "\" class=\"scp_staffCounterCount\"></span>\n          <div id=\"scp_staffCounterIcon-").concat(playerId, "\" class=\"scp_staffCounterIcon\"></div>\n        </div>"));
+            counters[playerId] = new ebg.counter();
+            counters[playerId].create("scp_staffCounterCount-".concat(playerId), {
+                value: staffCounts[playerId],
+                playerCounter: "staff",
+                playerId: playerId,
+            });
+        });
+        managers.counters = __assign(__assign({}, managers.counters), { staff: counters });
+    };
     return Template;
 }());
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {

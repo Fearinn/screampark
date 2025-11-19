@@ -14,9 +14,9 @@ trait SetupNewGame
         $gameinfos = $this->getGameinfos();
         $default_colors = $gameinfos['player_colors'];
 
-        foreach ($players as $player_id => $player) {
+        foreach ($players as $playerId => $player) {
             $query_values[] = vsprintf("('%s', '%s', '%s', '%s', '%s')", [
-                $player_id,
+                $playerId,
                 array_shift($default_colors),
                 $player["player_canal"],
                 addslashes($player["player_name"]),
@@ -43,6 +43,8 @@ trait SetupNewGame
 
         $Themes = new Themes($this);
         $Themes->setup();
+
+        $this->staffCounter->initDb(array_keys($players), 2);
 
         return ChooseTheme::class;
     }

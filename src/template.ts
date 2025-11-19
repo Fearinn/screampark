@@ -21,6 +21,7 @@ class Template {
           return this.game.bgaAnimationsActive();
         },
       }),
+      counters: {},
     };
     this.game.stocks = {};
 
@@ -32,6 +33,7 @@ class Template {
       );
     this.setupZones();
     this.setupStocks();
+    this.setupPanels();
   }
 
   public setupZones(): void {
@@ -102,5 +104,34 @@ class Template {
     }
     const starManager = new StarManager(this.game);
     starManager.setup();
+  }
+
+  private setupPanels(): void {
+    const { gamedatas, keysToNumbers, managers } = this.game;
+    const { players, staffCounts } = gamedatas;
+
+    const counters: Record<number, Counter> = {};
+
+    keysToNumbers(players).forEach((playerId) => {
+      this.game.getPlayerPanelElement(playerId).insertAdjacentHTML(
+        "beforeend",
+        `<div id="scp_staffCounter-${playerId}" class="scp_staffCounter">
+          <span id="scp_staffCounterCount-${playerId}" class="scp_staffCounterCount"></span>
+          <div id="scp_staffCounterIcon-${playerId}" class="scp_staffCounterIcon"></div>
+        </div>`
+      );
+
+      counters[playerId] = new ebg.counter();
+      counters[playerId].create(`scp_staffCounterCount-${playerId}`, {
+        value: staffCounts[playerId],
+        playerCounter: "staff",
+        playerId,
+      });
+    });
+
+    managers.counters = {
+      ...managers.counters,
+      staff: counters,
+    };
   }
 }

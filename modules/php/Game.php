@@ -36,9 +36,9 @@ class Game extends \Bga\GameFramework\Table
     public readonly array $GENRES;
     public readonly array $SCENES;
     public readonly Deck $scene_cards;
-    public readonly PlayerCounter $scene_counter;
     public readonly array $THEMES;
     public readonly Deck $theme_cards;
+    public readonly PlayerCounter $staffCounter;
 
     public function __construct()
     {
@@ -50,6 +50,8 @@ class Game extends \Bga\GameFramework\Table
         $this->vip_cards = $this->deckFactory->createDeck("vips");
         $this->scene_cards = $this->deckFactory->createDeck("scenes");
         $this->theme_cards = $this->deckFactory->createDeck("themes");
+
+        $this->staffCounter = $this->counterFactory->createPlayerCounter("staff");
 
         $this->decorateNotifs();
     }

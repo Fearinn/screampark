@@ -578,6 +578,23 @@ p {
   background-size: cover;
 }
 
+.player-board-game-specific-content {
+  padding: 0 4px;
+}
+
+.scp_staffCounter {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.scp_staffCounterIcon {
+  background-image: url("img/staff.png");
+  background-size: cover;
+  filter: drop-shadow(0 0 2px #808080);
+  aspect-ratio: 1;
+  width: 30px;
+}
+
 #bga-zoom-wrapper {
   direction: ltr;
 }

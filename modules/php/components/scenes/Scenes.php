@@ -10,13 +10,14 @@ class Scenes extends Cards
 {
     protected readonly array $SCENES;
     protected readonly array $GENRES;
-    public readonly PlayerCounter $counter;
+    protected readonly PlayerCounter $staffCounter;
 
     public function __construct(Game $game)
     {
         parent::__construct($game, $game->scene_cards, "scenes");
         $this->SCENES = $this->game->SCENES;
         $this->GENRES = $this->game->GENRES;
+        $this->staffCounter = $this->game->staffCounter;
         $this->cardFields = "card_id id, card_location location, card_location_arg location_arg, 
         card_type type, card_type_arg type_arg, slot, position";
     }
@@ -86,7 +87,7 @@ class Scenes extends Cards
         return $nextPosition;
     }
 
-    protected function getNextMinPoints(int $playerId): int
+    protected function getMinPoints(int $playerId): int
     {
         $maxSlot = $this->getMaxSlot($playerId);
 

@@ -16,11 +16,13 @@ interface SCP_Gamedatas extends Gamedatas<SCP_Player> {
   themeCards: ThemeCard[];
   sceneHand: SceneCard[];
   sceneCards: SceneCard[];
+  staffCounts: Record<number, number>;
 }
 
 interface Managers {
   zoom: ZoomManager;
   animations: BgaAnimations.Manager;
+  counters: Counters;
   vips?: BgaCards.Manager<VipCard>;
   scenes?: BgaCards.Manager<SceneCard>;
   themes?: BgaCards.Manager<ThemeCard>;
@@ -34,6 +36,10 @@ interface Stocks {
   themes?: ThemeStocks;
   stars?: StarStocks;
   meeples?: MeepleStocks;
+}
+
+interface Counters {
+  staff?: Record<number, Counter>;
 }
 
 type SCP_Card = {
