@@ -9,12 +9,12 @@ class PlayerTurn extends State {
   }
 
   public onUpdate(args: ArgsPlayerTurn): void {
-    const { player_id: playerId } = this.game;
-
     if (!this.game.isCurrentPlayerActive()) {
       this.onInactiveUpdate();
       return;
     }
+
+    const { playableScenes } = args;
 
     const { hand } = this.sceneManager.stocks;
     hand.setSelectionMode("multiple");
@@ -28,11 +28,13 @@ class PlayerTurn extends State {
 
       const { id: cardId } = card;
 
-      this.game.addButton(_("play as new Scene"), () => {
-        this.game.performAction("actPlayScene", {
-          cardId: cardId,
+      if (playableScenes.includes(cardId)) {
+        this.game.addButton(_("play as new Scene"), () => {
+          this.game.performAction("actPlayScene", {
+            cardId: cardId,
+          });
         });
-      });
+      }
     };
   }
 
@@ -41,12 +43,11 @@ class PlayerTurn extends State {
   }
 
   public onLeaving(): void {
-    const { player_id: playerId } = this.game;
+    const { hand } = this.sceneManager.stocks;
+    hand.setSelectionMode("none");
   }
 }
 
 interface ArgsPlayerTurn {
-  _private: {
-    playableScenes: SceneCard[];
-  };
+  playableScenes: number[];
 }

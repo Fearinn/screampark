@@ -22,8 +22,8 @@ class PlayerTurn extends GameState
     ) {
         parent::__construct(
             $game,
-            id: 5,
-            type: StateType::MULTIPLE_ACTIVE_PLAYER,
+            id: 50,
+            type: StateType::PRIVATE,
             description: clienttranslate('Other player(s) must play or discard 2 scene cards'),
             descriptionMyTurn: clienttranslate('${you} must play or discard 2 scene cards'),
         );
@@ -31,26 +31,17 @@ class PlayerTurn extends GameState
         $this->scenes = new Scenes($this->game);
     }
 
-    public function getArgs(): array
+    public function getArgs(int $playerId): array
     {
         $args = [
-            "_private" => [],
+            "playableScenes" => $this->scenes->getPlayable($playerId),
+            "attachableScenes" => [],
         ];
 
-        $players = $this->game->loadPlayersBasicInfos();
-        foreach ($players as $playerId => $player) {
-            $args["_private"][$playerId] = [
-                "playableScenes" => $this->scenes->getPlayable($playerId),
-                "attachableScenes" => [],
-            ];
-        }
         return $args;
     }
 
-    public function onEnteringState(int $activePlayerId): void
-    {
-        $this->gamestate->setAllPlayersMultiactive();
-    }
+    public function onEnteringState(): void {}
 
     #[PossibleAction]
     public function actPlayScene(
@@ -58,7 +49,7 @@ class PlayerTurn extends GameState
         array $args,
         #[IntParam(min: 1, max: 120)] int $cardId
     ): void {
-        $playableScenes = $args["_private"][$currentPlayerId]["playableScenes"];
+        $playableScenes = $args["playableScenes"];
 
         if (!in_array($cardId, $playableScenes)) {
             throw new BgaUserException(clienttranslate("You can't play that card as a new scene"));
@@ -75,6 +66,8 @@ class PlayerTurn extends GameState
                 "card" => $card,
             ]
         );
+
+        $this->gamestate->nextPrivateState($currentPlayerId, PlayerTurn::class);
     }
 
     public function zombie(int $playerId, array $args): void {}

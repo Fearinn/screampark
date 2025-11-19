@@ -1211,11 +1211,11 @@ var PlayerTurn = /** @class */ (function (_super) {
     }
     PlayerTurn.prototype.onUpdate = function (args) {
         var _this = this;
-        var playerId = this.game.player_id;
         if (!this.game.isCurrentPlayerActive()) {
             this.onInactiveUpdate();
             return;
         }
+        var playableScenes = args.playableScenes;
         var hand = this.sceneManager.stocks.hand;
         hand.setSelectionMode("multiple");
         hand.onSelectionChange = function (selection, card) {
@@ -1224,18 +1224,21 @@ var PlayerTurn = /** @class */ (function (_super) {
                 return;
             }
             var cardId = card.id;
-            _this.game.addButton(_("play as new Scene"), function () {
-                _this.game.performAction("actPlayScene", {
-                    cardId: cardId,
+            if (playableScenes.includes(cardId)) {
+                _this.game.addButton(_("play as new Scene"), function () {
+                    _this.game.performAction("actPlayScene", {
+                        cardId: cardId,
+                    });
                 });
-            });
+            }
         };
     };
     PlayerTurn.prototype.onInactiveUpdate = function () {
         this.onLeaving();
     };
     PlayerTurn.prototype.onLeaving = function () {
-        var playerId = this.game.player_id;
+        var hand = this.sceneManager.stocks.hand;
+        hand.setSelectionMode("none");
     };
     return PlayerTurn;
 }(State));
