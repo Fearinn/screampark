@@ -26,7 +26,7 @@ class PreTurn extends GameState
         );
     }
 
-    public function onEnteringState(int $activePlayerId): void
+    public function onEnteringState(): void
     {
         $this->gamestate->setAllPlayersMultiactive();
         $this->gamestate->initializePrivateStateForAllActivePlayers();

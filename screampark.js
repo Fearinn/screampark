@@ -1181,6 +1181,7 @@ var StateManager = /** @class */ (function () {
     StateManager.prototype.onEntering = function (stateName, args) {
         var _a;
         var _b = this.game, isSpectator = _b.isSpectator, on_client_state = _b.on_client_state;
+        console.log(stateName, "TEST");
         if (isSpectator) {
             return;
         }

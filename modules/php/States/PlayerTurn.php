@@ -5,18 +5,19 @@ declare(strict_types=1);
 namespace Bga\Games\ScreamPark\States;
 
 use Bga\GameFramework\Actions\Types\IntParam;
+use Bga\GameFramework\Components\Counters\PlayerCounter;
 use Bga\GameFramework\States\GameState;
 use Bga\GameFramework\StateType;
 use Bga\GameFramework\States\PossibleAction;
 use Bga\Games\ScreamPark\components\scenes\Scene;
 use Bga\Games\ScreamPark\components\scenes\Scenes;
 use Bga\Games\ScreamPark\Game;
-use BgaUserException;
 use BgaVisibleSystemException;
 
 class PlayerTurn extends GameState
 {
     protected Scenes $scenes;
+    protected PlayerCounter $draftCounter;
 
     function __construct(
         protected Game $game,
@@ -30,6 +31,7 @@ class PlayerTurn extends GameState
         );
 
         $this->scenes = new Scenes($this->game);
+        $this->draftCounter = $this->game->draftCounter;
     }
 
     public function getArgs(int $playerId): array
@@ -37,6 +39,7 @@ class PlayerTurn extends GameState
         $args = [
             "playableScenes" => $this->scenes->getPlayable($playerId),
             "attachableScenes" => [],
+            "_no_notify" => $this->draftCounter->get($playerId) === 2,
         ];
 
         return $args;
@@ -55,6 +58,13 @@ class PlayerTurn extends GameState
         }
 
         $Scene->play($currentPlayerId);
+        $this->draftCounter->inc($currentPlayerId, 1);
+
+        if ($this->draftCounter->get($currentPlayerId)) {
+            $this->gamestate->setPlayerNonMultiactive($currentPlayerId, PassScenes::class);
+            return;
+        }
+
         $this->gamestate->nextPrivateState($currentPlayerId, PlayerTurn::class);
     }
 
@@ -69,6 +79,13 @@ class PlayerTurn extends GameState
         }
 
         $Scene->discard($currentPlayerId);
+        $this->draftCounter->inc($currentPlayerId, 1);
+
+        if ($this->draftCounter->get($currentPlayerId)) {
+            $this->gamestate->setPlayerNonMultiactive($currentPlayerId, PassScenes::class);
+            return;
+        }
+
         $this->gamestate->nextPrivateState($currentPlayerId, PlayerTurn::class);
     }
 

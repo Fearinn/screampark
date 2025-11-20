@@ -31,6 +31,7 @@ class RevealThemes extends GameState
     public function onEnteringState(): string
     {
         $players = $this->game->loadPlayersBasicInfos();
+        
         foreach ($players as $playerId => $player) {
             $sql = "SELECT card_id FROM {$this->themes->dbTable} WHERE card_location='hand' AND card_location_arg={$playerId}";
             $cardId = $this->game->getUniqueValueFromDB($sql);
