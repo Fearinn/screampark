@@ -57,8 +57,12 @@ class Scene extends Scenes
         $this->game->notify->player(
             $playerId,
             "playScene",
-            "",
+            clienttranslate('You play ${scene_label} as a new scene'),
             [
+                "i18n" => ["scene_label"],
+                "preserve" => ["sceneId"],
+                "scene_label" => $this->UP["label"],
+                "sceneId" => $this->id,
                 "card" => $card,
             ]
         );
@@ -78,7 +82,7 @@ class Scene extends Scenes
         $this->game->notify->player(
             $playerId,
             "discardScene",
-            clienttranslate('${player_name} discards ${scene_label} and gets 2 ${staff_icon}'),
+            clienttranslate('You discard ${scene_label} and get 2 ${staff_icon}'),
             [
                 "i18n" => ["scene_label"],
                 "preserve" => ["sceneId"],
