@@ -11,6 +11,7 @@ class Scenes extends Cards
     protected readonly array $SCENES;
     protected readonly array $GENRES;
     protected readonly PlayerCounter $staffCounter;
+    protected readonly PlayerCounter $privateStaffCounter;
 
     public function __construct(Game $game)
     {
@@ -18,6 +19,7 @@ class Scenes extends Cards
         $this->SCENES = $this->game->SCENES;
         $this->GENRES = $this->game->GENRES;
         $this->staffCounter = $this->game->staffCounter;
+        $this->privateStaffCounter = $this->game->privateStaffCounter;
         $this->cardFields = "card_id id, card_location location, card_location_arg location_arg, 
         card_type type, card_type_arg type_arg, slot, position";
     }

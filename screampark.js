@@ -463,14 +463,14 @@ var Template = /** @class */ (function () {
     };
     Template.prototype.setupPanels = function () {
         var _this = this;
-        var _a = this.game, gamedatas = _a.gamedatas, keysToNumbers = _a.keysToNumbers, managers = _a.managers;
-        var players = gamedatas.players, staffCounts = gamedatas.staffCounts;
+        var _a = this.game, gamedatas = _a.gamedatas, keysToNumbers = _a.keysToNumbers, managers = _a.managers, player_id = _a.player_id;
+        var players = gamedatas.players, staffCounts = gamedatas.staffCounts, privateStaffCount = gamedatas.privateStaffCount;
         var counters = {};
         keysToNumbers(players).forEach(function (playerId) {
             _this.game.getPlayerPanelElement(playerId).insertAdjacentHTML("beforeend", "<div id=\"scp_staffCounter-".concat(playerId, "\" class=\"scp_staffCounter\">\n          <span id=\"scp_staffCounterCount-").concat(playerId, "\" class=\"scp_staffCounterCount\"></span>\n          <div id=\"scp_staffCounterIcon-").concat(playerId, "\" class=\"scp_staffCounterIcon\"></div>\n        </div>"));
             counters[playerId] = new ebg.counter();
             counters[playerId].create("scp_staffCounterCount-".concat(playerId), {
-                value: staffCounts[playerId],
+                value: player_id === playerId ? privateStaffCount : staffCounts[playerId],
                 playerCounter: "staff",
                 playerId: playerId,
             });
@@ -669,6 +669,7 @@ define([
 var NotifManager = /** @class */ (function () {
     function NotifManager(game) {
         this.game = game;
+        this.counters = this.game.managers.counters;
         this.themeManager = new ThemeManager(this.game);
         this.sceneManager = new SceneManager(this.game);
     }
@@ -793,11 +794,11 @@ var NotifManager = /** @class */ (function () {
     };
     NotifManager.prototype.notif_discardScene = function (args) {
         return __awaiter(this, void 0, void 0, function () {
-            var playerId, card, hand;
+            var card, hand;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        playerId = args.player_id, card = args.card;
+                        card = args.card;
                         hand = this.sceneManager.stocks.hand;
                         return [4 /*yield*/, hand.removeCard(card, {
                                 fadeOut: true,
@@ -807,6 +808,17 @@ var NotifManager = /** @class */ (function () {
                         _a.sent();
                         return [2 /*return*/];
                 }
+            });
+        });
+    };
+    NotifManager.prototype.notif_privateSetCounter = function (args) {
+        return __awaiter(this, void 0, void 0, function () {
+            var playerId, inc, name, counter;
+            return __generator(this, function (_a) {
+                playerId = args.player_id, inc = args.inc, name = args.name;
+                counter = this.counters[name][playerId];
+                counter.incValue(inc);
+                return [2 /*return*/];
             });
         });
     };

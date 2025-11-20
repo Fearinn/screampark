@@ -45,6 +45,7 @@ trait SetupNewGame
         $Themes->setup();
 
         $this->staffCounter->initDb(array_keys($players), 2);
+        $this->privateStaffCounter->initDb(array_keys($players), 2);
 
         return ChooseTheme::class;
     }

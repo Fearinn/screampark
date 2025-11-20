@@ -1,10 +1,12 @@
 class NotifManager {
   private readonly game: SCP;
+  private readonly counters: Counters;
   private readonly themeManager: ThemeManager;
   private readonly sceneManager: SceneManager;
 
   constructor(game: SCP) {
     this.game = game;
+    this.counters = this.game.managers.counters;
     this.themeManager = new ThemeManager(this.game);
     this.sceneManager = new SceneManager(this.game);
   }
@@ -113,12 +115,22 @@ class NotifManager {
     player_id: number;
     card: SceneCard;
   }): Promise<void> {
-    const { player_id: playerId, card } = args;
+    const { card } = args;
     const { hand } = this.sceneManager.stocks;
 
     await hand.removeCard(card, {
       fadeOut: true,
       slideTo: document.getElementById("player_boards"),
     });
+  }
+
+  public async notif_privateSetCounter(args: {
+    player_id: number;
+    inc: number;
+    name: string;
+  }): Promise<void> {
+    const { player_id: playerId, inc, name } = args;
+    const counter = this.counters[name][playerId];
+    counter.incValue(inc);
   }
 }

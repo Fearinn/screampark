@@ -30,7 +30,7 @@ class Scene extends Scenes
 
     private function canPayCost(int $playerId): bool
     {
-        return $this->staffCost <= $this->staffCounter->get($playerId);
+        return $this->staffCost <= $this->privateStaffCounter->get($playerId);
     }
 
     public function isPlayable(int $playerId): bool
@@ -42,9 +42,19 @@ class Scene extends Scenes
     public function play(int $playerId): void
     {
         if ($this->staffCost > 0) {
-            $this->staffCounter->inc(
+            $this->privateStaffCounter->inc(
                 $playerId,
                 -$this->staffCost,
+            );
+
+            $this->game->notify->player(
+                $playerId,
+                "privateSetCounter",
+                "",
+                [
+                    "name" => "staff",
+                    "inc" => -$this->staffCost,
+                ]
             );
         }
 
@@ -92,7 +102,17 @@ class Scene extends Scenes
             ]
         );
 
-        $this->staffCounter->inc($playerId, 2);
+        $this->privateStaffCounter->inc($playerId, 2);
+
+        $this->game->notify->player(
+            $playerId,
+            "privateSetCounter",
+            "",
+            [
+                "name" => "staff",
+                "inc" => 2,
+            ]
+        );
     }
 
     public function isDiscardable(int $playerId): bool

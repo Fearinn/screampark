@@ -32,6 +32,10 @@ trait Gamedatas
             "staffCounts" => $this->staffCounter->getAll(),
         ];
 
+        if (!$this->isSpectator()) {
+            $gamedatas["privateStaffCount"] = $this->privateStaffCounter->get($playerId);
+        }
+
         return $gamedatas;
     }
 }

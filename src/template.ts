@@ -107,8 +107,8 @@ class Template {
   }
 
   private setupPanels(): void {
-    const { gamedatas, keysToNumbers, managers } = this.game;
-    const { players, staffCounts } = gamedatas;
+    const { gamedatas, keysToNumbers, managers, player_id } = this.game;
+    const { players, staffCounts, privateStaffCount } = gamedatas;
 
     const counters: Record<number, Counter> = {};
 
@@ -123,7 +123,8 @@ class Template {
 
       counters[playerId] = new ebg.counter();
       counters[playerId].create(`scp_staffCounterCount-${playerId}`, {
-        value: staffCounts[playerId],
+        value:
+          player_id === playerId ? privateStaffCount : staffCounts[playerId],
         playerCounter: "staff",
         playerId,
       });
