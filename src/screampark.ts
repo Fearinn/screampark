@@ -177,14 +177,19 @@ class SCP extends GameGui<SCP_Gamedatas> implements SCP {
       args.skull_icon = this.getScenicIcon("skull");
     }
 
-    if (log.includes("${staffCost_icon}")) {
-      const backgroundImage = `url(${g_gamethemeurl}img/icons/staffCost.png)`;
-      args.staffCost_icon = `<span class="scp_smIcon scp_genreIcon" style="background-image: ${backgroundImage};"></span>`;
-    }
-
     if (log.includes("${lightning_icon}")) {
       const backgroundImage = `url(${g_gamethemeurl}img/icons/lightning.png)`;
       args.lightning_icon = `<span class="scp_smIcon scp_genreIcon" style="background-image: ${backgroundImage};"></span>`;
+    }
+
+    if (log.includes("${staff_icon}")) {
+      const backgroundImage = `url(${g_gamethemeurl}img/staff.png)`;
+      args.staff_icon = `<span class="scp_smIcon" style="background-image: ${backgroundImage};"></span>`;
+    }
+
+    if (log.includes("${staffCost_icon}")) {
+      const backgroundImage = `url(${g_gamethemeurl}img/icons/staffCost.png)`;
+      args.staffCost_icon = `<span class="scp_smIcon" style="background-image: ${backgroundImage};"></span>`;
     }
   }
 

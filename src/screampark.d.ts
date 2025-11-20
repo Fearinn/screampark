@@ -50,4 +50,9 @@ type SCP_Card = {
   location_arg?: number;
 };
 
-type ActionName = "actChooseTheme" | "actUndoChooseTheme" | "actPlayScene";
+type ActionName =
+  | "actChooseTheme"
+  | "actUndoChooseTheme"
+  | "actPlayScene"
+  | "actAttachScene"
+  | "actDiscardScene";

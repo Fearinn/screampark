@@ -124,4 +124,20 @@ class Scenes extends Cards
 
         return $playableCards;
     }
+
+    public function getAttachable(int $playerId): array
+    {
+        $hand = $this->deck->getPlayerHand($playerId);
+        $attachableCards = [];
+
+        foreach ($hand as $cardId => $card) {
+            $Scene = new Scene($this->game, $cardId);
+
+            if ($Scene->isAttachable($playerId)) {
+                $attachableCards[] = $cardId;
+            }
+        }
+
+        return $attachableCards;
+    }
 }

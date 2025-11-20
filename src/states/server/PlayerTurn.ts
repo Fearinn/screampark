@@ -14,27 +14,66 @@ class PlayerTurn extends State {
       return;
     }
 
-    const { playableScenes } = args;
+    const { playableScenes, attachableScenes } = args;
 
     const { hand } = this.sceneManager.stocks;
     hand.setSelectionMode("multiple");
 
-    hand.onSelectionChange = (selection, card) => {
+    hand.onSelectionChange = (selection, lastChange) => {
       document.getElementById("generalactions").innerHTML = "";
 
-      if (selection.length !== 1) {
+      if (selection.length === 0) {
         return;
       }
 
-      const { id: cardId } = card;
+      if (selection.length === 2) {
+        this.game.addButton(_("discard both and get a genre card"), () => {}, {
+          color: "alert",
+        });
+        return;
+      }
 
-      if (playableScenes.includes(cardId)) {
-        this.game.addButton(_("play as new Scene"), () => {
+      if (selection.length > 2) {
+        hand.unselectAll();
+        return;
+      }
+
+      const cardId = Number(selection[0].id);
+
+      this.game.addButton(
+        _("play as new scene"),
+        () => {
           this.game.performAction("actPlayScene", {
             cardId: cardId,
           });
-        });
-      }
+        },
+        {
+          disabled: !playableScenes.includes(cardId),
+        }
+      );
+
+      this.game.addButton(
+        _("attach to other scene"),
+        () => {
+          this.game.performAction("actAttachScene", {
+            cardId: cardId,
+          });
+        },
+        { disabled: !attachableScenes.includes(cardId) }
+      );
+
+      this.game.addButton(
+        this.game.format_string_recursive(
+          _("discard and get 2 ${staff_icon}"),
+          {}
+        ),
+        () => {
+          this.game.performAction("actDiscardScene", {
+            cardId: cardId,
+          });
+        },
+        { color: "alert" }
+      );
     };
   }
 
@@ -50,4 +89,5 @@ class PlayerTurn extends State {
 
 interface ArgsPlayerTurn {
   playableScenes: number[];
+  attachableScenes: number[];
 }

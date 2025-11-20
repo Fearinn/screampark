@@ -106,6 +106,19 @@ class NotifManager {
   }): Promise<void> {
     const { player_id: playerId, card } = args;
     const { boards } = this.sceneManager.stocks;
-    boards[playerId].addCard(card);
+    await boards[playerId].addCard(card);
+  }
+
+  public async notif_discardScene(args: {
+    player_id: number;
+    card: SceneCard;
+  }): Promise<void> {
+    const { player_id: playerId, card } = args;
+    const { hand } = this.sceneManager.stocks;
+
+    await hand.removeCard(card, {
+      fadeOut: true,
+      slideTo: document.getElementById("player_boards"),
+    });
   }
 }

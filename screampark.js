@@ -626,13 +626,17 @@ var SCP = /** @class */ (function (_super) {
         if (log.includes("${skull_icon}")) {
             args.skull_icon = this.getScenicIcon("skull");
         }
-        if (log.includes("${staffCost_icon}")) {
-            var backgroundImage = "url(".concat(g_gamethemeurl, "img/icons/staffCost.png)");
-            args.staffCost_icon = "<span class=\"scp_smIcon scp_genreIcon\" style=\"background-image: ".concat(backgroundImage, ";\"></span>");
-        }
         if (log.includes("${lightning_icon}")) {
             var backgroundImage = "url(".concat(g_gamethemeurl, "img/icons/lightning.png)");
             args.lightning_icon = "<span class=\"scp_smIcon scp_genreIcon\" style=\"background-image: ".concat(backgroundImage, ";\"></span>");
+        }
+        if (log.includes("${staff_icon}")) {
+            var backgroundImage = "url(".concat(g_gamethemeurl, "img/staff.png)");
+            args.staff_icon = "<span class=\"scp_smIcon\" style=\"background-image: ".concat(backgroundImage, ";\"></span>");
+        }
+        if (log.includes("${staffCost_icon}")) {
+            var backgroundImage = "url(".concat(g_gamethemeurl, "img/icons/staffCost.png)");
+            args.staffCost_icon = "<span class=\"scp_smIcon\" style=\"background-image: ".concat(backgroundImage, ";\"></span>");
         }
     };
     SCP.prototype.getScenicIcon = function (scenicName) {
@@ -775,10 +779,34 @@ var NotifManager = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             var playerId, card, boards;
             return __generator(this, function (_a) {
-                playerId = args.player_id, card = args.card;
-                boards = this.sceneManager.stocks.boards;
-                boards[playerId].addCard(card);
-                return [2 /*return*/];
+                switch (_a.label) {
+                    case 0:
+                        playerId = args.player_id, card = args.card;
+                        boards = this.sceneManager.stocks.boards;
+                        return [4 /*yield*/, boards[playerId].addCard(card)];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    NotifManager.prototype.notif_discardScene = function (args) {
+        return __awaiter(this, void 0, void 0, function () {
+            var playerId, card, hand;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        playerId = args.player_id, card = args.card;
+                        hand = this.sceneManager.stocks.hand;
+                        return [4 /*yield*/, hand.removeCard(card, {
+                                fadeOut: true,
+                                slideTo: document.getElementById("player_boards"),
+                            })];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
             });
         });
     };
@@ -1233,22 +1261,42 @@ var PlayerTurn = /** @class */ (function (_super) {
             this.onInactiveUpdate();
             return;
         }
-        var playableScenes = args.playableScenes;
+        var playableScenes = args.playableScenes, attachableScenes = args.attachableScenes;
         var hand = this.sceneManager.stocks.hand;
         hand.setSelectionMode("multiple");
-        hand.onSelectionChange = function (selection, card) {
+        hand.onSelectionChange = function (selection, lastChange) {
             document.getElementById("generalactions").innerHTML = "";
-            if (selection.length !== 1) {
+            if (selection.length === 0) {
                 return;
             }
-            var cardId = card.id;
-            if (playableScenes.includes(cardId)) {
-                _this.game.addButton(_("play as new Scene"), function () {
-                    _this.game.performAction("actPlayScene", {
-                        cardId: cardId,
-                    });
+            if (selection.length === 2) {
+                _this.game.addButton(_("discard both and get a genre card"), function () { }, {
+                    color: "alert",
                 });
+                return;
             }
+            if (selection.length > 2) {
+                hand.unselectAll();
+                return;
+            }
+            var cardId = Number(selection[0].id);
+            _this.game.addButton(_("play as new scene"), function () {
+                _this.game.performAction("actPlayScene", {
+                    cardId: cardId,
+                });
+            }, {
+                disabled: !playableScenes.includes(cardId),
+            });
+            _this.game.addButton(_("attach to other scene"), function () {
+                _this.game.performAction("actAttachScene", {
+                    cardId: cardId,
+                });
+            }, { disabled: !attachableScenes.includes(cardId) });
+            _this.game.addButton(_this.game.format_string_recursive(_("discard and get 2 ${staff_icon}"), {}), function () {
+                _this.game.performAction("actDiscardScene", {
+                    cardId: cardId,
+                });
+            }, { color: "alert" });
         };
     };
     PlayerTurn.prototype.onInactiveUpdate = function () {

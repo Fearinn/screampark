@@ -12,6 +12,7 @@ use Bga\Games\ScreamPark\components\scenes\Scene;
 use Bga\Games\ScreamPark\components\scenes\Scenes;
 use Bga\Games\ScreamPark\Game;
 use BgaUserException;
+use BgaVisibleSystemException;
 
 class PlayerTurn extends GameState
 {
@@ -46,27 +47,28 @@ class PlayerTurn extends GameState
     #[PossibleAction]
     public function actPlayScene(
         int $currentPlayerId,
-        array $args,
         #[IntParam(min: 1, max: 120)] int $cardId
     ): void {
-        $playableScenes = $args["playableScenes"];
-
-        if (!in_array($cardId, $playableScenes)) {
-            throw new BgaUserException(clienttranslate("You can't play that card as a new scene"));
+        $Scene = new Scene($this->game, $cardId);
+        if (!$Scene->isPlayable($currentPlayerId)) {
+            throw new BgaVisibleSystemException("Unexpected error: 2");
         }
 
+        $Scene->play($currentPlayerId);
+        $this->gamestate->nextPrivateState($currentPlayerId, PlayerTurn::class);
+    }
+
+    #[PossibleAction]
+    public function actDiscardScene(
+        int $currentPlayerId,
+        #[IntParam(min: 1, max: 120)] int $cardId
+    ): void {
         $Scene = new Scene($this->game, $cardId);
-        $card = $Scene->play($currentPlayerId);
+        if (!$Scene->isDiscardable($currentPlayerId)) {
+            throw new BgaVisibleSystemException("Unexpected error: 3");
+        }
 
-        $this->notify->player(
-            $currentPlayerId,
-            "playScene",
-            "",
-            [
-                "card" => $card,
-            ]
-        );
-
+        $Scene->discard($currentPlayerId);
         $this->gamestate->nextPrivateState($currentPlayerId, PlayerTurn::class);
     }
 
