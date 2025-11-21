@@ -35,7 +35,7 @@ class DealScenes extends GameState
 
             $this->notify->player(
                 $playerId,
-                "privateDealScenes",
+                "dealScenesPrivate",
                 "",
                 [
                     "cards" => $cards,

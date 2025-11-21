@@ -97,7 +97,7 @@ class ChooseTheme extends GameState
 
         $this->notify->player(
             $currentPlayerId,
-            "privateGetTheme",
+            "getThemePrivate",
             "",
             [
                 "card" => $card,

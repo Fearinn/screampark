@@ -33,7 +33,7 @@ trait Gamedatas
         ];
 
         if (!$this->isSpectator()) {
-            $gamedatas["privateStaffCount"] = $this->privateStaffCounter->get($playerId);
+            $gamedatas["staffCountPrivate"] = $this->staffCounterPrivate->get($playerId);
         }
 
         return $gamedatas;

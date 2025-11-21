@@ -6,6 +6,7 @@ namespace Bga\Games\ScreamPark\States;
 
 use Bga\GameFramework\States\GameState;
 use Bga\GameFramework\StateType;
+use Bga\Games\ScreamPark\components\scenes\Scene;
 use Bga\Games\ScreamPark\components\scenes\Scenes;
 use Bga\Games\ScreamPark\Game;
 
@@ -22,7 +23,6 @@ class PassScenes extends GameState
             id: 6,
             type: StateType::GAME,
             description: clienttranslate('Revealing scene cards...'),
-            descriptionMyTurn: clienttranslate('Revealing scene cards'),
         );
 
         $this->scenes = new Scenes($this->game);
@@ -31,8 +31,20 @@ class PassScenes extends GameState
 
     public function onEnteringState(): void
     {
-        $this->gamestate->setAllPlayersMultiactive();
-    }
+        $players = $this->game->loadPlayersBasicInfos();
+        foreach ($players as $playerId => $player) {
+            $discardedCards = $this->scenes->deck->getCardsInLocation("discard", $playerId);
 
-    public function zombie(): void {}
+            foreach ($discardedCards as $cardId => $card) {
+                $Scene =  new Scene($this->game, $cardId);
+                $Scene->revealDiscarded($playerId);
+            }
+
+            $playedCards = $this->scenes->deck->getCardsInLocation("played", $playerId);
+            foreach ($playedCards as $cardId => $card) {
+                $Scene = new Scene($this->game, $cardId);
+                $Scene->revealPlayed($playerId);
+            }
+        }
+    }
 }

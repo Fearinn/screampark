@@ -39,7 +39,7 @@ class Game extends \Bga\GameFramework\Table
     public readonly array $THEMES;
     public readonly Deck $theme_cards;
     public readonly PlayerCounter $staffCounter;
-    public readonly PlayerCounter $privateStaffCounter;
+    public readonly PlayerCounter $staffCounterPrivate;
     public readonly PlayerCounter $draftCounter;
 
     public function __construct()
@@ -54,7 +54,7 @@ class Game extends \Bga\GameFramework\Table
         $this->theme_cards = $this->deckFactory->createDeck("themes");
 
         $this->staffCounter = $this->counterFactory->createPlayerCounter("staff");
-        $this->privateStaffCounter = $this->counterFactory->createPlayerCounter("privateStaff");
+        $this->staffCounterPrivate = $this->counterFactory->createPlayerCounter("staffPrivate");
 
         $this->draftCounter = $this->counterFactory->createPlayerCounter("draft");
 

@@ -56,7 +56,7 @@ class NotifManager {
     );
   }
 
-  public async notif_privateGetTheme(args: {
+  public async notif_getThemePrivate(args: {
     player_id: number;
     card: ThemeCard;
   }): Promise<void> {
@@ -75,7 +75,7 @@ class NotifManager {
     boards[playerId].setCardVisible(card, true);
   }
 
-  public async notif_privateDealScenes(args: {
+  public async notif_dealScenesPrivate(args: {
     cards: SceneCard[];
   }): Promise<void> {
     const { cards } = args;
@@ -102,6 +102,15 @@ class NotifManager {
     });
   }
 
+  public async notif_playScenePrivate(args: {
+    player_id: number;
+    card: SceneCard;
+  }): Promise<void> {
+    const { player_id: playerId, card } = args;
+    const { boards } = this.sceneManager.stocks;
+    await boards[playerId].addCard(card);
+  }
+
   public async notif_playScene(args: {
     player_id: number;
     card: SceneCard;
@@ -109,6 +118,19 @@ class NotifManager {
     const { player_id: playerId, card } = args;
     const { boards } = this.sceneManager.stocks;
     await boards[playerId].addCard(card);
+  }
+
+  public async notif_discardScenePrivate(args: {
+    player_id: number;
+    card: SceneCard;
+  }): Promise<void> {
+    const { card } = args;
+    const { hand } = this.sceneManager.stocks;
+
+    await hand.removeCard(card, {
+      fadeOut: true,
+      slideTo: document.getElementById("player_boards"),
+    });
   }
 
   public async notif_discardScene(args: {
@@ -124,7 +146,7 @@ class NotifManager {
     });
   }
 
-  public async notif_privateSetCounter(args: {
+  public async notif_setCounterPrivate(args: {
     player_id: number;
     inc: number;
     name: string;

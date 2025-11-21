@@ -30,7 +30,7 @@ class Scene extends Scenes
 
     private function canPayCost(int $playerId): bool
     {
-        return $this->staffCost <= $this->privateStaffCounter->get($playerId);
+        return $this->staffCost <= $this->staffCounterPrivate->get($playerId);
     }
 
     public function isPlayable(int $playerId): bool
@@ -42,14 +42,14 @@ class Scene extends Scenes
     public function play(int $playerId): void
     {
         if ($this->staffCost > 0) {
-            $this->privateStaffCounter->inc(
+            $this->staffCounterPrivate->inc(
                 $playerId,
                 -$this->staffCost,
             );
 
             $this->game->notify->player(
                 $playerId,
-                "privateSetCounter",
+                "setCounterPrivate",
                 "",
                 [
                     "name" => "staff",
@@ -66,7 +66,7 @@ class Scene extends Scenes
 
         $this->game->notify->player(
             $playerId,
-            "playScene",
+            "playScenePrivate",
             clienttranslate('You play ${scene_label} as a new scene'),
             [
                 "i18n" => ["scene_label"],
@@ -77,6 +77,8 @@ class Scene extends Scenes
             ]
         );
     }
+
+    public function revealPlayed(int $playerId): void {}
 
     public function isAttachable(int $playerId): bool
     {
@@ -91,7 +93,7 @@ class Scene extends Scenes
 
         $this->game->notify->player(
             $playerId,
-            "discardScene",
+            "discardScenePrivate",
             clienttranslate('You discard ${scene_label} and get 2 ${staff_icon}'),
             [
                 "i18n" => ["scene_label"],
@@ -102,11 +104,11 @@ class Scene extends Scenes
             ]
         );
 
-        $this->privateStaffCounter->inc($playerId, 2);
+        $this->staffCounterPrivate->inc($playerId, 2);
 
         $this->game->notify->player(
             $playerId,
-            "privateSetCounter",
+            "setCounterPrivate",
             "",
             [
                 "name" => "staff",
@@ -114,6 +116,8 @@ class Scene extends Scenes
             ]
         );
     }
+
+    public function revealDiscarded(int $playerId): void {}
 
     public function isDiscardable(int $playerId): bool
     {
