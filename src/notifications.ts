@@ -14,7 +14,13 @@ class NotifManager {
   public setIgnoreChecks() {
     const { notifqueue, player_id } = this.game;
 
-    const notifsToIgnore = ["getTheme", "dealScenes"];
+    const notifsToIgnore = [
+      "getTheme",
+      "dealScenes",
+      "playScene",
+      "discardScene",
+      "setCounter",
+    ];
 
     notifsToIgnore.forEach((notifName) => {
       notifqueue.setIgnoreNotificationCheck(
@@ -117,7 +123,9 @@ class NotifManager {
   }): Promise<void> {
     const { player_id: playerId, card } = args;
     const { boards } = this.sceneManager.stocks;
-    await boards[playerId].addCard(card);
+    await boards[playerId].addCard(card, {
+      fromElement: document.getElementById(`scp_playerZone-${playerId}`),
+    });
   }
 
   public async notif_discardScenePrivate(args: {
@@ -137,10 +145,12 @@ class NotifManager {
     player_id: number;
     card: SceneCard;
   }): Promise<void> {
-    const { card } = args;
-    const { hand } = this.sceneManager.stocks;
+    const { card, player_id: playerId } = args;
+    const { boards } = this.sceneManager.stocks;
 
-    await hand.removeCard(card, {
+    card.slot = 1;
+    await boards[playerId].addCard(card);
+    await boards[playerId].removeCard(card, {
       fadeOut: true,
       slideTo: document.getElementById("player_boards"),
     });

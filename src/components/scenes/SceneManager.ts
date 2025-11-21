@@ -144,8 +144,8 @@ class SceneManager {
 
   public setup(): void {
     this.build();
-    const { sceneCards, sceneHand } = this.game.gamedatas;
-    this.manager.placeCards([...sceneCards, ...sceneHand]);
+    const { sceneCards, sceneHand, sceneBoard } = this.game.gamedatas;
+    this.manager.placeCards([...sceneCards, ...sceneHand, ...sceneBoard]);
   }
 }
 

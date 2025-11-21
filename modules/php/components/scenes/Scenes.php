@@ -61,7 +61,14 @@ class Scenes extends Cards
     public function getPublic(): array
     {
         $cards = $this->game->getObjectListFromDB("SELECT {$this->cardFields} FROM {$this->dbTable} 
-        WHERE card_location='board' OR card_location='played'");
+        WHERE card_location='board'");
+        return $cards;
+    }
+
+    public function getBoard(int $playerId): array
+    {
+        $cards = $this->game->getObjectListFromDB("SELECT {$this->cardFields} FROM {$this->dbTable} 
+        WHERE (card_location='board' OR card_location='played') AND card_location_arg={$playerId}");
         return $cards;
     }
 

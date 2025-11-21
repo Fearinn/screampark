@@ -8,6 +8,7 @@ class Scene extends Scenes
 {
     private readonly int $cardId;
     public readonly int $id;
+    public readonly string $type;
     public readonly int $points;
     public readonly int $staffCost;
     private readonly array $UP;
@@ -21,11 +22,18 @@ class Scene extends Scenes
 
         $this->cardId = $cardId;
         $this->id = $sceneId;
+        $this->type = $card["type"];
         $SCENE = $this->SCENES[$this->id];
         $this->UP = $SCENE["up"];
         $this->DOWN = $SCENE["down"];
         $this->points = (int) $this->UP["points"];
         $this->staffCost = (int) $this->DOWN["staffCost"];
+    }
+
+    private function move(string $location, int $location_arg = 0): array
+    {
+        $this->deck->moveCard($this->cardId, $location, $location_arg);
+        return $this->getCard($this->cardId);
     }
 
     private function canPayCost(int $playerId): bool
@@ -78,7 +86,30 @@ class Scene extends Scenes
         );
     }
 
-    public function revealPlayed(int $playerId): void {}
+    public function revealPlayed(int $playerId): void
+    {
+        if ($this->staffCost > 0) {
+            $this->staffCounter->inc(
+                $playerId,
+                -$this->staffCost,
+            );
+        }
+
+        $card = $this->move("board", $playerId);
+
+        $this->game->notify->all(
+            "playScene",
+            clienttranslate('${player_name} plays ${scene_label}'),
+            [
+                "i18n" => ["scene_label"],
+                "preserve" => ["sceneId"],
+                "player_id" => $playerId,
+                "scene_label" => $this->UP["label"],
+                "sceneId" => $this->id,
+                "card" => $card,
+            ]
+        );
+    }
 
     public function isAttachable(int $playerId): bool
     {
@@ -88,8 +119,7 @@ class Scene extends Scenes
 
     public function discard(int $playerId): void
     {
-        $this->deck->moveCard($this->cardId, "discard", $playerId);
-        $card = $this->getCard($this->cardId);
+        $card = $this->move("discard", $playerId);
 
         $this->game->notify->player(
             $playerId,
@@ -117,7 +147,25 @@ class Scene extends Scenes
         );
     }
 
-    public function revealDiscarded(int $playerId): void {}
+    public function revealDiscarded(int $playerId): void
+    {
+        $card = $this->move("box");
+
+        $this->game->notify->all(
+            "discardScene",
+            clienttranslate('${player_name} discards ${scene_label} and gets 2 ${staff_icon}'),
+            [
+                "i18n" => ["scene_label"],
+                "preserve" => ["sceneId"],
+                "player_id" => $playerId,
+                "scene_label" => $this->UP["label"],
+                "sceneId" => $this->id,
+                "card" => $card,
+            ]
+        );
+
+        $this->staffCounter->inc($playerId, 2);
+    }
 
     public function isDiscardable(int $playerId): bool
     {

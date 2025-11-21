@@ -675,7 +675,13 @@ var NotifManager = /** @class */ (function () {
     }
     NotifManager.prototype.setIgnoreChecks = function () {
         var _a = this.game, notifqueue = _a.notifqueue, player_id = _a.player_id;
-        var notifsToIgnore = ["getTheme", "dealScenes"];
+        var notifsToIgnore = [
+            "getTheme",
+            "dealScenes",
+            "playScene",
+            "discardScene",
+            "setCounter",
+        ];
         notifsToIgnore.forEach(function (notifName) {
             notifqueue.setIgnoreNotificationCheck(notifName, function (notif) {
                 var playerId = notif.args.player_id;
@@ -800,7 +806,9 @@ var NotifManager = /** @class */ (function () {
                     case 0:
                         playerId = args.player_id, card = args.card;
                         boards = this.sceneManager.stocks.boards;
-                        return [4 /*yield*/, boards[playerId].addCard(card)];
+                        return [4 /*yield*/, boards[playerId].addCard(card, {
+                                fromElement: document.getElementById("scp_playerZone-".concat(playerId)),
+                            })];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];
@@ -829,17 +837,21 @@ var NotifManager = /** @class */ (function () {
     };
     NotifManager.prototype.notif_discardScene = function (args) {
         return __awaiter(this, void 0, void 0, function () {
-            var card, hand;
+            var card, playerId, boards;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        card = args.card;
-                        hand = this.sceneManager.stocks.hand;
-                        return [4 /*yield*/, hand.removeCard(card, {
+                        card = args.card, playerId = args.player_id;
+                        boards = this.sceneManager.stocks.boards;
+                        card.slot = 1;
+                        return [4 /*yield*/, boards[playerId].addCard(card)];
+                    case 1:
+                        _a.sent();
+                        return [4 /*yield*/, boards[playerId].removeCard(card, {
                                 fadeOut: true,
                                 slideTo: document.getElementById("player_boards"),
                             })];
-                    case 1:
+                    case 2:
                         _a.sent();
                         return [2 /*return*/];
                 }
@@ -1017,8 +1029,8 @@ var SceneManager = /** @class */ (function () {
     };
     SceneManager.prototype.setup = function () {
         this.build();
-        var _a = this.game.gamedatas, sceneCards = _a.sceneCards, sceneHand = _a.sceneHand;
-        this.manager.placeCards(__spreadArray(__spreadArray([], sceneCards, true), sceneHand, true));
+        var _a = this.game.gamedatas, sceneCards = _a.sceneCards, sceneHand = _a.sceneHand, sceneBoard = _a.sceneBoard;
+        this.manager.placeCards(__spreadArray(__spreadArray(__spreadArray([], sceneCards, true), sceneHand, true), sceneBoard, true));
     };
     return SceneManager;
 }());

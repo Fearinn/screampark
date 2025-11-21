@@ -60,8 +60,8 @@ class PlayerTurn extends GameState
         $Scene->play($currentPlayerId);
         $this->draftCounter->inc($currentPlayerId, 1);
 
-        if ($this->draftCounter->get($currentPlayerId)) {
-            $this->gamestate->setPlayerNonMultiactive($currentPlayerId, PassScenes::class);
+        if ($this->draftCounter->get($currentPlayerId) === 2) {
+            $this->gamestate->setPlayerNonMultiactive($currentPlayerId, RevealScenes::class);
             return;
         }
 
@@ -81,8 +81,8 @@ class PlayerTurn extends GameState
         $Scene->discard($currentPlayerId);
         $this->draftCounter->inc($currentPlayerId, 1);
 
-        if ($this->draftCounter->get($currentPlayerId)) {
-            $this->gamestate->setPlayerNonMultiactive($currentPlayerId, PassScenes::class);
+        if ($this->draftCounter->get($currentPlayerId) === 2) {
+            $this->gamestate->setPlayerNonMultiactive($currentPlayerId, RevealScenes::class);
             return;
         }
 
