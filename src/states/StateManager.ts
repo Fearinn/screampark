@@ -11,7 +11,7 @@ class StateManager {
   }
 
   onEntering(stateName: StateName, args: Record<string, any>): void {
-    const { isSpectator, on_client_state } = this.game;
+    const { isSpectator } = this.game;
 
     if (isSpectator) {
       return;
@@ -21,7 +21,7 @@ class StateManager {
   }
 
   onUpdate(stateName: StateName, args: Record<string, any>): void {
-    const { isSpectator, on_client_state } = this.game;
+    const { isSpectator } = this.game;
 
     if (isSpectator) {
       return;

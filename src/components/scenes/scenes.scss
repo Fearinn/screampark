@@ -9,8 +9,25 @@
 }
 
 .scp_scenes {
-  &:empty {
-    display: none;
+  .slot {
+    display: flex;
+    flex-direction: column;
+
+    &:empty {
+      display: none;
+    }
+
+    .scp_scene {
+      &:not(:first-child) {
+        margin-top: -115%;
+      }
+
+      @for $i from 1 through 24 {
+        &:nth-child(#{$i}) {
+          z-index: (11 - $i);
+        }
+      }
+    }
   }
 }
 

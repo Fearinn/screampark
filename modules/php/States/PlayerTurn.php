@@ -38,7 +38,7 @@ class PlayerTurn extends GameState
     {
         $args = [
             "playableScenes" => $this->scenes->getPlayable($playerId),
-            "attachableScenes" => [],
+            "attachableScenes" => $this->scenes->getAttachable($playerId),
             "_no_notify" => $this->draftCounter->get($playerId) === 2,
         ];
 
@@ -87,6 +87,20 @@ class PlayerTurn extends GameState
         }
 
         $this->gamestate->nextPrivateState($currentPlayerId, PlayerTurn::class);
+    }
+
+    #[PossibleAction]
+    public function actAttachSceneStart(
+        int $currentPlayerId,
+        #[IntParam(min: 1, max: 120)] int $cardId,
+    ) {
+        $Scene = new Scene($this->game, $cardId);
+        if (!$Scene->isAttachable($currentPlayerId)) {
+            throw new BgaVisibleSystemException("Unexpected error: 4");
+        }
+
+        $this->globals->set(gAttaching, $cardId);
+        $this->gamestate->nextPrivateState($currentPlayerId, AttachScene::class);
     }
 
     public function zombie(int $playerId, array $args): void {}

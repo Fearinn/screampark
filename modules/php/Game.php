@@ -25,6 +25,8 @@ use Bga\GameFramework\Components\Deck;
 use Bga\Games\ScreamPark\Gamedatas;
 use Bga\Games\ScreamPark\SetupNewGame;
 
+define("gAttaching", "gAttaching");
+
 class Game extends \Bga\GameFramework\Table
 {
     use Gamedatas;

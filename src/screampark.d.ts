@@ -56,5 +56,6 @@ type ActionName =
   | "actChooseTheme"
   | "actUndoChooseTheme"
   | "actPlayScene"
+  | "actAttachSceneStart"
   | "actAttachScene"
   | "actDiscardScene";

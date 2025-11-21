@@ -108,6 +108,7 @@
 
 .scp_playerBoard {
   display: flex;
+  align-items: start;
   gap: 12px;
   padding: 0 12px 12px 12px;
 }
@@ -160,8 +161,87 @@ p {
   bottom: 11%;
 }
 
-.scp_scenes:empty {
+.scp_scenes .slot {
+  display: flex;
+  flex-direction: column;
+}
+.scp_scenes .slot:empty {
   display: none;
+}
+.scp_scenes .slot .scp_scene:not(:first-child) {
+  margin-top: -115%;
+}
+.scp_scenes .slot .scp_scene:nth-child(1) {
+  z-index: 10;
+}
+.scp_scenes .slot .scp_scene:nth-child(2) {
+  z-index: 9;
+}
+.scp_scenes .slot .scp_scene:nth-child(3) {
+  z-index: 8;
+}
+.scp_scenes .slot .scp_scene:nth-child(4) {
+  z-index: 7;
+}
+.scp_scenes .slot .scp_scene:nth-child(5) {
+  z-index: 6;
+}
+.scp_scenes .slot .scp_scene:nth-child(6) {
+  z-index: 5;
+}
+.scp_scenes .slot .scp_scene:nth-child(7) {
+  z-index: 4;
+}
+.scp_scenes .slot .scp_scene:nth-child(8) {
+  z-index: 3;
+}
+.scp_scenes .slot .scp_scene:nth-child(9) {
+  z-index: 2;
+}
+.scp_scenes .slot .scp_scene:nth-child(10) {
+  z-index: 1;
+}
+.scp_scenes .slot .scp_scene:nth-child(11) {
+  z-index: 0;
+}
+.scp_scenes .slot .scp_scene:nth-child(12) {
+  z-index: -1;
+}
+.scp_scenes .slot .scp_scene:nth-child(13) {
+  z-index: -2;
+}
+.scp_scenes .slot .scp_scene:nth-child(14) {
+  z-index: -3;
+}
+.scp_scenes .slot .scp_scene:nth-child(15) {
+  z-index: -4;
+}
+.scp_scenes .slot .scp_scene:nth-child(16) {
+  z-index: -5;
+}
+.scp_scenes .slot .scp_scene:nth-child(17) {
+  z-index: -6;
+}
+.scp_scenes .slot .scp_scene:nth-child(18) {
+  z-index: -7;
+}
+.scp_scenes .slot .scp_scene:nth-child(19) {
+  z-index: -8;
+}
+.scp_scenes .slot .scp_scene:nth-child(20) {
+  z-index: -9;
+}
+.scp_scenes .slot .scp_scene:nth-child(21) {
+  z-index: -10;
+}
+.scp_scenes .slot .scp_scene:nth-child(22) {
+  z-index: -11;
+}
+.scp_scenes .slot .scp_scene:nth-child(23) {
+  z-index: -12;
+}
+.scp_scenes .slot .scp_scene:nth-child(24) {
+  z-index: -13;
 }
 
 .scp_hand {

@@ -87,7 +87,7 @@ class Scenes extends Cards
     public function getNextPosition(int $playerId, int $slot): int
     {
         $nextPosition = (int) $this->game->getUniqueValueFromDB("SELECT MAX(position) FROM {$this->dbTable}
-        WHERE card_location='board' AND card_location_arg={$playerId} AND slot={$slot}");
+        WHERE (card_location='board' OR card_location='played') AND card_location_arg={$playerId} AND slot={$slot}") + 1;
 
         if (!$nextPosition) {
             return 1;
@@ -104,13 +104,13 @@ class Scenes extends Cards
             return 0;
         }
 
-        $card = $this->getHead($playerId, $maxSlot);
+        $card = $this->getMainInSlot($playerId, $maxSlot);
         $sceneId = (int) $card["type_arg"];
         $SCENE = $this->SCENES[$sceneId];
         return (int) $SCENE["up"]["points"];
     }
 
-    protected function getHead(int $playerId, int $slot): array
+    public function getMainInSlot(int $playerId, int $slot): array
     {
         $sql = "SELECT {$this->cardFields} FROM {$this->dbTable} 
         WHERE (card_location='board' OR card_location='played') AND card_location_arg={$playerId} AND position=1 AND slot={$slot}";

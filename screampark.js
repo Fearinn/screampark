@@ -1227,7 +1227,7 @@ var StateManager = /** @class */ (function () {
     }
     StateManager.prototype.onEntering = function (stateName, args) {
         var _a;
-        var _b = this.game, isSpectator = _b.isSpectator, on_client_state = _b.on_client_state;
+        var isSpectator = this.game.isSpectator;
         if (isSpectator) {
             return;
         }
@@ -1235,7 +1235,7 @@ var StateManager = /** @class */ (function () {
     };
     StateManager.prototype.onUpdate = function (stateName, args) {
         var _a;
-        var _b = this.game, isSpectator = _b.isSpectator, on_client_state = _b.on_client_state;
+        var isSpectator = this.game.isSpectator;
         if (isSpectator) {
             return;
         }
@@ -1347,7 +1347,7 @@ var PlayerTurn = /** @class */ (function (_super) {
                 disabled: !playableScenes.includes(cardId),
             });
             _this.game.addButton(_("attach to other scene"), function () {
-                _this.game.performAction("actAttachScene", {
+                _this.game.performAction("actAttachSceneStart", {
                     cardId: cardId,
                 });
             }, { disabled: !attachableScenes.includes(cardId) });

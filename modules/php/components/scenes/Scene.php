@@ -88,13 +88,6 @@ class Scene extends Scenes
 
     public function revealPlayed(int $playerId): void
     {
-        if ($this->staffCost > 0) {
-            $this->staffCounter->inc(
-                $playerId,
-                -$this->staffCost,
-            );
-        }
-
         $card = $this->move("board", $playerId);
 
         $this->game->notify->all(
@@ -116,6 +109,48 @@ class Scene extends Scenes
         return $this->getMaxSlot($playerId) > 0 && $this->canPayCost($playerId);
     }
 
+    public function attach(int $playerId, int $slot): void
+    {
+        if ($this->staffCost > 0) {
+            $this->staffCounterPrivate->inc(
+                $playerId,
+                -$this->staffCost,
+            );
+
+            $this->game->notify->player(
+                $playerId,
+                "setCounterPrivate",
+                "",
+                [
+                    "name" => "staff",
+                    "inc" => -$this->staffCost,
+                ]
+            );
+        }
+
+        $position = $this->getNextPosition($playerId, $slot);
+        $sql = "UPDATE {$this->dbTable} SET position={$position}, slot={$slot}, card_location='played', card_location_arg={$playerId} WHERE card_id={$this->cardId}";
+        $this->game->DbQuery($sql);
+
+        $card = $this->getCard($this->cardId);
+        $card2 = $this->getMainInSlot($playerId, $slot);
+        $sceneId2 = (int) $card2["type_arg"];
+
+        $this->game->notify->player(
+            $playerId,
+            "playScenePrivate",
+            clienttranslate('You attach ${scene_label} to ${scene_label2}'),
+            [
+                "i18n" => ["scene_label", "scene_label2"],
+                "preserve" => ["sceneId", "sceneId2"],
+                "scene_label" => $this->DOWN["label"],
+                "sceneId" => $this->id,
+                "card" => $card,
+                "scene_label2" => $this->SCENES[$sceneId2]["up"]["label"],
+                "sceneId2" => $sceneId2,
+            ]
+        );
+    }
 
     public function discard(int $playerId): void
     {
