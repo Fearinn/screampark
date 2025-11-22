@@ -18,6 +18,7 @@ class AttachScene extends GameState
 {
     protected Scenes $scenes;
     protected PlayerCounter $draftCounter;
+    protected PlayerCounter $attachingCardId;
 
     function __construct(
         protected Game $game,
@@ -32,31 +33,24 @@ class AttachScene extends GameState
 
         $this->scenes = new Scenes($this->game);
         $this->draftCounter = $this->game->draftCounter;
+        $this->attachingCardId = $this->game->attachingCardId;
     }
 
     public function getArgs(int $playerId): array
     {
         $maxSlot = $this->scenes->getMaxSlot($playerId);
-        $auto = $maxSlot === 1;
+        $cardId = $this->attachingCardId->get($playerId);
 
         $args = [
-            "cardId" => $this->globals->get(gAttaching),
+            "cardId" => $cardId,
+            "scene_label" => "",
             "maxSlot" => $maxSlot,
-            "auto" => $auto,
-            "_no_notify" => $auto,
         ];
 
         return $args;
     }
 
-    public function onEnteringState(int $currentPlayerId): void
-    {
-        $args = $this->getArgs($currentPlayerId);
-
-        if ($args["auto"]) {
-            $this->actAttachScene($currentPlayerId, 1, $args);
-        }
-    }
+    public function onEnteringState(int $currentPlayerId): void {}
 
     #[PossibleAction]
     public function actAttachScene(
@@ -64,23 +58,30 @@ class AttachScene extends GameState
         #[IntParam(min: 1, max: 24)] int $slot,
         array $args,
     ) {
-        $cardId = $this->globals->get(gAttaching);
+        $cardId = $this->attachingCardId->get($currentPlayerId);
         $Scene = new Scene($this->game, $cardId);
 
         if ($args["maxSlot"] < $slot) {
             throw new \BgaVisibleSystemException("Unexpected error: 5");
         }
 
-        $Scene->attach($currentPlayerId, $slot);
+        $this->attach($currentPlayerId, $Scene);
+    }
+
+    public function attach(int $currentPlayerId, $Scene): void
+    {
+        $Scene->attach($currentPlayerId, 1);
         $this->draftCounter->inc($currentPlayerId, 1);
-        $this->globals->set(gAttaching, null);
+        $this->attachingCardId->set($currentPlayerId, 0);
 
         if ($this->draftCounter->get($currentPlayerId) === 2) {
             $this->gamestate->setPlayerNonMultiactive($currentPlayerId, RevealScenes::class);
+            return;
         }
 
         $this->gamestate->nextPrivateState($currentPlayerId, PlayerTurn::class);
     }
+
 
     public function zombie(int $playerId, array $args): void {}
 }

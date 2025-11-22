@@ -161,6 +161,9 @@ p {
   bottom: 11%;
 }
 
+.scp_scenes {
+  align-items: start !important;
+}
 .scp_scenes .slot {
   display: flex;
   flex-direction: column;

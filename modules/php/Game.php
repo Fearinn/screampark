@@ -25,8 +25,6 @@ use Bga\GameFramework\Components\Deck;
 use Bga\Games\ScreamPark\Gamedatas;
 use Bga\Games\ScreamPark\SetupNewGame;
 
-define("gAttaching", "gAttaching");
-
 class Game extends \Bga\GameFramework\Table
 {
     use Gamedatas;
@@ -43,6 +41,7 @@ class Game extends \Bga\GameFramework\Table
     public readonly PlayerCounter $staffCounter;
     public readonly PlayerCounter $staffCounterPrivate;
     public readonly PlayerCounter $draftCounter;
+    public readonly PlayerCounter $attachingCardId;
 
     public function __construct()
     {
@@ -57,8 +56,8 @@ class Game extends \Bga\GameFramework\Table
 
         $this->staffCounter = $this->counterFactory->createPlayerCounter("staff");
         $this->staffCounterPrivate = $this->counterFactory->createPlayerCounter("staffPrivate");
-
         $this->draftCounter = $this->counterFactory->createPlayerCounter("draft");
+        $this->attachingCardId = $this->counterFactory->createPlayerCounter("attaching");
 
         $this->decorateNotifs();
     }

@@ -9,6 +9,8 @@
 }
 
 .scp_scenes {
+  align-items: start !important;
+
   .slot {
     display: flex;
     flex-direction: column;

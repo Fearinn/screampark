@@ -11,13 +11,13 @@ class Scene extends Scenes
     public readonly string $type;
     public readonly int $points;
     public readonly int $staffCost;
-    private readonly array $UP;
-    private readonly array $DOWN;
+    public readonly array $UP;
+    public readonly array $DOWN;
 
     public function __construct(Game $game, int $cardId)
     {
         parent::__construct($game, $game->scene_cards, "scenes");
-        $card = $this->deck->getCard($cardId);
+        $card = $this->getCard($cardId);
         $sceneId = (int) $card["type_arg"];
 
         $this->cardId = $cardId;
@@ -89,17 +89,40 @@ class Scene extends Scenes
     public function revealPlayed(int $playerId): void
     {
         $card = $this->move("board", $playerId);
+        $position = (int) $card["position"];
+
+        if ($position === 1) {
+            $this->game->notify->all(
+                "playScene",
+                clienttranslate('${player_name} plays ${scene_label} as a new scene'),
+                [
+                    "i18n" => ["scene_label"],
+                    "preserve" => ["sceneId"],
+                    "player_id" => $playerId,
+                    "scene_label" => $this->UP["label"],
+                    "sceneId" => $this->id,
+                    "card" => $card,
+                ]
+            );
+            return;
+        }
+
+        $slot = (int) $card["slot"];
+        $card2 = $this->getMainInSlot($playerId, $slot);
+        $sceneId2 = (int) $card2["type_arg"];
 
         $this->game->notify->all(
             "playScene",
-            clienttranslate('${player_name} plays ${scene_label}'),
+            clienttranslate('${player_name} attaches ${scene_label} to ${scene_label2}'),
             [
-                "i18n" => ["scene_label"],
-                "preserve" => ["sceneId"],
+                "i18n" => ["scene_label", "scene_label2"],
+                "preserve" => ["sceneId", "sceneId2"],
                 "player_id" => $playerId,
-                "scene_label" => $this->UP["label"],
+                "scene_label" => $this->DOWN["label"],
                 "sceneId" => $this->id,
                 "card" => $card,
+                "scene_label2" => $this->SCENES[$sceneId2]["up"]["label"],
+                "sceneId2" => $sceneId2,
             ]
         );
     }
@@ -129,7 +152,9 @@ class Scene extends Scenes
         }
 
         $position = $this->getNextPosition($playerId, $slot);
-        $sql = "UPDATE {$this->dbTable} SET position={$position}, slot={$slot}, card_location='played', card_location_arg={$playerId} WHERE card_id={$this->cardId}";
+        $sql = "UPDATE {$this->dbTable} SET position={$position}, slot={$slot}, card_location='played', card_location_arg={$playerId} 
+        WHERE card_id={$this->cardId}";
+        
         $this->game->DbQuery($sql);
 
         $card = $this->getCard($this->cardId);

@@ -18,6 +18,7 @@ class PlayerTurn extends GameState
 {
     protected Scenes $scenes;
     protected PlayerCounter $draftCounter;
+    protected PlayerCounter $attachingCardId;
 
     function __construct(
         protected Game $game,
@@ -32,6 +33,7 @@ class PlayerTurn extends GameState
 
         $this->scenes = new Scenes($this->game);
         $this->draftCounter = $this->game->draftCounter;
+        $this->attachingCardId = $this->game->attachingCardId;
     }
 
     public function getArgs(int $playerId): array
@@ -39,7 +41,6 @@ class PlayerTurn extends GameState
         $args = [
             "playableScenes" => $this->scenes->getPlayable($playerId),
             "attachableScenes" => $this->scenes->getAttachable($playerId),
-            "_no_notify" => $this->draftCounter->get($playerId) === 2,
         ];
 
         return $args;
@@ -99,7 +100,15 @@ class PlayerTurn extends GameState
             throw new BgaVisibleSystemException("Unexpected error: 4");
         }
 
-        $this->globals->set(gAttaching, $cardId);
+        $this->attachingCardId->set($currentPlayerId, $cardId);
+
+        $maxSlot = $this->scenes->getMaxSlot($currentPlayerId);
+        if ($maxSlot === 1) {
+            $AttachScene = new AttachScene($this->game);
+            $AttachScene->attach($currentPlayerId, $Scene);
+            return;
+        }
+
         $this->gamestate->nextPrivateState($currentPlayerId, AttachScene::class);
     }
 
