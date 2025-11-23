@@ -18,7 +18,7 @@ class PlayerTurn extends GameState
 {
     protected Scenes $scenes;
     protected PlayerCounter $draftCounter;
-    protected PlayerCounter $attachingCardId;
+    protected PlayerCounter $attachmentCardId;
 
     function __construct(
         protected Game $game,
@@ -33,7 +33,7 @@ class PlayerTurn extends GameState
 
         $this->scenes = new Scenes($this->game);
         $this->draftCounter = $this->game->draftCounter;
-        $this->attachingCardId = $this->game->attachingCardId;
+        $this->attachmentCardId = $this->game->attachmentCardId;
     }
 
     public function getArgs(int $playerId): array
@@ -100,7 +100,7 @@ class PlayerTurn extends GameState
             throw new BgaVisibleSystemException("Unexpected error: 4");
         }
 
-        $this->attachingCardId->set($currentPlayerId, $cardId);
+        $this->attachmentCardId->set($currentPlayerId, $cardId);
 
         $maxSlot = $this->scenes->getMaxSlot($currentPlayerId);
         if ($maxSlot === 1) {

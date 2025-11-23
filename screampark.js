@@ -1270,6 +1270,9 @@ var AttachScene = /** @class */ (function (_super) {
             this.onInactiveUpdate();
             return;
         }
+        this.game.addButton(_("cancel"), function () {
+            _this.game.performAction("actAttachSceneCancel");
+        }, { type: "alert" });
         var playerId = this.game.player_id;
         var boards = this.sceneManager.stocks.boards;
         var board = boards[playerId];

@@ -16,6 +16,14 @@ class AttachScene extends State {
       return;
     }
 
+    this.game.addButton(
+      _("cancel"),
+      () => {
+        this.game.performAction("actAttachSceneCancel");
+      },
+      { type: "alert" }
+    );
+
     const { player_id: playerId } = this.game;
     const { boards } = this.sceneManager.stocks;
     const board = boards[playerId];

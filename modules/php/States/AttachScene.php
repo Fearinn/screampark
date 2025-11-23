@@ -18,7 +18,7 @@ class AttachScene extends GameState
 {
     protected Scenes $scenes;
     protected PlayerCounter $draftCounter;
-    protected PlayerCounter $attachingCardId;
+    protected PlayerCounter $attachmentCardId;
 
     function __construct(
         protected Game $game,
@@ -33,17 +33,18 @@ class AttachScene extends GameState
 
         $this->scenes = new Scenes($this->game);
         $this->draftCounter = $this->game->draftCounter;
-        $this->attachingCardId = $this->game->attachingCardId;
+        $this->attachmentCardId = $this->game->attachmentCardId;
     }
 
     public function getArgs(int $playerId): array
     {
         $maxSlot = $this->scenes->getMaxSlot($playerId);
-        $cardId = $this->attachingCardId->get($playerId);
+        $cardId = $this->attachmentCardId->get($playerId);
+        $Scene = new Scene($this->game, $cardId);
 
         $args = [
             "cardId" => $cardId,
-            "scene_label" => "",
+            "scene_label" => $Scene->DOWN["label"],
             "maxSlot" => $maxSlot,
         ];
 
@@ -58,7 +59,7 @@ class AttachScene extends GameState
         #[IntParam(min: 1, max: 24)] int $slot,
         array $args,
     ) {
-        $cardId = $this->attachingCardId->get($currentPlayerId);
+        $cardId = $this->attachmentCardId->get($currentPlayerId);
         $Scene = new Scene($this->game, $cardId);
 
         if ($args["maxSlot"] < $slot) {
@@ -72,7 +73,7 @@ class AttachScene extends GameState
     {
         $Scene->attach($currentPlayerId, $slot);
         $this->draftCounter->inc($currentPlayerId, 1);
-        $this->attachingCardId->set($currentPlayerId, 0);
+        $this->attachmentCardId->set($currentPlayerId, 0);
 
         if ($this->draftCounter->get($currentPlayerId) === 2) {
             $this->gamestate->setPlayerNonMultiactive($currentPlayerId, RevealScenes::class);
@@ -82,6 +83,12 @@ class AttachScene extends GameState
         $this->gamestate->nextPrivateState($currentPlayerId, PlayerTurn::class);
     }
 
+    #[PossibleAction]
+    public function actAttachSceneCancel(int $currentPlayerId): void
+    {
+        $this->attachmentCardId->set($currentPlayerId, 0);
+        $this->gamestate->nextPrivateState($currentPlayerId, PlayerTurn::class);
+    }
 
     public function zombie(int $playerId, array $args): void {}
 }

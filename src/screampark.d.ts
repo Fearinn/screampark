@@ -58,4 +58,5 @@ type ActionName =
   | "actPlayScene"
   | "actAttachSceneStart"
   | "actAttachScene"
+  | "actAttachSceneCancel"
   | "actDiscardScene";

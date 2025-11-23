@@ -54,7 +54,7 @@ class DealScenes extends GameState
 
         $this->notify->all(
             "message",
-            clienttranslate("Each player draws 8 Scenes from the deck")
+            clienttranslate("Each player draws 8 scene cards from the deck")
         );
 
         return PreTurn::class;
