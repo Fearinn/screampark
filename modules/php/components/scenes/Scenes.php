@@ -41,10 +41,10 @@ class Scenes extends Cards
         $playerCount = $this->game->getPlayerCount();
 
         $genreCards = [];
-        foreach ($this->GENRES as $genre_id => $genre) {
+        foreach ($this->GENRES as $genreId => $genre) {
             $genreCards[] = [
                 "type" => "genre",
-                "type_arg" => $genre_id,
+                "type_arg" => $genreId,
                 "nbr" => 9 * $playerCount,
             ];
         }
@@ -56,6 +56,14 @@ class Scenes extends Cards
     {
         $card = $this->game->getObjectFromDB("SELECT {$this->cardFields} FROM {$this->dbTable} WHERE card_id={$cardId}");
         return $card;
+    }
+
+    protected function getCards(array $cardIds): array
+    {
+        $cardIds = implode(",", $cardIds);
+        $cards = $this->game->getObjectListFromDB("SELECT {$this->cardFields} FROM {$this->dbTable} 
+        WHERE card_id IN ({$cardIds})");
+        return $cards;
     }
 
     public function getPublic(): array
@@ -148,5 +156,36 @@ class Scenes extends Cards
         }
 
         return $attachableCards;
+    }
+
+    public function discardBoth(int $playerId, array $cardIds): void
+    {
+        $this->deck->moveCards($cardIds, "discard", $playerId);
+        $cards = $this->getCards($cardIds);
+
+        [$cardId, $cardId2] = $cardIds;
+        $Scene = new Scene($this->game, $cardId);
+        $Scene2 = new Scene($this->game, $cardId2);
+
+        $this->game->notify->player(
+            $playerId,
+            "discardBoth",
+            clienttranslate('You discard 2 ${scene_label} and ${scene_label2} to pick a genre card'),
+            [
+                "i18n" => ["scene_label", "scene_label2"],
+                "preserve" => ["sceneId", "sceneId2"],
+                "scene_label" => $Scene->UP["label"],
+                "scene_label2" => $Scene2->UP["label"],
+                "sceneId" => $Scene->id,
+                "sceneId2" => $Scene2->id,
+                "cards" => $cards,
+            ]
+        );
+    }
+
+    public function getGenreCardId(int $genreId): int
+    {
+        $sql = "SELECT card_id FROM {$this->dbTable} WHERE card_location='genreDeck' AND card_type='genre' AND card_type_arg={$genreId} LIMIT 1";
+        return (int) $this->game->getUniqueValueFromDB($sql);
     }
 }

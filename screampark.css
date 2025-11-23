@@ -134,12 +134,17 @@ p {
   gap: var(--gap);
 }
 
-.scp_smIcon {
+.scp_icon {
   display: inline-block;
   background-size: cover;
   vertical-align: middle;
   aspect-ratio: 1;
   width: 1.1em;
+}
+
+.scp_button .scp_icon-genre {
+  margin: -4px;
+  width: 36px;
 }
 
 .scp_tooltip {

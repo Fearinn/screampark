@@ -1,11 +1,13 @@
 class PlayerTurn extends State {
   private sceneManager: SceneManager;
-  private SCENES: SCENE[];
+  private SCENES: Record<number, SCENE>;
+  private GENRES: Record<number, GENRE>;
 
   constructor(game: SCP) {
     super(game);
     this.sceneManager = new SceneManager(this.game);
     this.SCENES = this.game.gamedatas.SCENES;
+    this.GENRES = this.game.gamedatas.GENRES;
   }
 
   public onUpdate(args: ArgsPlayerTurn): void {
@@ -16,6 +18,7 @@ class PlayerTurn extends State {
       return;
     }
 
+    const { keysToNumbers } = this.game;
     const { playableScenes, attachableScenes } = args;
 
     const { hand } = this.sceneManager.stocks;
@@ -23,15 +26,40 @@ class PlayerTurn extends State {
 
     hand.onSelectionChange = (selection, lastChange) => {
       this.game.clearButtons();
+      this.game.statusBar.setTitle(
+        _("${you} must play or discard 2 scene cards")
+      );
 
       if (selection.length === 0) {
         return;
       }
 
       if (selection.length === 2) {
-        this.game.addButton(_("discard both and get a genre card"), () => {}, {
-          type: "alert",
+        this.game.statusBar.setTitle(
+          _("${you} may discard both scenes and pick any genre card")
+        );
+
+        keysToNumbers(this.GENRES).forEach((genreId) => {
+          const { label } = this.GENRES[genreId];
+
+          this.game.addButton(
+            this.game.format_string_recursive(_("${genre_icon}"), {
+              genreId,
+            }),
+            () => {
+              this.game.performAction("actAttachGenreStart", {
+                cardIds: selection
+                  .map((card) => {
+                    return Number(card.id);
+                  })
+                  .join(","),
+                genreId: genreId,
+              });
+            },
+            { title: _(label) }
+          );
         });
+
         return;
       }
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bga\Games\ScreamPark\States;
 
+use Bga\GameFramework\Actions\Types\IntArrayParam;
 use Bga\GameFramework\Actions\Types\IntParam;
 use Bga\GameFramework\Components\Counters\PlayerCounter;
 use Bga\GameFramework\States\GameState;
@@ -110,6 +111,20 @@ class PlayerTurn extends GameState
         }
 
         $this->gamestate->nextPrivateState($currentPlayerId, AttachScene::class);
+    }
+
+    #[PossibleAction]
+    public function actAttachGenreStart(
+        int $currentPlayerId,
+        #[IntArrayParam(min: 2, max: 2)] array $cardIds,
+        #[IntParam(min: 1, max: 5)] int $genreId,
+    ): void {
+        $this->scenes->discardBoth($currentPlayerId, $cardIds);
+
+        $cardId = $this->scenes->getGenreCardId($genreId);
+        $this->attachmentCardId->set($currentPlayerId, $cardId);
+
+        $this->gamestate->nextPrivateState($currentPlayerId, AttachGenre::class);
     }
 
     public function zombie(int $playerId, array $args): void {}

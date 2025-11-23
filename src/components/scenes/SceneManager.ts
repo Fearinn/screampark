@@ -2,8 +2,8 @@ class SceneManager {
   private readonly game: SCP;
   public stocks: SceneStocks;
   private manager: BgaCards.Manager<SceneCard>;
-  private readonly GENRES: GENRE[];
-  private readonly SCENES: SCENE[];
+  private readonly GENRES: Record<number, GENRE>;
+  private readonly SCENES: Record<number, SCENE>;
 
   constructor(game: SCP) {
     this.game = game;

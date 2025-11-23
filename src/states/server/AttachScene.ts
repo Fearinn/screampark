@@ -1,6 +1,6 @@
 class AttachScene extends State {
   private sceneManager: SceneManager;
-  private SCENES: SCENE[];
+  private SCENES: Record<number, SCENE>;
 
   constructor(game: SCP) {
     super(game);

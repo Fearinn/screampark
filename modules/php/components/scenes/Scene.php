@@ -13,6 +13,8 @@ class Scene extends Scenes
     public readonly int $staffCost;
     public readonly array $UP;
     public readonly array $DOWN;
+    public readonly array $GENRES;
+    public readonly string $label;
 
     public function __construct(Game $game, int $cardId)
     {
@@ -23,6 +25,7 @@ class Scene extends Scenes
         $this->cardId = $cardId;
         $this->id = $sceneId;
         $this->type = $card["type"];
+
         $SCENE = $this->SCENES[$this->id];
         $this->UP = $SCENE["up"];
         $this->DOWN = $SCENE["down"];
@@ -154,7 +157,7 @@ class Scene extends Scenes
         $position = $this->getNextPosition($playerId, $slot);
         $sql = "UPDATE {$this->dbTable} SET position={$position}, slot={$slot}, card_location='played', card_location_arg={$playerId} 
         WHERE card_id={$this->cardId}";
-        
+
         $this->game->DbQuery($sql);
 
         $card = $this->getCard($this->cardId);

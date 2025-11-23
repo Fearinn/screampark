@@ -70,6 +70,7 @@ class SCP extends GameGui<SCP_Gamedatas> implements SCP {
       classes?: string[];
       disabled?: boolean;
       confirm?: string;
+      title?: string;
     } = {}
   ) {
     params.type = params.type || "default";
@@ -129,12 +130,12 @@ class SCP extends GameGui<SCP_Gamedatas> implements SCP {
   private addIcons(log: string, args: Record<string, any>) {
     if (log.includes("${randomGenre_icon}")) {
       const backgroundImage = `url(${g_gamethemeurl}img/icons/genre_0.png)`;
-      args.randomGenre_icon = `<span class="scp_smIcon scp_genreIcon" style="background-image: ${backgroundImage};"></span>`;
+      args.randomGenre_icon = `<span class="scp_icon scp_icon-genre" style="background-image: ${backgroundImage};"></span>`;
     }
 
-    if (log.includes("${genre_icon}") && args.genre_id) {
-      const backgroundImage = `url(${g_gamethemeurl}img/icons/genre_${args.genre_id}.png)`;
-      args.genre_icon = `<span class="scp_smIcon scp_genreIcons" style="background-image: ${backgroundImage};"></span>`;
+    if (log.includes("${genre_icon}") && args.genreId) {
+      const backgroundImage = `url(${g_gamethemeurl}img/icons/genre_${args.genreId}.png)`;
+      args.genre_icon = `<span class="scp_icon scp_icon-genre" style="background-image: ${backgroundImage};"></span>`;
     }
 
     if (log.includes("${candlestick_icon}")) {
@@ -155,17 +156,17 @@ class SCP extends GameGui<SCP_Gamedatas> implements SCP {
 
     if (log.includes("${lightning_icon}")) {
       const backgroundImage = `url(${g_gamethemeurl}img/icons/lightning.png)`;
-      args.lightning_icon = `<span class="scp_smIcon scp_genreIcon" style="background-image: ${backgroundImage};"></span>`;
+      args.lightning_icon = `<span class="scp_icon scp_genreIcon" style="background-image: ${backgroundImage};"></span>`;
     }
 
     if (log.includes("${staff_icon}")) {
       const backgroundImage = `url(${g_gamethemeurl}img/staff.png)`;
-      args.staff_icon = `<span class="scp_smIcon" style="background-image: ${backgroundImage};"></span>`;
+      args.staff_icon = `<span class="scp_icon" style="background-image: ${backgroundImage};"></span>`;
     }
 
     if (log.includes("${staffCost_icon}")) {
       const backgroundImage = `url(${g_gamethemeurl}img/icons/staffCost.png)`;
-      args.staffCost_icon = `<span class="scp_smIcon" style="background-image: ${backgroundImage};"></span>`;
+      args.staffCost_icon = `<span class="scp_icon" style="background-image: ${backgroundImage};"></span>`;
     }
   }
 
@@ -180,6 +181,6 @@ class SCP extends GameGui<SCP_Gamedatas> implements SCP {
     const scenic_id = scenicSymbols[scenicName];
     const backgroundImage = `url(${g_gamethemeurl}img/icons/scenic_${scenic_id}.png)`;
 
-    return `<span class="scp_smIcon scp_genreIcon" style="background-image: ${backgroundImage};"></span>`;
+    return `<span class="scp_icon scp_genreIcon" style="background-image: ${backgroundImage};"></span>`;
   }
 }

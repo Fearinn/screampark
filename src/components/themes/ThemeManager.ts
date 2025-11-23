@@ -47,7 +47,7 @@ class ThemeManager {
                   _("1 point for each scene with any ${genre_icon}"),
                   {
                     theme_label: _(label),
-                    genre_id: genres[0],
+                    genreId: genres[0],
                   }
                 )}
                 </p>
@@ -56,7 +56,7 @@ class ThemeManager {
                   _("1 point for each scene with any ${genre_icon}"),
                   {
                     theme_label: _(label),
-                    genre_id: genres[1],
+                    genreId: genres[1],
                   }
                 )}
                 </p>

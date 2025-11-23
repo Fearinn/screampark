@@ -600,11 +600,11 @@ var SCP = /** @class */ (function (_super) {
     SCP.prototype.addIcons = function (log, args) {
         if (log.includes("${randomGenre_icon}")) {
             var backgroundImage = "url(".concat(g_gamethemeurl, "img/icons/genre_0.png)");
-            args.randomGenre_icon = "<span class=\"scp_smIcon scp_genreIcon\" style=\"background-image: ".concat(backgroundImage, ";\"></span>");
+            args.randomGenre_icon = "<span class=\"scp_icon scp_icon-genre\" style=\"background-image: ".concat(backgroundImage, ";\"></span>");
         }
-        if (log.includes("${genre_icon}") && args.genre_id) {
-            var backgroundImage = "url(".concat(g_gamethemeurl, "img/icons/genre_").concat(args.genre_id, ".png)");
-            args.genre_icon = "<span class=\"scp_smIcon scp_genreIcons\" style=\"background-image: ".concat(backgroundImage, ";\"></span>");
+        if (log.includes("${genre_icon}") && args.genreId) {
+            var backgroundImage = "url(".concat(g_gamethemeurl, "img/icons/genre_").concat(args.genreId, ".png)");
+            args.genre_icon = "<span class=\"scp_icon scp_icon-genre\" style=\"background-image: ".concat(backgroundImage, ";\"></span>");
         }
         if (log.includes("${candlestick_icon}")) {
             args.candlestick_icon = this.getScenicIcon("candlestick");
@@ -620,15 +620,15 @@ var SCP = /** @class */ (function (_super) {
         }
         if (log.includes("${lightning_icon}")) {
             var backgroundImage = "url(".concat(g_gamethemeurl, "img/icons/lightning.png)");
-            args.lightning_icon = "<span class=\"scp_smIcon scp_genreIcon\" style=\"background-image: ".concat(backgroundImage, ";\"></span>");
+            args.lightning_icon = "<span class=\"scp_icon scp_genreIcon\" style=\"background-image: ".concat(backgroundImage, ";\"></span>");
         }
         if (log.includes("${staff_icon}")) {
             var backgroundImage = "url(".concat(g_gamethemeurl, "img/staff.png)");
-            args.staff_icon = "<span class=\"scp_smIcon\" style=\"background-image: ".concat(backgroundImage, ";\"></span>");
+            args.staff_icon = "<span class=\"scp_icon\" style=\"background-image: ".concat(backgroundImage, ";\"></span>");
         }
         if (log.includes("${staffCost_icon}")) {
             var backgroundImage = "url(".concat(g_gamethemeurl, "img/icons/staffCost.png)");
-            args.staffCost_icon = "<span class=\"scp_smIcon\" style=\"background-image: ".concat(backgroundImage, ";\"></span>");
+            args.staffCost_icon = "<span class=\"scp_icon\" style=\"background-image: ".concat(backgroundImage, ";\"></span>");
         }
     };
     SCP.prototype.getScenicIcon = function (scenicName) {
@@ -640,7 +640,7 @@ var SCP = /** @class */ (function (_super) {
         };
         var scenic_id = scenicSymbols[scenicName];
         var backgroundImage = "url(".concat(g_gamethemeurl, "img/icons/scenic_").concat(scenic_id, ".png)");
-        return "<span class=\"scp_smIcon scp_genreIcon\" style=\"background-image: ".concat(backgroundImage, ";\"></span>");
+        return "<span class=\"scp_icon scp_genreIcon\" style=\"background-image: ".concat(backgroundImage, ";\"></span>");
     };
     return SCP;
 }(GameGui));
@@ -1113,10 +1113,10 @@ var ThemeManager = /** @class */ (function () {
                 var _b = _this.THEMES[theme_id], label = _b.label, genres = _b.genres;
                 _this.game.addTooltipHtml(element.id, "<div class=\"scp_tooltip scp_themeTooltip\">\n            <h4 class=\"scp_title scp_tooltipTitle\">".concat(_(label), "</h4>\n            <div class=\"scp_flexWrapper\" style=\"--direction: column; --gap: 4px\">\n                <p>End of round/day:</p>\n                <p class=\"scp_tooltipContent\">\n                ").concat(_this.game.format_string_recursive(_("1 point for each scene with any ${genre_icon}"), {
                     theme_label: _(label),
-                    genre_id: genres[0],
+                    genreId: genres[0],
                 }), "\n                </p>\n                <p class=\"scp_tooltipContent\">\n                ").concat(_this.game.format_string_recursive(_("1 point for each scene with any ${genre_icon}"), {
                     theme_label: _(label),
-                    genre_id: genres[1],
+                    genreId: genres[1],
                 }), "\n                </p>\n            </div>\n          </div>"));
             },
             setupBackDiv: function (card, element) {
@@ -1360,6 +1360,7 @@ var PlayerTurn = /** @class */ (function (_super) {
         var _this = _super.call(this, game) || this;
         _this.sceneManager = new SceneManager(_this.game);
         _this.SCENES = _this.game.gamedatas.SCENES;
+        _this.GENRES = _this.game.gamedatas.GENRES;
         return _this;
     }
     PlayerTurn.prototype.onUpdate = function (args) {
@@ -1369,17 +1370,32 @@ var PlayerTurn = /** @class */ (function (_super) {
             this.onInactiveUpdate();
             return;
         }
+        var keysToNumbers = this.game.keysToNumbers;
         var playableScenes = args.playableScenes, attachableScenes = args.attachableScenes;
         var hand = this.sceneManager.stocks.hand;
         hand.setSelectionMode("multiple");
         hand.onSelectionChange = function (selection, lastChange) {
             _this.game.clearButtons();
+            _this.game.statusBar.setTitle(_("${you} must play or discard 2 scene cards"));
             if (selection.length === 0) {
                 return;
             }
             if (selection.length === 2) {
-                _this.game.addButton(_("discard both and get a genre card"), function () { }, {
-                    type: "alert",
+                _this.game.statusBar.setTitle(_("${you} may discard both scenes and pick any genre card"));
+                keysToNumbers(_this.GENRES).forEach(function (genreId) {
+                    var label = _this.GENRES[genreId].label;
+                    _this.game.addButton(_this.game.format_string_recursive(_("${genre_icon}"), {
+                        genreId: genreId,
+                    }), function () {
+                        _this.game.performAction("actAttachGenreStart", {
+                            cardIds: selection
+                                .map(function (card) {
+                                return Number(card.id);
+                            })
+                                .join(","),
+                            genreId: genreId,
+                        });
+                    }, { title: _(label) });
                 });
                 return;
             }
