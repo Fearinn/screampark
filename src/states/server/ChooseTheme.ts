@@ -9,12 +9,12 @@ class ChooseTheme extends State {
   }
 
   public onUpdate(): void {
-    const { player_id: playerId } = this.game;
-
     if (!this.game.isCurrentPlayerActive()) {
       this.onInactiveUpdate();
       return;
     }
+
+    const { player_id: playerId } = this.game;
 
     this.themeManager.setSelection(playerId, (selection, card) => {
       if (selection.length === 0) {

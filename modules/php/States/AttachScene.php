@@ -65,12 +65,12 @@ class AttachScene extends GameState
             throw new \BgaVisibleSystemException("Unexpected error: 5");
         }
 
-        $this->attach($currentPlayerId, $Scene);
+        $this->attach($currentPlayerId, $Scene, $slot);
     }
 
-    public function attach(int $currentPlayerId, $Scene): void
+    public function attach(int $currentPlayerId, Scene $Scene, int $slot): void
     {
-        $Scene->attach($currentPlayerId, 1);
+        $Scene->attach($currentPlayerId, $slot);
         $this->draftCounter->inc($currentPlayerId, 1);
         $this->attachingCardId->set($currentPlayerId, 0);
 

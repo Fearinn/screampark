@@ -981,8 +981,12 @@ var SceneManager = /** @class */ (function () {
         var boards = {};
         keysToNumbers(players).forEach(function (playerId) {
             boards[playerId] = new BgaCards.SlotStock(_this.manager, document.getElementById("scp_scenes-".concat(playerId)), {
+                gap: "16px",
                 wrap: "nowrap",
-                slotsIds: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+                slotsIds: [
+                    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+                    20, 21, 22, 23, 24,
+                ],
                 mapCardToSlot: function (_a) {
                     var slot = _a.slot;
                     return Number(slot);
@@ -1223,6 +1227,7 @@ var StateManager = /** @class */ (function () {
         this.states = {
             ChooseTheme: new ChooseTheme(this.game),
             PlayerTurn: new PlayerTurn(this.game),
+            AttachScene: new AttachScene(this.game),
         };
     }
     StateManager.prototype.onEntering = function (stateName, args) {
@@ -1260,6 +1265,47 @@ var State = /** @class */ (function () {
     State.prototype.onLeaving = function () { };
     return State;
 }());
+var AttachScene = /** @class */ (function (_super) {
+    __extends(AttachScene, _super);
+    function AttachScene(game) {
+        var _this = _super.call(this, game) || this;
+        _this.sceneManager = new SceneManager(_this.game);
+        _this.SCENES = _this.game.gamedatas.SCENES;
+        return _this;
+    }
+    AttachScene.prototype.onUpdate = function () {
+        var _this = this;
+        if (!this.game.isCurrentPlayerActive()) {
+            this.onInactiveUpdate();
+            return;
+        }
+        var playerId = this.game.player_id;
+        var boards = this.sceneManager.stocks.boards;
+        var board = boards[playerId];
+        board.setSlotSelectionMode("single");
+        board.onSlotSelectionChange = function (selection, slot) {
+            _this.game.removeConfirmation();
+            if (selection.length === 0) {
+                return;
+            }
+            _this.game.addConfirmation(_("confirm"), function () {
+                _this.game.performAction("actAttachScene", {
+                    slot: slot,
+                });
+            });
+        };
+    };
+    AttachScene.prototype.onInactiveUpdate = function () {
+        this.onLeaving();
+    };
+    AttachScene.prototype.onLeaving = function () {
+        var playerId = this.game.player_id;
+        var boards = this.sceneManager.stocks.boards;
+        var board = boards[playerId];
+        board.setSlotSelectionMode("none");
+    };
+    return AttachScene;
+}(State));
 var ChooseTheme = /** @class */ (function (_super) {
     __extends(ChooseTheme, _super);
     function ChooseTheme(game) {
@@ -1270,11 +1316,11 @@ var ChooseTheme = /** @class */ (function (_super) {
     }
     ChooseTheme.prototype.onUpdate = function () {
         var _this = this;
-        var playerId = this.game.player_id;
         if (!this.game.isCurrentPlayerActive()) {
             this.onInactiveUpdate();
             return;
         }
+        var playerId = this.game.player_id;
         this.themeManager.setSelection(playerId, function (selection, card) {
             if (selection.length === 0) {
                 _this.game.removeConfirmation();

@@ -16,7 +16,7 @@
     flex-direction: column;
 
     &:empty {
-      display: none;
+      display: none !important;
     }
 
     .scp_scene {

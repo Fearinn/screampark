@@ -7,6 +7,7 @@ class StateManager {
     this.states = {
       ChooseTheme: new ChooseTheme(this.game),
       PlayerTurn: new PlayerTurn(this.game),
+      AttachScene: new AttachScene(this.game),
     };
   }
 
@@ -55,4 +56,4 @@ class State {
   public onLeaving(): void {}
 }
 
-type StateName = "ChooseTheme" | "PlayerTurn";
+type StateName = "ChooseTheme" | "PlayerTurn" | "AttachScene";

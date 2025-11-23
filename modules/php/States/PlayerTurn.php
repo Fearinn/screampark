@@ -105,7 +105,7 @@ class PlayerTurn extends GameState
         $maxSlot = $this->scenes->getMaxSlot($currentPlayerId);
         if ($maxSlot === 1) {
             $AttachScene = new AttachScene($this->game);
-            $AttachScene->attach($currentPlayerId, $Scene);
+            $AttachScene->attach($currentPlayerId, $Scene, 1);
             return;
         }
 
