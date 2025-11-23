@@ -16,7 +16,11 @@ class ChooseTheme extends State {
 
     const { player_id: playerId } = this.game;
 
-    this.themeManager.setSelection(playerId, (selection, card) => {
+    const { boards } = this.themeManager.stocks;
+    const board = boards[playerId];
+
+    board.setSelectionMode("single");
+    board.onSelectionChange = (selection, card) => {
       if (selection.length === 0) {
         this.game.removeConfirmation();
         return;
@@ -35,7 +39,7 @@ class ChooseTheme extends State {
           });
         }
       );
-    });
+    };
   }
 
   private onInactiveUpdate(): void {
@@ -54,6 +58,7 @@ class ChooseTheme extends State {
 
   public onLeaving(): void {
     const { player_id: playerId } = this.game;
-    this.themeManager.setSelection(playerId, null);
+    const { boards } = this.themeManager.stocks;
+    boards[playerId].setSelectionMode("none");
   }
 }

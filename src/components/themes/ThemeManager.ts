@@ -100,16 +100,6 @@ class ThemeManager {
     const { themeHands, themeCards } = this.game.gamedatas;
     this.manager.placeCards([...themeHands, ...themeCards]);
   }
-
-  public setSelection(
-    playerId: number,
-    callback: null | ((selection: ThemeCard[], card: ThemeCard) => void)
-  ): void {
-    const { boards } = this.stocks;
-    const board = boards[playerId];
-    board.setSelectionMode(callback ? "single" : "none");
-    board.onSelectionChange = callback;
-  }
 }
 
 interface ThemeCard extends Partial<SCP_Card> {
