@@ -29,7 +29,7 @@ class AttachGenre extends GameState
             id: 52,
             type: StateType::PRIVATE,
             description: clienttranslate('Other player(s) must play or discard 2 scene cards'),
-            descriptionMyTurn: clienttranslate('${you} may attach a ${genre_icon} (${genre_label}) card to a scene'),
+            descriptionMyTurn: clienttranslate('${you} may attach a ${genre_icon} (${genreLabel}) card to a scene'),
         );
 
         $this->scenes = new Scenes($this->game);
@@ -44,7 +44,7 @@ class AttachGenre extends GameState
         $Genre = new Genre($this->game, $cardId);
 
         $args = [
-            "genre_label" => $Genre->label,
+            "genreLabel" => $Genre->label,
             "genreId" =>  $Genre->id,
             "cardId" => $cardId,
             "maxSlot" => $maxSlot,

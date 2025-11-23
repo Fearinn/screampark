@@ -3,7 +3,7 @@
 $this->SCENES = [
     1 => [
         "id" => 1,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Prison Cell"),
             "points" => 2,
             "genreCost" => [
@@ -14,7 +14,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Fake Razor Wire"),
             "genres" => [
                 1 => 1,
@@ -30,7 +30,7 @@ $this->SCENES = [
     ],
     2 => [
         "id" => 2,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Police Precint"),
             "points" => 2,
             "genreCost" => [
@@ -41,7 +41,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Hidden Trapdoor"),
             "genres" => [
                 1 => 1,
@@ -57,7 +57,7 @@ $this->SCENES = [
     ],
     3 => [
         "id" => 3,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Sewer System"),
             "points" => 2,
             "genreCost" => [
@@ -68,7 +68,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Dripping Water"),
             "genres" => [
                 1 => 1,
@@ -84,7 +84,7 @@ $this->SCENES = [
     ],
     4 => [
         "id" => 4,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Dirty Bathroom"),
             "points" => 2,
             "genreCost" => [
@@ -95,7 +95,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Trapped Victim"),
             "genres" => [
                 1 => 2,
@@ -111,7 +111,7 @@ $this->SCENES = [
     ],
     5 => [
         "id" => 5,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Quiet Toy Store"),
             "points" => 2,
             "genreCost" => [
@@ -122,7 +122,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Bloody Handprints"),
             "genres" => [
                 1 => 0,
@@ -138,7 +138,7 @@ $this->SCENES = [
     ],
     6 => [
         "id" => 6,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Dazzling Arcade"),
             "points" => 2,
             "genreCost" => [
@@ -149,7 +149,7 @@ $this->SCENES = [
                 5 => 1,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Murdurous Mascot"),
             "genres" => [
                 1 => 1,
@@ -165,7 +165,7 @@ $this->SCENES = [
     ],
     7 => [
         "id" => 7,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Dummy Warehouse"),
             "points" => 4,
             "genreCost" => [
@@ -176,7 +176,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Manequim"),
             "genres" => [
                 1 => 1,
@@ -192,7 +192,7 @@ $this->SCENES = [
     ],
     8 => [
         "id" => 8,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Meat Freezer"),
             "points" => 4,
             "genreCost" => [
@@ -203,7 +203,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Dangling Bodies"),
             "genres" => [
                 1 => 0,
@@ -219,7 +219,7 @@ $this->SCENES = [
     ],
     9 => [
         "id" => 9,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Torture Cases"),
             "points" => 4,
             "genreCost" => [
@@ -230,7 +230,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Static Sparkers"),
             "genres" => [
                 1 => 0,
@@ -246,7 +246,7 @@ $this->SCENES = [
     ],
     10 => [
         "id" => 10,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Rusty Garrows"),
             "points" => 4,
             "genreCost" => [
@@ -257,7 +257,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Falling Guillotine"),
             "genres" => [
                 1 => 0,
@@ -273,7 +273,7 @@ $this->SCENES = [
     ],
     11 => [
         "id" => 11,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Torment Workshop"),
             "points" => 6,
             "genreCost" => [
@@ -284,7 +284,7 @@ $this->SCENES = [
                 5 => 1,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Angry Torture"),
             "genres" => [
                 1 => 0,
@@ -300,7 +300,7 @@ $this->SCENES = [
     ],
     12 => [
         "id" => 12,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Red Room"),
             "points" => 6,
             "genreCost" => [
@@ -311,7 +311,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Puppet"),
             "genres" => [
                 1 => 1,
@@ -327,7 +327,7 @@ $this->SCENES = [
     ],
     13 => [
         "id" => 13,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Empty Stables"),
             "points" => 2,
             "genreCost" => [
@@ -338,7 +338,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Wraith"),
             "genres" => [
                 1 => 0,
@@ -354,7 +354,7 @@ $this->SCENES = [
     ],
     14 => [
         "id" => 14,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Decaying Atrium"),
             "points" => 2,
             "genreCost" => [
@@ -365,7 +365,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Big Chandelier"),
             "genres" => [
                 1 => 0,
@@ -381,7 +381,7 @@ $this->SCENES = [
     ],
     15 => [
         "id" => 15,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Rotting Kitchen"),
             "points" => 2,
             "genreCost" => [
@@ -392,7 +392,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Zipline Bats"),
             "genres" => [
                 1 => 1,
@@ -408,7 +408,7 @@ $this->SCENES = [
     ],
     16 => [
         "id" => 16,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Haunted Gallery"),
             "points" => 2,
             "genreCost" => [
@@ -419,7 +419,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Changing Paintings"),
             "genres" => [
                 1 => 0,
@@ -435,7 +435,7 @@ $this->SCENES = [
     ],
     17 => [
         "id" => 17,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Noble Bathroom"),
             "points" => 2,
             "genreCost" => [
@@ -446,7 +446,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Tooth Gargoyles"),
             "genres" => [
                 1 => 1,
@@ -462,7 +462,7 @@ $this->SCENES = [
     ],
     18 => [
         "id" => 18,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Deathly Bathroom"),
             "points" => 2,
             "genreCost" => [
@@ -473,7 +473,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Pepper's Ghost"),
             "genres" => [
                 1 => 0,
@@ -489,7 +489,7 @@ $this->SCENES = [
     ],
     19 => [
         "id" => 19,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Webbed Attic"),
             "points" => 4,
             "genreCost" => [
@@ -500,7 +500,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Pneumatic Spider"),
             "genres" => [
                 1 => 1,
@@ -516,7 +516,7 @@ $this->SCENES = [
     ],
     20 => [
         "id" => 20,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Dusty Library"),
             "points" => 4,
             "genreCost" => [
@@ -527,7 +527,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Etheral Singing"),
             "genres" => [
                 1 => 1,
@@ -543,7 +543,7 @@ $this->SCENES = [
     ],
     21 => [
         "id" => 21,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Poison Greenhouse"),
             "points" => 4,
             "genreCost" => [
@@ -554,7 +554,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Plague Doctor"),
             "genres" => [
                 1 => 1,
@@ -570,7 +570,7 @@ $this->SCENES = [
     ],
     22 => [
         "id" => 22,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Hedge Maze"),
             "points" => 4,
             "genreCost" => [
@@ -581,7 +581,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Pumpkin Lord"),
             "genres" => [
                 1 => 2,
@@ -597,7 +597,7 @@ $this->SCENES = [
     ],
     23 => [
         "id" => 23,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Flooded Chamber"),
             "points" => 6,
             "genreCost" => [
@@ -608,7 +608,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Laser Mist"),
             "genres" => [
                 1 => 0,
@@ -624,7 +624,7 @@ $this->SCENES = [
     ],
     24 => [
         "id" => 24,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Dark Room"),
             "points" => 6,
             "genreCost" => [
@@ -635,7 +635,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Gentleman Ghost"),
             "genres" => [
                 1 => 0,
@@ -651,7 +651,7 @@ $this->SCENES = [
     ],
     25 => [
         "id" => 25,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Agency Offices"),
             "points" => 2,
             "genreCost" => [
@@ -662,7 +662,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Wanted Posters"),
             "genres" => [
                 1 => 0,
@@ -678,7 +678,7 @@ $this->SCENES = [
     ],
     26 => [
         "id" => 26,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Interrogation Room"),
             "points" => 2,
             "genreCost" => [
@@ -689,7 +689,7 @@ $this->SCENES = [
                 5 => 1,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Rage Cage"),
             "genres" => [
                 1 => 0,
@@ -705,7 +705,7 @@ $this->SCENES = [
     ],
     27 => [
         "id" => 27,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Research Facility"),
             "points" => 2,
             "genreCost" => [
@@ -716,7 +716,7 @@ $this->SCENES = [
                 5 => 1,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Secure Entrance"),
             "genres" => [
                 1 => 0,
@@ -732,7 +732,7 @@ $this->SCENES = [
     ],
     28 => [
         "id" => 28,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Autopsy Station"),
             "points" => 2,
             "genreCost" => [
@@ -743,7 +743,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Dissected Pacient"),
             "genres" => [
                 1 => 0,
@@ -759,7 +759,7 @@ $this->SCENES = [
     ],
     29 => [
         "id" => 29,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Testing Chamber"),
             "points" => 2,
             "genreCost" => [
@@ -770,7 +770,7 @@ $this->SCENES = [
                 5 => 2,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Irradiated Mutant"),
             "genres" => [
                 1 => 0,
@@ -786,7 +786,7 @@ $this->SCENES = [
     ],
     30 => [
         "id" => 30,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Biohazard Vault"),
             "points" => 2,
             "genreCost" => [
@@ -797,7 +797,7 @@ $this->SCENES = [
                 5 => 1,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Radioactive Sludge"),
             "genres" => [
                 1 => 0,
@@ -813,7 +813,7 @@ $this->SCENES = [
     ],
     31 => [
         "id" => 31,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Quarantine Zone"),
             "points" => 4,
             "genreCost" => [
@@ -824,7 +824,7 @@ $this->SCENES = [
                 5 => 1,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Sample Tanks"),
             "genres" => [
                 1 => 0,
@@ -840,7 +840,7 @@ $this->SCENES = [
     ],
     32 => [
         "id" => 32,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Evacuated Office"),
             "points" => 4,
             "genreCost" => [
@@ -851,7 +851,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Blacklight Paint"),
             "genres" => [
                 1 => 0,
@@ -867,7 +867,7 @@ $this->SCENES = [
     ],
     33 => [
         "id" => 33,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Military Sala"),
             "points" => 4,
             "genreCost" => [
@@ -878,7 +878,7 @@ $this->SCENES = [
                 5 => 2,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Pulsing Blob"),
             "genres" => [
                 1 => 0,
@@ -894,7 +894,7 @@ $this->SCENES = [
     ],
     34 => [
         "id" => 34,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Weapon Storage"),
             "points" => 4,
             "genreCost" => [
@@ -905,7 +905,7 @@ $this->SCENES = [
                 5 => 1,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Agent"),
             "genres" => [
                 1 => 0,
@@ -921,7 +921,7 @@ $this->SCENES = [
     ],
     35 => [
         "id" => 35,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Command Center"),
             "points" => 6,
             "genreCost" => [
@@ -932,7 +932,7 @@ $this->SCENES = [
                 5 => 1,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Reptilian Hybrid"),
             "genres" => [
                 1 => 0,
@@ -948,7 +948,7 @@ $this->SCENES = [
     ],
     36 => [
         "id" => 36,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Observation Deck"),
             "points" => 6,
             "genreCost" => [
@@ -959,7 +959,7 @@ $this->SCENES = [
                 5 => 3,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Kaiju Animatronic"),
             "genres" => [
                 1 => 0,
@@ -975,7 +975,7 @@ $this->SCENES = [
     ],
     37 => [
         "id" => 37,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Dark Highway"),
             "points" => 2,
             "genreCost" => [
@@ -986,7 +986,7 @@ $this->SCENES = [
                 5 => 1,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Truck Horn"),
             "genres" => [
                 1 => 0,
@@ -1002,7 +1002,7 @@ $this->SCENES = [
     ],
     38 => [
         "id" => 38,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Gas Station"),
             "points" => 2,
             "genreCost" => [
@@ -1013,7 +1013,7 @@ $this->SCENES = [
                 5 => 1,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Disguised Android"),
             "genres" => [
                 1 => 1,
@@ -1029,7 +1029,7 @@ $this->SCENES = [
     ],
     39 => [
         "id" => 39,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Dead-End Dinner"),
             "points" => 2,
             "genreCost" => [
@@ -1040,7 +1040,7 @@ $this->SCENES = [
                 5 => 1,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Looping Jukebox"),
             "genres" => [
                 1 => 0,
@@ -1056,7 +1056,7 @@ $this->SCENES = [
     ],
     40 => [
         "id" => 40,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Corn Field"),
             "points" => 2,
             "genreCost" => [
@@ -1067,7 +1067,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Sneaky Scarecrow"),
             "genres" => [
                 1 => 2,
@@ -1083,7 +1083,7 @@ $this->SCENES = [
     ],
     41 => [
         "id" => 41,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Human Living Room"),
             "points" => 2,
             "genreCost" => [
@@ -1094,7 +1094,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Security Screens"),
             "genres" => [
                 1 => 1,
@@ -1110,7 +1110,7 @@ $this->SCENES = [
     ],
     42 => [
         "id" => 42,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Crashed Pod"),
             "points" => 2,
             "genreCost" => [
@@ -1121,7 +1121,7 @@ $this->SCENES = [
                 5 => 2,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Strange Debris"),
             "genres" => [
                 1 => 0,
@@ -1137,7 +1137,7 @@ $this->SCENES = [
     ],
     43 => [
         "id" => 43,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Humming Monolith"),
             "points" => 4,
             "genreCost" => [
@@ -1148,7 +1148,7 @@ $this->SCENES = [
                 5 => 1,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Disturbing Tones"),
             "genres" => [
                 1 => 1,
@@ -1164,7 +1164,7 @@ $this->SCENES = [
     ],
     44 => [
         "id" => 44,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Invaded Barn"),
             "points" => 4,
             "genreCost" => [
@@ -1175,7 +1175,7 @@ $this->SCENES = [
                 5 => 1,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Abduction Beam"),
             "genres" => [
                 1 => 0,
@@ -1191,7 +1191,7 @@ $this->SCENES = [
     ],
     45 => [
         "id" => 45,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Medical Wing"),
             "points" => 4,
             "genreCost" => [
@@ -1202,7 +1202,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Hazy Lights"),
             "genres" => [
                 1 => 1,
@@ -1218,7 +1218,7 @@ $this->SCENES = [
     ],
     46 => [
         "id" => 46,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Organ Storeroom"),
             "points" => 4,
             "genreCost" => [
@@ -1229,7 +1229,7 @@ $this->SCENES = [
                 5 => 1,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Glowing Jars"),
             "genres" => [
                 1 => 0,
@@ -1245,7 +1245,7 @@ $this->SCENES = [
     ],
     47 => [
         "id" => 47,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Alien Zoo"),
             "points" => 6,
             "genreCost" => [
@@ -1256,7 +1256,7 @@ $this->SCENES = [
                 5 => 1,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Hungry Plant"),
             "genres" => [
                 1 => 0,
@@ -1272,7 +1272,7 @@ $this->SCENES = [
     ],
     48 => [
         "id" => 48,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Flight Deck"),
             "points" => 6,
             "genreCost" => [
@@ -1283,7 +1283,7 @@ $this->SCENES = [
                 5 => 4,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Martian Leader"),
             "genres" => [
                 1 => 1,
@@ -1299,7 +1299,7 @@ $this->SCENES = [
     ],
     49 => [
         "id" => 49,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Ticket Booth"),
             "points" => 2,
             "genreCost" => [
@@ -1310,7 +1310,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Story Video"),
             "genres" => [
                 1 => 0,
@@ -1326,7 +1326,7 @@ $this->SCENES = [
     ],
     50 => [
         "id" => 50,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Gift Shop"),
             "points" => 2,
             "genreCost" => [
@@ -1337,7 +1337,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Merchandise"),
             "genres" => [
                 1 => 0,
@@ -1353,7 +1353,7 @@ $this->SCENES = [
     ],
     51 => [
         "id" => 51,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Caravan Camp"),
             "points" => 2,
             "genreCost" => [
@@ -1364,7 +1364,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Flying Knife"),
             "genres" => [
                 1 => 0,
@@ -1380,7 +1380,7 @@ $this->SCENES = [
     ],
     52 => [
         "id" => 52,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Curio Cabinet"),
             "points" => 2,
             "genreCost" => [
@@ -1391,7 +1391,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Doll Collection"),
             "genres" => [
                 1 => 1,
@@ -1407,7 +1407,7 @@ $this->SCENES = [
     ],
     53 => [
         "id" => 53,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Psychic Parlor"),
             "points" => 2,
             "genreCost" => [
@@ -1418,7 +1418,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Fortune Teller"),
             "genres" => [
                 1 => 1,
@@ -1434,7 +1434,7 @@ $this->SCENES = [
     ],
     54 => [
         "id" => 54,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Beast Pens"),
             "points" => 2,
             "genreCost" => [
@@ -1445,7 +1445,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Growling Crates"),
             "genres" => [
                 1 => 1,
@@ -1461,7 +1461,7 @@ $this->SCENES = [
     ],
     55 => [
         "id" => 55,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Grand Arena"),
             "points" => 4,
             "genreCost" => [
@@ -1472,7 +1472,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Depraved Magician"),
             "genres" => [
                 1 => 1,
@@ -1488,7 +1488,7 @@ $this->SCENES = [
     ],
     56 => [
         "id" => 56,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Carnival Ride"),
             "points" => 4,
             "genreCost" => [
@@ -1499,7 +1499,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Dynamic Spotlight"),
             "genres" => [
                 1 => 0,
@@ -1515,7 +1515,7 @@ $this->SCENES = [
     ],
     57 => [
         "id" => 57,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Closed Funhouse"),
             "points" => 4,
             "genreCost" => [
@@ -1526,7 +1526,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Body-Sawing Box"),
             "genres" => [
                 1 => 1,
@@ -1542,7 +1542,7 @@ $this->SCENES = [
     ],
     58 => [
         "id" => 58,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Hall of Mirrors"),
             "points" => 4,
             "genreCost" => [
@@ -1553,7 +1553,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Uncanny Mimic"),
             "genres" => [
                 1 => 0,
@@ -1569,7 +1569,7 @@ $this->SCENES = [
     ],
     59 => [
         "id" => 59,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Spinning Tunnel"),
             "points" => 6,
             "genreCost" => [
@@ -1580,7 +1580,7 @@ $this->SCENES = [
                 5 => 1,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Constant Laughter"),
             "genres" => [
                 1 => 1,
@@ -1596,7 +1596,7 @@ $this->SCENES = [
     ],
     60 => [
         "id" => 60,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Balloon Room"),
             "points" => 6,
             "genreCost" => [
@@ -1607,7 +1607,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Birthday Clown"),
             "genres" => [
                 1 => 2,
@@ -1623,7 +1623,7 @@ $this->SCENES = [
     ],
     61 => [
         "id" => 61,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Secret Clubhouse"),
             "points" => 2,
             "genreCost" => [
@@ -1634,7 +1634,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Conspiracy Wall"),
             "genres" => [
                 1 => 0,
@@ -1650,7 +1650,7 @@ $this->SCENES = [
     ],
     62 => [
         "id" => 62,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Vandalized Bunk"),
             "points" => 2,
             "genreCost" => [
@@ -1661,7 +1661,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Kid Whispers"),
             "genres" => [
                 1 => 0,
@@ -1677,7 +1677,7 @@ $this->SCENES = [
     ],
     63 => [
         "id" => 63,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Broken Train"),
             "points" => 2,
             "genreCost" => [
@@ -1688,7 +1688,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Smoke Smell"),
             "genres" => [
                 1 => 0,
@@ -1704,7 +1704,7 @@ $this->SCENES = [
     ],
     64 => [
         "id" => 64,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Forgotten Forest"),
             "points" => 2,
             "genreCost" => [
@@ -1715,7 +1715,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Bog Fog"),
             "genres" => [
                 1 => 0,
@@ -1731,7 +1731,7 @@ $this->SCENES = [
     ],
     65 => [
         "id" => 65,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Hiker's Campsite"),
             "points" => 2,
             "genreCost" => [
@@ -1742,7 +1742,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Bright Campfire"),
             "genres" => [
                 1 => 0,
@@ -1758,7 +1758,7 @@ $this->SCENES = [
     ],
     66 => [
         "id" => 66,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Ranger Station"),
             "points" => 2,
             "genreCost" => [
@@ -1769,7 +1769,7 @@ $this->SCENES = [
                 5 => 1,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Hiding Cryptid"),
             "genres" => [
                 1 => 0,
@@ -1785,7 +1785,7 @@ $this->SCENES = [
     ],
     67 => [
         "id" => 67,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Misty Dock"),
             "points" => 4,
             "genreCost" => [
@@ -1796,7 +1796,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Gutted Fish"),
             "genres" => [
                 1 => 0,
@@ -1812,7 +1812,7 @@ $this->SCENES = [
     ],
     68 => [
         "id" => 68,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Local Boathouse"),
             "points" => 4,
             "genreCost" => [
@@ -1823,7 +1823,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Lake Monster"),
             "genres" => [
                 1 => 0,
@@ -1839,7 +1839,7 @@ $this->SCENES = [
     ],
     69 => [
         "id" => 69,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Cave Entrance"),
             "points" => 4,
             "genreCost" => [
@@ -1850,7 +1850,7 @@ $this->SCENES = [
                 5 => 1,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Warning Signs"),
             "genres" => [
                 1 => 0,
@@ -1866,7 +1866,7 @@ $this->SCENES = [
     ],
     70 => [
         "id" => 70,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Damp Mineshaft"),
             "points" => 4,
             "genreCost" => [
@@ -1877,7 +1877,7 @@ $this->SCENES = [
                 5 => 1,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Fake Rock Collapse"),
             "genres" => [
                 1 => 0,
@@ -1893,7 +1893,7 @@ $this->SCENES = [
     ],
     71 => [
         "id" => 71,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Locked Basement"),
             "points" => 6,
             "genreCost" => [
@@ -1904,7 +1904,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Possesed Girl"),
             "genres" => [
                 1 => 0,
@@ -1920,7 +1920,7 @@ $this->SCENES = [
     ],
     72 => [
         "id" => 72,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Log Cabin"),
             "points" => 6,
             "genreCost" => [
@@ -1931,7 +1931,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Masked Killer"),
             "genres" => [
                 1 => 0,
@@ -1947,7 +1947,7 @@ $this->SCENES = [
     ],
     73 => [
         "id" => 73,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Doomsday Shelter"),
             "points" => 2,
             "genreCost" => [
@@ -1958,7 +1958,7 @@ $this->SCENES = [
                 5 => 1,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Freight Elevator"),
             "genres" => [
                 1 => 0,
@@ -1974,7 +1974,7 @@ $this->SCENES = [
     ],
     74 => [
         "id" => 74,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Subway Station"),
             "points" => 2,
             "genreCost" => [
@@ -1985,7 +1985,7 @@ $this->SCENES = [
                 5 => 1,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Abomination"),
             "genres" => [
                 1 => 0,
@@ -2001,7 +2001,7 @@ $this->SCENES = [
     ],
     75 => [
         "id" => 75,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Raided Store"),
             "points" => 2,
             "genreCost" => [
@@ -2012,7 +2012,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Dirty Mercenary"),
             "genres" => [
                 1 => 0,
@@ -2028,7 +2028,7 @@ $this->SCENES = [
     ],
     76 => [
         "id" => 76,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Drive-In Theater"),
             "points" => 2,
             "genreCost" => [
@@ -2039,7 +2039,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Infected Zombie"),
             "genres" => [
                 1 => 0,
@@ -2055,7 +2055,7 @@ $this->SCENES = [
     ],
     77 => [
         "id" => 77,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Garbage Dump"),
             "points" => 2,
             "genreCost" => [
@@ -2066,7 +2066,7 @@ $this->SCENES = [
                 5 => 1,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Crushed Car"),
             "genres" => [
                 1 => 0,
@@ -2082,7 +2082,7 @@ $this->SCENES = [
     ],
     78 => [
         "id" => 78,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Factory Floor"),
             "points" => 2,
             "genreCost" => [
@@ -2093,7 +2093,7 @@ $this->SCENES = [
                 5 => 2,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Bubbling Goo"),
             "genres" => [
                 1 => 0,
@@ -2109,7 +2109,7 @@ $this->SCENES = [
     ],
     79 => [
         "id" => 79,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Makeshift Forge"),
             "points" => 4,
             "genreCost" => [
@@ -2120,7 +2120,7 @@ $this->SCENES = [
                 5 => 2,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Flame Burst"),
             "genres" => [
                 1 => 0,
@@ -2136,7 +2136,7 @@ $this->SCENES = [
     ],
     80 => [
         "id" => 80,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Scavenger Base"),
             "points" => 4,
             "genreCost" => [
@@ -2147,7 +2147,7 @@ $this->SCENES = [
                 5 => 1,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Junk Barricade"),
             "genres" => [
                 1 => 0,
@@ -2163,7 +2163,7 @@ $this->SCENES = [
     ],
     81 => [
         "id" => 81,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Radio Room"),
             "points" => 4,
             "genreCost" => [
@@ -2174,7 +2174,7 @@ $this->SCENES = [
                 5 => 1,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Defective Robot"),
             "genres" => [
                 1 => 0,
@@ -2190,7 +2190,7 @@ $this->SCENES = [
     ],
     82 => [
         "id" => 82,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Canibal Cave"),
             "points" => 4,
             "genreCost" => [
@@ -2201,7 +2201,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Bone Pits"),
             "genres" => [
                 1 => 0,
@@ -2217,7 +2217,7 @@ $this->SCENES = [
     ],
     83 => [
         "id" => 83,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Maradeur Fort"),
             "points" => 6,
             "genreCost" => [
@@ -2228,7 +2228,7 @@ $this->SCENES = [
                 5 => 2,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Rolling Oil Drums"),
             "genres" => [
                 1 => 0,
@@ -2244,7 +2244,7 @@ $this->SCENES = [
     ],
     84 => [
         "id" => 84,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Rockslash Arena"),
             "points" => 6,
             "genreCost" => [
@@ -2255,7 +2255,7 @@ $this->SCENES = [
                 5 => 2,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Rigged Chainsaw"),
             "genres" => [
                 1 => 0,
@@ -2271,7 +2271,7 @@ $this->SCENES = [
     ],
     85 => [
         "id" => 85,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Ancient Graveyard"),
             "points" => 6,
             "genreCost" => [
@@ -2282,7 +2282,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Eerie Winds"),
             "genres" => [
                 1 => 0,
@@ -2298,7 +2298,7 @@ $this->SCENES = [
     ],
     86 => [
         "id" => 86,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Antique Room"),
             "points" => 2,
             "genreCost" => [
@@ -2309,7 +2309,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Skiterring Critters"),
             "genres" => [
                 1 => 0,
@@ -2325,7 +2325,7 @@ $this->SCENES = [
     ],
     87 => [
         "id" => 87,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Trophy Room"),
             "points" => 2,
             "genreCost" => [
@@ -2336,7 +2336,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Captive Werewolf"),
             "genres" => [
                 1 => 0,
@@ -2352,7 +2352,7 @@ $this->SCENES = [
     ],
     88 => [
         "id" => 88,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Eerie Dining Hall"),
             "points" => 2,
             "genreCost" => [
@@ -2363,7 +2363,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Floating Candles"),
             "genres" => [
                 1 => 0,
@@ -2379,7 +2379,7 @@ $this->SCENES = [
     ],
     89 => [
         "id" => 89,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Feeding Room"),
             "points" => 2,
             "genreCost" => [
@@ -2390,7 +2390,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Noble Vampire"),
             "genres" => [
                 1 => 0,
@@ -2406,7 +2406,7 @@ $this->SCENES = [
     ],
     90 => [
         "id" => 90,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Moonlit Dungeon"),
             "points" => 2,
             "genreCost" => [
@@ -2417,7 +2417,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Popping Coffins"),
             "genres" => [
                 1 => 0,
@@ -2433,7 +2433,7 @@ $this->SCENES = [
     ],
     91 => [
         "id" => 91,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Deep Catacombs"),
             "points" => 4,
             "genreCost" => [
@@ -2444,7 +2444,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Grabbing Hands"),
             "genres" => [
                 1 => 0,
@@ -2460,7 +2460,7 @@ $this->SCENES = [
     ],
     92 => [
         "id" => 92,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Stolen Tomb"),
             "points" => 4,
             "genreCost" => [
@@ -2471,7 +2471,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Living Mummy"),
             "genres" => [
                 1 => 0,
@@ -2487,7 +2487,7 @@ $this->SCENES = [
     ],
     93 => [
         "id" => 93,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Alchemy Room"),
             "points" => 4,
             "genreCost" => [
@@ -2498,7 +2498,7 @@ $this->SCENES = [
                 5 => 1,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Shifting Symbols"),
             "genres" => [
                 1 => 0,
@@ -2514,7 +2514,7 @@ $this->SCENES = [
     ],
     94 => [
         "id" => 94,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Vintage Lab"),
             "points" => 4,
             "genreCost" => [
@@ -2525,7 +2525,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Mad Scientist"),
             "genres" => [
                 1 => 0,
@@ -2541,7 +2541,7 @@ $this->SCENES = [
     ],
     95 => [
         "id" => 95,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Narrow Passage"),
             "points" => 6,
             "genreCost" => [
@@ -2552,7 +2552,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Endless Wailing"),
             "genres" => [
                 1 => 0,
@@ -2568,7 +2568,7 @@ $this->SCENES = [
     ],
     96 => [
         "id" => 96,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Burned Tower"),
             "points" => 6,
             "genreCost" => [
@@ -2579,7 +2579,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Moving Dragon Head"),
             "genres" => [
                 1 => 0,
@@ -2595,7 +2595,7 @@ $this->SCENES = [
     ],
     97 => [
         "id" => 97,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Museum Exhibit"),
             "points" => 2,
             "genreCost" => [
@@ -2606,7 +2606,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Legend Narration"),
             "genres" => [
                 1 => 0,
@@ -2622,7 +2622,7 @@ $this->SCENES = [
     ],
     98 => [
         "id" => 98,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Waiting Room"),
             "points" => 2,
             "genreCost" => [
@@ -2633,7 +2633,7 @@ $this->SCENES = [
                 5 => 1,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Awful Lighting"),
             "genres" => [
                 1 => 0,
@@ -2649,7 +2649,7 @@ $this->SCENES = [
     ],
     99 => [
         "id" => 99,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Padded Room"),
             "points" => 2,
             "genreCost" => [
@@ -2660,7 +2660,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Confused Drawings"),
             "genres" => [
                 1 => 0,
@@ -2676,7 +2676,7 @@ $this->SCENES = [
     ],
     100 => [
         "id" => 100,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Crawlspace"),
             "points" => 2,
             "genreCost" => [
@@ -2687,7 +2687,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Ankle Ticklers"),
             "genres" => [
                 1 => 0,
@@ -2703,7 +2703,7 @@ $this->SCENES = [
     ],
     101 => [
         "id" => 101,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Psychochamber"),
             "points" => 2,
             "genreCost" => [
@@ -2714,7 +2714,7 @@ $this->SCENES = [
                 5 => 2,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Giant Projector"),
             "genres" => [
                 1 => 0,
@@ -2730,7 +2730,7 @@ $this->SCENES = [
     ],
     102 => [
         "id" => 102,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Maw of Madness"),
             "points" => 2,
             "genreCost" => [
@@ -2741,7 +2741,7 @@ $this->SCENES = [
                 5 => 1,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Raving Madman"),
             "genres" => [
                 1 => 0,
@@ -2757,7 +2757,7 @@ $this->SCENES = [
     ],
     103 => [
         "id" => 103,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Decrepit Hut"),
             "points" => 4,
             "genreCost" => [
@@ -2768,7 +2768,7 @@ $this->SCENES = [
                 5 => 1,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Hag Witch"),
             "genres" => [
                 1 => 0,
@@ -2784,7 +2784,7 @@ $this->SCENES = [
     ],
     104 => [
         "id" => 104,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Crumbling Ruins"),
             "points" => 4,
             "genreCost" => [
@@ -2795,7 +2795,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Chating Cultist"),
             "genres" => [
                 1 => 0,
@@ -2811,7 +2811,7 @@ $this->SCENES = [
     ],
     105 => [
         "id" => 105,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Lighthouse Room"),
             "points" => 4,
             "genreCost" => [
@@ -2822,7 +2822,7 @@ $this->SCENES = [
                 5 => 1,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Strobelight"),
             "genres" => [
                 1 => 0,
@@ -2838,7 +2838,7 @@ $this->SCENES = [
     ],
     106 => [
         "id" => 106,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Room of Eyes"),
             "points" => 4,
             "genreCost" => [
@@ -2849,7 +2849,7 @@ $this->SCENES = [
                 5 => 1,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Tentacled Being"),
             "genres" => [
                 1 => 0,
@@ -2865,7 +2865,7 @@ $this->SCENES = [
     ],
     107 => [
         "id" => 107,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Portal Room"),
             "points" => 6,
             "genreCost" => [
@@ -2876,7 +2876,7 @@ $this->SCENES = [
                 5 => 3,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Infinity Mirrors"),
             "genres" => [
                 1 => 0,
@@ -2892,7 +2892,7 @@ $this->SCENES = [
     ],
     108 => [
         "id" => 108,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Abyss Bridge"),
             "points" => 6,
             "genreCost" => [
@@ -2903,7 +2903,7 @@ $this->SCENES = [
                 5 => 3,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Dramatic Music"),
             "genres" => [
                 1 => 0,
@@ -2919,7 +2919,7 @@ $this->SCENES = [
     ],
     109 => [
         "id" => 109,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Child's Room"),
             "points" => 2,
             "genreCost" => [
@@ -2930,7 +2930,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Rumbling Bed"),
             "genres" => [
                 1 => 0,
@@ -2946,7 +2946,7 @@ $this->SCENES = [
     ],
     110 => [
         "id" => 110,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Messy Study"),
             "points" => 2,
             "genreCost" => [
@@ -2957,7 +2957,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Dancing Shadows"),
             "genres" => [
                 1 => 0,
@@ -2973,7 +2973,7 @@ $this->SCENES = [
     ],
     111 => [
         "id" => 111,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Overgrown Garden"),
             "points" => 2,
             "genreCost" => [
@@ -2984,7 +2984,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Blood Fountain"),
             "genres" => [
                 1 => 0,
@@ -3000,7 +3000,7 @@ $this->SCENES = [
     ],
     112 => [
         "id" => 112,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Arched Walkway"),
             "points" => 2,
             "genreCost" => [
@@ -3011,7 +3011,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Diabolic Nun"),
             "genres" => [
                 1 => 0,
@@ -3027,7 +3027,7 @@ $this->SCENES = [
     ],
     113 => [
         "id" => 113,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Confessional"),
             "points" => 2,
             "genreCost" => [
@@ -3038,7 +3038,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Blurry Faces"),
             "genres" => [
                 1 => 0,
@@ -3054,7 +3054,7 @@ $this->SCENES = [
     ],
     114 => [
         "id" => 114,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Dim Mausoleum"),
             "points" => 2,
             "genreCost" => [
@@ -3065,7 +3065,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Sinful Spirit"),
             "genres" => [
                 1 => 0,
@@ -3081,7 +3081,7 @@ $this->SCENES = [
     ],
     115 => [
         "id" => 115,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Forsake Chapel"),
             "points" => 4,
             "genreCost" => [
@@ -3092,7 +3092,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Ghoul Priest"),
             "genres" => [
                 1 => 0,
@@ -3108,7 +3108,7 @@ $this->SCENES = [
     ],
     116 => [
         "id" => 116,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Winding Labyrinth"),
             "points" => 4,
             "genreCost" => [
@@ -3119,7 +3119,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Ghostlights"),
             "genres" => [
                 1 => 0,
@@ -3135,7 +3135,7 @@ $this->SCENES = [
     ],
     117 => [
         "id" => 117,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Ritual Chamber"),
             "points" => 4,
             "genreCost" => [
@@ -3146,7 +3146,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Unholy Altar"),
             "genres" => [
                 1 => 0,
@@ -3162,7 +3162,7 @@ $this->SCENES = [
     ],
     118 => [
         "id" => 118,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Exorcism Room"),
             "points" => 4,
             "genreCost" => [
@@ -3173,7 +3173,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Ceiling Harness"),
             "genres" => [
                 1 => 0,
@@ -3189,7 +3189,7 @@ $this->SCENES = [
     ],
     119 => [
         "id" => 119,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Swirling Hallways"),
             "points" => 6,
             "genreCost" => [
@@ -3200,7 +3200,7 @@ $this->SCENES = [
                 5 => 2,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Moving Walls"),
             "genres" => [
                 1 => 0,
@@ -3216,7 +3216,7 @@ $this->SCENES = [
     ],
     120 => [
         "id" => 120,
-        "up" => [
+        "UP" => [
             "label" => clienttranslate("Evil Realm"),
             "points" => 6,
             "genreCost" => [
@@ -3227,7 +3227,7 @@ $this->SCENES = [
                 5 => 0,
             ],
         ],
-        "down" => [
+        "DOWN" => [
             "label" => clienttranslate("Demon Queen"),
             "genres" => [
                 1 => 0,

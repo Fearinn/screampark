@@ -28,7 +28,7 @@ class AttachScene extends GameState
             id: 51,
             type: StateType::PRIVATE,
             description: clienttranslate('Other player(s) must play or discard 2 scene cards'),
-            descriptionMyTurn: clienttranslate('${you} may attach ${scene_label} to other scene'),
+            descriptionMyTurn: clienttranslate('${you} may attach ${sceneLabel} to other scene'),
         );
 
         $this->scenes = new Scenes($this->game);
@@ -44,7 +44,7 @@ class AttachScene extends GameState
 
         $args = [
             "cardId" => $cardId,
-            "scene_label" => $Scene->DOWN["label"],
+            "sceneLabel" => $Scene->downLabel,
             "maxSlot" => $maxSlot,
         ];
 

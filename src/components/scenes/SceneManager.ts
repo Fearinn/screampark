@@ -43,11 +43,11 @@ class SceneManager {
         if (type === "genre") {
           element.style.backgroundImage = `url(${g_gamethemeurl}img/genres/genre_${scene_id}.jpg)`;
 
-          const { label: genre_label } = this.GENRES[scene_id];
+          const { label: genreLabel } = this.GENRES[scene_id];
           this.game.addTooltip(
             element.id,
-            this.game.format_string_recursive(_("${genre_label}"), {
-              genre_label,
+            this.game.format_string_recursive(_("${genreLabel}"), {
+              genreLabel,
             }),
             ""
           );
@@ -55,13 +55,13 @@ class SceneManager {
         }
 
         element.style.backgroundImage = `url(${g_gamethemeurl}img/scenes/scene_${scene_id}.jpg)`;
-        const { up, down } = this.SCENES[scene_id];
+        const { UP, DOWN } = this.SCENES[scene_id];
 
         this.game.addTooltip(
           element.id,
-          this.game.format_string_recursive(_("${up_label} / ${down_label}"), {
-            up_label: _(up.label),
-            down_label: _(down.label),
+          this.game.format_string_recursive(_("${upLabel} / ${downLabel}"), {
+            upLabel: _(UP.label),
+            downLabel: _(DOWN.label),
           }),
           ""
         );
@@ -108,10 +108,9 @@ class SceneManager {
           gap: "16px",
           wrap: "nowrap",
           sort: (a, b) => {
-            return (
-              this.SCENES[a.type_arg].up.points -
-              this.SCENES[b.type_arg].up.points
-            );
+            const SCENE = this.SCENES[a.type_arg];
+            const SCENE2 = this.SCENES[b.type_arg];
+            return SCENE.UP.points - SCENE2.UP.points;
           },
           autoPlace: ({ location, location_arg }) => {
             return location === "hand" && Number(location_arg) === player_id;
@@ -155,12 +154,12 @@ class SceneManager {
 
 interface SCENE {
   id: number;
-  up: {
+  UP: {
     label: string;
     points: number;
     genreCost: Record<number, number>;
   };
-  down: {
+  DOWN: {
     label: string;
     scenic: number;
     ability: number;

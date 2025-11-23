@@ -46,7 +46,7 @@ class ThemeManager {
                 ${this.game.format_string_recursive(
                   _("1 point for each scene with any ${genre_icon}"),
                   {
-                    theme_label: _(label),
+                    themeLabel: _(label),
                     genreId: genres[0],
                   }
                 )}
@@ -55,7 +55,7 @@ class ThemeManager {
                 ${this.game.format_string_recursive(
                   _("1 point for each scene with any ${genre_icon}"),
                   {
-                    theme_label: _(label),
+                    themeLabel: _(label),
                     genreId: genres[1],
                   }
                 )}

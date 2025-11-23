@@ -42,12 +42,12 @@ class RevealThemes extends GameState
 
             $this->notify->all(
                 "revealTheme",
-                clienttranslate('${player_name} reveals his theme: ${theme_label}'),
+                clienttranslate('${player_name} reveals his theme: ${themeLabel}'),
                 [
-                    "i18n" => ["theme_label"],
+                    "i18n" => ["themeLabel"],
                     "preserve" => ["themeId"],
                     "player_id" => $playerId,
-                    "theme_label" => $this->THEMES[$themeId]["label"],
+                    "themeLabel" => $this->THEMES[$themeId]["label"],
                     "themeId" => $themeId,
                     "card" => $card,
                 ],

@@ -11,10 +11,9 @@ class Scene extends Scenes
     public readonly string $type;
     public readonly int $points;
     public readonly int $staffCost;
-    public readonly array $UP;
-    public readonly array $DOWN;
     public readonly array $GENRES;
-    public readonly string $label;
+    public readonly string $upLabel;
+    public readonly STRING $downLabel;
 
     public function __construct(Game $game, int $cardId)
     {
@@ -27,10 +26,12 @@ class Scene extends Scenes
         $this->type = $card["type"];
 
         $SCENE = $this->SCENES[$this->id];
-        $this->UP = $SCENE["up"];
-        $this->DOWN = $SCENE["down"];
-        $this->points = (int) $this->UP["points"];
-        $this->staffCost = (int) $this->DOWN["staffCost"];
+        $UP = $SCENE["UP"];
+        $DOWN = $SCENE["DOWN"];
+        $this->points = (int) $UP["points"];
+        $this->staffCost = (int) $DOWN["staffCost"];
+        $this->upLabel = $UP["label"];
+        $this->downLabel = $DOWN["label"];
     }
 
     private function move(string $location, int $location_arg = 0): array
@@ -78,11 +79,11 @@ class Scene extends Scenes
         $this->game->notify->player(
             $playerId,
             "playScenePrivate",
-            clienttranslate('You play ${scene_label} as a new scene'),
+            clienttranslate('You play ${sceneLabel} as a new scene'),
             [
-                "i18n" => ["scene_label"],
+                "i18n" => ["sceneLabel"],
                 "preserve" => ["sceneId"],
-                "scene_label" => $this->UP["label"],
+                "sceneLabel" => $this->upLabel,
                 "sceneId" => $this->id,
                 "card" => $card,
             ]
@@ -97,12 +98,12 @@ class Scene extends Scenes
         if ($position === 1) {
             $this->game->notify->all(
                 "playScene",
-                clienttranslate('${player_name} plays ${scene_label} as a new scene'),
+                clienttranslate('${player_name} plays ${sceneLabel} as a new scene'),
                 [
-                    "i18n" => ["scene_label"],
+                    "i18n" => ["sceneLabel"],
                     "preserve" => ["sceneId"],
                     "player_id" => $playerId,
-                    "scene_label" => $this->UP["label"],
+                    "sceneLabel" => $this->upLabel,
                     "sceneId" => $this->id,
                     "card" => $card,
                 ]
@@ -112,20 +113,21 @@ class Scene extends Scenes
 
         $slot = (int) $card["slot"];
         $card2 = $this->getMainInSlot($playerId, $slot);
-        $sceneId2 = (int) $card2["type_arg"];
+        $cardId2 = (int) $card2["id"];
+        $Scene2 = new Scene($this->game, $cardId2);
 
         $this->game->notify->all(
             "playScene",
-            clienttranslate('${player_name} attaches ${scene_label} to ${scene_label2}'),
+            clienttranslate('${player_name} attaches ${sceneLabel} to ${sceneLabel2}'),
             [
-                "i18n" => ["scene_label", "scene_label2"],
+                "i18n" => ["sceneLabel", "sceneLabel2"],
                 "preserve" => ["sceneId", "sceneId2"],
                 "player_id" => $playerId,
-                "scene_label" => $this->DOWN["label"],
+                "sceneLabel" => $this->downLabel,
                 "sceneId" => $this->id,
                 "card" => $card,
-                "scene_label2" => $this->SCENES[$sceneId2]["up"]["label"],
-                "sceneId2" => $sceneId2,
+                "sceneLabel2" => $Scene2->upLabel,
+                "sceneId2" => $Scene2->id,
             ]
         );
     }
@@ -162,20 +164,21 @@ class Scene extends Scenes
 
         $card = $this->getCard($this->cardId);
         $card2 = $this->getMainInSlot($playerId, $slot);
-        $sceneId2 = (int) $card2["type_arg"];
+        $cardId2 = (int) $card2["id"];
+        $Scene2 = new Scene($this->game, $cardId2);
 
         $this->game->notify->player(
             $playerId,
             "playScenePrivate",
-            clienttranslate('You attach ${scene_label} to ${scene_label2}'),
+            clienttranslate('You attach ${sceneLabel} to ${sceneLabel2}'),
             [
-                "i18n" => ["scene_label", "scene_label2"],
+                "i18n" => ["sceneLabel", "sceneLabel2"],
                 "preserve" => ["sceneId", "sceneId2"],
-                "scene_label" => $this->DOWN["label"],
+                "sceneLabel" => $this->downLabel,
                 "sceneId" => $this->id,
                 "card" => $card,
-                "scene_label2" => $this->SCENES[$sceneId2]["up"]["label"],
-                "sceneId2" => $sceneId2,
+                "sceneLabel2" => $Scene2->upLabel,
+                "sceneId2" => $Scene2->id,
             ]
         );
     }
@@ -187,11 +190,11 @@ class Scene extends Scenes
         $this->game->notify->player(
             $playerId,
             "discardScenePrivate",
-            clienttranslate('You discard ${scene_label} and get 2 ${staff_icon}'),
+            clienttranslate('You discard ${sceneLabel} and get 2 ${staff_icon}'),
             [
-                "i18n" => ["scene_label"],
+                "i18n" => ["sceneLabel"],
                 "preserve" => ["sceneId"],
-                "scene_label" => $this->UP["label"],
+                "sceneLabel" => $this->upLabel,
                 "sceneId" => $this->id,
                 "card" => $card,
             ]
@@ -216,12 +219,12 @@ class Scene extends Scenes
 
         $this->game->notify->all(
             "discardScene",
-            clienttranslate('${player_name} discards ${scene_label} and gets 2 ${staff_icon}'),
+            clienttranslate('${player_name} discards ${sceneLabel} and gets 2 ${staff_icon}'),
             [
-                "i18n" => ["scene_label"],
+                "i18n" => ["sceneLabel"],
                 "preserve" => ["sceneId"],
                 "player_id" => $playerId,
-                "scene_label" => $this->UP["label"],
+                "sceneLabel" => $this->upLabel,
                 "sceneId" => $this->id,
                 "card" => $card,
             ]

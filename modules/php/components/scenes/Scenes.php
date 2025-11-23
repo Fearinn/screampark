@@ -115,7 +115,7 @@ class Scenes extends Cards
         $card = $this->getMainInSlot($playerId, $maxSlot);
         $sceneId = (int) $card["type_arg"];
         $SCENE = $this->SCENES[$sceneId];
-        return (int) $SCENE["up"]["points"];
+        return (int) $SCENE["UP"]["points"];
     }
 
     public function getMainInSlot(int $playerId, int $slot): array
@@ -170,12 +170,12 @@ class Scenes extends Cards
         $this->game->notify->player(
             $playerId,
             "discardBoth",
-            clienttranslate('You discard 2 ${scene_label} and ${scene_label2} to pick a genre card'),
+            clienttranslate('You discard ${sceneLabel} and ${sceneLabel2} to pick a genre card'),
             [
-                "i18n" => ["scene_label", "scene_label2"],
+                "i18n" => ["sceneLabel", "sceneLabel2"],
                 "preserve" => ["sceneId", "sceneId2"],
-                "scene_label" => $Scene->UP["label"],
-                "scene_label2" => $Scene2->UP["label"],
+                "sceneLabel" => $Scene->upLabel,
+                "sceneLabel2" => $Scene2->upLabel,
                 "sceneId" => $Scene->id,
                 "sceneId2" => $Scene2->id,
                 "cards" => $cards,

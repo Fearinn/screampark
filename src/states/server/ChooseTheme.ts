@@ -34,8 +34,8 @@ class ChooseTheme extends State {
       const { label } = this.THEMES[themeId];
 
       this.game.addButton(
-        this.game.format_string_recursive(_("keep ${theme_label}"), {
-          theme_label: _(label),
+        this.game.format_string_recursive(_("keep ${themeLabel}"), {
+          themeLabel: _(label),
         }),
         () => {
           this.game.performAction("actChooseTheme", {

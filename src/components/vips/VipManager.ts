@@ -29,9 +29,9 @@ class VipManager {
         this.game.addTooltip(
           element.id,
           this.game.format_string_recursive(
-            _("${vip_label}: ${vip_description}"),
+            _("${vipLabel}: ${vip_description}"),
             {
-              vip_label: _(label),
+              vipLabel: _(label),
               vip_description: {
                 log: _(description),
                 args: {},

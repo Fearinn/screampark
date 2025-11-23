@@ -35,23 +35,25 @@ class Genre extends Scenes
     public function attach(int $playerId, int $slot): void
     {
         $position = $this->getNextPosition($playerId, $slot);
+
         $sql = "UPDATE {$this->dbTable} SET position={$position}, slot={$slot}, card_location='played', 
         card_location_arg={$playerId} WHERE card_id={$this->cardId}";
-
         $this->game->DbQuery($sql);
-
         $card = $this->getCard($this->cardId);
-        $sceneId = (int) $card["type_arg"];
+
+        $sceneCard = $this->getMainInSlot($playerId, $slot);
+        $sceneCardId = (int) $sceneCard["id"];
+        $Scene = new Scene($this->game, $sceneCardId);
 
         $this->game->notify->player(
             $playerId,
             "playScenePrivate",
-            clienttranslate('You attach a ${genre_label} card to ${scene_label}'),
+            clienttranslate('You attach a ${genreLabel} card to ${sceneLabel}'),
             [
-                "i18n" => ["genre_label", "scene_label"],
+                "i18n" => ["genreLabel", "sceneLabel"],
                 "preserve" => ["sceneId"],
-                "genre_label" => $this->label,
-                "scene_label" => $this->SCENES[$sceneId]["up"]["label"],
+                "genreLabel" => $this->label,
+                "sceneLabel" => $Scene->upLabel,
                 "sceneId" => $this->id,
                 "card" => $card,
             ]

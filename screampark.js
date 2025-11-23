@@ -950,17 +950,17 @@ var SceneManager = /** @class */ (function () {
                 }
                 if (type === "genre") {
                     element.style.backgroundImage = "url(".concat(g_gamethemeurl, "img/genres/genre_").concat(scene_id, ".jpg)");
-                    var genre_label = _this.GENRES[scene_id].label;
-                    _this.game.addTooltip(element.id, _this.game.format_string_recursive(_("${genre_label}"), {
-                        genre_label: genre_label,
+                    var genreLabel = _this.GENRES[scene_id].label;
+                    _this.game.addTooltip(element.id, _this.game.format_string_recursive(_("${genreLabel}"), {
+                        genreLabel: genreLabel,
                     }), "");
                     return;
                 }
                 element.style.backgroundImage = "url(".concat(g_gamethemeurl, "img/scenes/scene_").concat(scene_id, ".jpg)");
-                var _b = _this.SCENES[scene_id], up = _b.up, down = _b.down;
-                _this.game.addTooltip(element.id, _this.game.format_string_recursive(_("${up_label} / ${down_label}"), {
-                    up_label: _(up.label),
-                    down_label: _(down.label),
+                var _b = _this.SCENES[scene_id], UP = _b.UP, DOWN = _b.DOWN;
+                _this.game.addTooltip(element.id, _this.game.format_string_recursive(_("${upLabel} / ${downLabel}"), {
+                    upLabel: _(UP.label),
+                    downLabel: _(DOWN.label),
                 }), "");
             },
             setupBackDiv: function (_a, element) {
@@ -996,8 +996,9 @@ var SceneManager = /** @class */ (function () {
                 gap: "16px",
                 wrap: "nowrap",
                 sort: function (a, b) {
-                    return (_this.SCENES[a.type_arg].up.points -
-                        _this.SCENES[b.type_arg].up.points);
+                    var SCENE = _this.SCENES[a.type_arg];
+                    var SCENE2 = _this.SCENES[b.type_arg];
+                    return SCENE.UP.points - SCENE2.UP.points;
                 },
                 autoPlace: function (_a) {
                     var location = _a.location, location_arg = _a.location_arg;
@@ -1112,10 +1113,10 @@ var ThemeManager = /** @class */ (function () {
                 element.style.backgroundImage = "url(".concat(g_gamethemeurl, "img/themes/theme_").concat(theme_id, ".jpg)");
                 var _b = _this.THEMES[theme_id], label = _b.label, genres = _b.genres;
                 _this.game.addTooltipHtml(element.id, "<div class=\"scp_tooltip scp_themeTooltip\">\n            <h4 class=\"scp_title scp_tooltipTitle\">".concat(_(label), "</h4>\n            <div class=\"scp_flexWrapper\" style=\"--direction: column; --gap: 4px\">\n                <p>End of round/day:</p>\n                <p class=\"scp_tooltipContent\">\n                ").concat(_this.game.format_string_recursive(_("1 point for each scene with any ${genre_icon}"), {
-                    theme_label: _(label),
+                    themeLabel: _(label),
                     genreId: genres[0],
                 }), "\n                </p>\n                <p class=\"scp_tooltipContent\">\n                ").concat(_this.game.format_string_recursive(_("1 point for each scene with any ${genre_icon}"), {
-                    theme_label: _(label),
+                    themeLabel: _(label),
                     genreId: genres[1],
                 }), "\n                </p>\n            </div>\n          </div>"));
             },
@@ -1170,8 +1171,8 @@ var VipManager = /** @class */ (function () {
                 var vip_id = _a.type_arg;
                 element.classList.add("scp_card");
                 var _b = _this.VIPS[vip_id], label = _b.label, description = _b.description;
-                _this.game.addTooltip(element.id, _this.game.format_string_recursive(_("${vip_label}: ${vip_description}"), {
-                    vip_label: _(label),
+                _this.game.addTooltip(element.id, _this.game.format_string_recursive(_("${vipLabel}: ${vip_description}"), {
+                    vipLabel: _(label),
                     vip_description: {
                         log: _(description),
                         args: {},
@@ -1328,8 +1329,8 @@ var ChooseTheme = /** @class */ (function (_super) {
             }
             var cardId = card.id, themeId = card.type_arg;
             var label = _this.THEMES[themeId].label;
-            _this.game.addButton(_this.game.format_string_recursive(_("keep ${theme_label}"), {
-                theme_label: _(label),
+            _this.game.addButton(_this.game.format_string_recursive(_("keep ${themeLabel}"), {
+                themeLabel: _(label),
             }), function () {
                 _this.game.performAction("actChooseTheme", {
                     cardId: cardId,
