@@ -8,7 +8,9 @@ class AttachScene extends State {
     this.SCENES = this.game.gamedatas.SCENES;
   }
 
-  public onUpdate(): void {
+  public onUpdate(args: ArgsAttachScene): void {
+    super.onUpdate(args);
+
     if (!this.game.isCurrentPlayerActive()) {
       this.onInactiveUpdate();
       return;
@@ -20,13 +22,13 @@ class AttachScene extends State {
 
     board.setSlotSelectionMode("single");
     board.onSlotSelectionChange = (selection, slot) => {
-      this.game.removeConfirmation();
+      this.game.clearButtons();
 
       if (selection.length === 0) {
         return;
       }
 
-      this.game.addConfirmation(_("confirm"), () => {
+      this.game.addButton(_("confirm"), () => {
         this.game.performAction("actAttachScene", {
           slot,
         });
@@ -39,6 +41,8 @@ class AttachScene extends State {
   }
 
   public onLeaving(): void {
+    super.onLeaving();
+
     const { player_id: playerId } = this.game;
 
     const { boards } = this.sceneManager.stocks;
@@ -46,3 +50,5 @@ class AttachScene extends State {
     board.setSlotSelectionMode("none");
   }
 }
+
+interface ArgsAttachScene {}

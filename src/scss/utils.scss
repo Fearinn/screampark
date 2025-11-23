@@ -4,8 +4,13 @@ p {
   margin: 0;
 }
 
+.scp_defaultActions,
 .scp_alertActions {
   display: inline-flex;
+
+  &:empty {
+    display: none;
+  }
 }
 
 .scp_flexWrapper {

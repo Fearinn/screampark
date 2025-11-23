@@ -64,15 +64,16 @@ class SCP extends GameGui<SCP_Gamedatas> implements SCP {
     callback: () => void,
     params: {
       id?: string;
+      type?: "default" | "alert";
       color?: "primary" | "secondary" | "alert";
       destination?: HTMLElement;
       classes?: string[];
       disabled?: boolean;
-      order?: number;
       confirm?: string;
-      type?: "alert" | "default";
-    } = { type: "default" }
+    } = {}
   ) {
+    params.type = params.type || "default";
+
     const id =
       params.id ||
       `scp_button-${Date.now().toString(36)}${Math.random()
@@ -81,9 +82,12 @@ class SCP extends GameGui<SCP_Gamedatas> implements SCP {
 
     document.getElementById(id)?.remove();
 
-    if (!params.destination && params.type === "alert") {
-      params.destination = document.getElementById(`scp_alertActions`);
-    }
+    params.destination =
+      params.destination ||
+      document.getElementById(`scp_${params.type}Actions`);
+
+    params.color =
+      params.color || (params.type === "alert" ? "alert" : "primary");
 
     this.statusBar.addActionButton(
       label,
@@ -96,39 +100,11 @@ class SCP extends GameGui<SCP_Gamedatas> implements SCP {
         ...params,
       }
     );
-
-    document.getElementById(id).style.order = `${params?.order}` || "0";
   }
 
-  public clearActionButtons(): void {
+  public clearButtons(): void {
+    document.getElementById("scp_defaultActions").innerHTML = "";
     document.getElementById("scp_alertActions").innerHTML = "";
-  }
-
-  public addConfirmation(
-    label: string,
-    callback: () => void,
-    params?: {
-      color?: "primary" | "secondary" | "alert";
-      destination?: HTMLElement;
-      classes?: string[];
-      autoclick?: boolean;
-      order?: number;
-    }
-  ) {
-    this.addButton(
-      label,
-      () => {
-        callback();
-      },
-      {
-        id: `scp_confirmationBtn`,
-        ...params,
-      }
-    );
-  }
-
-  public removeConfirmation() {
-    document.getElementById(`scp_confirmationBtn`)?.remove();
   }
 
   public keysToNumbers(object: Record<number, any>) {

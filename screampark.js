@@ -416,9 +416,7 @@ var Template = /** @class */ (function () {
             counters: {},
         };
         this.game.stocks = {};
-        document
-            .getElementById("generalactions")
-            .insertAdjacentHTML("afterend", "<div id=\"scp_alertActions\" class=\"scp_alertActions\"></div>");
+        document.getElementById("generalactions").insertAdjacentHTML("beforebegin", "<div id=\"scp_defaultActions\" class=\"scp_defaultActions\"></div>\n      <div id=\"scp_alertActions\" class=\"scp_alertActions\"></div>");
         this.setupZones();
         this.setupStocks();
         this.setupPanels();
@@ -565,31 +563,25 @@ var SCP = /** @class */ (function (_super) {
     };
     SCP.prototype.addButton = function (label, callback, params) {
         var _a;
-        if (params === void 0) { params = { type: "default" }; }
+        if (params === void 0) { params = {}; }
+        params.type = params.type || "default";
         var id = params.id ||
             "scp_button-".concat(Date.now().toString(36)).concat(Math.random()
                 .toString(36)
                 .slice(2));
         (_a = document.getElementById(id)) === null || _a === void 0 ? void 0 : _a.remove();
-        if (!params.destination && params.type === "alert") {
-            params.destination = document.getElementById("scp_alertActions");
-        }
+        params.destination =
+            params.destination ||
+                document.getElementById("scp_".concat(params.type, "Actions"));
+        params.color =
+            params.color || (params.type === "alert" ? "alert" : "primary");
         this.statusBar.addActionButton(label, function () {
             callback();
         }, __assign({ id: id, classes: ["scp_button"] }, params));
-        document.getElementById(id).style.order = "".concat(params === null || params === void 0 ? void 0 : params.order) || "0";
     };
-    SCP.prototype.clearActionButtons = function () {
+    SCP.prototype.clearButtons = function () {
+        document.getElementById("scp_defaultActions").innerHTML = "";
         document.getElementById("scp_alertActions").innerHTML = "";
-    };
-    SCP.prototype.addConfirmation = function (label, callback, params) {
-        this.addButton(label, function () {
-            callback();
-        }, __assign({ id: "scp_confirmationBtn" }, params));
-    };
-    SCP.prototype.removeConfirmation = function () {
-        var _a;
-        (_a = document.getElementById("scp_confirmationBtn")) === null || _a === void 0 ? void 0 : _a.remove();
     };
     SCP.prototype.keysToNumbers = function (object) {
         return Object.keys(object).map(function (key) {
@@ -1155,12 +1147,6 @@ var ThemeManager = /** @class */ (function () {
         var _a = this.game.gamedatas, themeHands = _a.themeHands, themeCards = _a.themeCards;
         this.manager.placeCards(__spreadArray(__spreadArray([], themeHands, true), themeCards, true));
     };
-    ThemeManager.prototype.setSelection = function (playerId, callback) {
-        var boards = this.stocks.boards;
-        var board = boards[playerId];
-        board.setSelectionMode(callback ? "single" : "none");
-        board.onSelectionChange = callback;
-    };
     return ThemeManager;
 }());
 var VipManager = /** @class */ (function () {
@@ -1232,26 +1218,14 @@ var StateManager = /** @class */ (function () {
     }
     StateManager.prototype.onEntering = function (stateName, args) {
         var _a;
-        var isSpectator = this.game.isSpectator;
-        if (isSpectator) {
-            return;
-        }
         (_a = this.states[stateName]) === null || _a === void 0 ? void 0 : _a.onEntering(args);
     };
     StateManager.prototype.onUpdate = function (stateName, args) {
         var _a;
-        var isSpectator = this.game.isSpectator;
-        if (isSpectator) {
-            return;
-        }
         (_a = this.states[stateName]) === null || _a === void 0 ? void 0 : _a.onUpdate(args);
     };
     StateManager.prototype.onLeaving = function (stateName) {
         var _a;
-        var isSpectator = this.game.isSpectator;
-        if (isSpectator) {
-            return;
-        }
         (_a = this.states[stateName]) === null || _a === void 0 ? void 0 : _a.onLeaving();
     };
     return StateManager;
@@ -1260,9 +1234,25 @@ var State = /** @class */ (function () {
     function State(game) {
         this.game = game;
     }
-    State.prototype.onEntering = function (args) { };
-    State.prototype.onUpdate = function (args) { };
-    State.prototype.onLeaving = function () { };
+    State.prototype.onEntering = function (args) {
+        var isSpectator = this.game.isSpectator;
+        if (isSpectator) {
+            return;
+        }
+    };
+    State.prototype.onUpdate = function (args) {
+        var isSpectator = this.game.isSpectator;
+        if (isSpectator) {
+            return;
+        }
+    };
+    State.prototype.onLeaving = function () {
+        var isSpectator = this.game.isSpectator;
+        if (isSpectator) {
+            return;
+        }
+        this.game.clearButtons();
+    };
     return State;
 }());
 var AttachScene = /** @class */ (function (_super) {
@@ -1273,8 +1263,9 @@ var AttachScene = /** @class */ (function (_super) {
         _this.SCENES = _this.game.gamedatas.SCENES;
         return _this;
     }
-    AttachScene.prototype.onUpdate = function () {
+    AttachScene.prototype.onUpdate = function (args) {
         var _this = this;
+        _super.prototype.onUpdate.call(this, args);
         if (!this.game.isCurrentPlayerActive()) {
             this.onInactiveUpdate();
             return;
@@ -1284,11 +1275,11 @@ var AttachScene = /** @class */ (function (_super) {
         var board = boards[playerId];
         board.setSlotSelectionMode("single");
         board.onSlotSelectionChange = function (selection, slot) {
-            _this.game.removeConfirmation();
+            _this.game.clearButtons();
             if (selection.length === 0) {
                 return;
             }
-            _this.game.addConfirmation(_("confirm"), function () {
+            _this.game.addButton(_("confirm"), function () {
                 _this.game.performAction("actAttachScene", {
                     slot: slot,
                 });
@@ -1299,6 +1290,7 @@ var AttachScene = /** @class */ (function (_super) {
         this.onLeaving();
     };
     AttachScene.prototype.onLeaving = function () {
+        _super.prototype.onLeaving.call(this);
         var playerId = this.game.player_id;
         var boards = this.sceneManager.stocks.boards;
         var board = boards[playerId];
@@ -1314,28 +1306,33 @@ var ChooseTheme = /** @class */ (function (_super) {
         _this.THEMES = _this.game.gamedatas.THEMES;
         return _this;
     }
-    ChooseTheme.prototype.onUpdate = function () {
+    ChooseTheme.prototype.onUpdate = function (args) {
         var _this = this;
+        _super.prototype.onUpdate.call(this, args);
         if (!this.game.isCurrentPlayerActive()) {
             this.onInactiveUpdate();
             return;
         }
         var playerId = this.game.player_id;
-        this.themeManager.setSelection(playerId, function (selection, card) {
+        var boards = this.themeManager.stocks.boards;
+        var board = boards[playerId];
+        board.setSelectionMode("single");
+        board.onSelectionChange = function (selection, card) {
+            _this.game.clearButtons();
             if (selection.length === 0) {
-                _this.game.removeConfirmation();
+                _this.game.clearButtons();
                 return;
             }
             var cardId = card.id, themeId = card.type_arg;
             var label = _this.THEMES[themeId].label;
-            _this.game.addConfirmation(_this.game.format_string_recursive(_("keep ${theme_label}"), {
+            _this.game.addButton(_this.game.format_string_recursive(_("keep ${theme_label}"), {
                 theme_label: _(label),
             }), function () {
                 _this.game.performAction("actChooseTheme", {
                     cardId: cardId,
                 });
             });
-        });
+        };
     };
     ChooseTheme.prototype.onInactiveUpdate = function () {
         var _this = this;
@@ -1347,8 +1344,10 @@ var ChooseTheme = /** @class */ (function (_super) {
         }, { color: "secondary" });
     };
     ChooseTheme.prototype.onLeaving = function () {
+        _super.prototype.onLeaving.call(this);
         var playerId = this.game.player_id;
-        this.themeManager.setSelection(playerId, null);
+        var boards = this.themeManager.stocks.boards;
+        boards[playerId].setSelectionMode("none");
     };
     return ChooseTheme;
 }(State));
@@ -1362,6 +1361,7 @@ var PlayerTurn = /** @class */ (function (_super) {
     }
     PlayerTurn.prototype.onUpdate = function (args) {
         var _this = this;
+        _super.prototype.onUpdate.call(this, args);
         if (!this.game.isCurrentPlayerActive()) {
             this.onInactiveUpdate();
             return;
@@ -1370,13 +1370,13 @@ var PlayerTurn = /** @class */ (function (_super) {
         var hand = this.sceneManager.stocks.hand;
         hand.setSelectionMode("multiple");
         hand.onSelectionChange = function (selection, lastChange) {
-            document.getElementById("generalactions").innerHTML = "";
+            _this.game.clearButtons();
             if (selection.length === 0) {
                 return;
             }
             if (selection.length === 2) {
                 _this.game.addButton(_("discard both and get a genre card"), function () { }, {
-                    color: "alert",
+                    type: "alert",
                 });
                 return;
             }
@@ -1401,13 +1401,14 @@ var PlayerTurn = /** @class */ (function (_super) {
                 _this.game.performAction("actDiscardScene", {
                     cardId: cardId,
                 });
-            }, { color: "alert" });
+            }, { type: "alert" });
         };
     };
     PlayerTurn.prototype.onInactiveUpdate = function () {
         this.onLeaving();
     };
     PlayerTurn.prototype.onLeaving = function () {
+        _super.prototype.onLeaving.call(this);
         var hand = this.sceneManager.stocks.hand;
         hand.setSelectionMode("none");
     };

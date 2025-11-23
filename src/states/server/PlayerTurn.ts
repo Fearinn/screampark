@@ -9,6 +9,8 @@ class PlayerTurn extends State {
   }
 
   public onUpdate(args: ArgsPlayerTurn): void {
+    super.onUpdate(args);
+
     if (!this.game.isCurrentPlayerActive()) {
       this.onInactiveUpdate();
       return;
@@ -20,7 +22,7 @@ class PlayerTurn extends State {
     hand.setSelectionMode("multiple");
 
     hand.onSelectionChange = (selection, lastChange) => {
-      document.getElementById("generalactions").innerHTML = "";
+      this.game.clearButtons();
 
       if (selection.length === 0) {
         return;
@@ -28,7 +30,7 @@ class PlayerTurn extends State {
 
       if (selection.length === 2) {
         this.game.addButton(_("discard both and get a genre card"), () => {}, {
-          color: "alert",
+          type: "alert",
         });
         return;
       }
@@ -72,7 +74,7 @@ class PlayerTurn extends State {
             cardId: cardId,
           });
         },
-        { color: "alert" }
+        { type: "alert" }
       );
     };
   }
@@ -82,6 +84,8 @@ class PlayerTurn extends State {
   }
 
   public onLeaving(): void {
+    super.onLeaving();
+
     const { hand } = this.sceneManager.stocks;
     hand.setSelectionMode("none");
   }

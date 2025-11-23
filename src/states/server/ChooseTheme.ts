@@ -8,7 +8,9 @@ class ChooseTheme extends State {
     this.THEMES = this.game.gamedatas.THEMES;
   }
 
-  public onUpdate(): void {
+  public onUpdate(args: ArgsChooseTheme): void {
+    super.onUpdate(args);
+
     if (!this.game.isCurrentPlayerActive()) {
       this.onInactiveUpdate();
       return;
@@ -21,15 +23,17 @@ class ChooseTheme extends State {
 
     board.setSelectionMode("single");
     board.onSelectionChange = (selection, card) => {
+      this.game.clearButtons();
+
       if (selection.length === 0) {
-        this.game.removeConfirmation();
+        this.game.clearButtons();
         return;
       }
 
       const { id: cardId, type_arg: themeId } = card;
       const { label } = this.THEMES[themeId];
 
-      this.game.addConfirmation(
+      this.game.addButton(
         this.game.format_string_recursive(_("keep ${theme_label}"), {
           theme_label: _(label),
         }),
@@ -57,8 +61,12 @@ class ChooseTheme extends State {
   }
 
   public onLeaving(): void {
+    super.onLeaving();
+
     const { player_id: playerId } = this.game;
     const { boards } = this.themeManager.stocks;
     boards[playerId].setSelectionMode("none");
   }
 }
+
+interface ArgsChooseTheme {}

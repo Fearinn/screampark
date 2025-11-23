@@ -12,32 +12,14 @@ class StateManager {
   }
 
   onEntering(stateName: StateName, args: Record<string, any>): void {
-    const { isSpectator } = this.game;
-
-    if (isSpectator) {
-      return;
-    }
-
     this.states[stateName]?.onEntering(args);
   }
 
   onUpdate(stateName: StateName, args: Record<string, any>): void {
-    const { isSpectator } = this.game;
-
-    if (isSpectator) {
-      return;
-    }
-
     this.states[stateName]?.onUpdate(args);
   }
 
   onLeaving(stateName: StateName): void {
-    const { isSpectator } = this.game;
-
-    if (isSpectator) {
-      return;
-    }
-
     this.states[stateName]?.onLeaving();
   }
 }
@@ -49,11 +31,31 @@ class State {
     this.game = game;
   }
 
-  public onEntering(args: Record<string, any>): void {}
+  public onEntering(args: Record<string, any>): void {
+    const { isSpectator } = this.game;
 
-  public onUpdate(args: Record<string, any>): void {}
+    if (isSpectator) {
+      return;
+    }
+  }
 
-  public onLeaving(): void {}
+  public onUpdate(args: Record<string, any>): void {
+    const { isSpectator } = this.game;
+
+    if (isSpectator) {
+      return;
+    }
+  }
+
+  public onLeaving(): void {
+    const { isSpectator } = this.game;
+
+    if (isSpectator) {
+      return;
+    }
+
+    this.game.clearButtons();
+  }
 }
 
 type StateName = "ChooseTheme" | "PlayerTurn" | "AttachScene";

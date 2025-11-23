@@ -25,12 +25,11 @@ class Template {
     };
     this.game.stocks = {};
 
-    document
-      .getElementById("generalactions")
-      .insertAdjacentHTML(
-        "afterend",
-        `<div id="scp_alertActions" class="scp_alertActions"></div>`
-      );
+    document.getElementById("generalactions").insertAdjacentHTML(
+      "beforebegin",
+      `<div id="scp_defaultActions" class="scp_defaultActions"></div>
+      <div id="scp_alertActions" class="scp_alertActions"></div>`
+    );
     this.setupZones();
     this.setupStocks();
     this.setupPanels();
