@@ -19,7 +19,7 @@ class PlayerTurn extends GameState
 {
     protected Scenes $scenes;
     protected PlayerCounter $draftCounter;
-    protected PlayerCounter $attachmentCardId;
+    protected PlayerCounter $attachmentVariable;
 
     function __construct(
         protected Game $game,
@@ -34,12 +34,13 @@ class PlayerTurn extends GameState
 
         $this->scenes = new Scenes($this->game);
         $this->draftCounter = $this->game->draftCounter;
-        $this->attachmentCardId = $this->game->attachmentCardId;
+        $this->attachmentVariable = $this->game->attachmentVariable;
     }
 
     public function getArgs(int $playerId): array
     {
         $args = [
+            "maxSlot" => $this->scenes->getMaxSlot($playerId),
             "playableScenes" => $this->scenes->getPlayable($playerId),
             "attachableScenes" => $this->scenes->getAttachable($playerId),
         ];
@@ -101,7 +102,7 @@ class PlayerTurn extends GameState
             throw new BgaVisibleSystemException("Unexpected error: 4");
         }
 
-        $this->attachmentCardId->set($currentPlayerId, $cardId);
+        $this->attachmentVariable->set($currentPlayerId, $cardId);
 
         $maxSlot = $this->scenes->getMaxSlot($currentPlayerId);
         if ($maxSlot === 1) {
@@ -119,10 +120,19 @@ class PlayerTurn extends GameState
         #[IntArrayParam(min: 2, max: 2)] array $cardIds,
         #[IntParam(min: 1, max: 5)] int $genreId,
     ): void {
-        $this->scenes->discardBoth($currentPlayerId, $cardIds);
+        $maxSlot = $this->scenes->getMaxSlot($currentPlayerId);
+        if ($maxSlot === 0) {
+            throw new \BgaVisibleSystemException("Unexpected error: 7");
+        }
 
-        $cardId = $this->scenes->getGenreCardId($genreId);
-        $this->attachmentCardId->set($currentPlayerId, $cardId);
+        if ($maxSlot === 1) {
+            $AttachGenre = new AttachGenre($this->game);
+            $AttachGenre->attach($currentPlayerId, $genreId, 1);
+            return;
+        }
+
+        $this->scenes->discardBoth($currentPlayerId, $cardIds);
+        $this->attachmentVariable->set($currentPlayerId, $genreId);
 
         $this->gamestate->nextPrivateState($currentPlayerId, AttachGenre::class);
     }

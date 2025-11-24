@@ -6,7 +6,7 @@ use Bga\Games\ScreamPark\Game;
 
 class Genre extends Scenes
 {
-    private readonly int $cardId;
+    public readonly int $cardId;
     public readonly int $id;
     public readonly string $label;
 

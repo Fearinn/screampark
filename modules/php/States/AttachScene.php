@@ -18,7 +18,7 @@ class AttachScene extends GameState
 {
     protected Scenes $scenes;
     protected PlayerCounter $draftCounter;
-    protected PlayerCounter $attachmentCardId;
+    protected PlayerCounter $attachmentVariable;
 
     function __construct(
         protected Game $game,
@@ -33,13 +33,13 @@ class AttachScene extends GameState
 
         $this->scenes = new Scenes($this->game);
         $this->draftCounter = $this->game->draftCounter;
-        $this->attachmentCardId = $this->game->attachmentCardId;
+        $this->attachmentVariable = $this->game->attachmentVariable;
     }
 
     public function getArgs(int $playerId): array
     {
         $maxSlot = $this->scenes->getMaxSlot($playerId);
-        $cardId = $this->attachmentCardId->get($playerId);
+        $cardId = $this->attachmentVariable->get($playerId);
         $Scene = new Scene($this->game, $cardId);
 
         $args = [
@@ -59,11 +59,11 @@ class AttachScene extends GameState
         #[IntParam(min: 1, max: 24)] int $slot,
         array $args,
     ) {
-        $cardId = $this->attachmentCardId->get($currentPlayerId);
+        $cardId = $this->attachmentVariable->get($currentPlayerId);
         $Scene = new Scene($this->game, $cardId);
 
         if ($args["maxSlot"] < $slot) {
-            throw new \BgaVisibleSystemException("Unexpected error: 5");
+            throw new \BgaVisibleSystemException("Unexpected error: 6");
         }
 
         $this->attach($currentPlayerId, $Scene, $slot);
@@ -73,7 +73,7 @@ class AttachScene extends GameState
     {
         $Scene->attach($currentPlayerId, $slot);
         $this->draftCounter->inc($currentPlayerId, 1);
-        $this->attachmentCardId->set($currentPlayerId, 0);
+        $this->attachmentVariable->set($currentPlayerId, 0);
 
         if ($this->draftCounter->get($currentPlayerId) === 2) {
             $this->gamestate->setPlayerNonMultiactive($currentPlayerId, RevealScenes::class);
@@ -86,7 +86,7 @@ class AttachScene extends GameState
     #[PossibleAction]
     public function actAttachSceneCancel(int $currentPlayerId): void
     {
-        $this->attachmentCardId->set($currentPlayerId, 0);
+        $this->attachmentVariable->set($currentPlayerId, 0);
         $this->gamestate->nextPrivateState($currentPlayerId, PlayerTurn::class);
     }
 

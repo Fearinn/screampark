@@ -60,4 +60,6 @@ type ActionName =
   | "actAttachScene"
   | "actAttachSceneCancel"
   | "actDiscardScene"
-  | "actDiscardBoth";
+  | "actAttachGenreStart"
+  | "actAttachGenre"
+  | "actAttachGenreCancel";

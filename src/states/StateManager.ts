@@ -6,20 +6,26 @@ class StateManager {
     this.game = game;
     this.states = {
       ChooseTheme: new ChooseTheme(this.game),
+      PreTurn: new PreTurn(this.game),
       PlayerTurn: new PlayerTurn(this.game),
       AttachScene: new AttachScene(this.game),
+      AttachGenre: new AttachGenre(this.game),
     };
   }
 
   onEntering(stateName: StateName, args: Record<string, any>): void {
+    console.trace(stateName, "entering");
     this.states[stateName]?.onEntering(args);
   }
 
   onUpdate(stateName: StateName, args: Record<string, any>): void {
+    console.trace(stateName, "update");
     this.states[stateName]?.onUpdate(args);
   }
 
   onLeaving(stateName: StateName): void {
+    console.trace(stateName, "leaving");
+
     this.states[stateName]?.onLeaving();
   }
 }
@@ -58,4 +64,9 @@ class State {
   }
 }
 
-type StateName = "ChooseTheme" | "PlayerTurn" | "AttachScene";
+type StateName =
+  | "ChooseTheme"
+  | "PreTurn"
+  | "PlayerTurn"
+  | "AttachScene"
+  | "AttachGenre";

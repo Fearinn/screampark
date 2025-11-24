@@ -41,7 +41,7 @@ class Game extends \Bga\GameFramework\Table
     public readonly PlayerCounter $staffCounter;
     public readonly PlayerCounter $staffCounterPrivate;
     public readonly PlayerCounter $draftCounter;
-    public readonly PlayerCounter $attachmentCardId;
+    public readonly PlayerCounter $attachmentVariable;
 
     public function __construct()
     {
@@ -57,7 +57,7 @@ class Game extends \Bga\GameFramework\Table
         $this->staffCounter = $this->counterFactory->createPlayerCounter("staff");
         $this->staffCounterPrivate = $this->counterFactory->createPlayerCounter("staffPrivate");
         $this->draftCounter = $this->counterFactory->createPlayerCounter("draft");
-        $this->attachmentCardId = $this->counterFactory->createPlayerCounter("attaching");
+        $this->attachmentVariable = $this->counterFactory->createPlayerCounter("attaching");
 
         $this->decorateNotifs();
     }

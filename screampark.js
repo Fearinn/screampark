@@ -776,15 +776,17 @@ var NotifManager = /** @class */ (function () {
     };
     NotifManager.prototype.notif_playScenePrivate = function (args) {
         return __awaiter(this, void 0, void 0, function () {
-            var playerId, card, boards;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            var playerId, card, _a, boards, genreDeck;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
                         playerId = args.player_id, card = args.card;
-                        boards = this.sceneManager.stocks.boards;
-                        return [4 /*yield*/, boards[playerId].addCard(card)];
+                        _a = this.sceneManager.stocks, boards = _a.boards, genreDeck = _a.genreDeck;
+                        return [4 /*yield*/, boards[playerId].addCard(card, {
+                                fromStock: card.type === "genre" ? genreDeck : undefined,
+                            })];
                     case 1:
-                        _a.sent();
+                        _b.sent();
                         return [2 /*return*/];
                 }
             });
@@ -792,17 +794,20 @@ var NotifManager = /** @class */ (function () {
     };
     NotifManager.prototype.notif_playScene = function (args) {
         return __awaiter(this, void 0, void 0, function () {
-            var playerId, card, boards;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            var playerId, card, _a, boards, genreDeck;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
                         playerId = args.player_id, card = args.card;
-                        boards = this.sceneManager.stocks.boards;
+                        _a = this.sceneManager.stocks, boards = _a.boards, genreDeck = _a.genreDeck;
                         return [4 /*yield*/, boards[playerId].addCard(card, {
-                                fromElement: document.getElementById("scp_playerZone-".concat(playerId)),
+                                fromStock: card.type === "genre" ? genreDeck : undefined,
+                                fromElement: card.type === "scene"
+                                    ? document.getElementById("scp_playerZone-".concat(playerId))
+                                    : undefined,
                             })];
                     case 1:
-                        _a.sent();
+                        _b.sent();
                         return [2 /*return*/];
                 }
             });
@@ -1213,20 +1218,25 @@ var StateManager = /** @class */ (function () {
         this.game = game;
         this.states = {
             ChooseTheme: new ChooseTheme(this.game),
+            PreTurn: new PreTurn(this.game),
             PlayerTurn: new PlayerTurn(this.game),
             AttachScene: new AttachScene(this.game),
+            AttachGenre: new AttachGenre(this.game),
         };
     }
     StateManager.prototype.onEntering = function (stateName, args) {
         var _a;
+        console.trace(stateName, "entering");
         (_a = this.states[stateName]) === null || _a === void 0 ? void 0 : _a.onEntering(args);
     };
     StateManager.prototype.onUpdate = function (stateName, args) {
         var _a;
+        console.trace(stateName, "update");
         (_a = this.states[stateName]) === null || _a === void 0 ? void 0 : _a.onUpdate(args);
     };
     StateManager.prototype.onLeaving = function (stateName) {
         var _a;
+        console.trace(stateName, "leaving");
         (_a = this.states[stateName]) === null || _a === void 0 ? void 0 : _a.onLeaving();
     };
     return StateManager;
@@ -1256,6 +1266,52 @@ var State = /** @class */ (function () {
     };
     return State;
 }());
+var AttachGenre = /** @class */ (function (_super) {
+    __extends(AttachGenre, _super);
+    function AttachGenre(game) {
+        var _this = _super.call(this, game) || this;
+        _this.sceneManager = new SceneManager(_this.game);
+        _this.GENRES = _this.game.gamedatas.GENRES;
+        return _this;
+    }
+    AttachGenre.prototype.onUpdate = function (args) {
+        var _this = this;
+        _super.prototype.onUpdate.call(this, args);
+        if (!this.game.isCurrentPlayerActive()) {
+            this.onInactiveUpdate();
+            return;
+        }
+        this.game.addButton(_("cancel"), function () {
+            _this.game.performAction("actAttachGenreCancel");
+        }, { type: "alert" });
+        var playerId = this.game.player_id;
+        var boards = this.sceneManager.stocks.boards;
+        var board = boards[playerId];
+        board.setSlotSelectionMode("single");
+        board.onSlotSelectionChange = function (selection, slot) {
+            _this.game.clearButtons();
+            if (selection.length === 0) {
+                return;
+            }
+            _this.game.addButton(_("confirm"), function () {
+                _this.game.performAction("actAttachGenre", {
+                    slot: slot,
+                });
+            });
+        };
+    };
+    AttachGenre.prototype.onInactiveUpdate = function () {
+        this.onLeaving();
+    };
+    AttachGenre.prototype.onLeaving = function () {
+        _super.prototype.onLeaving.call(this);
+        var playerId = this.game.player_id;
+        var boards = this.sceneManager.stocks.boards;
+        var board = boards[playerId];
+        board.setSlotSelectionMode("none");
+    };
+    return AttachGenre;
+}(State));
 var AttachScene = /** @class */ (function (_super) {
     __extends(AttachScene, _super);
     function AttachScene(game) {
@@ -1372,9 +1428,9 @@ var PlayerTurn = /** @class */ (function (_super) {
             return;
         }
         var keysToNumbers = this.game.keysToNumbers;
-        var playableScenes = args.playableScenes, attachableScenes = args.attachableScenes;
+        var playableScenes = args.playableScenes, attachableScenes = args.attachableScenes, maxSlot = args.maxSlot;
         var hand = this.sceneManager.stocks.hand;
-        hand.setSelectionMode("multiple");
+        hand.setSelectionMode(maxSlot > 0 ? "multiple" : "single");
         hand.onSelectionChange = function (selection, lastChange) {
             _this.game.clearButtons();
             _this.game.statusBar.setTitle(_("${you} must play or discard 2 scene cards"));
@@ -1382,7 +1438,7 @@ var PlayerTurn = /** @class */ (function (_super) {
                 return;
             }
             if (selection.length === 2) {
-                _this.game.statusBar.setTitle(_("${you} may discard both scenes and pick any genre card"));
+                _this.game.statusBar.setTitle(_("${you} may discard both scenes to pick any genre card"));
                 keysToNumbers(_this.GENRES).forEach(function (genreId) {
                     var label = _this.GENRES[genreId].label;
                     _this.game.addButton(_this.game.format_string_recursive(_("${genre_icon}"), {
@@ -1433,4 +1489,28 @@ var PlayerTurn = /** @class */ (function (_super) {
         hand.setSelectionMode("none");
     };
     return PlayerTurn;
+}(State));
+var PreTurn = /** @class */ (function (_super) {
+    __extends(PreTurn, _super);
+    function PreTurn(game) {
+        var _this = _super.call(this, game) || this;
+        _this.sceneManager = new SceneManager(_this.game);
+        return _this;
+    }
+    PreTurn.prototype.onUpdate = function (args) {
+        _super.prototype.onUpdate.call(this, args);
+        if (!this.game.isCurrentPlayerActive()) {
+            this.onInactiveUpdate();
+            return;
+        }
+    };
+    PreTurn.prototype.onInactiveUpdate = function () {
+        this.onLeaving();
+    };
+    PreTurn.prototype.onLeaving = function () {
+        _super.prototype.onLeaving.call(this);
+        var hand = this.sceneManager.stocks.hand;
+        hand.setSelectionMode("none");
+    };
+    return PreTurn;
 }(State));

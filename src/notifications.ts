@@ -113,8 +113,10 @@ class NotifManager {
     card: SceneCard;
   }): Promise<void> {
     const { player_id: playerId, card } = args;
-    const { boards } = this.sceneManager.stocks;
-    await boards[playerId].addCard(card);
+    const { boards, genreDeck } = this.sceneManager.stocks;
+    await boards[playerId].addCard(card, {
+      fromStock: card.type === "genre" ? genreDeck : undefined,
+    });
   }
 
   public async notif_playScene(args: {
@@ -122,9 +124,13 @@ class NotifManager {
     card: SceneCard;
   }): Promise<void> {
     const { player_id: playerId, card } = args;
-    const { boards } = this.sceneManager.stocks;
+    const { boards, genreDeck } = this.sceneManager.stocks;
     await boards[playerId].addCard(card, {
-      fromElement: document.getElementById(`scp_playerZone-${playerId}`),
+      fromStock: card.type === "genre" ? genreDeck : undefined,
+      fromElement:
+        card.type === "scene"
+          ? document.getElementById(`scp_playerZone-${playerId}`)
+          : undefined,
     });
   }
 

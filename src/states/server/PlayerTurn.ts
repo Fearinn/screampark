@@ -19,10 +19,10 @@ class PlayerTurn extends State {
     }
 
     const { keysToNumbers } = this.game;
-    const { playableScenes, attachableScenes } = args;
+    const { playableScenes, attachableScenes, maxSlot } = args;
 
     const { hand } = this.sceneManager.stocks;
-    hand.setSelectionMode("multiple");
+    hand.setSelectionMode(maxSlot > 0 ? "multiple" : "single");
 
     hand.onSelectionChange = (selection, lastChange) => {
       this.game.clearButtons();
@@ -36,7 +36,7 @@ class PlayerTurn extends State {
 
       if (selection.length === 2) {
         this.game.statusBar.setTitle(
-          _("${you} may discard both scenes and pick any genre card")
+          _("${you} may discard both scenes to pick any genre card")
         );
 
         keysToNumbers(this.GENRES).forEach((genreId) => {
@@ -120,6 +120,7 @@ class PlayerTurn extends State {
 }
 
 interface ArgsPlayerTurn {
+  maxSlot: number;
   playableScenes: number[];
   attachableScenes: number[];
 }

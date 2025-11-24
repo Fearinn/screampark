@@ -183,9 +183,11 @@ class Scenes extends Cards
         );
     }
 
-    public function getGenreCardId(int $genreId): int
+    public function getGenre(int $genreId): Genre
     {
         $sql = "SELECT card_id FROM {$this->dbTable} WHERE card_location='genreDeck' AND card_type='genre' AND card_type_arg={$genreId} LIMIT 1";
-        return (int) $this->game->getUniqueValueFromDB($sql);
+        $cardId = (int) $this->game->getUniqueValueFromDB($sql);
+        $Genre = new Genre($this->game, $cardId);
+        return $Genre;
     }
 }

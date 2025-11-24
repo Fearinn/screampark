@@ -19,7 +19,7 @@ class AttachGenre extends GameState
 {
     protected Scenes $scenes;
     protected PlayerCounter $draftCounter;
-    protected PlayerCounter $attachmentCardId;
+    protected PlayerCounter $attachmentVariable;
 
     function __construct(
         protected Game $game,
@@ -34,19 +34,19 @@ class AttachGenre extends GameState
 
         $this->scenes = new Scenes($this->game);
         $this->draftCounter = $this->game->draftCounter;
-        $this->attachmentCardId = $this->game->attachmentCardId;
+        $this->attachmentVariable = $this->game->attachmentVariable;
     }
 
     public function getArgs(int $playerId): array
     {
         $maxSlot = $this->scenes->getMaxSlot($playerId);
-        $cardId = $this->attachmentCardId->get($playerId);
-        $Genre = new Genre($this->game, $cardId);
+        $genreId = $this->attachmentVariable->get($playerId);
+        $Genre = $this->scenes->getGenre($genreId);
 
         $args = [
             "genreLabel" => $Genre->label,
             "genreId" =>  $Genre->id,
-            "cardId" => $cardId,
+            "cardId" => $Genre->cardId,
             "maxSlot" => $maxSlot,
         ];
 
@@ -61,34 +61,30 @@ class AttachGenre extends GameState
         #[IntParam(min: 1, max: 24)] int $slot,
         array $args,
     ) {
-        $cardId = $this->attachmentCardId->get($currentPlayerId);
-        $Genre = new Genre($this->game, $cardId);
+        $genreId = $this->attachmentVariable->get($currentPlayerId);
 
         if ($args["maxSlot"] < $slot) {
             throw new \BgaVisibleSystemException("Unexpected error: 5");
         }
 
-        $this->attach($currentPlayerId, $Genre, $slot);
+        $this->attach($currentPlayerId, $genreId, $slot);
     }
 
-    public function attach(int $currentPlayerId, Genre $Genre, int $slot): void
+    public function attach(int $currentPlayerId, int $genreId, int $slot): void
     {
+        $Genre = $this->scenes->getGenre($genreId);
         $Genre->attach($currentPlayerId, $slot);
-        $this->draftCounter->inc($currentPlayerId, 1);
-        $this->attachmentCardId->set($currentPlayerId, 0);
 
-        if ($this->draftCounter->get($currentPlayerId) === 2) {
-            $this->gamestate->setPlayerNonMultiactive($currentPlayerId, RevealScenes::class);
-            return;
-        }
+        $this->draftCounter->set($currentPlayerId, 2);
+        $this->attachmentVariable->set($currentPlayerId, 0);
 
-        $this->gamestate->nextPrivateState($currentPlayerId, PlayerTurn::class);
+        $this->gamestate->setPlayerNonMultiactive($currentPlayerId, RevealScenes::class);
     }
 
     #[PossibleAction]
     public function actAttachGenreCancel(int $currentPlayerId): void
     {
-        $this->attachmentCardId->set($currentPlayerId, 0);
+        $this->attachmentVariable->set($currentPlayerId, 0);
         $this->gamestate->nextPrivateState($currentPlayerId, PlayerTurn::class);
     }
 
