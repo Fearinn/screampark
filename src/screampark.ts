@@ -123,6 +123,12 @@ class SCP extends GameGui<SCP_Gamedatas> implements SCP {
   ): { log: string; args: Record<string, any> } {
     try {
       this.addIcons(log, args);
+
+      Object.keys(args).forEach((key) => {
+        if (key.includes("Label")) {
+          args[key] = `<span style="font-weight: bold">${_(args[key])}</span>`;
+        }
+      });
     } catch (error) {
       console.error(error);
     }

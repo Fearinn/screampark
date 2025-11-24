@@ -594,6 +594,11 @@ var SCP = /** @class */ (function (_super) {
     SCP.prototype.bgaFormatText = function (log, args) {
         try {
             this.addIcons(log, args);
+            Object.keys(args).forEach(function (key) {
+                if (key.includes("Label")) {
+                    args[key] = "<span style=\"font-weight: bold\">".concat(_(args[key]), "</span>");
+                }
+            });
         }
         catch (error) {
             console.error(error);
