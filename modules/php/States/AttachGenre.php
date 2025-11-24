@@ -74,9 +74,31 @@ class AttachGenre extends GameState
     {
         $this->scenes->deck->moveAllCardsInLocation(
             "todiscard",
-            "discard",
+            "discardboth",
             $currentPlayerId,
             $currentPlayerId
+        );
+
+        $cards = $this->scenes->deck->getCardsInLocation("discardboth", $currentPlayerId);
+        $cardsIds = array_keys($cards);
+        [$cardId, $cardId2] = $cardsIds;
+
+        $Scene = new Scene($this->game, $cardId);
+        $Scene2 = new Scene($this->game, $cardId2);
+
+        $this->game->notify->player(
+            $currentPlayerId,
+            "discardBothPrivate",
+            clienttranslate('You discard ${sceneLabel} and ${sceneLabel2} to pick a genre card'),
+            [
+                "i18n" => ["sceneLabel", "sceneLabel2"],
+                "preserve" => ["sceneId", "sceneId2"],
+                "sceneLabel" => $Scene->upLabel,
+                "sceneLabel2" => $Scene2->upLabel,
+                "sceneId" => $Scene->id,
+                "sceneId2" => $Scene2->id,
+                "cards" => array_values($cards),
+            ]
         );
 
         $Genre = $this->scenes->getGenre($genreId);

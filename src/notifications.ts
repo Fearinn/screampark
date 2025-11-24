@@ -19,6 +19,7 @@ class NotifManager {
       "dealScenes",
       "playScene",
       "discardScene",
+      "discardBoth",
       "setCounter",
     ];
 
@@ -147,16 +148,46 @@ class NotifManager {
     });
   }
 
+  public async notif_discardBothPrivate(args: {
+    cards: SceneCard[];
+  }): Promise<void> {
+    const { cards } = args;
+    const { hand } = this.sceneManager.stocks;
+    await hand.removeCards(cards, {
+      fadeOut: true,
+      slideTo: document.getElementById("player_boards"),
+    });
+  }
+
   public async notif_discardScene(args: {
     player_id: number;
     card: SceneCard;
   }): Promise<void> {
-    const { card, player_id: playerId } = args;
+    const { player_id: playerId, card } = args;
     const { boards } = this.sceneManager.stocks;
 
     card.slot = 1;
     await boards[playerId].addCard(card);
     await boards[playerId].removeCard(card, {
+      fadeOut: true,
+      slideTo: document.getElementById("player_boards"),
+    });
+  }
+
+  public async notif_discardBoth(args: {
+    player_id: number;
+    cards: SceneCard[];
+  }): Promise<void> {
+    let { player_id: playerId, cards } = args;
+    const { boards } = this.sceneManager.stocks;
+
+    cards = cards.map((card) => {
+      card.slot = 1;
+      return card;
+    });
+    
+    await boards[playerId].addCards(cards);
+    await boards[playerId].removeCards(cards, {
       fadeOut: true,
       slideTo: document.getElementById("player_boards"),
     });

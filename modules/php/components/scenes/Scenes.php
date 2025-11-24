@@ -26,7 +26,6 @@ class Scenes extends Cards
 
     public function setup(): void
     {
-
         $sceneCards = [];
         foreach ($this->SCENES as $sceneId => $scene) {
             $sceneCards[] = [
@@ -58,11 +57,11 @@ class Scenes extends Cards
         return $card;
     }
 
-    protected function getCards(array $cardIds): array
+    protected function getCards(array $cardsIds): array
     {
-        $cardIds = implode(",", $cardIds);
+        $cardsIds = implode(",", $cardsIds);
         $cards = $this->game->getObjectListFromDB("SELECT {$this->cardFields} FROM {$this->dbTable} 
-        WHERE card_id IN ({$cardIds})");
+        WHERE card_id IN ({$cardsIds})");
         return $cards;
     }
 
@@ -73,17 +72,28 @@ class Scenes extends Cards
         return $cards;
     }
 
+    public function getHand(int $playerId): array
+    {
+        $sql = "SELECT {$this->cardFields} FROM {$this->dbTable} 
+        WHERE card_location IN ('hand', 'todiscard') AND card_location_arg={$playerId}";
+        $hand = $this->game->getObjectListFromDB($sql);
+
+        return $hand;
+    }
+
     public function getBoard(int $playerId): array
     {
-        $cards = $this->game->getObjectListFromDB("SELECT {$this->cardFields} FROM {$this->dbTable} 
-        WHERE (card_location='board' OR card_location='played') AND card_location_arg={$playerId}");
-        return $cards;
+        $sql = "SELECT {$this->cardFields} FROM {$this->dbTable} 
+        WHERE card_location IN ('board', 'played') AND card_location_arg={$playerId}";
+        $board = $this->game->getObjectListFromDB($sql);
+
+        return $board;
     }
 
     public function getMaxSlot(int $playerId): int
     {
         $slot = (int) $this->game->getUniqueValueFromDB("SELECT MAX(slot) FROM {$this->dbTable} 
-        WHERE (card_location='board' OR card_location='played') AND card_location_arg={$playerId} AND position=1");
+        WHERE card_location IN ('board', 'played') AND card_location_arg={$playerId} AND position=1");
 
         if (!$slot) {
             return 0;
@@ -95,7 +105,7 @@ class Scenes extends Cards
     public function getNextPosition(int $playerId, int $slot): int
     {
         $nextPosition = (int) $this->game->getUniqueValueFromDB("SELECT MAX(position) FROM {$this->dbTable}
-        WHERE (card_location='board' OR card_location='played') AND card_location_arg={$playerId} AND slot={$slot}") + 1;
+        WHERE card_location IN ('board', 'played') AND card_location_arg={$playerId} AND slot={$slot}") + 1;
 
         if (!$nextPosition) {
             return 1;
@@ -158,36 +168,40 @@ class Scenes extends Cards
         return $attachableCards;
     }
 
-    public function discardBoth(int $playerId, array $cardIds): void
-    {
-        $this->deck->moveCards($cardIds, "todiscard", $playerId);
-        // $cards = $this->getCards($cardIds);
-
-        // [$cardId, $cardId2] = $cardIds;
-        // $Scene = new Scene($this->game, $cardId);
-        // $Scene2 = new Scene($this->game, $cardId2);
-
-        // $this->game->notify->player(
-        //     $playerId,
-        //     "discardBoth",
-        //     clienttranslate('You discard ${sceneLabel} and ${sceneLabel2} to pick a genre card'),
-        //     [
-        //         "i18n" => ["sceneLabel", "sceneLabel2"],
-        //         "preserve" => ["sceneId", "sceneId2"],
-        //         "sceneLabel" => $Scene->upLabel,
-        //         "sceneLabel2" => $Scene2->upLabel,
-        //         "sceneId" => $Scene->id,
-        //         "sceneId2" => $Scene2->id,
-        //         "cards" => $cards,
-        //     ]
-        // );
-    }
-
     public function getGenre(int $genreId): Genre
     {
         $sql = "SELECT card_id FROM {$this->dbTable} WHERE card_location='genreDeck' AND card_type='genre' AND card_type_arg={$genreId} LIMIT 1";
         $cardId = (int) $this->game->getUniqueValueFromDB($sql);
         $Genre = new Genre($this->game, $cardId);
         return $Genre;
+    }
+
+    public function revealDiscardedBoth(int $playerId): void
+    {
+        $cards = $this->deck->getCardsInLocation("discardboth", $playerId);
+        if (count($cards) !== 2) {
+            return;
+        }
+
+        $cardsIds = array_keys($cards);
+        [$cardId, $cardId2] = $cardsIds;
+
+        $Scene = new Scene($this->game, $cardId);
+        $Scene2 = new Scene($this->game, $cardId2);
+
+        $this->game->notify->all(
+            "discardBoth",
+            clienttranslate('${player_name} discards ${sceneLabel} and ${sceneLabel2} to pick a genre card'),
+            [
+                "i18n" => ["sceneLabel", "sceneLabel2"],
+                "preserve" => ["sceneId", "sceneId2"],
+                "player_id" => $playerId,
+                "sceneLabel" => $Scene->upLabel,
+                "sceneLabel2" => $Scene2->upLabel,
+                "sceneId" => $Scene->id,
+                "sceneId2" => $Scene2->id,
+                "cards" => array_values($cards),
+            ]
+        );
     }
 }

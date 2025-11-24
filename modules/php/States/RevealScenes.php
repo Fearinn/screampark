@@ -46,6 +46,8 @@ class RevealScenes extends GameState
                 $Scene->revealDiscarded($playerId);
             }
 
+            $this->scenes->revealDiscardedBoth($playerId);
+
             $playedCards = $this->scenes->deck->getCardsInLocation("played", $playerId);
             foreach ($playedCards as $cardId => $card) {
                 if ($card["type"] === "genre") {

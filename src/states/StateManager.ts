@@ -14,18 +14,14 @@ class StateManager {
   }
 
   onEntering(stateName: StateName, args: Record<string, any>): void {
-    console.trace(stateName, "entering");
     this.states[stateName]?.onEntering(args);
   }
 
   onUpdate(stateName: StateName, args: Record<string, any>): void {
-    console.trace(stateName, "update");
     this.states[stateName]?.onUpdate(args);
   }
 
   onLeaving(stateName: StateName): void {
-    console.trace(stateName, "leaving");
-
     this.states[stateName]?.onLeaving();
   }
 }

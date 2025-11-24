@@ -72,7 +72,7 @@ class Genre extends Scenes
 
         $this->game->notify->all(
             "playScene",
-            clienttranslate('${player_name} attaches ${genreLabel} to ${sceneLabel}'),
+            clienttranslate('${player_name} attaches a ${genreLabel} card to ${sceneLabel}'),
             [
                 "i18n" => ["genreLabel", "sceneLabel"],
                 "preserve" => ["genreId", "sceneId"],
@@ -80,6 +80,7 @@ class Genre extends Scenes
                 "genreLabel" => $this->label,
                 "genreId" => $this->id,
                 "card" => $card,
+                "sceneLabel" => $Scene->upLabel,
                 "sceneId" => $Scene->id,
             ]
         );

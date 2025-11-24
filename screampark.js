@@ -672,6 +672,7 @@ var NotifManager = /** @class */ (function () {
             "dealScenes",
             "playScene",
             "discardScene",
+            "discardBoth",
             "setCounter",
         ];
         notifsToIgnore.forEach(function (notifName) {
@@ -832,19 +833,64 @@ var NotifManager = /** @class */ (function () {
             });
         });
     };
-    NotifManager.prototype.notif_discardScene = function (args) {
+    NotifManager.prototype.notif_discardBothPrivate = function (args) {
         return __awaiter(this, void 0, void 0, function () {
-            var card, playerId, boards;
+            var cards, hand;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        card = args.card, playerId = args.player_id;
+                        cards = args.cards;
+                        hand = this.sceneManager.stocks.hand;
+                        return [4 /*yield*/, hand.removeCards(cards, {
+                                fadeOut: true,
+                                slideTo: document.getElementById("player_boards"),
+                            })];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    NotifManager.prototype.notif_discardScene = function (args) {
+        return __awaiter(this, void 0, void 0, function () {
+            var playerId, card, boards;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        playerId = args.player_id, card = args.card;
                         boards = this.sceneManager.stocks.boards;
                         card.slot = 1;
                         return [4 /*yield*/, boards[playerId].addCard(card)];
                     case 1:
                         _a.sent();
                         return [4 /*yield*/, boards[playerId].removeCard(card, {
+                                fadeOut: true,
+                                slideTo: document.getElementById("player_boards"),
+                            })];
+                    case 2:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    NotifManager.prototype.notif_discardBoth = function (args) {
+        return __awaiter(this, void 0, void 0, function () {
+            var playerId, cards, boards;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        playerId = args.player_id, cards = args.cards;
+                        boards = this.sceneManager.stocks.boards;
+                        cards = cards.map(function (card) {
+                            card.slot = 1;
+                            return card;
+                        });
+                        return [4 /*yield*/, boards[playerId].addCards(cards)];
+                    case 1:
+                        _a.sent();
+                        return [4 /*yield*/, boards[playerId].removeCards(cards, {
                                 fadeOut: true,
                                 slideTo: document.getElementById("player_boards"),
                             })];
@@ -1007,7 +1053,8 @@ var SceneManager = /** @class */ (function () {
                 },
                 autoPlace: function (_a) {
                     var location = _a.location, location_arg = _a.location_arg;
-                    return location === "hand" && Number(location_arg) === player_id;
+                    return ((location === "hand" || location === "todiscard") &&
+                        Number(location_arg) === player_id);
                 },
             }),
             deck: new BgaCards.Deck(this.manager, document.getElementById("scp_sceneDeck"), {
@@ -1226,17 +1273,14 @@ var StateManager = /** @class */ (function () {
     }
     StateManager.prototype.onEntering = function (stateName, args) {
         var _a;
-        console.trace(stateName, "entering");
         (_a = this.states[stateName]) === null || _a === void 0 ? void 0 : _a.onEntering(args);
     };
     StateManager.prototype.onUpdate = function (stateName, args) {
         var _a;
-        console.trace(stateName, "update");
         (_a = this.states[stateName]) === null || _a === void 0 ? void 0 : _a.onUpdate(args);
     };
     StateManager.prototype.onLeaving = function (stateName) {
         var _a;
-        console.trace(stateName, "leaving");
         (_a = this.states[stateName]) === null || _a === void 0 ? void 0 : _a.onLeaving();
     };
     return StateManager;
@@ -1445,7 +1489,7 @@ var PlayerTurn = /** @class */ (function (_super) {
                         genreId: genreId,
                     }), function () {
                         _this.game.performAction("actAttachGenreStart", {
-                            cardIds: selection
+                            cardsIds: selection
                                 .map(function (card) {
                                 return Number(card.id);
                             })

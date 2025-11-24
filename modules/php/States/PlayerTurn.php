@@ -121,7 +121,7 @@ class PlayerTurn extends GameState
     public function actAttachGenreStart(
         int $currentPlayerId,
         array $args,
-        #[IntArrayParam(min: 2, max: 2)] array $cardIds,
+        #[IntArrayParam(min: 2, max: 2)] array $cardsIds,
         #[IntParam(min: 1, max: 5)] int $genreId,
     ): void {
         if (!$args["canAttachGenre"]) {
@@ -135,7 +135,7 @@ class PlayerTurn extends GameState
             return;
         }
 
-        $this->scenes->discardBoth($currentPlayerId, $cardIds);
+        $this->scenes->deck->moveCards($cardsIds, "todiscard", $currentPlayerId);
         $this->attachmentVariable->set($currentPlayerId, $genreId);
 
         $this->gamestate->nextPrivateState($currentPlayerId, AttachGenre::class);

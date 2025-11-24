@@ -48,7 +48,7 @@ class PlayerTurn extends State {
             }),
             () => {
               this.game.performAction("actAttachGenreStart", {
-                cardIds: selection
+                cardsIds: selection
                   .map((card) => {
                     return Number(card.id);
                   })
