@@ -14,9 +14,10 @@
 .scp_playerZones {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
+  flex-wrap: wrap;
   gap: 16px;
-  width: 100%;
+  max-height: calc(var(--board-width) * 2);
 }
 
 .scp_playerZone {
@@ -25,9 +26,7 @@
   flex-direction: column;
   border-radius: 8px;
   box-shadow: 0 0 8px #808080;
-  max-width: calc(var(--board-width) * 1.5);
-  width: 95%;
-  overflow: visible;
+  overflow-x: visible;
 
   &-current {
     order: -1;

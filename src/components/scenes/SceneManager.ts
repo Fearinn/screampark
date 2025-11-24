@@ -113,7 +113,6 @@ class SceneManager {
         document.getElementById("scp_hand"),
         {
           gap: "16px",
-          wrap: "nowrap",
           sort: (a, b) => {
             const SCENE = this.SCENES[a.type_arg];
             const SCENE2 = this.SCENES[b.type_arg];

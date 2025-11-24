@@ -79,9 +79,10 @@
 .scp_playerZones {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
+  flex-wrap: wrap;
   gap: 16px;
-  width: 100%;
+  max-height: calc(var(--board-width) * 2);
 }
 
 .scp_playerZone {
@@ -90,9 +91,7 @@
   flex-direction: column;
   border-radius: 8px;
   box-shadow: 0 0 8px #808080;
-  max-width: calc(var(--board-width) * 1.5);
-  width: 95%;
-  overflow: visible;
+  overflow-x: visible;
 }
 .scp_playerZone-current {
   order: -1;
@@ -260,7 +259,6 @@ p {
 .scp_hand {
   justify-content: start !important;
   padding: 12px;
-  overflow: auto;
 }
 .scp_hand:has(.hand-stock:empty) {
   display: none;
@@ -696,16 +694,16 @@ p {
   direction: ltr;
   position: relative;
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
   gap: 32px;
-  padding: 8px 16px;
   width: 100%;
 }
 
 .scp_pref-themedBg {
   background-image: url("img/background.jpg");
-  background-size: 100% 100%;
+  background-size: cover;
 }
 .scp_pref-themedBg .player-board {
   background-image: url("img/background.jpg");

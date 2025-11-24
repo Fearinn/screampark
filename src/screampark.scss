@@ -25,16 +25,16 @@
   direction: ltr;
   position: relative;
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
   gap: 32px;
-  padding: 8px 16px;
   width: 100%;
 }
 
 .scp_pref-themedBg {
   background-image: url("img/background.jpg");
-  background-size: 100% 100%;
+  background-size: cover;
 
   .player-board {
     background-image: url("img/background.jpg");
