@@ -29,7 +29,7 @@ class PlayerTurn extends GameState
             id: 50,
             type: StateType::PRIVATE,
             description: clienttranslate('Other player(s) must play or discard 2 scene cards'),
-            descriptionMyTurn: clienttranslate('${you} must play or discard 2 scene cards'),
+            descriptionMyTurn: clienttranslate('${you} must play or discard a scene card (${nbr} left)'),
         );
 
         $this->scenes = new Scenes($this->game);
@@ -40,9 +40,11 @@ class PlayerTurn extends GameState
     public function getArgs(int $playerId): array
     {
         $maxSlot = $this->scenes->getMaxSlot($playerId);
+        $draftCount = $this->draftCounter->get($playerId);
 
         $args = [
-            "canAttachGenre" => $maxSlot > 0 && $this->draftCounter->get($playerId) === 0,
+            "nbr" => 2 - $draftCount,
+            "canAttachGenre" => $maxSlot > 0 && $draftCount === 0,
             "playableScenes" => $this->scenes->getPlayable($playerId),
             "attachableScenes" => $this->scenes->getAttachable($playerId),
         ];

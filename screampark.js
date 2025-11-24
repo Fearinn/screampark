@@ -1505,12 +1505,14 @@ var PlayerTurn = /** @class */ (function (_super) {
             return;
         }
         var keysToNumbers = this.game.keysToNumbers;
-        var playableScenes = args.playableScenes, attachableScenes = args.attachableScenes, canAttachGenre = args.canAttachGenre;
+        var playableScenes = args.playableScenes, attachableScenes = args.attachableScenes, canAttachGenre = args.canAttachGenre, nbr = args.nbr;
         var hand = this.sceneManager.stocks.hand;
         hand.setSelectionMode(canAttachGenre ? "multiple" : "single");
         hand.onSelectionChange = function (selection, lastChange) {
             _this.game.clearButtons();
-            _this.game.statusBar.setTitle(_("${you} must play or discard 2 scene cards"));
+            _this.game.statusBar.setTitle(_("${you} must play or discard a scene card (${nbr} left)"), {
+                nbr: nbr,
+            });
             if (selection.length === 0) {
                 return;
             }

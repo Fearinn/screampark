@@ -19,7 +19,7 @@ class PlayerTurn extends State {
     }
 
     const { keysToNumbers } = this.game;
-    const { playableScenes, attachableScenes, canAttachGenre } = args;
+    const { playableScenes, attachableScenes, canAttachGenre, nbr } = args;
 
     const { hand } = this.sceneManager.stocks;
     hand.setSelectionMode(canAttachGenre ? "multiple" : "single");
@@ -27,7 +27,10 @@ class PlayerTurn extends State {
     hand.onSelectionChange = (selection, lastChange) => {
       this.game.clearButtons();
       this.game.statusBar.setTitle(
-        _("${you} must play or discard 2 scene cards")
+        _("${you} must play or discard a scene card (${nbr} left)"),
+        {
+          nbr,
+        }
       );
 
       if (selection.length === 0) {
@@ -120,6 +123,7 @@ class PlayerTurn extends State {
 }
 
 interface ArgsPlayerTurn {
+  nbr: number;
   canAttachGenre: boolean;
   playableScenes: number[];
   attachableScenes: number[];
