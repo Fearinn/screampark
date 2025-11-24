@@ -34,6 +34,7 @@ class PassScenes extends GameState
 
     public function onEnteringState(): string
     {
+        $this->draftCounter->setAll(0);
         return PreTurn::class;
     }
 }
