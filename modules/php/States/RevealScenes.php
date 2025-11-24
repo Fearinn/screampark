@@ -48,8 +48,10 @@ class RevealScenes extends GameState
 
             $this->scenes->revealDiscardedBoth($playerId);
 
-            $playedCards = $this->scenes->deck->getCardsInLocation("played", $playerId);
-            foreach ($playedCards as $cardId => $card) {
+            $playedCards = $this->scenes->deck->getCardsInLocation("played", $playerId, "position");
+            foreach ($playedCards as $card) {
+                $cardId = (int) $card["id"];
+
                 if ($card["type"] === "genre") {
                     $Genre = new Genre($this->game, $cardId);
                     $Genre->revealAttached($playerId);
