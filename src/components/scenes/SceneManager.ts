@@ -25,6 +25,12 @@ class SceneManager {
       cardHeight: 285.1,
       cardWidth: 150,
       cardBorderRadius: "8px",
+      selectedSlotStyle: {
+        outlineSize: 5,
+      },
+      selectableSlotStyle: {
+        outlineSize: 5,
+      },
       isCardVisible: ({ type_arg }) => {
         return !!type_arg;
       },
@@ -95,6 +101,7 @@ class SceneManager {
               Number(location_arg) === playerId
             );
           },
+          sort: BgaCards.sort("position"),
         }
       );
     });
@@ -182,7 +189,7 @@ interface SceneCard extends SCP_Card {
   type: "scene" | "genre";
   location?: "hand" | "todiscard" | "board" | "played";
   slot?: number;
-  order?: number;
+  position?: number;
 }
 
 interface GENRE {

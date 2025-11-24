@@ -103,9 +103,12 @@ class SCP extends GameGui<SCP_Gamedatas> implements SCP {
     );
   }
 
-  public clearButtons(): void {
+  public clearButtons(preserveAlert = false): void {
     document.getElementById("scp_defaultActions").innerHTML = "";
-    document.getElementById("scp_alertActions").innerHTML = "";
+
+    if (!preserveAlert) {
+      document.getElementById("scp_alertActions").innerHTML = "";
+    }
   }
 
   public keysToNumbers(object: Record<number, any>) {

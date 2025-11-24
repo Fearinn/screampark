@@ -1,11 +1,13 @@
 class AttachGenre extends State {
   private sceneManager: SceneManager;
+  private SCENES: Record<number, SCENE>;
   private GENRES: Record<number, GENRE>;
 
   constructor(game: SCP) {
     super(game);
     this.sceneManager = new SceneManager(this.game);
     this.GENRES = this.game.gamedatas.GENRES;
+    this.SCENES = this.game.gamedatas.SCENES;
   }
 
   public onUpdate(args: ArgsAttachGenre): void {
@@ -30,17 +32,33 @@ class AttachGenre extends State {
 
     board.setSlotSelectionMode("single");
     board.onSlotSelectionChange = (selection, slot) => {
-      this.game.clearButtons();
+      this.game.clearButtons(true);
 
       if (selection.length === 0) {
         return;
       }
 
-      this.game.addButton(_("confirm"), () => {
-        this.game.performAction("actAttachGenre", {
-          slot,
-        });
+      const card = board.getCards().find((card) => {
+        return (
+          card.slot == slot &&
+          card.position == 1 &&
+          card.location_arg == playerId
+        );
       });
+
+      const { type_arg: sceneId } = card;
+      const { UP } = this.SCENES[sceneId];
+
+      this.game.addButton(
+        this.game.format_string_recursive(_("attach to ${sceneLabel}"), {
+          sceneLabel: _(UP.label),
+        }),
+        () => {
+          this.game.performAction("actAttachGenre", {
+            slot,
+          });
+        }
+      );
     };
   }
 

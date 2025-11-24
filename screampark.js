@@ -579,9 +579,12 @@ var SCP = /** @class */ (function (_super) {
             callback();
         }, __assign({ id: id, classes: ["scp_button"] }, params));
     };
-    SCP.prototype.clearButtons = function () {
+    SCP.prototype.clearButtons = function (preserveAlert) {
+        if (preserveAlert === void 0) { preserveAlert = false; }
         document.getElementById("scp_defaultActions").innerHTML = "";
-        document.getElementById("scp_alertActions").innerHTML = "";
+        if (!preserveAlert) {
+            document.getElementById("scp_alertActions").innerHTML = "";
+        }
     };
     SCP.prototype.keysToNumbers = function (object) {
         return Object.keys(object).map(function (key) {
@@ -983,6 +986,12 @@ var SceneManager = /** @class */ (function () {
             cardHeight: 285.1,
             cardWidth: 150,
             cardBorderRadius: "8px",
+            selectedSlotStyle: {
+                outlineSize: 5,
+            },
+            selectableSlotStyle: {
+                outlineSize: 5,
+            },
             isCardVisible: function (_a) {
                 var type_arg = _a.type_arg;
                 return !!type_arg;
@@ -1039,6 +1048,7 @@ var SceneManager = /** @class */ (function () {
                     return ((location === "board" || location === "played") &&
                         Number(location_arg) === playerId);
                 },
+                sort: BgaCards.sort("position"),
             });
         });
         this.game.stocks.scenes = {
@@ -1316,6 +1326,7 @@ var AttachGenre = /** @class */ (function (_super) {
         var _this = _super.call(this, game) || this;
         _this.sceneManager = new SceneManager(_this.game);
         _this.GENRES = _this.game.gamedatas.GENRES;
+        _this.SCENES = _this.game.gamedatas.SCENES;
         return _this;
     }
     AttachGenre.prototype.onUpdate = function (args) {
@@ -1333,11 +1344,20 @@ var AttachGenre = /** @class */ (function (_super) {
         var board = boards[playerId];
         board.setSlotSelectionMode("single");
         board.onSlotSelectionChange = function (selection, slot) {
-            _this.game.clearButtons();
+            _this.game.clearButtons(true);
             if (selection.length === 0) {
                 return;
             }
-            _this.game.addButton(_("confirm"), function () {
+            var card = board.getCards().find(function (card) {
+                return (card.slot == slot &&
+                    card.position == 1 &&
+                    card.location_arg == playerId);
+            });
+            var sceneId = card.type_arg;
+            var UP = _this.SCENES[sceneId].UP;
+            _this.game.addButton(_this.game.format_string_recursive(_("attach to ${sceneLabel}"), {
+                sceneLabel: _(UP.label),
+            }), function () {
                 _this.game.performAction("actAttachGenre", {
                     slot: slot,
                 });
@@ -1379,11 +1399,20 @@ var AttachScene = /** @class */ (function (_super) {
         var board = boards[playerId];
         board.setSlotSelectionMode("single");
         board.onSlotSelectionChange = function (selection, slot) {
-            _this.game.clearButtons();
+            _this.game.clearButtons(true);
             if (selection.length === 0) {
                 return;
             }
-            _this.game.addButton(_("confirm"), function () {
+            var card = board.getCards().find(function (card) {
+                return (card.slot == slot &&
+                    card.position == 1 &&
+                    card.location_arg == playerId);
+            });
+            var sceneId = card.type_arg;
+            var UP = _this.SCENES[sceneId].UP;
+            _this.game.addButton(_this.game.format_string_recursive(_("attach to ${sceneLabel}"), {
+                sceneLabel: _(UP.label),
+            }), function () {
                 _this.game.performAction("actAttachScene", {
                     slot: slot,
                 });

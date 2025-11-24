@@ -30,17 +30,32 @@ class AttachScene extends State {
 
     board.setSlotSelectionMode("single");
     board.onSlotSelectionChange = (selection, slot) => {
-      this.game.clearButtons();
+      this.game.clearButtons(true);
 
       if (selection.length === 0) {
         return;
       }
-
-      this.game.addButton(_("confirm"), () => {
-        this.game.performAction("actAttachScene", {
-          slot,
-        });
+      const card = board.getCards().find((card) => {
+        return (
+          card.slot == slot &&
+          card.position == 1 &&
+          card.location_arg == playerId
+        );
       });
+
+      const { type_arg: sceneId } = card;
+      const { UP } = this.SCENES[sceneId];
+
+      this.game.addButton(
+        this.game.format_string_recursive(_("attach to ${sceneLabel}"), {
+          sceneLabel: _(UP.label),
+        }),
+        () => {
+          this.game.performAction("actAttachScene", {
+            slot,
+          });
+        }
+      );
     };
   }
 
