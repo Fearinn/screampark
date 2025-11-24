@@ -260,8 +260,8 @@ p {
   justify-content: start !important;
   padding: 12px;
 }
-.scp_hand:has(.hand-stock:empty) {
-  display: none;
+.scp_hand:empty {
+  display: none !important;
 }
 
 .scp_genreDeck {

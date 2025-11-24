@@ -37,8 +37,8 @@
   justify-content: start !important;
   padding: 12px;
 
-  &:has(.hand-stock:empty) {
-    display: none;
+  &:empty {
+    display: none !important;
   }
 }
 
