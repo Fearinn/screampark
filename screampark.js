@@ -1509,8 +1509,11 @@ var PreTurn = /** @class */ (function (_super) {
     };
     PreTurn.prototype.onLeaving = function () {
         _super.prototype.onLeaving.call(this);
-        var hand = this.sceneManager.stocks.hand;
+        var playerId = this.game.player_id;
+        var _a = this.sceneManager.stocks, hand = _a.hand, boards = _a.boards;
         hand.setSelectionMode("none");
+        var board = boards[playerId];
+        board.setSlotSelectionMode("none");
     };
     return PreTurn;
 }(State));

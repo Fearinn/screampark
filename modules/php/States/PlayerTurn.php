@@ -55,7 +55,7 @@ class PlayerTurn extends GameState
     #[PossibleAction]
     public function actPlayScene(
         int $currentPlayerId,
-        #[IntParam(min: 1, max: 120)] int $cardId
+        #[IntParam(min: 1, max: 120)] int $cardId,
     ): void {
         $Scene = new Scene($this->game, $cardId);
         if (!$Scene->isPlayable($currentPlayerId)) {

@@ -160,27 +160,27 @@ class Scenes extends Cards
 
     public function discardBoth(int $playerId, array $cardIds): void
     {
-        $this->deck->moveCards($cardIds, "discard", $playerId);
-        $cards = $this->getCards($cardIds);
+        $this->deck->moveCards($cardIds, "todiscard", $playerId);
+        // $cards = $this->getCards($cardIds);
 
-        [$cardId, $cardId2] = $cardIds;
-        $Scene = new Scene($this->game, $cardId);
-        $Scene2 = new Scene($this->game, $cardId2);
+        // [$cardId, $cardId2] = $cardIds;
+        // $Scene = new Scene($this->game, $cardId);
+        // $Scene2 = new Scene($this->game, $cardId2);
 
-        $this->game->notify->player(
-            $playerId,
-            "discardBoth",
-            clienttranslate('You discard ${sceneLabel} and ${sceneLabel2} to pick a genre card'),
-            [
-                "i18n" => ["sceneLabel", "sceneLabel2"],
-                "preserve" => ["sceneId", "sceneId2"],
-                "sceneLabel" => $Scene->upLabel,
-                "sceneLabel2" => $Scene2->upLabel,
-                "sceneId" => $Scene->id,
-                "sceneId2" => $Scene2->id,
-                "cards" => $cards,
-            ]
-        );
+        // $this->game->notify->player(
+        //     $playerId,
+        //     "discardBoth",
+        //     clienttranslate('You discard ${sceneLabel} and ${sceneLabel2} to pick a genre card'),
+        //     [
+        //         "i18n" => ["sceneLabel", "sceneLabel2"],
+        //         "preserve" => ["sceneId", "sceneId2"],
+        //         "sceneLabel" => $Scene->upLabel,
+        //         "sceneLabel2" => $Scene2->upLabel,
+        //         "sceneId" => $Scene->id,
+        //         "sceneId2" => $Scene2->id,
+        //         "cards" => $cards,
+        //     ]
+        // );
     }
 
     public function getGenre(int $genreId): Genre

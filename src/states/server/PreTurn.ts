@@ -22,8 +22,12 @@ class PreTurn extends State {
   public onLeaving(): void {
     super.onLeaving();
 
-    const { hand } = this.sceneManager.stocks;
+    const { player_id: playerId } = this.game;
+
+    const { hand, boards } = this.sceneManager.stocks;
     hand.setSelectionMode("none");
+    const board = boards[playerId];
+    board.setSlotSelectionMode("none");
   }
 }
 

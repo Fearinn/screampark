@@ -59,4 +59,29 @@ class Genre extends Scenes
             ]
         );
     }
+
+    public function revealAttached(int $playerId): void
+    {
+        $this->move("board", $playerId);
+        $card = $this->getCard($this->cardId);
+        $slot = (int) $card["slot"];
+
+        $sceneCard = $this->getMainInSlot($playerId, $slot);
+        $sceneCardId = (int) $sceneCard["id"];
+        $Scene = new Scene($this->game, $sceneCardId);
+
+        $this->game->notify->all(
+            "playScene",
+            clienttranslate('${player_name} attaches ${genreLabel} to ${sceneLabel}'),
+            [
+                "i18n" => ["genreLabel", "sceneLabel"],
+                "preserve" => ["genreId", "sceneId"],
+                "player_id" => $playerId,
+                "genreLabel" => $this->label,
+                "genreId" => $this->id,
+                "card" => $card,
+                "sceneId" => $Scene->id,
+            ]
+        );
+    }
 }

@@ -6,6 +6,7 @@ namespace Bga\Games\ScreamPark\States;
 
 use Bga\GameFramework\States\GameState;
 use Bga\GameFramework\StateType;
+use Bga\Games\ScreamPark\components\scenes\Genre;
 use Bga\Games\ScreamPark\components\scenes\Scene;
 use Bga\Games\ScreamPark\components\scenes\Scenes;
 use Bga\Games\ScreamPark\Game;
@@ -47,6 +48,11 @@ class RevealScenes extends GameState
 
             $playedCards = $this->scenes->deck->getCardsInLocation("played", $playerId);
             foreach ($playedCards as $cardId => $card) {
+                if ($card["type"] === "genre") {
+                    $Genre = new Genre($this->game, $cardId);
+                    $Genre->revealAttached($playerId);
+                    continue;
+                }
                 $Scene = new Scene($this->game, $cardId);
                 $Scene->revealPlayed($playerId);
             }

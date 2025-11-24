@@ -56,7 +56,7 @@ class AttachGenre extends GameState
     public function onEnteringState(int $currentPlayerId): void {}
 
     #[PossibleAction]
-    public function actAttachScene(
+    public function actAttachGenre(
         int $currentPlayerId,
         #[IntParam(min: 1, max: 24)] int $slot,
         array $args,
@@ -72,6 +72,13 @@ class AttachGenre extends GameState
 
     public function attach(int $currentPlayerId, int $genreId, int $slot): void
     {
+        $this->scenes->deck->moveAllCardsInLocation(
+            "todiscard",
+            "discard",
+            $currentPlayerId,
+            $currentPlayerId
+        );
+
         $Genre = $this->scenes->getGenre($genreId);
         $Genre->attach($currentPlayerId, $slot);
 
@@ -84,6 +91,7 @@ class AttachGenre extends GameState
     #[PossibleAction]
     public function actAttachGenreCancel(int $currentPlayerId): void
     {
+        $this->scenes->deck->moveAllCardsInLocation("todiscard", "hand", $currentPlayerId, $currentPlayerId);
         $this->attachmentVariable->set($currentPlayerId, 0);
         $this->gamestate->nextPrivateState($currentPlayerId, PlayerTurn::class);
     }
