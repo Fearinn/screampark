@@ -82,7 +82,7 @@
   align-items: stretch;
   flex-wrap: wrap;
   gap: 16px;
-  max-height: calc(var(--board-width) * 2);
+  max-height: calc(var(--board-width) * 1.5);
 }
 
 .scp_playerZone {
@@ -694,7 +694,7 @@ p {
   direction: ltr;
   position: relative;
   display: flex;
-  align-items: center;
+  align-items: start;
   justify-content: center;
   flex-wrap: wrap;
   padding: 8px 0;
