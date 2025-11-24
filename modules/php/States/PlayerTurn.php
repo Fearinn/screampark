@@ -39,8 +39,10 @@ class PlayerTurn extends GameState
 
     public function getArgs(int $playerId): array
     {
+        $maxSlot = $this->scenes->getMaxSlot($playerId);
+
         $args = [
-            "maxSlot" => $this->scenes->getMaxSlot($playerId),
+            "canAttachGenre" => $maxSlot > 0 && $this->draftCounter->get($playerId) === 0,
             "playableScenes" => $this->scenes->getPlayable($playerId),
             "attachableScenes" => $this->scenes->getAttachable($playerId),
         ];
@@ -98,6 +100,7 @@ class PlayerTurn extends GameState
         #[IntParam(min: 1, max: 120)] int $cardId,
     ) {
         $Scene = new Scene($this->game, $cardId);
+
         if (!$Scene->isAttachable($currentPlayerId)) {
             throw new BgaVisibleSystemException("Unexpected error: 4");
         }
@@ -117,14 +120,15 @@ class PlayerTurn extends GameState
     #[PossibleAction]
     public function actAttachGenreStart(
         int $currentPlayerId,
+        array $args,
         #[IntArrayParam(min: 2, max: 2)] array $cardIds,
         #[IntParam(min: 1, max: 5)] int $genreId,
     ): void {
-        $maxSlot = $this->scenes->getMaxSlot($currentPlayerId);
-        if ($maxSlot === 0) {
+        if (!$args["canAttachGenre"]) {
             throw new \BgaVisibleSystemException("Unexpected error: 7");
         }
 
+        $maxSlot = $this->scenes->getMaxSlot($currentPlayerId);
         if ($maxSlot === 1) {
             $AttachGenre = new AttachGenre($this->game);
             $AttachGenre->attach($currentPlayerId, $genreId, 1);

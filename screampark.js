@@ -1428,9 +1428,9 @@ var PlayerTurn = /** @class */ (function (_super) {
             return;
         }
         var keysToNumbers = this.game.keysToNumbers;
-        var playableScenes = args.playableScenes, attachableScenes = args.attachableScenes, maxSlot = args.maxSlot;
+        var playableScenes = args.playableScenes, attachableScenes = args.attachableScenes, canAttachGenre = args.canAttachGenre;
         var hand = this.sceneManager.stocks.hand;
-        hand.setSelectionMode(maxSlot > 0 ? "multiple" : "single");
+        hand.setSelectionMode(canAttachGenre ? "multiple" : "single");
         hand.onSelectionChange = function (selection, lastChange) {
             _this.game.clearButtons();
             _this.game.statusBar.setTitle(_("${you} must play or discard 2 scene cards"));

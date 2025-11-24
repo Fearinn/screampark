@@ -19,10 +19,10 @@ class PlayerTurn extends State {
     }
 
     const { keysToNumbers } = this.game;
-    const { playableScenes, attachableScenes, maxSlot } = args;
+    const { playableScenes, attachableScenes, canAttachGenre } = args;
 
     const { hand } = this.sceneManager.stocks;
-    hand.setSelectionMode(maxSlot > 0 ? "multiple" : "single");
+    hand.setSelectionMode(canAttachGenre ? "multiple" : "single");
 
     hand.onSelectionChange = (selection, lastChange) => {
       this.game.clearButtons();
@@ -120,7 +120,7 @@ class PlayerTurn extends State {
 }
 
 interface ArgsPlayerTurn {
-  maxSlot: number;
+  canAttachGenre: boolean;
   playableScenes: number[];
   attachableScenes: number[];
 }
