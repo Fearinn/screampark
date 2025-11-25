@@ -18,6 +18,9 @@ class AttachGenre extends State {
       return;
     }
 
+    const { cardsToDiscard } = args;
+    this.sceneManager.highlight(cardsToDiscard);
+
     this.game.addButton(
       _("cancel"),
       () => {
@@ -69,12 +72,15 @@ class AttachGenre extends State {
   public onLeaving(): void {
     super.onLeaving();
 
-    const { player_id: playerId } = this.game;
+    this.sceneManager.clearHighlight();
 
+    const { player_id: playerId } = this.game;
     const { boards } = this.sceneManager.stocks;
     const board = boards[playerId];
     board.setSlotSelectionMode("none");
   }
 }
 
-interface ArgsAttachGenre {}
+interface ArgsAttachGenre {
+  cardsToDiscard: SceneCard[];
+}

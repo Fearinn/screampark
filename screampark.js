@@ -1095,8 +1095,11 @@ var SceneManager = /** @class */ (function () {
         var _a = this.game.gamedatas, sceneCards = _a.sceneCards, sceneHand = _a.sceneHand, sceneBoard = _a.sceneBoard;
         this.manager.placeCards(__spreadArray(__spreadArray(__spreadArray([], sceneCards, true), sceneHand, true), sceneBoard, true));
     };
-    SceneManager.prototype.highlight = function (card) {
-        this.manager.getCardElement(card).classList.add("scp_card-highlight");
+    SceneManager.prototype.highlight = function (cards) {
+        var _this = this;
+        cards.forEach(function (card) {
+            _this.manager.getCardElement(card).classList.add("scp_card-highlight");
+        });
     };
     SceneManager.prototype.clearHighlight = function () {
         document.querySelectorAll(".scp_card-highlight").forEach(function (cardElement) {
@@ -1348,6 +1351,8 @@ var AttachGenre = /** @class */ (function (_super) {
             this.onInactiveUpdate();
             return;
         }
+        var cardsToDiscard = args.cardsToDiscard;
+        this.sceneManager.highlight(cardsToDiscard);
         this.game.addButton(_("cancel"), function () {
             _this.game.performAction("actAttachGenreCancel");
         }, { type: "alert" });
@@ -1381,6 +1386,7 @@ var AttachGenre = /** @class */ (function (_super) {
     };
     AttachGenre.prototype.onLeaving = function () {
         _super.prototype.onLeaving.call(this);
+        this.sceneManager.clearHighlight();
         var playerId = this.game.player_id;
         var boards = this.sceneManager.stocks.boards;
         var board = boards[playerId];
@@ -1407,7 +1413,7 @@ var AttachScene = /** @class */ (function (_super) {
             _this.game.performAction("actAttachSceneCancel");
         }, { type: "alert" });
         var cardToAttach = args.cardToAttach;
-        this.sceneManager.highlight(cardToAttach);
+        this.sceneManager.highlight([cardToAttach]);
         var playerId = this.game.player_id;
         var boards = this.sceneManager.stocks.boards;
         var board = boards[playerId];

@@ -160,8 +160,10 @@ class SceneManager {
     this.manager.placeCards([...sceneCards, ...sceneHand, ...sceneBoard]);
   }
 
-  public highlight(card: SceneCard): void {
-    this.manager.getCardElement(card).classList.add("scp_card-highlight");
+  public highlight(cards: SceneCard[]): void {
+    cards.forEach((card) => {
+      this.manager.getCardElement(card).classList.add("scp_card-highlight");
+    });
   }
 
   public clearHighlight(): void {

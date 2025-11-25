@@ -25,7 +25,7 @@ class AttachScene extends State {
     );
 
     const { cardToAttach } = args;
-    this.sceneManager.highlight(cardToAttach);
+    this.sceneManager.highlight([cardToAttach]);
 
     const { player_id: playerId } = this.game;
     const { boards } = this.sceneManager.stocks;
@@ -70,7 +70,7 @@ class AttachScene extends State {
     super.onLeaving();
 
     this.sceneManager.clearHighlight();
-    
+
     const { player_id: playerId } = this.game;
     const { boards } = this.sceneManager.stocks;
     const board = boards[playerId];

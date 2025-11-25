@@ -42,12 +42,14 @@ class AttachGenre extends GameState
         $maxSlot = $this->scenes->getMaxSlot($playerId);
         $genreId = $this->attachmentVariable->get($playerId);
         $Genre = $this->scenes->getGenre($genreId);
+        $cardsToDiscard = $this->scenes->deck->getCardsInLocation("todiscard", $playerId);
 
         $args = [
             "genreLabel" => $Genre->label,
             "genreId" =>  $Genre->id,
             "cardId" => $Genre->cardId,
             "maxSlot" => $maxSlot,
+            "cardsToDiscard" => array_values($cardsToDiscard),
         ];
 
         return $args;
