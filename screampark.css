@@ -92,6 +92,7 @@
   border-radius: 8px;
   box-shadow: 0 0 8px #808080;
   overflow-x: visible;
+  min-width: var(--board-width);
 }
 .scp_playerZone-current {
   order: -1;
@@ -664,6 +665,9 @@ p {
 
 .scp_card {
   background-size: cover;
+}
+.scp_card-highlight {
+  outline: var(--bga-cards_selected-card_outline-size, 5px) solid var(--bga-cards_selected-card_outline-color, #8a2be2);
 }
 .scp_card .bga-cards_card-side {
   background-size: cover;

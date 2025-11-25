@@ -27,6 +27,7 @@
   border-radius: 8px;
   box-shadow: 0 0 8px #808080;
   overflow-x: visible;
+  min-width: var(--board-width);
 
   &-current {
     order: -1;

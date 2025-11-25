@@ -159,6 +159,16 @@ class SceneManager {
     const { sceneCards, sceneHand, sceneBoard } = this.game.gamedatas;
     this.manager.placeCards([...sceneCards, ...sceneHand, ...sceneBoard]);
   }
+
+  public highlight(card: SceneCard): void {
+    this.manager.getCardElement(card).classList.add("scp_card-highlight");
+  }
+
+  public clearHighlight(): void {
+    document.querySelectorAll(".scp_card-highlight").forEach((cardElement) => {
+      cardElement.classList.remove("scp_card-highlight");
+    });
+  }
 }
 
 interface SCENE {

@@ -46,6 +46,7 @@ class AttachScene extends GameState
             "cardId" => $cardId,
             "sceneLabel" => $Scene->downLabel,
             "maxSlot" => $maxSlot,
+            "cardToAttach" => $Scene->card,
         ];
 
         return $args;

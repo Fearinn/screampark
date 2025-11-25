@@ -6,9 +6,9 @@ use Bga\Games\ScreamPark\Game;
 
 class Scene extends Scenes
 {
+    public readonly array $card;
     private readonly int $cardId;
     public readonly int $id;
-    public readonly string $type;
     public readonly int $points;
     public readonly int $staffCost;
     public readonly array $GENRES;
@@ -18,12 +18,12 @@ class Scene extends Scenes
     public function __construct(Game $game, int $cardId)
     {
         parent::__construct($game, $game->scene_cards, "scenes");
-        $card = $this->getCard($cardId);
-        $sceneId = (int) $card["type_arg"];
+        
+        $this->card = $this->getCard($cardId);
+        $sceneId = (int) $this->card["type_arg"];
 
         $this->cardId = $cardId;
         $this->id = $sceneId;
-        $this->type = $card["type"];
 
         $SCENE = $this->SCENES[$this->id];
         $UP = $SCENE["UP"];

@@ -24,6 +24,9 @@ class AttachScene extends State {
       { type: "alert" }
     );
 
+    const { cardToAttach } = args;
+    this.sceneManager.highlight(cardToAttach);
+
     const { player_id: playerId } = this.game;
     const { boards } = this.sceneManager.stocks;
     const board = boards[playerId];
@@ -66,12 +69,15 @@ class AttachScene extends State {
   public onLeaving(): void {
     super.onLeaving();
 
+    this.sceneManager.clearHighlight();
+    
     const { player_id: playerId } = this.game;
-
     const { boards } = this.sceneManager.stocks;
     const board = boards[playerId];
     board.setSlotSelectionMode("none");
   }
 }
 
-interface ArgsAttachScene {}
+interface ArgsAttachScene {
+  cardToAttach: SceneCard;
+}

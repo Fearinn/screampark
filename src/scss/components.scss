@@ -7,6 +7,11 @@
 .scp_card {
   background-size: cover;
 
+  &-highlight {
+    outline: var(--bga-cards_selected-card_outline-size, 5px) solid
+      var(--bga-cards_selected-card_outline-color, #8a2be2);
+  }
+
   .bga-cards_card-side {
     background-size: cover;
   }
