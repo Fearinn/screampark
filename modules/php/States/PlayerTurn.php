@@ -52,7 +52,7 @@ class PlayerTurn extends GameState
         return $args;
     }
 
-    public function onEnteringState(): void {}
+    public function onEnteringState(int $currentPlayerId): void {}
 
     #[PossibleAction]
     public function actPlayScene(
@@ -143,5 +143,41 @@ class PlayerTurn extends GameState
         $this->gamestate->nextPrivateState($currentPlayerId, AttachGenre::class);
     }
 
-    public function zombie(int $playerId, array $args): void {}
+    public function zombie(int $playerId, array $args): void
+    {
+        $playableScenes = $args["playableScenes"];
+        $attachableScenes = $args["attachableScenes"];
+        $canAttachGenre = $args["canAttachGenre"];
+
+        $hand = $this->scenes->deck->getPlayerHand($playerId);
+
+        if ($playableScenes && bga_rand(0, 1)) {
+            $cardId = $this->getRandomZombieChoice($playableScenes);
+
+            $this->actPlayScene($playerId, $cardId);
+            return;
+        }
+
+        if ((!$attachableScenes && !$canAttachGenre) || bga_rand(0, 1)) {
+            $cardsIds = array_keys($hand);
+            $cardId = $this->getRandomZombieChoice($cardsIds);
+
+            $this->actDiscardScene($playerId, $cardId);
+            return;
+        }
+
+        if ($attachableScenes && (!$canAttachGenre || bga_rand(0, 1))) {
+            $cardId = $this->getRandomZombieChoice($attachableScenes);
+
+            $this->actAttachSceneStart($playerId, $cardId);
+            return;
+        }
+
+        $cardsIds = array_keys($hand);
+        shuffle($cardsIds);
+        $cardIds = array_slice($cardsIds, 0, 2, true);
+        $genreId = bga_rand(1, 5);
+
+        $this->actAttachGenreStart($playerId, $args, $cardIds, $genreId);
+    }
 }

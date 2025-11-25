@@ -57,8 +57,8 @@ class AttachScene extends GameState
     #[PossibleAction]
     public function actAttachScene(
         int $currentPlayerId,
-        #[IntParam(min: 1, max: 24)] int $slot,
         array $args,
+        #[IntParam(min: 1, max: 24)] int $slot,
     ) {
         $cardId = $this->attachmentVariable->get($currentPlayerId);
         $Scene = new Scene($this->game, $cardId);
@@ -91,5 +91,10 @@ class AttachScene extends GameState
         $this->gamestate->nextPrivateState($currentPlayerId, PlayerTurn::class);
     }
 
-    public function zombie(int $playerId, array $args): void {}
+    public function zombie(int $playerId, array $args): void
+    {
+        $maxSlot = $args["maxSlot"];
+        $slot = bga_rand(1, $maxSlot);
+        $this->actAttachScene($playerId, $args, $slot);
+    }
 }

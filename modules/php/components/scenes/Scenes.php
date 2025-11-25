@@ -140,32 +140,32 @@ class Scenes extends Cards
     {
         $hand = $this->deck->getPlayerHand($playerId);
 
-        $playableCards = [];
+        $playable = [];
         foreach ($hand as $cardId => $card) {
             $Scene = new Scene($this->game, $cardId);
 
             if ($Scene->isPlayable($playerId)) {
-                $playableCards[] = $cardId;
+                $playable[] = $cardId;
             }
         }
 
-        return $playableCards;
+        return $playable;
     }
 
     public function getAttachable(int $playerId): array
     {
         $hand = $this->deck->getPlayerHand($playerId);
-        $attachableCards = [];
+        $attachable = [];
 
         foreach ($hand as $cardId => $card) {
             $Scene = new Scene($this->game, $cardId);
 
             if ($Scene->isAttachable($playerId)) {
-                $attachableCards[] = $cardId;
+                $attachable[] = $cardId;
             }
         }
 
-        return $attachableCards;
+        return $attachable;
     }
 
     public function getGenre(int $genreId): Genre

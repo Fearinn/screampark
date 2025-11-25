@@ -9,7 +9,6 @@ use Bga\GameFramework\Components\Counters\PlayerCounter;
 use Bga\GameFramework\States\GameState;
 use Bga\GameFramework\StateType;
 use Bga\GameFramework\States\PossibleAction;
-use Bga\Games\ScreamPark\components\scenes\Genre;
 use Bga\Games\ScreamPark\components\scenes\Scene;
 use Bga\Games\ScreamPark\components\scenes\Scenes;
 use Bga\Games\ScreamPark\Game;
@@ -60,8 +59,8 @@ class AttachGenre extends GameState
     #[PossibleAction]
     public function actAttachGenre(
         int $currentPlayerId,
-        #[IntParam(min: 1, max: 24)] int $slot,
         array $args,
+        #[IntParam(min: 1, max: 24)] int $slot,
     ) {
         $genreId = $this->attachmentVariable->get($currentPlayerId);
 
@@ -120,5 +119,10 @@ class AttachGenre extends GameState
         $this->gamestate->nextPrivateState($currentPlayerId, PlayerTurn::class);
     }
 
-    public function zombie(int $playerId, array $args): void {}
+    public function zombie(int $playerId, array $args): void
+    {
+        $maxSlot = $args["maxSlot"];
+        $slot = bga_rand(1, $maxSlot);
+        $this->actAttachGenre($playerId, $args, $slot);
+    }
 }

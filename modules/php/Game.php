@@ -84,7 +84,7 @@ class Game extends \Bga\GameFramework\Table
         $this->gamestate->jumpToState($state);
     }
 
-    public function debug_playAutomatically(int $moves = 50)
+    public function debug_playAutomatically(int $moves = 1)
     {
         $count = 0;
         while (intval($this->gamestate->getCurrentMainStateId()) < 99 && $count < $moves) {

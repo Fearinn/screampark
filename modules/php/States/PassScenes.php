@@ -35,6 +35,11 @@ class PassScenes extends GameState
     public function onEnteringState(): string
     {
         $this->draftCounter->setAll(0);
+
+        if ($this->scenes->deck->countCardsInLocation("hand") === 0) {
+            return DealScenes::class;
+        }
+
         return PreTurn::class;
     }
 }
