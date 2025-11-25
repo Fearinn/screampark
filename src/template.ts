@@ -65,6 +65,7 @@ class Template {
               ? `<div id="scp_hand" class="scp_hand"></div>`
               : ""
           }
+          <div id="scp_fakeHand-${playerId}" class="scp_fakeHand"></div>
           <div id="scp_meepleSteps-${playerId}" class="scp_meepleSteps">
             <div id="scp_meepleStep-0-${playerId}" class="scp_meepleStep"></div>
           </div>

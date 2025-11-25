@@ -21,6 +21,7 @@ class NotifManager {
       "discardScene",
       "discardBoth",
       "setCounter",
+      "receiveCards",
     ];
 
     notifsToIgnore.forEach((notifName) => {
@@ -88,7 +89,7 @@ class NotifManager {
     const { cards } = args;
     const { hand, deck } = this.sceneManager.stocks;
 
-    hand.addCards(cards, { fromStock: deck });
+    await hand.addCards(cards, { fromStock: deck });
   }
 
   public async notif_dealScenes(args: {
@@ -96,17 +97,14 @@ class NotifManager {
     cardCount: number;
   }): Promise<void> {
     const { cardCount, player_id: playerId } = args;
-    const { deck } = this.sceneManager.stocks;
+    const { fakeHands, deck } = this.sceneManager.stocks;
 
     const fakeCards: SceneCard[] = [];
     for (let i = 1; i <= cardCount; i++) {
       fakeCards.push({ id: -i, type: "scene" });
     }
 
-    await deck.addCards(fakeCards);
-    await deck.removeCards(fakeCards, {
-      slideTo: document.getElementById(`scp_playerZone-${playerId}`),
-    });
+    await fakeHands[playerId].addCards(fakeCards, { fromStock: deck });
   }
 
   public async notif_playScenePrivate(args: {
@@ -115,6 +113,7 @@ class NotifManager {
   }): Promise<void> {
     const { player_id: playerId, card } = args;
     const { boards, genreDeck } = this.sceneManager.stocks;
+
     await boards[playerId].addCard(card, {
       fromStock: card.type === "genre" ? genreDeck : undefined,
     });
@@ -126,6 +125,7 @@ class NotifManager {
   }): Promise<void> {
     const { player_id: playerId, card } = args;
     const { boards, genreDeck } = this.sceneManager.stocks;
+
     await boards[playerId].addCard(card, {
       fromStock: card.type === "genre" ? genreDeck : undefined,
       fromElement:
@@ -153,6 +153,7 @@ class NotifManager {
   }): Promise<void> {
     const { cards } = args;
     const { hand } = this.sceneManager.stocks;
+
     await hand.removeCards(cards, {
       fadeOut: true,
       slideTo: document.getElementById("player_boards"),
@@ -164,12 +165,9 @@ class NotifManager {
     card: SceneCard;
   }): Promise<void> {
     const { player_id: playerId, card } = args;
-    const { boards } = this.sceneManager.stocks;
+    const { fakeHands } = this.sceneManager.stocks;
 
-    card.slot = 1;
-    await boards[playerId].addCard(card);
-    await boards[playerId].removeCard(card, {
-      fadeOut: true,
+    await fakeHands[playerId].removeCard(card, {
       slideTo: document.getElementById("player_boards"),
     });
   }
@@ -178,18 +176,33 @@ class NotifManager {
     player_id: number;
     cards: SceneCard[];
   }): Promise<void> {
-    let { player_id: playerId, cards } = args;
-    const { boards } = this.sceneManager.stocks;
+    const { player_id: playerId, cards } = args;
+    const { fakeHands } = this.sceneManager.stocks;
 
-    cards = cards.map((card) => {
-      card.slot = 1;
-      return card;
-    });
-    
-    await boards[playerId].addCards(cards);
-    await boards[playerId].removeCards(cards, {
-      fadeOut: true,
+    await fakeHands[playerId].removeCards(cards, {
       slideTo: document.getElementById("player_boards"),
+    });
+  }
+
+  public async notif_receiveCardsPrivate(args: {
+    player_id: number;
+    cards: SceneCard[];
+  }): Promise<void> {
+    const { cards } = args;
+    const { hand } = this.sceneManager.stocks;
+    await hand.addCards(cards);
+  }
+
+  public async notif_receiveCards(args: {
+    player_id: number;
+    otherPlayerId: number;
+    cards: SceneCard[];
+  }): Promise<void> {
+    const { player_id: playerId, otherPlayerId, cards } = args;
+    const { fakeHands } = this.sceneManager.stocks;
+
+    await fakeHands[playerId].addCards(cards, {
+      fromStock: fakeHands[otherPlayerId],
     });
   }
 

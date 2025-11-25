@@ -40,6 +40,53 @@ class PassScenes extends GameState
             return DealScenes::class;
         }
 
+        $day = $this->game->dayCounter->get();
+
+        $players = $this->game->loadPlayersBasicInfos();
+        foreach ($players as $playerId => $player) {
+            $otherPlayerId = $this->game->getPlayerBefore($playerId);
+            if ($day % 2 === 0) {
+                $otherPlayerId = $this->game->getPlayerAfter($playerId);
+            }
+
+            $this->scenes->deck->moveAllCardsInLocation("hand", "prehand", $otherPlayerId, $playerId);
+        }
+
+        foreach ($players as $playerId => $player) {
+            $this->scenes->deck->moveAllCardsInLocation("prehand", "hand", $playerId, $playerId);
+            $cards = $this->scenes->getHand($playerId);
+
+            $this->notify->player(
+                $playerId,
+                "receiveCardsPrivate",
+                "",
+                [
+                    "player_id" => $playerId,
+                    "cards" => $cards,
+                ],
+            );
+
+            $cards = array_map(function ($card) {
+                unset($card["type_arg"]);
+                return $card;
+            }, $cards);
+
+            $this->notify->all(
+                "receiveCards",
+                "",
+                [
+                    "player_id" => $playerId,
+                    "otherPlayerId" => $otherPlayerId,
+                    "cards" => $cards,
+                ]
+            );
+        }
+
+        $this->notify->all(
+            "message",
+            clienttranslate('All players pass their hands'),
+        );
+
         return PreTurn::class;
     }
 }

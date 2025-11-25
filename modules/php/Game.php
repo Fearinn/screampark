@@ -21,6 +21,7 @@ declare(strict_types=1);
 namespace Bga\Games\ScreamPark;
 
 use Bga\GameFramework\Components\Counters\PlayerCounter;
+use Bga\GameFramework\Components\Counters\TableCounter;
 use Bga\GameFramework\Components\Deck;
 use Bga\Games\ScreamPark\Gamedatas;
 use Bga\Games\ScreamPark\SetupNewGame;
@@ -42,6 +43,7 @@ class Game extends \Bga\GameFramework\Table
     public readonly PlayerCounter $staffCounterPrivate;
     public readonly PlayerCounter $draftCounter;
     public readonly PlayerCounter $attachmentVariable;
+    public readonly TableCounter $dayCounter;
 
     public function __construct()
     {
@@ -56,8 +58,9 @@ class Game extends \Bga\GameFramework\Table
 
         $this->staffCounter = $this->counterFactory->createPlayerCounter("staff");
         $this->staffCounterPrivate = $this->counterFactory->createPlayerCounter("staffPrivate");
-        $this->draftCounter = $this->counterFactory->createPlayerCounter("draft");
-        $this->attachmentVariable = $this->counterFactory->createPlayerCounter("attaching");
+        $this->draftCounter = $this->counterFactory->createPlayerCounter("draft", 0, 2);
+        $this->attachmentVariable = $this->counterFactory->createPlayerCounter("attachment");
+        $this->dayCounter = $this->counterFactory->createTableCounter("day", 1, 3);
 
         $this->decorateNotifs();
     }

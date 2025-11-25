@@ -81,6 +81,7 @@ class SceneManager {
     const { players, sceneDeckCount } = gamedatas;
 
     const boards = {};
+    const fakeHands = {};
     keysToNumbers(players).forEach((playerId) => {
       boards[playerId] = new BgaCards.SlotStock(
         this.manager,
@@ -104,10 +105,17 @@ class SceneManager {
           sort: BgaCards.sort("position"),
         }
       );
+
+      fakeHands[playerId] = new BgaCards.VoidStock(
+        this.manager,
+        document.getElementById(`scp_fakeHand-${playerId}`),
+        {}
+      );
     });
 
     this.game.stocks.scenes = {
       boards,
+      fakeHands,
       hand: new BgaCards.LineStock(
         this.manager,
         document.getElementById("scp_hand"),
@@ -194,6 +202,7 @@ interface SceneStocks {
   genreDeck: BgaCards.Deck<SceneCard>;
   hand: BgaCards.LineStock<SceneCard>;
   boards: Record<number, BgaCards.SlotStock<SceneCard>>;
+  fakeHands: Record<number, BgaCards.VoidStock<SceneCard>>;
 }
 
 interface SceneCard extends SCP_Card {
