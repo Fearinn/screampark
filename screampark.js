@@ -1213,13 +1213,13 @@ var ThemeManager = /** @class */ (function () {
                     return;
                 }
                 element.style.backgroundImage = "url(".concat(g_gamethemeurl, "img/themes/theme_").concat(theme_id, ".jpg)");
-                var _b = _this.THEMES[theme_id], label = _b.label, genres = _b.genres;
+                var _b = _this.THEMES[theme_id], label = _b.label, genreCost = _b.genreCost;
                 _this.game.addTooltipHtml(element.id, "<div class=\"scp_tooltip scp_themeTooltip\">\n            <h4 class=\"scp_title scp_tooltipTitle\">".concat(_(label), "</h4>\n            <div class=\"scp_flexWrapper\" style=\"--direction: column; --gap: 4px\">\n                <p>End of round/day:</p>\n                <p class=\"scp_tooltipContent\">\n                ").concat(_this.game.format_string_recursive(_("1 point for each scene with any ${genre_icon}"), {
                     themeLabel: _(label),
-                    genreId: genres[0],
+                    genreId: genreCost[0],
                 }), "\n                </p>\n                <p class=\"scp_tooltipContent\">\n                ").concat(_this.game.format_string_recursive(_("1 point for each scene with any ${genre_icon}"), {
                     themeLabel: _(label),
-                    genreId: genres[1],
+                    genreId: genreCost[1],
                 }), "\n                </p>\n            </div>\n          </div>"));
             },
             setupBackDiv: function (card, element) {

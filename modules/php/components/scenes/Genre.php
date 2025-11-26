@@ -41,9 +41,7 @@ class Genre extends Scenes
         $this->game->DbQuery($sql);
         $card = $this->getCard($this->cardId);
 
-        $sceneCard = $this->getMainInSlot($playerId, $slot);
-        $sceneCardId = (int) $sceneCard["id"];
-        $Scene = new Scene($this->game, $sceneCardId);
+        $Scene = $this->getMainInSlot($playerId, $slot);
 
         $this->game->notify->player(
             $playerId,
@@ -66,9 +64,7 @@ class Genre extends Scenes
         $card = $this->getCard($this->cardId);
         $slot = (int) $card["slot"];
 
-        $sceneCard = $this->getMainInSlot($playerId, $slot);
-        $sceneCardId = (int) $sceneCard["id"];
-        $Scene = new Scene($this->game, $sceneCardId);
+        $Scene = $this->getMainInSlot($playerId, $slot);
 
         $this->game->notify->all(
             "placeScene",

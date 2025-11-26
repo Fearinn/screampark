@@ -34,13 +34,14 @@ class Themes extends Cards
         }
     }
 
-    public function getHands(int $current_player_id): array
+    public function getHands(int $currentPlayerId): array
     {
         $hands = [];
 
         $players = $this->game->loadPlayersBasicInfos();
+
         foreach ($players as $player_id => $player) {
-            if ($current_player_id === $player_id) {
+            if ($currentPlayerId === $player_id) {
                 $hand = $this->getHand($player_id);
             } else {
                 $sql = "SELECT card_id id, card_location location, card_location_arg location_arg FROM {$this->dbTable} 
@@ -48,9 +49,16 @@ class Themes extends Cards
                 $hand = $this->game->getObjectListFromDB($sql);
             }
 
-           $hands = array_merge($hands, $hand);
+            $hands = array_merge($hands, $hand);
         }
 
         return $hands;
+    }
+
+    public function getCost(int $playerId): array
+    {
+        $sql = "SELECT card_type_arg FROM {$this->dbTable} WHERE card_location='board' AND card_location_arg={$playerId}";
+        $themeId = (int) $this->game->getUniqueValueFromDB($sql);
+        return $this->THEMES[$themeId]["genreCost"];
     }
 }

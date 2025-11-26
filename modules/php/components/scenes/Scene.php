@@ -2,10 +2,12 @@
 
 namespace Bga\Games\ScreamPark\components\scenes;
 
+use Bga\Games\ScreamPark\components\themes\Themes;
 use Bga\Games\ScreamPark\Game;
 
 class Scene extends Scenes
 {
+    public readonly array $GENRES;
     public readonly array $card;
     private readonly int $cardId;
     public readonly int $id;
@@ -13,8 +15,9 @@ class Scene extends Scenes
     private readonly int $staffCost;
     public readonly string $upLabel;
     public readonly string $downLabel;
-    private readonly int $ability;
-    public readonly array $GENRES;
+    public readonly int $ability;
+    public readonly array $genreCost;
+    public readonly array $genres;
 
     public function __construct(Game $game, int $cardId)
     {
@@ -34,6 +37,8 @@ class Scene extends Scenes
         $this->staffCost = (int) $DOWN["staffCost"];
         $this->upLabel = $UP["label"];
         $this->downLabel = $DOWN["label"];
+        $this->genreCost = $UP["genreCost"];
+        $this->genres = $DOWN["genres"];
     }
 
     private function move(string $location, int $location_arg = 0): array
@@ -130,9 +135,7 @@ class Scene extends Scenes
         }
 
         $slot = (int) $card["slot"];
-        $card2 = $this->getMainInSlot($playerId, $slot);
-        $cardId2 = (int) $card2["id"];
-        $Scene2 = new Scene($this->game, $cardId2);
+        $Scene2 = $this->getMainInSlot($playerId, $slot);
 
         $this->game->notify->all(
             "placeScene",
@@ -166,9 +169,7 @@ class Scene extends Scenes
         $this->game->DbQuery($sql);
 
         $card = $this->getCard($this->cardId);
-        $card2 = $this->getMainInSlot($playerId, $slot);
-        $cardId2 = (int) $card2["id"];
-        $Scene2 = new Scene($this->game, $cardId2);
+        $Scene2 = $this->getMainInSlot($playerId, $slot);
 
         $this->game->notify->player(
             $playerId,
@@ -240,5 +241,70 @@ class Scene extends Scenes
     {
         $card = $this->getCard($this->cardId);
         return $card["location"] === "hand" && (int) $card["location_arg"] === $playerId;
+    }
+
+    private function getInSlot(int $playerId, int $slot): array
+    {
+        $sql = "SELECT {$this->cardFields} FROM {$this->dbTable} 
+        WHERE card_location='board' AND card_location_arg={$playerId} AND slot={$slot}";
+
+        $scenes = [];
+
+        $cards = $this->game->getCollectionFromDB($sql);
+        foreach ($cards as $cardId => $card) {
+            $scenes[] = new Scene($this->game, $cardId);
+        }
+
+        return $scenes;
+    }
+
+    private function sumSlotGenres(int $playerId, int $slot): array
+    {
+        $genres = array_fill(1, 5, 0);
+        $scenesInSlot = $this->getInSlot($playerId, $slot);
+
+        foreach ($scenesInSlot as $Scene) {
+            foreach ($Scene->genres as $genreId => $value) {
+                $genres[$genreId] += $value;
+            }
+        }
+
+        return $genres;
+    }
+
+    public function isComplete(int $playerId): bool
+    {
+        $slot = (int) $this->card["slot"];
+        $genreCost = $this->genreCost;
+
+        $genres = $this->sumSlotGenres($playerId, $slot);
+        foreach ($genres as $genreId => $value) {
+            $cost[$genreId] -= $value;
+        }
+
+        return !array_any($genreCost, function ($cost) {
+            $cost > 0;
+        });
+    }
+
+    public function scoreTheme(int $playerId): int
+    {
+        $points = 0;
+        $slot = (int) $this->card["slot"];
+
+        $Themes = new Themes($this->game);
+        $genreIds = $Themes->getCost($playerId);
+
+        $scenesInSlot = $this->getInSlot($playerId, $slot);
+        foreach ($scenesInSlot as $Scene) {
+            foreach ($genreIds as $genreId) {
+                if ($Scene->genres[$genreId] > 0) {
+                    $points += 1;
+                }
+            }
+        }
+
+        $this->playerScore->inc($playerId, $points);
+        return $points;
     }
 }

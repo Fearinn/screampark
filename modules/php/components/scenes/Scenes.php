@@ -12,6 +12,7 @@ class Scenes extends Cards
     protected readonly array $GENRES;
     protected readonly PlayerCounter $staffCounter;
     protected readonly PlayerCounter $staffCounterPrivate;
+    protected readonly PlayerCounter $playerScore;
 
     public function __construct($game)
     {
@@ -20,6 +21,8 @@ class Scenes extends Cards
         $this->GENRES = $this->game->GENRES;
         $this->staffCounter = $this->game->staffCounter;
         $this->staffCounterPrivate = $this->game->staffCounterPrivate;
+        $this->playerScore = $this->game->playerScore;
+        
         $this->cardFields = "card_id id, card_location location, card_location_arg location_arg, 
         card_type type, card_type_arg type_arg, slot, position";
     }
@@ -122,18 +125,28 @@ class Scenes extends Cards
             return 0;
         }
 
-        $card = $this->getMainInSlot($playerId, $maxSlot);
-        $sceneId = (int) $card["type_arg"];
+        $Scene = $this->getMainInSlot($playerId, $maxSlot);
+        if (!$Scene) {
+            return 0;
+        }
+
+        $sceneId = $Scene->id;
         $SCENE = $this->SCENES[$sceneId];
         return (int) $SCENE["UP"]["points"];
     }
 
-    public function getMainInSlot(int $playerId, int $slot): array
+    public function getMainInSlot(int $playerId, int $slot): ?Scene
     {
         $sql = "SELECT {$this->cardFields} FROM {$this->dbTable} 
         WHERE (card_location='board' OR card_location='placed') AND card_location_arg={$playerId} AND position=1 AND slot={$slot}";
 
-        return $this->game->getObjectFromDB($sql);
+        $card = $this->game->getObjectFromDB($sql);
+        if (!$card) {
+            return null;
+        }
+
+        $cardId = (int) $card["id"];
+        return new Scene($this->game, $cardId);
     }
 
     public function getPlayable(int $playerId): array

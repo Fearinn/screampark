@@ -25,6 +25,7 @@ use Bga\GameFramework\Components\Counters\TableCounter;
 use Bga\GameFramework\Components\Deck;
 use Bga\Games\ScreamPark\Gamedatas;
 use Bga\Games\ScreamPark\SetupNewGame;
+use Bga\Games\ScreamPark\States\EndDay;
 
 class Game extends \Bga\GameFramework\Table
 {
@@ -97,5 +98,11 @@ class Game extends \Bga\GameFramework\Table
                 $this->gamestate->runStateClassZombie($this->gamestate->getCurrentState($playerId), $playerId);
             }
         }
+    }
+
+    public function debug_endDay(): void
+    {
+        $EndDay = new EndDay($this);
+        $EndDay->onEnteringState();
     }
 }

@@ -35,7 +35,7 @@ class ThemeManager {
 
         element.style.backgroundImage = `url(${g_gamethemeurl}img/themes/theme_${theme_id}.jpg)`;
 
-        const { label, genres } = this.THEMES[theme_id];
+        const { label, genreCost } = this.THEMES[theme_id];
         this.game.addTooltipHtml(
           element.id,
           `<div class="scp_tooltip scp_themeTooltip">
@@ -47,7 +47,7 @@ class ThemeManager {
                   _("1 point for each scene with any ${genre_icon}"),
                   {
                     themeLabel: _(label),
-                    genreId: genres[0],
+                    genreId: genreCost[0],
                   }
                 )}
                 </p>
@@ -56,7 +56,7 @@ class ThemeManager {
                   _("1 point for each scene with any ${genre_icon}"),
                   {
                     themeLabel: _(label),
-                    genreId: genres[1],
+                    genreId: genreCost[1],
                   }
                 )}
                 </p>
@@ -111,7 +111,7 @@ interface ThemeCard extends Partial<SCP_Card> {
 interface THEME {
   id: number;
   label: string;
-  genres: Record<number, number>;
+  genreCost: Record<number, number>;
 }
 
 interface ThemeStocks {
