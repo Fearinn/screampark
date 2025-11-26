@@ -31,4 +31,11 @@ class Vips extends Cards
             $this->deck->pickCardForLocation("deck", "board", $day);
         }
     }
+
+    public function getBySlot(int $slot): array
+    {
+        $sql = "SELECT {$this->cardFields} FROM {$this->dbTable} WHERE card_location='board' AND card_location_arg={$$slot}";
+        $card = $this->game->getObjectFromDB($sql);
+        return $card;
+    }
 }

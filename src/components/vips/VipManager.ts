@@ -1,6 +1,6 @@
 class VipManager {
   private readonly game: SCP;
-  private stocks: VipStocks;
+  public stocks: VipStocks;
   private manager: BgaCards.Manager<SCP_Card>;
   private VIPS: VIP[];
 
@@ -52,7 +52,7 @@ class VipManager {
 
     this.game.stocks.vips = {
       board: new BgaCards.SlotStock(
-        managers.vips,
+        this.manager,
         document.getElementById("scp_vips"),
         {
           slotsIds: [1, 2, 3],

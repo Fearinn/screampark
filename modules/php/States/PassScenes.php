@@ -37,7 +37,7 @@ class PassScenes extends GameState
         $this->draftCounter->setAll(0);
 
         if ($this->scenes->deck->countCardsInLocation("hand") === 0) {
-            return EndDay::class;
+            return DayEnd::class;
         }
 
         $day = $this->game->dayCounter->get();

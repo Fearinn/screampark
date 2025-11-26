@@ -12,7 +12,7 @@ use Bga\Games\ScreamPark\components\themes\Themes;
 use Bga\Games\ScreamPark\components\vips\Vips;
 use Bga\Games\ScreamPark\Game;
 
-class EndDay extends GameState
+class DayEnd extends GameState
 {
     protected TableCounter $dayCounter;
     protected Scenes $scenes;
@@ -51,7 +51,24 @@ class EndDay extends GameState
             }
         }
 
+        $DAYS = [
+            1 => clienttranslate('Friday'),
+            2 => clienttranslate('Saturday'),
+            3 => clienttranslate('Sunday'),
+        ];
+
         $day = $this->dayCounter->inc(1);
+        $previousDay = $day - 1;
+        $this->notify->all(
+            "endDay",
+            clienttranslate('${dayLabel2} ends. A new day (${dayLabel}) begins'),
+            [
+                "i18n" => ["dayLabel", "dayLabel2"],
+                "previousDay" => $previousDay,
+                "dayLabel" => $DAYS[$day],
+                "dayLabel2" => $DAYS[$previousDay],
+            ]
+        );
 
         return DealScenes::class;
     }

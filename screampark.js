@@ -672,6 +672,7 @@ var NotifManager = /** @class */ (function () {
         this.counters = this.game.managers.counters;
         this.themeManager = new ThemeManager(this.game);
         this.sceneManager = new SceneManager(this.game);
+        this.vipManager = new VipManager(this.game);
     }
     NotifManager.prototype.setIgnoreChecks = function () {
         var _a = this.game, notifqueue = _a.notifqueue, player_id = _a.player_id;
@@ -928,6 +929,20 @@ var NotifManager = /** @class */ (function () {
                         _a.sent();
                         return [2 /*return*/];
                 }
+            });
+        });
+    };
+    NotifManager.prototype.notif_endDay = function (args) {
+        return __awaiter(this, void 0, void 0, function () {
+            var previousDay, board, card;
+            return __generator(this, function (_a) {
+                previousDay = args.previousDay;
+                board = this.vipManager.stocks.board;
+                card = board.getCards().find(function (card) {
+                    return Number(card.location_arg) === previousDay;
+                });
+                board.flipCard(card);
+                return [2 /*return*/];
             });
         });
     };
@@ -1291,7 +1306,7 @@ var VipManager = /** @class */ (function () {
         });
         this.manager = this.game.managers.vips;
         this.game.stocks.vips = {
-            board: new BgaCards.SlotStock(managers.vips, document.getElementById("scp_vips"), {
+            board: new BgaCards.SlotStock(this.manager, document.getElementById("scp_vips"), {
                 slotsIds: [1, 2, 3],
                 mapCardToSlot: function (card) {
                     return Number(card.location_arg);

@@ -3,12 +3,14 @@ class NotifManager {
   private readonly counters: Counters;
   private readonly themeManager: ThemeManager;
   private readonly sceneManager: SceneManager;
+  private readonly vipManager: VipManager;
 
   constructor(game: SCP) {
     this.game = game;
     this.counters = this.game.managers.counters;
     this.themeManager = new ThemeManager(this.game);
     this.sceneManager = new SceneManager(this.game);
+    this.vipManager = new VipManager(this.game);
   }
 
   public setIgnoreChecks() {
@@ -204,6 +206,15 @@ class NotifManager {
     await fakeHands[playerId].addCards(cards, {
       fromStock: fakeHands[otherPlayerId],
     });
+  }
+
+  public async notif_endDay(args: { previousDay: number }): Promise<void> {
+    const { previousDay } = args;
+    const { board } = this.vipManager.stocks;
+    const card = board.getCards().find((card) => {
+      return Number(card.location_arg) === previousDay;
+    });
+    board.flipCard(card);
   }
 
   public async notif_setCounterPrivate(args: {
