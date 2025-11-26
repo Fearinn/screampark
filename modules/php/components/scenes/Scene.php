@@ -10,10 +10,11 @@ class Scene extends Scenes
     private readonly int $cardId;
     public readonly int $id;
     public readonly int $points;
-    public readonly int $staffCost;
-    public readonly array $GENRES;
+    private readonly int $staffCost;
     public readonly string $upLabel;
-    public readonly STRING $downLabel;
+    public readonly string $downLabel;
+    private readonly int $ability;
+    public readonly array $GENRES;
 
     public function __construct(Game $game, int $cardId)
     {
@@ -29,6 +30,7 @@ class Scene extends Scenes
         $UP = $SCENE["UP"];
         $DOWN = $SCENE["DOWN"];
         $this->points = (int) $UP["points"];
+        $this->ability = (int) $DOWN["ability"];
         $this->staffCost = (int) $DOWN["staffCost"];
         $this->upLabel = $UP["label"];
         $this->downLabel = $DOWN["label"];
@@ -45,19 +47,10 @@ class Scene extends Scenes
         return $this->staffCost <= $this->staffCounterPrivate->get($playerId);
     }
 
-    public function isPlayable(int $playerId): bool
-    {
-        return $this->points >= $this->getMinPoints($playerId)
-            && $this->canPayCost($playerId);
-    }
-
-    public function place(int $playerId): void
+    private function applyCostOrAbility(int $playerId): void
     {
         if ($this->staffCost > 0) {
-            $this->staffCounterPrivate->inc(
-                $playerId,
-                -$this->staffCost,
-            );
+            $this->staffCounterPrivate->inc($playerId, -$this->staffCost);
 
             $this->game->notify->player(
                 $playerId,
@@ -69,6 +62,31 @@ class Scene extends Scenes
                 ]
             );
         }
+
+        if ($this->ability === 4) {
+            $this->staffCounterPrivate->inc($playerId, 1);
+
+            $this->game->notify->player(
+                $playerId,
+                "setCounterPrivate",
+                "",
+                [
+                    "name" => "staff",
+                    "inc" => 1,
+                ]
+            );
+        }
+    }
+
+    public function isPlayable(int $playerId): bool
+    {
+        return $this->points >= $this->getMinPoints($playerId)
+            && $this->canPayCost($playerId);
+    }
+
+    public function place(int $playerId): void
+    {
+        $this->applyCostOrAbility($playerId);
 
         $slot = $this->getMaxSlot($playerId) + 1;
 
@@ -118,7 +136,7 @@ class Scene extends Scenes
 
         $this->game->notify->all(
             "placeScene",
-            clienttranslate('${player_name} attaches ${sceneLabel} to ${sceneLabel2}'),
+            clienttranslate('${player_name} adds ${sceneLabel} to ${sceneLabel2}'),
             [
                 "i18n" => ["sceneLabel", "sceneLabel2"],
                 "preserve" => ["sceneId", "sceneId2"],
@@ -139,22 +157,7 @@ class Scene extends Scenes
 
     public function attach(int $playerId, int $slot): void
     {
-        if ($this->staffCost > 0) {
-            $this->staffCounterPrivate->inc(
-                $playerId,
-                -$this->staffCost,
-            );
-
-            $this->game->notify->player(
-                $playerId,
-                "setCounterPrivate",
-                "",
-                [
-                    "name" => "staff",
-                    "inc" => -$this->staffCost,
-                ]
-            );
-        }
+        $this->applyCostOrAbility($playerId);
 
         $position = $this->getNextPosition($playerId, $slot);
         $sql = "UPDATE {$this->dbTable} SET position={$position}, slot={$slot}, card_location='placed', card_location_arg={$playerId} 

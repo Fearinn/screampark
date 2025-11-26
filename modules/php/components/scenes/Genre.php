@@ -72,7 +72,7 @@ class Genre extends Scenes
 
         $this->game->notify->all(
             "placeScene",
-            clienttranslate('${player_name} attaches a ${genreLabel} card to ${sceneLabel}'),
+            clienttranslate('${player_name} adds a ${genreLabel} card to ${sceneLabel}'),
             [
                 "i18n" => ["genreLabel", "sceneLabel"],
                 "preserve" => ["genreId", "sceneId"],
