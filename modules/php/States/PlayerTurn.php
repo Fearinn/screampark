@@ -130,15 +130,15 @@ class PlayerTurn extends GameState
             throw new \BgaVisibleSystemException("Unexpected error: 7");
         }
 
+        $this->scenes->deck->moveCards($cardsIds, "todiscard", $currentPlayerId);
+        $this->attachmentVariable->set($currentPlayerId, $genreId);
+
         $maxSlot = $this->scenes->getMaxSlot($currentPlayerId);
         if ($maxSlot === 1) {
             $AttachGenre = new AttachGenre($this->game);
             $AttachGenre->attach($currentPlayerId, $genreId, 1);
             return;
         }
-
-        $this->scenes->deck->moveCards($cardsIds, "todiscard", $currentPlayerId);
-        $this->attachmentVariable->set($currentPlayerId, $genreId);
 
         $this->gamestate->nextPrivateState($currentPlayerId, AttachGenre::class);
     }
@@ -151,14 +151,14 @@ class PlayerTurn extends GameState
 
         $hand = $this->scenes->deck->getPlayerHand($playerId);
 
-        if ($playableScenes && bga_rand(0, 1)) {
+        if ($playableScenes && bga_rand(0, 0)) {
             $cardId = $this->getRandomZombieChoice($playableScenes);
 
             $this->actPlaceScene($playerId, $cardId);
             return;
         }
 
-        if ((!$attachableScenes && !$canAttachGenre) || bga_rand(0, 1)) {
+        if ((!$attachableScenes && !$canAttachGenre) || bga_rand(0, 0)) {
             $cardsIds = array_keys($hand);
             $cardId = $this->getRandomZombieChoice($cardsIds);
 
@@ -166,7 +166,7 @@ class PlayerTurn extends GameState
             return;
         }
 
-        if ($attachableScenes && (!$canAttachGenre || bga_rand(0, 1))) {
+        if ($attachableScenes && (!$canAttachGenre || bga_rand(0, 0))) {
             $cardId = $this->getRandomZombieChoice($attachableScenes);
 
             $this->actAttachSceneStart($playerId, $cardId);
@@ -175,9 +175,9 @@ class PlayerTurn extends GameState
 
         $cardsIds = array_keys($hand);
         shuffle($cardsIds);
-        $cardIds = array_slice($cardsIds, 0, 2, true);
+        $cardsIds = array_slice($cardsIds, 0, 2);
         $genreId = bga_rand(1, 5);
 
-        $this->actAttachGenreStart($playerId, $args, $cardIds, $genreId);
+        $this->actAttachGenreStart($playerId, $args, $cardsIds, $genreId);
     }
 }
