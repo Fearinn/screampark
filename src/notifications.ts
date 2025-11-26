@@ -17,7 +17,7 @@ class NotifManager {
     const notifsToIgnore = [
       "getTheme",
       "dealScenes",
-      "playScene",
+      "placeScene",
       "discardScene",
       "discardBoth",
       "setCounter",
@@ -107,7 +107,7 @@ class NotifManager {
     await fakeHands[playerId].addCards(fakeCards, { fromStock: deck });
   }
 
-  public async notif_playScenePrivate(args: {
+  public async notif_placeScenePrivate(args: {
     player_id: number;
     card: SceneCard;
   }): Promise<void> {
@@ -119,7 +119,7 @@ class NotifManager {
     });
   }
 
-  public async notif_playScene(args: {
+  public async notif_placeScene(args: {
     player_id: number;
     card: SceneCard;
   }): Promise<void> {

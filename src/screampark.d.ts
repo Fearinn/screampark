@@ -55,7 +55,7 @@ type SCP_Card = {
 type ActionName =
   | "actChooseTheme"
   | "actUndoChooseTheme"
-  | "actPlayScene"
+  | "actPlaceScene"
   | "actAttachSceneStart"
   | "actAttachScene"
   | "actAttachSceneCancel"

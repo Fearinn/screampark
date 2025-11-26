@@ -678,7 +678,7 @@ var NotifManager = /** @class */ (function () {
         var notifsToIgnore = [
             "getTheme",
             "dealScenes",
-            "playScene",
+            "placeScene",
             "discardScene",
             "discardBoth",
             "setCounter",
@@ -784,7 +784,7 @@ var NotifManager = /** @class */ (function () {
             });
         });
     };
-    NotifManager.prototype.notif_playScenePrivate = function (args) {
+    NotifManager.prototype.notif_placeScenePrivate = function (args) {
         return __awaiter(this, void 0, void 0, function () {
             var playerId, card, _a, boards, genreDeck;
             return __generator(this, function (_b) {
@@ -802,7 +802,7 @@ var NotifManager = /** @class */ (function () {
             });
         });
     };
-    NotifManager.prototype.notif_playScene = function (args) {
+    NotifManager.prototype.notif_placeScene = function (args) {
         return __awaiter(this, void 0, void 0, function () {
             var playerId, card, _a, boards, genreDeck;
             return __generator(this, function (_b) {
@@ -1073,7 +1073,7 @@ var SceneManager = /** @class */ (function () {
                 },
                 autoPlace: function (_a) {
                     var location = _a.location, location_arg = _a.location_arg;
-                    return ((location === "board" || location === "played") &&
+                    return ((location === "board" || location === "placed") &&
                         Number(location_arg) === playerId);
                 },
                 sort: BgaCards.sort("position"),
@@ -1397,7 +1397,7 @@ var AttachGenre = /** @class */ (function (_super) {
             });
             var sceneId = card.type_arg;
             var UP = _this.SCENES[sceneId].UP;
-            _this.game.addButton(_this.game.format_string_recursive(_("attach to ${sceneLabel}"), {
+            _this.game.addButton(_this.game.format_string_recursive(_("add to ${sceneLabel}"), {
                 sceneLabel: _(UP.label),
             }), function () {
                 _this.game.performAction("actAttachGenre", {
@@ -1455,7 +1455,7 @@ var AttachScene = /** @class */ (function (_super) {
             });
             var sceneId = card.type_arg;
             var UP = _this.SCENES[sceneId].UP;
-            _this.game.addButton(_this.game.format_string_recursive(_("attach to ${sceneLabel}"), {
+            _this.game.addButton(_this.game.format_string_recursive(_("add to ${sceneLabel}"), {
                 sceneLabel: _(UP.label),
             }), function () {
                 _this.game.performAction("actAttachScene", {
@@ -1582,14 +1582,14 @@ var PlayerTurn = /** @class */ (function (_super) {
                 return;
             }
             var cardId = Number(selection[0].id);
-            _this.game.addButton(_("play as new scene"), function () {
-                _this.game.performAction("actPlayScene", {
+            _this.game.addButton(_("place as new scene"), function () {
+                _this.game.performAction("actPlaceScene", {
                     cardId: cardId,
                 });
             }, {
                 disabled: !playableScenes.includes(cardId),
             });
-            _this.game.addButton(_("attach to other scene"), function () {
+            _this.game.addButton(_("add to other scene"), function () {
                 _this.game.performAction("actAttachSceneStart", {
                     cardId: cardId,
                 });

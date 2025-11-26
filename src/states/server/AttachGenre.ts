@@ -53,7 +53,7 @@ class AttachGenre extends State {
       const { UP } = this.SCENES[sceneId];
 
       this.game.addButton(
-        this.game.format_string_recursive(_("attach to ${sceneLabel}"), {
+        this.game.format_string_recursive(_("add to ${sceneLabel}"), {
           sceneLabel: _(UP.label),
         }),
         () => {

@@ -28,7 +28,7 @@ class PlayerTurn extends GameState
             $game,
             id: 50,
             type: StateType::PRIVATE,
-            description: clienttranslate('Other player(s) must play or discard 2 scene cards'),
+            description: clienttranslate('Other player(s) must draft 2 scene cards'),
             descriptionMyTurn: clienttranslate('${you} must play or discard a scene card (${nbr} left)'),
         );
 
@@ -55,7 +55,7 @@ class PlayerTurn extends GameState
     public function onEnteringState(int $currentPlayerId): void {}
 
     #[PossibleAction]
-    public function actPlayScene(
+    public function actPlaceScene(
         int $currentPlayerId,
         #[IntParam(min: 1, max: 120)] int $cardId,
     ): void {
@@ -64,7 +64,7 @@ class PlayerTurn extends GameState
             throw new BgaVisibleSystemException("Unexpected error: 2");
         }
 
-        $Scene->play($currentPlayerId);
+        $Scene->place($currentPlayerId);
         $this->draftCounter->inc($currentPlayerId, 1);
 
         if ($this->draftCounter->get($currentPlayerId) === 2) {
@@ -154,7 +154,7 @@ class PlayerTurn extends GameState
         if ($playableScenes && bga_rand(0, 1)) {
             $cardId = $this->getRandomZombieChoice($playableScenes);
 
-            $this->actPlayScene($playerId, $cardId);
+            $this->actPlaceScene($playerId, $cardId);
             return;
         }
 

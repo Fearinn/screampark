@@ -84,7 +84,7 @@ class Scenes extends Cards
     public function getBoard(int $playerId): array
     {
         $sql = "SELECT {$this->cardFields} FROM {$this->dbTable} 
-        WHERE card_location IN ('board', 'played') AND card_location_arg={$playerId}";
+        WHERE card_location IN ('board', 'placed') AND card_location_arg={$playerId}";
         $board = $this->game->getObjectListFromDB($sql);
 
         return $board;
@@ -93,7 +93,7 @@ class Scenes extends Cards
     public function getMaxSlot(int $playerId): int
     {
         $slot = (int) $this->game->getUniqueValueFromDB("SELECT MAX(slot) FROM {$this->dbTable} 
-        WHERE card_location IN ('board', 'played') AND card_location_arg={$playerId} AND position=1");
+        WHERE card_location IN ('board', 'placed') AND card_location_arg={$playerId} AND position=1");
 
         if (!$slot) {
             return 0;
@@ -105,7 +105,7 @@ class Scenes extends Cards
     public function getNextPosition(int $playerId, int $slot): int
     {
         $nextPosition = (int) $this->game->getUniqueValueFromDB("SELECT MAX(position) FROM {$this->dbTable}
-        WHERE card_location IN ('board', 'played') AND card_location_arg={$playerId} AND slot={$slot}") + 1;
+        WHERE card_location IN ('board', 'placed') AND card_location_arg={$playerId} AND slot={$slot}") + 1;
 
         if (!$nextPosition) {
             return 1;
@@ -131,7 +131,7 @@ class Scenes extends Cards
     public function getMainInSlot(int $playerId, int $slot): array
     {
         $sql = "SELECT {$this->cardFields} FROM {$this->dbTable} 
-        WHERE (card_location='board' OR card_location='played') AND card_location_arg={$playerId} AND position=1 AND slot={$slot}";
+        WHERE (card_location='board' OR card_location='placed') AND card_location_arg={$playerId} AND position=1 AND slot={$slot}";
 
         return $this->game->getObjectFromDB($sql);
     }

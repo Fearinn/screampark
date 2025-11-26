@@ -74,9 +74,9 @@ class PlayerTurn extends State {
       const cardId = Number(selection[0].id);
 
       this.game.addButton(
-        _("play as new scene"),
+        _("place as new scene"),
         () => {
-          this.game.performAction("actPlayScene", {
+          this.game.performAction("actPlaceScene", {
             cardId: cardId,
           });
         },
@@ -86,7 +86,7 @@ class PlayerTurn extends State {
       );
 
       this.game.addButton(
-        _("attach to other scene"),
+        _("add to other scene"),
         () => {
           this.game.performAction("actAttachSceneStart", {
             cardId: cardId,

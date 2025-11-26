@@ -21,7 +21,7 @@ class PreTurn extends GameState
             $game,
             id: 5,
             type: StateType::MULTIPLE_ACTIVE_PLAYER,
-            description: clienttranslate('Other player(s) must play or discard 2 scene cards'),
+            description: clienttranslate('Other player(s) must draft 2 scene cards'),
             initialPrivate: PlayerTurn::class,
         );
     }

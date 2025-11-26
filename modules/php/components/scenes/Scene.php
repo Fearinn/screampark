@@ -18,7 +18,7 @@ class Scene extends Scenes
     public function __construct(Game $game, int $cardId)
     {
         parent::__construct($game, $game->scene_cards, "scenes");
-        
+
         $this->card = $this->getCard($cardId);
         $sceneId = (int) $this->card["type_arg"];
 
@@ -51,7 +51,7 @@ class Scene extends Scenes
             && $this->canPayCost($playerId);
     }
 
-    public function play(int $playerId): void
+    public function place(int $playerId): void
     {
         if ($this->staffCost > 0) {
             $this->staffCounterPrivate->inc(
@@ -72,14 +72,14 @@ class Scene extends Scenes
 
         $slot = $this->getMaxSlot($playerId) + 1;
 
-        $this->game->DbQuery("UPDATE {$this->dbTable} SET card_location='played', card_location_arg={$playerId}, 
+        $this->game->DbQuery("UPDATE {$this->dbTable} SET card_location='placed', card_location_arg={$playerId}, 
         slot={$slot}, position=1 WHERE card_id={$this->cardId}");
         $card = $this->getCard($this->cardId);
 
         $this->game->notify->player(
             $playerId,
-            "playScenePrivate",
-            clienttranslate('You play ${sceneLabel} as a new scene'),
+            "placeScenePrivate",
+            clienttranslate('You place ${sceneLabel} as a new scene'),
             [
                 "i18n" => ["sceneLabel"],
                 "preserve" => ["sceneId"],
@@ -97,7 +97,7 @@ class Scene extends Scenes
 
         if ($position === 1) {
             $this->game->notify->all(
-                "playScene",
+                "placeScene",
                 clienttranslate('${player_name} plays ${sceneLabel} as a new scene'),
                 [
                     "i18n" => ["sceneLabel"],
@@ -117,7 +117,7 @@ class Scene extends Scenes
         $Scene2 = new Scene($this->game, $cardId2);
 
         $this->game->notify->all(
-            "playScene",
+            "placeScene",
             clienttranslate('${player_name} attaches ${sceneLabel} to ${sceneLabel2}'),
             [
                 "i18n" => ["sceneLabel", "sceneLabel2"],
@@ -157,7 +157,7 @@ class Scene extends Scenes
         }
 
         $position = $this->getNextPosition($playerId, $slot);
-        $sql = "UPDATE {$this->dbTable} SET position={$position}, slot={$slot}, card_location='played', card_location_arg={$playerId} 
+        $sql = "UPDATE {$this->dbTable} SET position={$position}, slot={$slot}, card_location='placed', card_location_arg={$playerId} 
         WHERE card_id={$this->cardId}";
 
         $this->game->DbQuery($sql);
@@ -169,8 +169,8 @@ class Scene extends Scenes
 
         $this->game->notify->player(
             $playerId,
-            "playScenePrivate",
-            clienttranslate('You attach ${sceneLabel} to ${sceneLabel2}'),
+            "placeScenePrivate",
+            clienttranslate('You add ${sceneLabel} to ${sceneLabel2}'),
             [
                 "i18n" => ["sceneLabel", "sceneLabel2"],
                 "preserve" => ["sceneId", "sceneId2"],

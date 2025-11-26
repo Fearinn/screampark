@@ -27,8 +27,8 @@ class AttachGenre extends GameState
             $game,
             id: 52,
             type: StateType::PRIVATE,
-            description: clienttranslate('Other player(s) must play or discard 2 scene cards'),
-            descriptionMyTurn: clienttranslate('${you} may attach a ${genre_icon} (${genreLabel}) card to a scene'),
+            description: clienttranslate('Other player(s) must draft 2 scene cards'),
+            descriptionMyTurn: clienttranslate('${you} may add a ${genre_icon} (${genreLabel}) card to a scene'),
         );
 
         $this->scenes = new Scenes($this->game);

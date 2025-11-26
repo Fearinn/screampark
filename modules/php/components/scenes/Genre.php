@@ -36,7 +36,7 @@ class Genre extends Scenes
     {
         $position = $this->getNextPosition($playerId, $slot);
 
-        $sql = "UPDATE {$this->dbTable} SET position={$position}, slot={$slot}, card_location='played', 
+        $sql = "UPDATE {$this->dbTable} SET position={$position}, slot={$slot}, card_location='placed', 
         card_location_arg={$playerId} WHERE card_id={$this->cardId}";
         $this->game->DbQuery($sql);
         $card = $this->getCard($this->cardId);
@@ -47,8 +47,8 @@ class Genre extends Scenes
 
         $this->game->notify->player(
             $playerId,
-            "playScenePrivate",
-            clienttranslate('You attach a ${genreLabel} card to ${sceneLabel}'),
+            "placeScenePrivate",
+            clienttranslate('You add a ${genreLabel} card to ${sceneLabel}'),
             [
                 "i18n" => ["genreLabel", "sceneLabel"],
                 "preserve" => ["sceneId"],
@@ -71,7 +71,7 @@ class Genre extends Scenes
         $Scene = new Scene($this->game, $sceneCardId);
 
         $this->game->notify->all(
-            "playScene",
+            "placeScene",
             clienttranslate('${player_name} attaches a ${genreLabel} card to ${sceneLabel}'),
             [
                 "i18n" => ["genreLabel", "sceneLabel"],

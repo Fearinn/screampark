@@ -98,7 +98,7 @@ class SceneManager {
           },
           autoPlace: ({ location, location_arg }) => {
             return (
-              (location === "board" || location === "played") &&
+              (location === "board" || location === "placed") &&
               Number(location_arg) === playerId
             );
           },
@@ -207,7 +207,7 @@ interface SceneStocks {
 
 interface SceneCard extends SCP_Card {
   type: "scene" | "genre";
-  location?: "hand" | "todiscard" | "board" | "played";
+  location?: "hand" | "todiscard" | "board" | "placed";
   slot?: number;
   position?: number;
 }
