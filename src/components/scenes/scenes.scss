@@ -36,6 +36,7 @@
 .scp_hand {
   justify-content: start !important;
   padding: 12px;
+  overflow-x: auto;
 
   &:empty {
     display: none !important;

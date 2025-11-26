@@ -79,8 +79,9 @@
 .scp_playerZones {
   display: flex;
   flex-direction: column;
-  align-items: stretch;
+  align-items: center;
   gap: 16px;
+  width: 100%;
 }
 
 .scp_playerZone {
@@ -90,7 +91,8 @@
   border-radius: 8px;
   box-shadow: 0 0 8px #808080;
   overflow-x: visible;
-  min-width: var(--board-width);
+  max-width: calc((var(--scene-width) + 17px) * 8);
+  width: 95%;
 }
 .scp_playerZone-current {
   order: -1;
@@ -258,6 +260,7 @@ p {
 .scp_hand {
   justify-content: start !important;
   padding: 12px;
+  overflow-x: auto;
 }
 .scp_hand:empty {
   display: none !important;
@@ -704,8 +707,8 @@ p {
   direction: ltr;
   position: relative;
   display: flex;
-  align-items: start;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   flex-wrap: wrap;
   padding: 8px 0;
   gap: 32px;

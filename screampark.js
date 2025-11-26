@@ -1099,6 +1099,7 @@ var SceneManager = /** @class */ (function () {
             boards: boards,
             fakeHands: fakeHands,
             hand: new BgaCards.LineStock(this.manager, document.getElementById("scp_hand"), {
+                wrap: "nowrap",
                 gap: "16px",
                 sort: function (a, b) {
                     var SCENE = _this.SCENES[a.type_arg];
