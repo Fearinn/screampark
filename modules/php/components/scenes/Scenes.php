@@ -22,7 +22,7 @@ class Scenes extends Cards
         $this->staffCounter = $this->game->staffCounter;
         $this->staffCounterPrivate = $this->game->staffCounterPrivate;
         $this->playerScore = $this->game->playerScore;
-        
+
         $this->cardFields = "card_id id, card_location location, card_location_arg location_arg, 
         card_type type, card_type_arg type_arg, slot, position";
     }
@@ -216,5 +216,34 @@ class Scenes extends Cards
                 "cards" => array_values($cards),
             ]
         );
+    }
+
+    public function getInSlot(int $playerId, int $slot): array
+    {
+        $sql = "SELECT {$this->cardFields} FROM {$this->dbTable} 
+        WHERE card_location='board' AND card_location_arg={$playerId} AND slot={$slot}";
+
+        $scenes = [];
+
+        $cards = $this->game->getCollectionFromDB($sql);
+        foreach ($cards as $cardId => $card) {
+            $scenes[] = new Scene($this->game, $cardId);
+        }
+
+        return $scenes;
+    }
+
+    public function sumSlotGenres(int $playerId, int $slot): array
+    {
+        $genres = array_fill(1, 5, 0);
+        $scenesInSlot = $this->getInSlot($playerId, $slot);
+
+        foreach ($scenesInSlot as $Scene) {
+            foreach ($Scene->genres as $genreId => $value) {
+                $genres[$genreId] += $value;
+            }
+        }
+
+        return $genres;
     }
 }

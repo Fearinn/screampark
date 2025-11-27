@@ -3,6 +3,7 @@
 namespace Bga\Games\ScreamPark\components\scenes;
 
 use Bga\Games\ScreamPark\components\themes\Themes;
+use Bga\Games\ScreamPark\components\vips\Vips;
 use Bga\Games\ScreamPark\Game;
 
 class Scene extends Scenes
@@ -12,12 +13,13 @@ class Scene extends Scenes
     private readonly int $cardId;
     public readonly int $id;
     public readonly int $points;
-    private readonly int $staffCost;
     public readonly string $upLabel;
     public readonly string $downLabel;
-    public readonly int $ability;
     public readonly array $genreCost;
     public readonly array $genres;
+    public readonly int $staffCost;
+    public readonly int $ability;
+    public readonly int $scenic;
 
     public function __construct(Game $game, int $cardId)
     {
@@ -33,12 +35,13 @@ class Scene extends Scenes
         $UP = $SCENE["UP"];
         $DOWN = $SCENE["DOWN"];
         $this->points = (int) $UP["points"];
-        $this->ability = (int) $DOWN["ability"];
-        $this->staffCost = (int) $DOWN["staffCost"];
         $this->upLabel = $UP["label"];
         $this->downLabel = $DOWN["label"];
         $this->genreCost = $UP["genreCost"];
         $this->genres = $DOWN["genres"];
+        $this->ability = (int) $DOWN["ability"];
+        $this->staffCost = (int) $DOWN["staffCost"];
+        $this->scenic = (int) $DOWN["scenic"];
     }
 
     private function move(string $location, int $location_arg = 0): array
@@ -243,35 +246,6 @@ class Scene extends Scenes
         return $card["location"] === "hand" && (int) $card["location_arg"] === $playerId;
     }
 
-    private function getInSlot(int $playerId, int $slot): array
-    {
-        $sql = "SELECT {$this->cardFields} FROM {$this->dbTable} 
-        WHERE card_location='board' AND card_location_arg={$playerId} AND slot={$slot}";
-
-        $scenes = [];
-
-        $cards = $this->game->getCollectionFromDB($sql);
-        foreach ($cards as $cardId => $card) {
-            $scenes[] = new Scene($this->game, $cardId);
-        }
-
-        return $scenes;
-    }
-
-    private function sumSlotGenres(int $playerId, int $slot): array
-    {
-        $genres = array_fill(1, 5, 0);
-        $scenesInSlot = $this->getInSlot($playerId, $slot);
-
-        foreach ($scenesInSlot as $Scene) {
-            foreach ($Scene->genres as $genreId => $value) {
-                $genres[$genreId] += $value;
-            }
-        }
-
-        return $genres;
-    }
-
     public function isComplete(int $playerId): bool
     {
         $slot = (int) $this->card["slot"];
@@ -283,7 +257,7 @@ class Scene extends Scenes
         }
 
         return !array_any($genreCost, function ($cost) {
-            $cost > 0;
+            return $cost > 0;
         });
     }
 
@@ -294,15 +268,23 @@ class Scene extends Scenes
 
         $Themes = new Themes($this->game);
         $genreIds = $Themes->getCost($playerId);
+        $genres = $this->sumSlotGenres($playerId, $slot);
 
-        $scenesInSlot = $this->getInSlot($playerId, $slot);
-        foreach ($scenesInSlot as $Scene) {
-            foreach ($genreIds as $genreId) {
-                if ($Scene->genres[$genreId] > 0) {
-                    $points += 1;
-                }
+        foreach ($genreIds as $genreId) {
+            if ($genres[$genreId] > 0) {
+                $points += 1;
             }
         }
+
+        $this->playerScore->inc($playerId, $points);
+        return $points;
+    }
+
+    public function scoreVip(int $playerId): int
+    {
+        $slot = (int) $this->card["slot"];
+        $Vips = new Vips($this->game);
+        $points = $Vips->isFullfilled($playerId, $slot) ? 2 : 0;
 
         $this->playerScore->inc($playerId, $points);
         return $points;

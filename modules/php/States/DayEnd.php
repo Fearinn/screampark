@@ -48,6 +48,7 @@ class DayEnd extends GameState
                 }
 
                 $Scene->scoreTheme($playerId);
+                $Scene->scoreVip($playerId);
             }
         }
 

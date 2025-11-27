@@ -100,7 +100,7 @@ class Game extends \Bga\GameFramework\Table
         }
     }
 
-    public function debug_endDay(): void
+    public function debug_DayEnd(): void
     {
         $DayEnd = new DayEnd($this);
         $DayEnd->onEnteringState();

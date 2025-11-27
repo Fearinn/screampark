@@ -22,8 +22,8 @@ class NotifManager {
       "placeScene",
       "discardScene",
       "discardBoth",
-      "setCounter",
       "receiveCards",
+      "setCounter",
     ];
 
     notifsToIgnore.forEach((notifName) => {

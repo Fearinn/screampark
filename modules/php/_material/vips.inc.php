@@ -11,7 +11,7 @@ $this->VIPS = [
         "id" => 2,
         "name" => "newinvestor",
         "label" => clienttranslate('New Investor'),
-        "description" => clienttranslate('Advance if the next scene has 2+ extra unnecessary ${candlestick_icon} / ${light_icon} / ${sound_icon} / ${skull_icon}'),
+        "description" => clienttranslate('Advance if the next scene any ${candlestick_icon} / ${light_icon} / ${sound_icon} / ${skull_icon}'),
     ],
     3 => [
         "id" => 3,
@@ -60,11 +60,5 @@ $this->VIPS = [
         "name" => "firemarshal",
         "label" => clienttranslate('Fire Marshal'),
         "description" => clienttranslate('Advance if the next scene is incomplete'),
-    ],
-    11 => [
-        "id" => 11,
-        "name" => "monsterfan",
-        "label" => clienttranslate('Monster Fan'),
-        "description" => clienttranslate('Advance if the next scene has visible eyes in its card art'),
     ],
 ];
