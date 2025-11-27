@@ -682,7 +682,6 @@ var NotifManager = /** @class */ (function () {
             "placeScene",
             "discardScene",
             "discardBoth",
-            "setCounter",
             "receiveCards",
         ];
         notifsToIgnore.forEach(function (notifName) {
@@ -690,6 +689,10 @@ var NotifManager = /** @class */ (function () {
                 var playerId = notif.args.player_id;
                 return playerId === player_id;
             });
+        });
+        notifqueue.setIgnoreNotificationCheck("setPlayerCounter", function (notif) {
+            var _a = notif.args, playerId = _a.playerId, ignore = _a.ignore;
+            return playerId === player_id && ignore;
         });
     };
     NotifManager.prototype.notif_discardTheme = function (args) {

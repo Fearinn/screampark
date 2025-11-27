@@ -23,7 +23,6 @@ class NotifManager {
       "discardScene",
       "discardBoth",
       "receiveCards",
-      "setCounter",
     ];
 
     notifsToIgnore.forEach((notifName) => {
@@ -35,6 +34,14 @@ class NotifManager {
         }
       );
     });
+
+    notifqueue.setIgnoreNotificationCheck(
+      "setPlayerCounter",
+      (notif: Notif<{ playerId: number; ignore: boolean }>) => {
+        const { playerId, ignore } = notif.args;
+        return playerId === player_id && ignore;
+      }
+    );
   }
 
   public async notif_discardTheme(args: {

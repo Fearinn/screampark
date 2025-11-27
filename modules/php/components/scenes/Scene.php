@@ -2,6 +2,7 @@
 
 namespace Bga\Games\ScreamPark\components\scenes;
 
+use Bga\GameFramework\NotificationMessage;
 use Bga\Games\ScreamPark\components\themes\Themes;
 use Bga\Games\ScreamPark\components\vips\Vips;
 use Bga\Games\ScreamPark\Game;
@@ -55,7 +56,26 @@ class Scene extends Scenes
         return $this->staffCost <= $this->staffCounterPrivate->get($playerId);
     }
 
-    private function applyCostOrAbility(int $playerId): void
+    public function updateStaff(int $playerId): void
+    {
+        if ($this->staffCost > 0) {
+            $this->staffCounter->inc(
+                $playerId,
+                -$this->staffCost,
+                new NotificationMessage("", ["ignore" => true])
+            );
+        }
+
+        if ($this->ability === 4) {
+            $this->staffCounter->inc(
+                $playerId,
+                1,
+                new NotificationMessage("", ["ignore" => true])
+            );
+        }
+    }
+
+    private function updateStaffPrivate(int $playerId): void
     {
         if ($this->staffCost > 0) {
             $this->staffCounterPrivate->inc($playerId, -$this->staffCost);
@@ -94,7 +114,7 @@ class Scene extends Scenes
 
     public function place(int $playerId): void
     {
-        $this->applyCostOrAbility($playerId);
+        $this->updateStaffPrivate($playerId);
 
         $slot = $this->getMaxSlot($playerId) + 1;
 
@@ -118,6 +138,8 @@ class Scene extends Scenes
 
     public function revealPlayed(int $playerId): void
     {
+        $this->updateStaff($playerId);
+
         $card = $this->move("board", $playerId);
         $position = (int) $card["position"];
 
@@ -163,7 +185,7 @@ class Scene extends Scenes
 
     public function attach(int $playerId, int $slot): void
     {
-        $this->applyCostOrAbility($playerId);
+        $this->updateStaffPrivate($playerId);
 
         $position = $this->getNextPosition($playerId, $slot);
         $sql = "UPDATE {$this->dbTable} SET position={$position}, slot={$slot}, card_location='placed', card_location_arg={$playerId} 
@@ -237,7 +259,11 @@ class Scene extends Scenes
             ]
         );
 
-        $this->staffCounter->inc($playerId, 2);
+        $this->staffCounter->inc(
+            $playerId,
+            2,
+            new NotificationMessage("", ["ignore" => true]),
+        );
     }
 
     public function isDiscardable(int $playerId): bool
