@@ -146,7 +146,7 @@ class Scene extends Scenes
         if ($position === 1) {
             $this->game->notify->all(
                 "placeScene",
-                clienttranslate('${player_name} plays ${sceneLabel} as a new scene'),
+                clienttranslate('${player_name} places ${sceneLabel} as a new scene'),
                 [
                     "i18n" => ["sceneLabel"],
                     "preserve" => ["sceneId"],
