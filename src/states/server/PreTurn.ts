@@ -24,6 +24,7 @@ class PreTurn extends State {
 
     const { player_id: playerId } = this.game;
 
+    this.sceneManager.clearHighlight();
     const { hand, boards } = this.sceneManager.stocks;
     hand.setSelectionMode("none");
     const board = boards[playerId];

@@ -1703,6 +1703,7 @@ var PreTurn = /** @class */ (function (_super) {
     PreTurn.prototype.onLeaving = function () {
         _super.prototype.onLeaving.call(this);
         var playerId = this.game.player_id;
+        this.sceneManager.clearHighlight();
         var _a = this.sceneManager.stocks, hand = _a.hand, boards = _a.boards;
         hand.setSelectionMode("none");
         var board = boards[playerId];
