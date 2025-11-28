@@ -218,7 +218,7 @@ class NotifManager {
     });
   }
 
-  public async notif_endDay(args: { previousDay: number }): Promise<void> {
+  public async notif_dayEnd(args: { previousDay: number }): Promise<void> {
     const { previousDay } = args;
     const { board } = this.vipManager.stocks;
     const card = board.getCards().find((card) => {
@@ -258,6 +258,7 @@ class NotifManager {
 
     const { boards } = this.sceneManager.stocks;
     const cardElement = boards[playerId].getCardElement(card);
+    console.log(card, "TEST", cardElement);
     await animations.displayScoring(cardElement, 2, playerColor);
   }
 

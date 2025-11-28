@@ -35,7 +35,7 @@ class DayEnd extends GameState
         $this->vips = new Vips($this->game);
     }
 
-    public function onEnteringState(): void
+    public function onEnteringState(): string
     {
         $players = $this->game->loadPlayersBasicInfos();
 
@@ -95,9 +95,12 @@ class DayEnd extends GameState
 
         $day = $this->dayCounter->inc(1);
         $previousDay = $day - 1;
+
+        $message = $day <= 3 ? clienttranslate('${dayLabel} ends. A new day begins') : clienttranslate('${dayLabel} ends');
+        
         $this->notify->all(
-            "endDay",
-            clienttranslate('${dayLabel} ends'),
+            "dayEnd",
+            $message,
             [
                 "i18n" => ["dayLabel"],
                 "previousDay" => $previousDay,
@@ -105,6 +108,6 @@ class DayEnd extends GameState
             ]
         );
 
-        // return DealScenes::class;
+        return DealScenes::class;
     }
 }

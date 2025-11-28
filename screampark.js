@@ -933,7 +933,7 @@ var NotifManager = /** @class */ (function () {
             });
         });
     };
-    NotifManager.prototype.notif_endDay = function (args) {
+    NotifManager.prototype.notif_dayEnd = function (args) {
         return __awaiter(this, void 0, void 0, function () {
             var previousDay, board, card;
             return __generator(this, function (_a) {
@@ -983,6 +983,7 @@ var NotifManager = /** @class */ (function () {
                         playerColor = players[playerId].color;
                         boards = this.sceneManager.stocks.boards;
                         cardElement = boards[playerId].getCardElement(card);
+                        console.log(card, "TEST", cardElement);
                         return [4 /*yield*/, animations.displayScoring(cardElement, 2, playerColor)];
                     case 1:
                         _b.sent();
