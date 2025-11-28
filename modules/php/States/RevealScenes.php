@@ -57,6 +57,7 @@ class RevealScenes extends GameState
                     $Genre->revealAttached($playerId);
                     continue;
                 }
+                
                 $Scene = new Scene($this->game, $cardId);
                 $Scene->revealPlayed($playerId);
             }

@@ -50,8 +50,8 @@ class Vips extends Cards
 
     public function isFullfilled(int $playerId, int $slot): bool
     {
-        $scenes = $this->scenes->getInSlot($playerId, $slot);
-        foreach ($scenes as $Scene) {
+        $Scenes = $this->scenes->getScenesInSlot($playerId, $slot);
+        foreach ($Scenes as $Scene) {
             if ($Scene->ability === 4) {
                 return true;
             }
@@ -92,9 +92,9 @@ class Vips extends Cards
 
     private function NewInvestor(int $playerId, int $slot): bool
     {
-        $scenes = $this->scenes->getInSlot($playerId, $slot);
+        $Scenes = $this->scenes->getScenesInSlot($playerId, $slot);
 
-        return array_any($scenes, function (Scene $Scene) {
+        return array_any($Scenes, function (Scene $Scene) {
             return $Scene->scenic > 0;
         });
     }
@@ -112,15 +112,15 @@ class Vips extends Cards
 
     private function NewsCrew(int $playerId, int $slot): bool
     {
-        $scenes = $this->scenes->getInSlot($playerId, $slot);
-        return count($scenes) >= 3;
+        $Scenes = $this->scenes->getScenesInSlot($playerId, $slot);
+        return count($Scenes) >= 3;
     }
 
     private function PoliceChief(int $playerId, int $slot): bool
     {
-        $scenes = $this->scenes->getInSlot($playerId, $slot);
+        $Scenes = $this->scenes->getScenesInSlot($playerId, $slot);
 
-        return array_any($scenes, function (Scene $Scene) {
+        return array_any($Scenes, function (Scene $Scene) {
             return $Scene->ability > 0;
         });
     }
@@ -147,8 +147,8 @@ class Vips extends Cards
 
     private function SecretShopper(int $playerId, int $slot): bool
     {
-        $scenes = $this->scenes->getInSlot($playerId, $slot);
-        return array_any($scenes, function (Scene $Scene) {
+        $Scenes = $this->scenes->getScenesInSlot($playerId, $slot);
+        return array_any($Scenes, function (Scene $Scene) {
             return $Scene->staffCost > 0;
         });
     }

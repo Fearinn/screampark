@@ -218,30 +218,47 @@ class Scenes extends Cards
         );
     }
 
-    public function getInSlot(int $playerId, int $slot): array
+    public function getScenesInSlot(int $playerId, int $slot): array
     {
-        $sql = "SELECT {$this->cardFields} FROM {$this->dbTable} 
-        WHERE card_location='board' AND card_location_arg={$playerId} AND slot={$slot}";
+        $sql = "SELECT {$this->cardFields} FROM {$this->dbTable} WHERE card_type='scene' AND card_location='board' 
+        AND card_location_arg={$playerId} AND slot={$slot}";
 
-        $scenes = [];
-
+        $Scenes = [];
         $cards = $this->game->getCollectionFromDB($sql);
         foreach ($cards as $cardId => $card) {
-            $scenes[] = new Scene($this->game, $cardId);
+            $Scenes[] = new Scene($this->game, $cardId);
         }
 
-        return $scenes;
+        return $Scenes;
+    }
+
+    private function getGenresInSlot(int $playerId, int $slot): array
+    {
+        $sql = "SELECT {$this->cardFields} FROM {$this->dbTable} WHERE card_type='genre' AND card_location='board' 
+        AND card_location_arg={$playerId} AND slot={$slot}";
+
+        $Genres = [];
+        $cards = $this->game->getCollectionFromDB($sql);
+        foreach ($cards as $cardId => $card) {
+            $Genres[] = new Genre($this->game, $cardId);
+        }
+        return $Genres;
     }
 
     public function sumSlotGenres(int $playerId, int $slot): array
     {
         $genres = array_fill(1, 5, 0);
-        $scenesInSlot = $this->getInSlot($playerId, $slot);
+        $Scenes = $this->getScenesInSlot($playerId, $slot);
 
-        foreach ($scenesInSlot as $Scene) {
+        foreach ($Scenes as $Scene) {
             foreach ($Scene->genres as $genreId => $value) {
                 $genres[$genreId] += $value;
             }
+        }
+
+        $Genres = $this->getGenresInSlot($playerId, $slot);
+        foreach ($Genres as $Genre) {
+            $genres[$Genre->id] += 1;
         }
 
         return $genres;
