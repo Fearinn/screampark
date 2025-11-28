@@ -23,6 +23,7 @@ namespace Bga\Games\ScreamPark;
 use Bga\GameFramework\Components\Counters\PlayerCounter;
 use Bga\GameFramework\Components\Counters\TableCounter;
 use Bga\GameFramework\Components\Deck;
+use Bga\GameFramework\NotificationMessage;
 use Bga\Games\ScreamPark\components\scenes\Scene;
 use Bga\Games\ScreamPark\Gamedatas;
 use Bga\Games\ScreamPark\SetupNewGame;
@@ -107,9 +108,9 @@ class Game extends \Bga\GameFramework\Table
         $DayEnd->onEnteringState();
     }
 
-    public function debug_updateStaff(): void
+    public function debug_incScore(int $inc): void
     {
-        $Scene = new Scene($this, 55);
-        $Scene->updateStaff((int) $this->getCurrentPlayerId(), true);
+        $playerId = (int) $this->getCurrentPlayerId();
+        $this->playerScore->inc($playerId, $inc);
     }
 }

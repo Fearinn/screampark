@@ -82,7 +82,7 @@ class Scene extends Scenes
 
             $this->game->notify->player(
                 $playerId,
-                "setCounterPrivate",
+                "setPlayerCounterPrivate",
                 "",
                 [
                     "name" => "staff",
@@ -96,7 +96,7 @@ class Scene extends Scenes
 
             $this->game->notify->player(
                 $playerId,
-                "setCounterPrivate",
+                "setPlayerCounterPrivate",
                 "",
                 [
                     "name" => "staff",
@@ -233,7 +233,7 @@ class Scene extends Scenes
 
         $this->game->notify->player(
             $playerId,
-            "setCounterPrivate",
+            "setPlayerCounterPrivate",
             "",
             [
                 "name" => "staff",

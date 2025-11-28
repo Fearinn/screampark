@@ -949,16 +949,17 @@ var NotifManager = /** @class */ (function () {
             });
         });
     };
-    NotifManager.prototype.notif_setCounterPrivate = function (args) {
-        return __awaiter(this, void 0, void 0, function () {
-            var playerId, inc, name, counter;
-            return __generator(this, function (_a) {
-                playerId = args.player_id, inc = args.inc, name = args.name;
-                counter = this.counters[name][playerId];
-                counter.incValue(inc);
-                return [2 /*return*/];
-            });
-        });
+    NotifManager.prototype.notif_setPlayerCounterPrivate = function (args) {
+        var playerId = args.player_id, inc = args.inc, name = args.name;
+        var counter = this.counters[name][playerId];
+        counter.incValue(inc);
+    };
+    NotifManager.prototype.notif_setPlayerCounter = function (args) {
+        var playerId = args.playerId, value = args.value, name = args.name;
+        if (name === "player_score") {
+            var starManager = new StarManager(this.game);
+            starManager.set(playerId, value);
+        }
     };
     return NotifManager;
 }());
@@ -1161,21 +1162,23 @@ var StarManager = /** @class */ (function () {
     }
     StarManager.prototype.build = function () {
         var _this = this;
-        var _a = this.game, managers = _a.managers, stocks = _a.stocks;
+        var _a = this.game, managers = _a.managers, stocks = _a.stocks, gamedatas = _a.gamedatas;
         var animations = managers.animations;
+        var players = gamedatas.players;
         managers.stars = new BgaCards.Manager({
             animationManager: animations,
             type: "scp_star",
             cardHeight: 40,
             cardWidth: 40,
             setupDiv: function (_a, element) {
-                var player_id = _a.id, player_color = _a.player_color;
+                var playerId = _a.id;
                 element.classList.add("scp_card");
                 var colors = ["982fff", "008000", "ff0000", "72c3b1", "ffa500"];
-                var color_id = colors.indexOf(player_color) + 1;
-                element.style.backgroundImage = "url(".concat(g_gamethemeurl, "img/icons/star_").concat(color_id, ".png)");
+                var playerColor = players[playerId].color;
+                var colorId = colors.indexOf(playerColor) + 1;
+                element.style.backgroundImage = "url(".concat(g_gamethemeurl, "img/icons/star_").concat(colorId, ".png)");
                 _this.game.addTooltip(element.id, _this.game.format_string_recursive(_("${player_name}'s star"), {
-                    player_name: _this.game.getFormattedPlayerName(player_id),
+                    player_name: _this.game.getFormattedPlayerName(playerId),
                 }), "");
             },
         });
@@ -1195,10 +1198,14 @@ var StarManager = /** @class */ (function () {
         var _a = this.game, gamedatas = _a.gamedatas, keysToNumbers = _a.keysToNumbers;
         var players = gamedatas.players;
         var board = this.stocks.board;
-        keysToNumbers(players).forEach(function (player_id) {
-            var _a = players[player_id], score = _a.score, player_color = _a.color;
-            board[score].addCard({ id: player_id, player_color: player_color });
+        keysToNumbers(players).forEach(function (playerId) {
+            var score = players[playerId].score;
+            board[score].addCard({ id: playerId });
         });
+    };
+    StarManager.prototype.set = function (playerId, score) {
+        var board = this.stocks.board;
+        board[score].addCard({ id: playerId });
     };
     return StarManager;
 }());

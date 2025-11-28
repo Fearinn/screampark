@@ -11,24 +11,28 @@ class StarManager {
   }
 
   private build(): void {
-    const { managers, stocks } = this.game;
+    const { managers, stocks, gamedatas } = this.game;
     const { animations } = managers;
+    const { players } = gamedatas;
 
     managers.stars = new BgaCards.Manager({
       animationManager: animations,
       type: "scp_star",
       cardHeight: 40,
       cardWidth: 40,
-      setupDiv: ({ id: player_id, player_color }, element) => {
+      setupDiv: ({ id: playerId }, element) => {
         element.classList.add("scp_card");
+
         const colors = ["982fff", "008000", "ff0000", "72c3b1", "ffa500"];
-        const color_id = colors.indexOf(player_color) + 1;
-        element.style.backgroundImage = `url(${g_gamethemeurl}img/icons/star_${color_id}.png)`;
+        const { color: playerColor } = players[playerId];
+
+        const colorId = colors.indexOf(playerColor) + 1;
+        element.style.backgroundImage = `url(${g_gamethemeurl}img/icons/star_${colorId}.png)`;
 
         this.game.addTooltip(
           element.id,
           this.game.format_string_recursive(_("${player_name}'s star"), {
-            player_name: this.game.getFormattedPlayerName(player_id),
+            player_name: this.game.getFormattedPlayerName(playerId),
           }),
           ""
         );
@@ -58,20 +62,20 @@ class StarManager {
     const { players } = gamedatas;
     const { board } = this.stocks;
 
-    keysToNumbers(players).forEach((player_id) => {
-      const {
-        score,
-        color: player_color,
-      } = players[player_id];
-
-      board[score].addCard({ id: player_id, player_color });
+    keysToNumbers(players).forEach((playerId) => {
+      const { score } = players[playerId];
+      board[score].addCard({ id: playerId });
     });
+  }
+
+  public set(playerId: number, score: number): void {
+    const { board } = this.stocks;
+    board[score].addCard({ id: playerId });
   }
 }
 
 interface StarCard {
   id: number;
-  player_color: string;
 }
 
 interface StarStocks {

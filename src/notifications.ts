@@ -224,13 +224,26 @@ class NotifManager {
     board.flipCard(card);
   }
 
-  public async notif_setCounterPrivate(args: {
+  public notif_setPlayerCounterPrivate(args: {
     player_id: number;
+    name: "staff";
     inc: number;
-    name: string;
-  }): Promise<void> {
+  }): void {
     const { player_id: playerId, inc, name } = args;
     const counter = this.counters[name][playerId];
     counter.incValue(inc);
+  }
+
+  public notif_setPlayerCounter(args: {
+    playerId: number;
+    name: "player_score";
+    value: number;
+  }): void {
+    const { playerId, value, name } = args;
+
+    if (name === "player_score") {
+      const starManager = new StarManager(this.game);
+      starManager.set(playerId, value);
+    }
   }
 }
