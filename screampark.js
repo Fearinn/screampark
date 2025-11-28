@@ -949,6 +949,50 @@ var NotifManager = /** @class */ (function () {
             });
         });
     };
+    NotifManager.prototype.notif_scoreTheme = function (args) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, managers, gamedatas, animations, players, playerId, points, playerColor, boards, board, card, cardElement;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _a = this.game, managers = _a.managers, gamedatas = _a.gamedatas;
+                        animations = managers.animations;
+                        players = gamedatas.players;
+                        playerId = args.player_id, points = args.points;
+                        playerColor = players[playerId].color;
+                        boards = this.themeManager.stocks.boards;
+                        board = boards[playerId];
+                        card = board.getCards()[0];
+                        cardElement = board.getCardElement(card);
+                        return [4 /*yield*/, animations.displayScoring(cardElement, points, playerColor)];
+                    case 1:
+                        _b.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    NotifManager.prototype.notif_scoreVip = function (args) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, managers, gamedatas, animations, players, playerId, card, playerColor, boards, cardElement;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _a = this.game, managers = _a.managers, gamedatas = _a.gamedatas;
+                        animations = managers.animations;
+                        players = gamedatas.players;
+                        playerId = args.player_id, card = args.card;
+                        playerColor = players[playerId].color;
+                        boards = this.sceneManager.stocks.boards;
+                        cardElement = boards[playerId].getCardElement(card);
+                        return [4 /*yield*/, animations.displayScoring(cardElement, 2, playerColor)];
+                    case 1:
+                        _b.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
     NotifManager.prototype.notif_setPlayerCounterPrivate = function (args) {
         var playerId = args.player_id, inc = args.inc, name = args.name;
         var counter = this.counters[name][playerId];

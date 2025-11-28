@@ -41,11 +41,13 @@ class PassScenes extends GameState
         }
 
         $day = $this->game->dayCounter->get();
+        $direction = $day % 2 === 0 ? clienttranslate("counterclockwise") : clienttranslate("clockwise");
 
         $players = $this->game->loadPlayersBasicInfos();
         foreach ($players as $playerId => $player) {
             $otherPlayerId = $this->game->getPlayerBefore($playerId);
-            if ($day % 2 === 0) {
+
+            if ($direction === "counterclockwise") {
                 $otherPlayerId = $this->game->getPlayerAfter($playerId);
             }
 
@@ -84,7 +86,11 @@ class PassScenes extends GameState
 
         $this->notify->all(
             "message",
-            clienttranslate('All players pass their hands'),
+            clienttranslate('All players pass their hands ${direction}'),
+            [
+                "i18n" => ["direction"],
+                "direction" => $direction
+            ],
         );
 
         return PreTurn::class;

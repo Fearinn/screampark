@@ -224,6 +224,40 @@ class NotifManager {
     board.flipCard(card);
   }
 
+  public async notif_scoreTheme(args: {
+    player_id: number;
+    points: number;
+  }): Promise<void> {
+    const { managers, gamedatas } = this.game;
+    const { animations } = managers;
+    const { players } = gamedatas;
+
+    const { player_id: playerId, points } = args;
+    const { color: playerColor } = players[playerId];
+    const { boards } = this.themeManager.stocks;
+    const board = boards[playerId];
+
+    const card = board.getCards()[0];
+    const cardElement = board.getCardElement(card);
+    await animations.displayScoring(cardElement, points, playerColor);
+  }
+
+  public async notif_scoreVip(args: {
+    player_id: number;
+    card: SceneCard;
+  }): Promise<void> {
+    const { managers, gamedatas } = this.game;
+    const { animations } = managers;
+    const { players } = gamedatas;
+
+    const { player_id: playerId, card } = args;
+    const { color: playerColor } = players[playerId];
+
+    const { boards } = this.sceneManager.stocks;
+    const cardElement = boards[playerId].getCardElement(card);
+    await animations.displayScoring(cardElement, 2, playerColor);
+  }
+
   public notif_setPlayerCounterPrivate(args: {
     player_id: number;
     name: "staff";

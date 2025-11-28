@@ -35,21 +35,56 @@ class DayEnd extends GameState
         $this->vips = new Vips($this->game);
     }
 
-    public function onEnteringState(): string
+    public function onEnteringState(): void
     {
         $players = $this->game->loadPlayersBasicInfos();
 
         foreach ($players as $playerId => $player) {
-            for ($slot = 1; $slot <= 24; $slot++) {
+            $maxSlot = $this->scenes->getMaxSlot($playerId);
+
+            $themePoints = 0;
+            for ($slot = 1; $slot <= $maxSlot; $slot++) {
                 $Scene = $this->scenes->getMainInSlot($playerId, $slot);
 
                 if (!$Scene) {
                     continue;
                 }
 
-                $Scene->scoreTheme($playerId);
-                $Scene->scoreVip($playerId);
+                $themePoints += $Scene->scoreTheme($playerId);
             }
+
+            $this->game->notify->all(
+                "scoreTheme",
+                clienttranslate('${player_name} scores ${points} point(s) from his Theme today'),
+                [
+                    "player_id" => $playerId,
+                    "points" => $themePoints,
+                ]
+            );
+
+            $vipPoints = 0;
+            for ($slot = 1; $slot <= $maxSlot; $slot++) {
+                $Scene = $this->scenes->getMainInSlot($playerId, $slot);
+
+                if (!$Scene) {
+                    continue;
+                }
+
+                if (!$Scene->scoreVip($playerId)) {
+                    break;
+                };
+
+                $vipPoints += 2;
+            }
+
+            $this->game->notify->all(
+                "message",
+                clienttranslate('${player_name} scores ${points} point(s) from the VIP today'),
+                [
+                    "player_id" => $playerId,
+                    "points" => $vipPoints,
+                ]
+            );
         }
 
         $DAYS = [
@@ -62,15 +97,14 @@ class DayEnd extends GameState
         $previousDay = $day - 1;
         $this->notify->all(
             "endDay",
-            clienttranslate('${dayLabel2} ends. A new day (${dayLabel}) begins'),
+            clienttranslate('${dayLabel} ends'),
             [
-                "i18n" => ["dayLabel", "dayLabel2"],
+                "i18n" => ["dayLabel"],
                 "previousDay" => $previousDay,
-                "dayLabel" => $DAYS[$day],
-                "dayLabel2" => $DAYS[$previousDay],
+                "dayLabel" => $DAYS[$previousDay],
             ]
         );
 
-        return DealScenes::class;
+        // return DealScenes::class;
     }
 }

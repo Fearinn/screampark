@@ -63,7 +63,7 @@ class Game extends \Bga\GameFramework\Table
         $this->staffCounterPrivate = $this->counterFactory->createPlayerCounter("staffPrivate");
         $this->draftCounter = $this->counterFactory->createPlayerCounter("draft", 0, 2);
         $this->attachmentVariable = $this->counterFactory->createPlayerCounter("attachment");
-        $this->dayCounter = $this->counterFactory->createTableCounter("day", 1, 3);
+        $this->dayCounter = $this->counterFactory->createTableCounter("day", 1, 4);
 
         $this->decorateNotifs();
     }

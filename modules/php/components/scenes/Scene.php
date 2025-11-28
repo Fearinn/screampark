@@ -301,8 +301,8 @@ class Scene extends Scenes
                 $points += 1;
             }
         }
-
         $this->playerScore->inc($playerId, $points);
+
         return $points;
     }
 
@@ -310,9 +310,21 @@ class Scene extends Scenes
     {
         $slot = (int) $this->card["slot"];
         $Vips = new Vips($this->game);
-        $points = $Vips->isFullfilled($playerId, $slot) ? 2 : 0;
 
+        $points = $Vips->isFullfilled($playerId, $slot) ? 2 : 0;
         $this->playerScore->inc($playerId, $points);
+
+        if ($points > 0) {
+            $this->game->notify->all(
+                "scoreVip",
+                "",
+                [
+                    "player_id" => $playerId,
+                    "card" => $this->card,
+                ]
+            );
+        }
+
         return $points;
     }
 }
