@@ -123,8 +123,9 @@ class NotifManager {
     const { player_id: playerId, card } = args;
     const { boards, genreDeck } = this.sceneManager.stocks;
 
-    await boards[playerId].addCard(card, {
+    boards[playerId].addCard(card, {
       fromStock: card.type === "genre" ? genreDeck : undefined,
+      toPlaceholder: "off",
     });
   }
 
@@ -141,6 +142,7 @@ class NotifManager {
         card.type === "scene"
           ? document.getElementById(`scp_playerZone-${playerId}`)
           : undefined,
+      toPlaceholder: "off",
     });
   }
 
@@ -207,11 +209,12 @@ class NotifManager {
     otherPlayerId: number;
     cards: SceneCard[];
   }): Promise<void> {
+    const { player_id } = this.game;
     const { player_id: playerId, otherPlayerId, cards } = args;
-    const { fakeHands } = this.sceneManager.stocks;
+    const { hand, fakeHands } = this.sceneManager.stocks;
 
     await fakeHands[playerId].addCards(cards, {
-      fromStock: fakeHands[otherPlayerId],
+      fromStock: otherPlayerId === player_id ? hand : fakeHands[otherPlayerId],
     });
   }
 

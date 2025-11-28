@@ -792,17 +792,13 @@ var NotifManager = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             var playerId, card, _a, boards, genreDeck;
             return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        playerId = args.player_id, card = args.card;
-                        _a = this.sceneManager.stocks, boards = _a.boards, genreDeck = _a.genreDeck;
-                        return [4 /*yield*/, boards[playerId].addCard(card, {
-                                fromStock: card.type === "genre" ? genreDeck : undefined,
-                            })];
-                    case 1:
-                        _b.sent();
-                        return [2 /*return*/];
-                }
+                playerId = args.player_id, card = args.card;
+                _a = this.sceneManager.stocks, boards = _a.boards, genreDeck = _a.genreDeck;
+                boards[playerId].addCard(card, {
+                    fromStock: card.type === "genre" ? genreDeck : undefined,
+                    toPlaceholder: "off",
+                });
+                return [2 /*return*/];
             });
         });
     };
@@ -819,6 +815,7 @@ var NotifManager = /** @class */ (function () {
                                 fromElement: card.type === "scene"
                                     ? document.getElementById("scp_playerZone-".concat(playerId))
                                     : undefined,
+                                toPlaceholder: "off",
                             })];
                     case 1:
                         _b.sent();
@@ -919,17 +916,18 @@ var NotifManager = /** @class */ (function () {
     };
     NotifManager.prototype.notif_receiveCards = function (args) {
         return __awaiter(this, void 0, void 0, function () {
-            var playerId, otherPlayerId, cards, fakeHands;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            var player_id, playerId, otherPlayerId, cards, _a, hand, fakeHands;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
+                        player_id = this.game.player_id;
                         playerId = args.player_id, otherPlayerId = args.otherPlayerId, cards = args.cards;
-                        fakeHands = this.sceneManager.stocks.fakeHands;
+                        _a = this.sceneManager.stocks, hand = _a.hand, fakeHands = _a.fakeHands;
                         return [4 /*yield*/, fakeHands[playerId].addCards(cards, {
-                                fromStock: fakeHands[otherPlayerId],
+                                fromStock: otherPlayerId === player_id ? hand : fakeHands[otherPlayerId],
                             })];
                     case 1:
-                        _a.sent();
+                        _b.sent();
                         return [2 /*return*/];
                 }
             });
