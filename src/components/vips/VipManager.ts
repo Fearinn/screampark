@@ -12,7 +12,7 @@ class VipManager {
   }
 
   private build(): void {
-    const { managers } = this.game;
+    const { managers, gamedatas } = this.game;
     const { animations } = managers;
 
     this.game.managers.vips = new BgaCards.Manager({
@@ -21,6 +21,9 @@ class VipManager {
       cardHeight: 286,
       cardWidth: 210,
       cardBorderRadius: "8px",
+      isCardVisible: (card) => {
+        return Number(card.location_arg) >= gamedatas.day;
+      },
       setupDiv: ({ type_arg: vip_id }, element) => {
         element.classList.add("scp_card");
 

@@ -19,6 +19,7 @@ interface SCP_Gamedatas extends Gamedatas<SCP_Player> {
   sceneBoard: SceneCard[];
   staffCounts: Record<number, number>;
   staffCountPrivate: number;
+  day: number;
 }
 
 interface Managers {

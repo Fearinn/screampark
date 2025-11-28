@@ -1331,7 +1331,7 @@ var VipManager = /** @class */ (function () {
     }
     VipManager.prototype.build = function () {
         var _this = this;
-        var managers = this.game.managers;
+        var _a = this.game, managers = _a.managers, gamedatas = _a.gamedatas;
         var animations = managers.animations;
         this.game.managers.vips = new BgaCards.Manager({
             animationManager: animations,
@@ -1339,6 +1339,9 @@ var VipManager = /** @class */ (function () {
             cardHeight: 286,
             cardWidth: 210,
             cardBorderRadius: "8px",
+            isCardVisible: function (card) {
+                return Number(card.location_arg) >= gamedatas.day;
+            },
             setupDiv: function (_a, element) {
                 var vip_id = _a.type_arg;
                 element.classList.add("scp_card");

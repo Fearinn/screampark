@@ -31,6 +31,7 @@ trait Gamedatas
             "sceneCards" => $Scenes->getPublic(),
             "sceneBoard" => !$this->isSpectator() ? $Scenes->getBoard($playerId) : [],
             "staffCounts" => $this->staffCounter->getAll(),
+            "day" => $this->dayCounter->get(),
         ];
 
         if (!$this->isSpectator()) {
