@@ -136,7 +136,7 @@ class Scene extends Scenes
         );
     }
 
-    public function revealPlayed(int $playerId): void
+    public function revealPlaced(int $playerId): void
     {
         $this->updateStaff($playerId);
 

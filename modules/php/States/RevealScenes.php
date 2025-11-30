@@ -42,24 +42,25 @@ class RevealScenes extends GameState
             $discardedCards = $this->scenes->deck->getCardsInLocation("discard", $playerId);
 
             foreach ($discardedCards as $cardId => $card) {
-                $Scene =  new Scene($this->game, $cardId);
+                $Scene = new Scene($this->game, $cardId);
                 $Scene->revealDiscarded($playerId);
             }
 
             $this->scenes->revealDiscardedBoth($playerId);
 
-            $placedCards = $this->scenes->deck->getCardsInLocation("placed", $playerId, "position");
-            foreach ($placedCards as $card) {
-                $cardId = (int) $card["id"];
+            $sql = "SELECT {$this->scenes->cardFields} FROM {$this->scenes->dbTable} 
+            WHERE card_location='placed' AND card_location_arg={$playerId} ORDER BY slot, position";
+            $placedCards = $this->game->getCollectionFromDB($sql);
 
+            foreach ($placedCards as $cardId => $card) {
                 if ($card["type"] === "genre") {
                     $Genre = new Genre($this->game, $cardId);
                     $Genre->revealAttached($playerId);
                     continue;
                 }
-                
+
                 $Scene = new Scene($this->game, $cardId);
-                $Scene->revealPlayed($playerId);
+                $Scene->revealPlaced($playerId);
             }
         }
 
