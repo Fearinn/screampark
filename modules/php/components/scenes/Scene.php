@@ -279,12 +279,14 @@ class Scene extends Scenes
 
         $genres = $this->sumSlotGenres($playerId, $slot);
         foreach ($genres as $genreId => $value) {
-            $cost[$genreId] -= $value;
+            $genreCost[$genreId] -= $value;
         }
 
-        return !array_any($genreCost, function ($cost) {
-            return $cost > 0;
+        $totalCost = array_reduce($genreCost, function ($carry, $cost) {
+            return $carry + $cost;
         });
+
+        return $totalCost <= $this->countSlotWilds($playerId, $slot);
     }
 
     public function scoreTheme(int $playerId): int

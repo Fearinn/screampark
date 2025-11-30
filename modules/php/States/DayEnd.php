@@ -46,10 +46,6 @@ class DayEnd extends GameState
             for ($slot = 1; $slot <= $maxSlot; $slot++) {
                 $Scene = $this->scenes->getMainInSlot($playerId, $slot);
 
-                if (!$Scene) {
-                    continue;
-                }
-
                 $themePoints += $Scene->scoreTheme($playerId);
             }
 
@@ -65,10 +61,6 @@ class DayEnd extends GameState
             $vipPoints = 0;
             for ($slot = 1; $slot <= $maxSlot; $slot++) {
                 $Scene = $this->scenes->getMainInSlot($playerId, $slot);
-
-                if (!$Scene) {
-                    continue;
-                }
 
                 if (!$Scene->scoreVip($playerId)) {
                     break;
@@ -97,7 +89,7 @@ class DayEnd extends GameState
         $previousDay = $day - 1;
 
         $message = $day <= 3 ? clienttranslate('${dayLabel} ends. A new day begins') : clienttranslate('${dayLabel} ends');
-        
+
         $this->notify->all(
             "dayEnd",
             $message,
@@ -107,6 +99,10 @@ class DayEnd extends GameState
                 "dayLabel" => $DAYS[$previousDay],
             ]
         );
+
+        if ($day > 3) {
+            return EndScore::class;
+        }
 
         return DealScenes::class;
     }

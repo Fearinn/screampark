@@ -983,8 +983,28 @@ var NotifManager = /** @class */ (function () {
                         playerColor = players[playerId].color;
                         boards = this.sceneManager.stocks.boards;
                         cardElement = boards[playerId].getCardElement(card);
-                        console.log(card, "TEST", cardElement);
                         return [4 /*yield*/, animations.displayScoring(cardElement, 2, playerColor)];
+                    case 1:
+                        _b.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    NotifManager.prototype.notif_scoreScene = function (args) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, managers, gamedatas, animations, players, playerId, card, points, playerColor, boards, cardElement;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _a = this.game, managers = _a.managers, gamedatas = _a.gamedatas;
+                        animations = managers.animations;
+                        players = gamedatas.players;
+                        playerId = args.player_id, card = args.card, points = args.points;
+                        playerColor = players[playerId].color;
+                        boards = this.sceneManager.stocks.boards;
+                        cardElement = boards[playerId].getCardElement(card);
+                        return [4 /*yield*/, animations.displayScoring(cardElement, points, playerColor)];
                     case 1:
                         _b.sent();
                         return [2 /*return*/];

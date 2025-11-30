@@ -52,7 +52,7 @@ class Vips extends Cards
     {
         $Scenes = $this->scenes->getScenesInSlot($playerId, $slot);
         foreach ($Scenes as $Scene) {
-            if ($Scene->ability === 4) {
+            if ($Scene->ability === 1) {
                 return true;
             }
         }
@@ -84,7 +84,7 @@ class Vips extends Cards
         }
 
         $excess = array_reduce($genreCost, function ($carry, $cost) {
-            return $carry -= $cost;
+            return $carry - $cost;
         }, 0);
 
         return $excess >= 2;

@@ -268,4 +268,18 @@ class Scenes extends Cards
 
         return $genres;
     }
+
+    public function countSlotWilds(int $playerId, int $slot): int
+    {
+        $wildCount = 0;
+
+        $Scenes = $this->getScenesInSlot($playerId, $slot);
+        foreach ($Scenes as $Scene) {
+            if ($Scene->ability === 3) {
+                $wildCount++;
+            }
+        }
+
+        return $wildCount;
+    }
 }

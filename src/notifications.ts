@@ -258,8 +258,24 @@ class NotifManager {
 
     const { boards } = this.sceneManager.stocks;
     const cardElement = boards[playerId].getCardElement(card);
-    console.log(card, "TEST", cardElement);
     await animations.displayScoring(cardElement, 2, playerColor);
+  }
+
+  public async notif_scoreScene(args: {
+    player_id: number;
+    card: SceneCard;
+    points: number;
+  }): Promise<void> {
+    const { managers, gamedatas } = this.game;
+    const { animations } = managers;
+    const { players } = gamedatas;
+
+    const { player_id: playerId, card, points } = args;
+    const { color: playerColor } = players[playerId];
+
+    const { boards } = this.sceneManager.stocks;
+    const cardElement = boards[playerId].getCardElement(card);
+    await animations.displayScoring(cardElement, points, playerColor);
   }
 
   public notif_setPlayerCounterPrivate(args: {
