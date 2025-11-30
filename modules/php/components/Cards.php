@@ -59,10 +59,16 @@ class Cards
         return $deckCount;
     }
 
-    public function getPublic(): array
+    public function getPublic(?int $excludedPlayerId = null): array
     {
-        $cards = $this->game->getObjectListFromDB("SELECT {$this->cardFields} FROM {$this->dbTable} 
-        WHERE card_location<>'deck' AND card_location<>'hand' AND card_location<>'box'");
+        $sql = "SELECT {$this->cardFields} FROM {$this->dbTable} 
+        WHERE card_location<>'deck' AND card_location<>'hand' AND card_location<>'box'";
+
+        if ($excludedPlayerId) {
+            $sql .= " AND card_location_arg<>{$excludedPlayerId}";
+        }
+
+        $cards = $this->game->getObjectListFromDB($sql);
         return $cards;
     }
 

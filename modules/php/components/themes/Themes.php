@@ -34,14 +34,14 @@ class Themes extends Cards
         }
     }
 
-    public function getHands(int $currentPlayerId): array
+    public function getHands(int $excludedPlayerId): array
     {
         $hands = [];
 
         $players = $this->game->loadPlayersBasicInfos();
 
         foreach ($players as $player_id => $player) {
-            if ($currentPlayerId === $player_id) {
+            if ($excludedPlayerId === $player_id) {
                 $hand = $this->getHand($player_id);
             } else {
                 $sql = "SELECT card_id id, card_location location, card_location_arg location_arg FROM {$this->dbTable} 

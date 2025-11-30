@@ -1138,7 +1138,6 @@ var SceneManager = /** @class */ (function () {
                     return ((location === "board" || location === "placed") &&
                         Number(location_arg) === playerId);
                 },
-                sort: BgaCards.sort("position"),
             });
             fakeHands[playerId] = new BgaCards.VoidStock(_this.manager, document.getElementById("scp_fakeHand-".concat(playerId)), {});
         });
@@ -1180,8 +1179,12 @@ var SceneManager = /** @class */ (function () {
     };
     SceneManager.prototype.setup = function () {
         this.build();
-        var _a = this.game.gamedatas, sceneCards = _a.sceneCards, sceneHand = _a.sceneHand, sceneBoard = _a.sceneBoard;
-        this.manager.placeCards(__spreadArray(__spreadArray(__spreadArray([], sceneCards, true), sceneHand, true), sceneBoard, true));
+        var _a = this.game.gamedatas, scenePublic = _a.scenePublic, sceneHand = _a.sceneHand, sceneBoard = _a.sceneBoard;
+        sceneBoard.sort(function (a, b) {
+            return Number(a.position) - Number(b.position);
+        });
+        var sceneCards = __spreadArray(__spreadArray(__spreadArray([], scenePublic, true), sceneHand, true), sceneBoard, true);
+        this.manager.placeCards(sceneCards);
     };
     SceneManager.prototype.highlight = function (cards) {
         var _this = this;

@@ -102,7 +102,6 @@ class SceneManager {
               Number(location_arg) === playerId
             );
           },
-          sort: BgaCards.sort("position"),
         }
       );
 
@@ -165,8 +164,13 @@ class SceneManager {
 
   public setup(): void {
     this.build();
-    const { sceneCards, sceneHand, sceneBoard } = this.game.gamedatas;
-    this.manager.placeCards([...sceneCards, ...sceneHand, ...sceneBoard]);
+    const { scenePublic, sceneHand, sceneBoard } = this.game.gamedatas;
+
+    sceneBoard.sort((a, b) => {
+      return Number(a.position) - Number(b.position);
+    });
+    const sceneCards = [...scenePublic, ...sceneHand, ...sceneBoard];
+    this.manager.placeCards(sceneCards);
   }
 
   public highlight(cards: SceneCard[]): void {
