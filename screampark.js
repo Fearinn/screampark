@@ -906,7 +906,11 @@ var NotifManager = /** @class */ (function () {
                     case 0:
                         cards = args.cards;
                         hand = this.sceneManager.stocks.hand;
-                        return [4 /*yield*/, hand.addCards(cards)];
+                        return [4 /*yield*/, hand.addCards(cards, {
+                                duration: 1000,
+                                toPlaceholder: "on",
+                                fromPlaceholder: "off",
+                            })];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];
@@ -925,6 +929,9 @@ var NotifManager = /** @class */ (function () {
                         _a = this.sceneManager.stocks, hand = _a.hand, fakeHands = _a.fakeHands;
                         return [4 /*yield*/, fakeHands[playerId].addCards(cards, {
                                 fromStock: otherPlayerId === player_id ? hand : fakeHands[otherPlayerId],
+                                duration: 1000,
+                                toPlaceholder: "off",
+                                fromPlaceholder: "on",
                             })];
                     case 1:
                         _b.sent();

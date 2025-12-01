@@ -272,6 +272,7 @@ p {
   left: 50%;
   transform: translateY(-50%);
   display: flex;
+  pointer-events: none;
 }
 
 .scp_genreDeck {

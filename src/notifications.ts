@@ -201,7 +201,11 @@ class NotifManager {
   }): Promise<void> {
     const { cards } = args;
     const { hand } = this.sceneManager.stocks;
-    await hand.addCards(cards);
+    await hand.addCards(cards, {
+      duration: 1000,
+      toPlaceholder: "on",
+      fromPlaceholder: "off",
+    });
   }
 
   public async notif_receiveCards(args: {
@@ -215,6 +219,9 @@ class NotifManager {
 
     await fakeHands[playerId].addCards(cards, {
       fromStock: otherPlayerId === player_id ? hand : fakeHands[otherPlayerId],
+      duration: 1000,
+      toPlaceholder: "off",
+      fromPlaceholder: "on",
     });
   }
 
