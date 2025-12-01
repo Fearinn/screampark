@@ -16,6 +16,7 @@ class SCP extends GameGui<SCP_Gamedatas> implements SCP {
 
     this.setupNotifications();
   }
+  
   public onEnteringState(
     stateName: StateName,
     args: { args: Record<string, any> }

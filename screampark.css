@@ -718,9 +718,8 @@ p {
 
 .scp_pref-themedBg {
   background-image: url("img/background.jpg");
+  background-size: cover;
   background-attachment: fixed;
-  background-size: 100%;
-  background-repeat: repeat;
 }
 .scp_pref-themedBg .player-board {
   background-image: url("img/background.jpg");
