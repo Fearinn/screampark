@@ -65,4 +65,5 @@ type StateName =
   | "PreTurn"
   | "PlayerTurn"
   | "AttachScene"
-  | "AttachGenre";
+  | "AttachGenre"
+  | "PlaceAnywhere";

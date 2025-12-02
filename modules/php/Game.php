@@ -45,7 +45,7 @@ class Game extends \Bga\GameFramework\Table
     public readonly PlayerCounter $staffCounter;
     public readonly PlayerCounter $staffCounterPrivate;
     public readonly PlayerCounter $draftCounter;
-    public readonly PlayerCounter $attachmentVariable;
+    public readonly PlayerCounter $actionVariable;
     public readonly TableCounter $dayCounter;
 
     public function __construct()
@@ -62,7 +62,7 @@ class Game extends \Bga\GameFramework\Table
         $this->staffCounter = $this->counterFactory->createPlayerCounter("staff");
         $this->staffCounterPrivate = $this->counterFactory->createPlayerCounter("staffPrivate");
         $this->draftCounter = $this->counterFactory->createPlayerCounter("draft", 0, 2);
-        $this->attachmentVariable = $this->counterFactory->createPlayerCounter("attachment");
+        $this->actionVariable = $this->counterFactory->createPlayerCounter("attachment");
         $this->dayCounter = $this->counterFactory->createTableCounter("day", 1, 4);
 
         $this->decorateNotifs();
@@ -108,9 +108,9 @@ class Game extends \Bga\GameFramework\Table
         $DayEnd->onEnteringState();
     }
 
-    public function debug_incScore(int $inc): void
-    {
+    public function debug_shiftScenes(int $slot = 1): void {
         $playerId = (int) $this->getCurrentPlayerId();
-        $this->playerScore->inc($playerId, $inc);
+        $Scenes = new Scenes($this);
+        $Scenes->shift($playerId, $slot);
     }
 }

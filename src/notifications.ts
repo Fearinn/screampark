@@ -195,6 +195,29 @@ class NotifManager {
     });
   }
 
+  public async notif_shiftScenesPrivate(args: {
+    player_id: number;
+    cards: SceneCard[];
+  }): Promise<void> {
+    const { player_id: playerId, cards } = args;
+    const { boards } = this.sceneManager.stocks;
+    const board = boards[playerId];
+
+    const promises = [];
+    cards.forEach((card) => {
+      const animation = board.addCard(card, {
+        fromElement: document.querySelector(
+          `#scp_scenes-${playerId} [data-slot-id="${card.slot}"]`
+        ),
+        fromPlaceholder: "off",
+      });
+
+      promises.push(animation);
+    });
+
+    await Promise.all(promises);
+  }
+
   public async notif_receiveCardsPrivate(args: {
     player_id: number;
     cards: SceneCard[];

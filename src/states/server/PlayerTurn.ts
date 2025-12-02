@@ -19,7 +19,7 @@ class PlayerTurn extends State {
     }
 
     const { keysToNumbers } = this.game;
-    const { playableScenes, attachableScenes, canAttachGenre, nbr } = args;
+    const { placeableScenes, attachableScenes, canAttachGenre, nbr } = args;
 
     const { hand } = this.sceneManager.stocks;
     hand.setSelectionMode(canAttachGenre ? "multiple" : "single");
@@ -81,7 +81,7 @@ class PlayerTurn extends State {
           });
         },
         {
-          disabled: !playableScenes.includes(cardId),
+          disabled: !placeableScenes.includes(cardId),
         }
       );
 
@@ -125,6 +125,6 @@ class PlayerTurn extends State {
 interface ArgsPlayerTurn {
   nbr: number;
   canAttachGenre: boolean;
-  playableScenes: number[];
+  placeableScenes: number[];
   attachableScenes: number[];
 }

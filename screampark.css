@@ -175,7 +175,6 @@ p {
   align-items: start !important;
 }
 .scp_scenes .slot {
-  display: flex;
   flex-direction: column;
 }
 .scp_scenes .slot:empty {

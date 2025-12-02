@@ -18,7 +18,7 @@ class AttachScene extends GameState
 {
     protected Scenes $scenes;
     protected PlayerCounter $draftCounter;
-    protected PlayerCounter $attachmentVariable;
+    protected PlayerCounter $actionVariable;
 
     function __construct(
         protected Game $game,
@@ -33,13 +33,13 @@ class AttachScene extends GameState
 
         $this->scenes = new Scenes($this->game);
         $this->draftCounter = $this->game->draftCounter;
-        $this->attachmentVariable = $this->game->attachmentVariable;
+        $this->actionVariable = $this->game->actionVariable;
     }
 
     public function getArgs(int $playerId): array
     {
         $maxSlot = $this->scenes->getMaxSlot($playerId);
-        $cardId = $this->attachmentVariable->get($playerId);
+        $cardId = $this->actionVariable->get($playerId);
         $Scene = new Scene($this->game, $cardId);
 
         $args = [
@@ -60,7 +60,7 @@ class AttachScene extends GameState
         array $args,
         #[IntParam(min: 1, max: 24)] int $slot,
     ) {
-        $cardId = $this->attachmentVariable->get($currentPlayerId);
+        $cardId = $this->actionVariable->get($currentPlayerId);
         $Scene = new Scene($this->game, $cardId);
 
         if ($args["maxSlot"] < $slot) {
@@ -74,7 +74,7 @@ class AttachScene extends GameState
     {
         $Scene->attach($currentPlayerId, $slot);
         $this->draftCounter->inc($currentPlayerId, 1);
-        $this->attachmentVariable->set($currentPlayerId, 0);
+        $this->actionVariable->set($currentPlayerId, 0);
 
         if ($this->draftCounter->get($currentPlayerId) === 2) {
             $this->gamestate->setPlayerNonMultiactive($currentPlayerId, RevealScenes::class);
@@ -87,7 +87,7 @@ class AttachScene extends GameState
     #[PossibleAction]
     public function actAttachSceneCancel(int $currentPlayerId): void
     {
-        $this->attachmentVariable->set($currentPlayerId, 0);
+        $this->actionVariable->set($currentPlayerId, 0);
         $this->gamestate->nextPrivateState($currentPlayerId, PlayerTurn::class);
     }
 

@@ -19,7 +19,7 @@ class PlayerTurn extends GameState
 {
     protected Scenes $scenes;
     protected PlayerCounter $draftCounter;
-    protected PlayerCounter $attachmentVariable;
+    protected PlayerCounter $actionVariable;
 
     function __construct(
         protected Game $game,
@@ -34,7 +34,7 @@ class PlayerTurn extends GameState
 
         $this->scenes = new Scenes($this->game);
         $this->draftCounter = $this->game->draftCounter;
-        $this->attachmentVariable = $this->game->attachmentVariable;
+        $this->actionVariable = $this->game->actionVariable;
     }
 
     public function getArgs(int $playerId): array
@@ -45,7 +45,7 @@ class PlayerTurn extends GameState
         $args = [
             "nbr" => 2 - $draftCount,
             "canAttachGenre" => $maxSlot > 0 && $draftCount === 0,
-            "playableScenes" => $this->scenes->getPlayable($playerId),
+            "placeableScenes" => $this->scenes->getPlaceable($playerId),
             "attachableScenes" => $this->scenes->getAttachable($playerId),
         ];
 
@@ -60,7 +60,7 @@ class PlayerTurn extends GameState
         #[IntParam(min: 1, max: 120)] int $cardId,
     ): void {
         $Scene = new Scene($this->game, $cardId);
-        if (!$Scene->isPlayable($currentPlayerId)) {
+        if (!$Scene->isPlaceable($currentPlayerId)) {
             throw new BgaVisibleSystemException("Unexpected error: 2");
         }
 
@@ -107,7 +107,7 @@ class PlayerTurn extends GameState
             throw new BgaVisibleSystemException("Unexpected error: 4");
         }
 
-        $this->attachmentVariable->set($currentPlayerId, $cardId);
+        $this->actionVariable->set($currentPlayerId, $cardId);
 
         $maxSlot = $this->scenes->getMaxSlot($currentPlayerId);
         if ($maxSlot === 1) {
@@ -131,7 +131,7 @@ class PlayerTurn extends GameState
         }
 
         $this->scenes->deck->moveCards($cardsIds, "todiscard", $currentPlayerId);
-        $this->attachmentVariable->set($currentPlayerId, $genreId);
+        $this->actionVariable->set($currentPlayerId, $genreId);
 
         $maxSlot = $this->scenes->getMaxSlot($currentPlayerId);
         if ($maxSlot === 1) {
@@ -143,16 +143,38 @@ class PlayerTurn extends GameState
         $this->gamestate->nextPrivateState($currentPlayerId, AttachGenre::class);
     }
 
+    #[PossibleAction]
+    public function actPlaceAnywhereStart(
+        int $currentPlayerId,
+        #[IntParam(min: 1, max: 120)] int $cardId,
+    ): void {
+        $Scene = new Scene($this->game, $cardId);
+        if (! $Scene->isPlaceableAnywhere($currentPlayerId)) {
+            throw new \BgaVisibleSystemException("Unexpected error: 8");
+        };
+
+        $this->actionVariable->set($currentPlayerId, $cardId);
+
+        $possibleSlots = $Scene->possibleAnywhereSlots($currentPlayerId);
+        if (count($possibleSlots) === 0) {
+            $slot = reset($possibleSlots);
+            $PlaceAnywhere = new PlaceAnywhere($this->game);
+            $PlaceAnywhere->placeAnywhere($currentPlayerId, $Scene, $slot);
+        }
+
+        $this->gamestate->nextPrivateState($currentPlayerId, PlaceAnywhere::class);
+    }
+
     public function zombie(int $playerId, array $args): void
     {
-        $playableScenes = $args["playableScenes"];
+        $placeableScenes = $args["placeableScenes"];
         $attachableScenes = $args["attachableScenes"];
         $canAttachGenre = $args["canAttachGenre"];
 
         $hand = $this->scenes->deck->getPlayerHand($playerId);
 
-        if ($playableScenes && bga_rand(0, 0)) {
-            $cardId = $this->getRandomZombieChoice($playableScenes);
+        if ($placeableScenes && bga_rand(0, 0)) {
+            $cardId = $this->getRandomZombieChoice($placeableScenes);
 
             $this->actPlaceScene($playerId, $cardId);
             return;

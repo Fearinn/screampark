@@ -106,7 +106,7 @@ class Scene extends Scenes
         }
     }
 
-    public function isPlayable(int $playerId): bool
+    public function isPlaceable(int $playerId): bool
     {
         return $this->points >= $this->getMinPoints($playerId)
             && $this->canPayCost($playerId);
@@ -178,6 +178,38 @@ class Scene extends Scenes
         );
     }
 
+    public function isPlaceableAnywhere(int $playerId): bool
+    {
+        return $this->points <= $this->getMinPoints($playerId) &&
+            $this->canPayCost($playerId);
+    }
+
+    public function possibleAnywhereSlots(int $playerId): array
+    {
+        $possibleSlots = [];
+
+        $maxSlot = $this->getMaxSlot($playerId);
+        for ($slot = 1; $slot <= $maxSlot; $slot++) {
+            $Scene = $this->getMainInSlot($playerId, $slot);
+
+            if ($this->points <= $Scene->points) {
+                $possibleSlots[] = $slot;
+            }
+        }
+
+        return $possibleSlots;
+    }
+
+    public function placeAnywhere(int $playerId, int $slot): void
+    {
+        $this->updateStaffPrivate($playerId);
+        $this->shift($playerId, $slot);
+
+        $this->game->DbQuery("UPDATE {$this->dbTable} SET card_location='placed', card_location_arg={$playerId}, 
+        slot={$slot}, position=1 WHERE card_id={$this->cardId}");
+        $card = $this->getCard($this->cardId);
+    }
+
     public function isAttachable(int $playerId): bool
     {
         return $this->getMaxSlot($playerId) > 0 && $this->canPayCost($playerId);
@@ -188,8 +220,8 @@ class Scene extends Scenes
         $this->updateStaffPrivate($playerId);
 
         $position = $this->getNextPosition($playerId, $slot);
-        $sql = "UPDATE {$this->dbTable} SET position={$position}, slot={$slot}, card_location='placed', card_location_arg={$playerId} 
-        WHERE card_id={$this->cardId}";
+        $sql = "UPDATE {$this->dbTable} SET position={$position}, slot={$slot}, card_location='placed', 
+        card_location_arg={$playerId} WHERE card_id={$this->cardId}";
 
         $this->game->DbQuery($sql);
 

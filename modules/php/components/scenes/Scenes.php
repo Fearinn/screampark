@@ -143,7 +143,7 @@ class Scenes extends Cards
     public function getMainInSlot(int $playerId, int $slot): ?Scene
     {
         $sql = "SELECT {$this->cardFields} FROM {$this->dbTable} 
-        WHERE (card_location='board' OR card_location='placed') AND card_location_arg={$playerId} AND position=1 AND slot={$slot}";
+        WHERE card_location IN ('board', 'placed') AND card_location_arg={$playerId} AND position=1 AND slot={$slot}";
 
         $card = $this->game->getObjectFromDB($sql);
         if (!$card) {
@@ -154,20 +154,20 @@ class Scenes extends Cards
         return new Scene($this->game, $cardId);
     }
 
-    public function getPlayable(int $playerId): array
+    public function getPlaceable(int $playerId): array
     {
         $hand = $this->deck->getPlayerHand($playerId);
 
-        $playable = [];
+        $placeable = [];
         foreach ($hand as $cardId => $card) {
             $Scene = new Scene($this->game, $cardId);
 
-            if ($Scene->isPlayable($playerId)) {
-                $playable[] = $cardId;
+            if ($Scene->isPlaceable($playerId)) {
+                $placeable[] = $cardId;
             }
         }
 
-        return $playable;
+        return $placeable;
     }
 
     public function getAttachable(int $playerId): array
@@ -267,6 +267,26 @@ class Scenes extends Cards
         }
 
         return $genres;
+    }
+
+    public function shift(int $playerId, int $slot): void
+    {
+        $sql = "UPDATE {$this->dbTable} SET slot=slot+1, shifted=1 WHERE card_location_arg={$playerId} 
+        AND card_location IN ('board', 'placed') AND slot>{$slot}";
+        $this->game->DbQuery($sql);
+
+        $sql = "SELECT {$this->cardFields} FROM {$this->dbTable} 
+        WHERE shifted=1 AND card_location_arg={$playerId} ORDER BY slot DESC, position DESC";
+        $cards = $this->game->getObjectListFromDB($sql);
+
+        $this->game->notify->player(
+            $playerId,
+            "shiftScenesPrivate",
+            "",
+            [
+                "cards" => $cards,
+            ]
+        );
     }
 
     public function countSlotWilds(int $playerId, int $slot): int

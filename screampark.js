@@ -898,6 +898,31 @@ var NotifManager = /** @class */ (function () {
             });
         });
     };
+    NotifManager.prototype.notif_shiftScenesPrivate = function (args) {
+        return __awaiter(this, void 0, void 0, function () {
+            var playerId, cards, boards, board, promises;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        playerId = args.player_id, cards = args.cards;
+                        boards = this.sceneManager.stocks.boards;
+                        board = boards[playerId];
+                        promises = [];
+                        cards.forEach(function (card) {
+                            var animation = board.addCard(card, {
+                                fromElement: document.querySelector("#scp_scenes-".concat(playerId, " [data-slot-id=\"").concat(card.slot, "\"]")),
+                                fromPlaceholder: "off",
+                            });
+                            promises.push(animation);
+                        });
+                        return [4 /*yield*/, Promise.all(promises)];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
     NotifManager.prototype.notif_receiveCardsPrivate = function (args) {
         return __awaiter(this, void 0, void 0, function () {
             var cards, hand;
@@ -1649,7 +1674,7 @@ var PlayerTurn = /** @class */ (function (_super) {
             return;
         }
         var keysToNumbers = this.game.keysToNumbers;
-        var playableScenes = args.playableScenes, attachableScenes = args.attachableScenes, canAttachGenre = args.canAttachGenre, nbr = args.nbr;
+        var placeableScenes = args.placeableScenes, attachableScenes = args.attachableScenes, canAttachGenre = args.canAttachGenre, nbr = args.nbr;
         var hand = this.sceneManager.stocks.hand;
         hand.setSelectionMode(canAttachGenre ? "multiple" : "single");
         hand.onSelectionChange = function (selection, lastChange) {
@@ -1689,7 +1714,7 @@ var PlayerTurn = /** @class */ (function (_super) {
                     cardId: cardId,
                 });
             }, {
-                disabled: !playableScenes.includes(cardId),
+                disabled: !placeableScenes.includes(cardId),
             });
             _this.game.addButton(_("add to other scene"), function () {
                 _this.game.performAction("actAttachSceneStart", {

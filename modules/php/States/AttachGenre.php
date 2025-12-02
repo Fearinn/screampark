@@ -18,7 +18,7 @@ class AttachGenre extends GameState
 {
     protected Scenes $scenes;
     protected PlayerCounter $draftCounter;
-    protected PlayerCounter $attachmentVariable;
+    protected PlayerCounter $actionVariable;
 
     function __construct(
         protected Game $game,
@@ -33,13 +33,13 @@ class AttachGenre extends GameState
 
         $this->scenes = new Scenes($this->game);
         $this->draftCounter = $this->game->draftCounter;
-        $this->attachmentVariable = $this->game->attachmentVariable;
+        $this->actionVariable = $this->game->actionVariable;
     }
 
     public function getArgs(int $playerId): array
     {
         $maxSlot = $this->scenes->getMaxSlot($playerId);
-        $genreId = $this->attachmentVariable->get($playerId);
+        $genreId = $this->actionVariable->get($playerId);
         $Genre = $this->scenes->getGenre($genreId);
         $cardsToDiscard = $this->scenes->deck->getCardsInLocation("todiscard", $playerId);
 
@@ -62,7 +62,7 @@ class AttachGenre extends GameState
         array $args,
         #[IntParam(min: 1, max: 24)] int $slot,
     ) {
-        $genreId = $this->attachmentVariable->get($currentPlayerId);
+        $genreId = $this->actionVariable->get($currentPlayerId);
 
         if ($args["maxSlot"] < $slot) {
             throw new \BgaVisibleSystemException("Unexpected error: 5");
@@ -106,7 +106,7 @@ class AttachGenre extends GameState
         $Genre->attach($currentPlayerId, $slot);
 
         $this->draftCounter->set($currentPlayerId, 2);
-        $this->attachmentVariable->set($currentPlayerId, 0);
+        $this->actionVariable->set($currentPlayerId, 0);
 
         $this->gamestate->setPlayerNonMultiactive($currentPlayerId, RevealScenes::class);
     }
@@ -115,7 +115,7 @@ class AttachGenre extends GameState
     public function actAttachGenreCancel(int $currentPlayerId): void
     {
         $this->scenes->deck->moveAllCardsInLocation("todiscard", "hand", $currentPlayerId, $currentPlayerId);
-        $this->attachmentVariable->set($currentPlayerId, 0);
+        $this->actionVariable->set($currentPlayerId, 0);
         $this->gamestate->nextPrivateState($currentPlayerId, PlayerTurn::class);
     }
 
