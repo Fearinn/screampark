@@ -82,7 +82,7 @@ class Scene extends Scenes
         if ($anywhere) {
             $this->staffCounter->inc(
                 $playerId,
-                1,
+                -1,
                 new NotificationMessage("", ["ignore" => true])
             );
         }
