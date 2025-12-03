@@ -92,7 +92,7 @@ class Scenes extends Cards
     public function getBoard(int $playerId): array
     {
         $sql = "SELECT {$this->cardFields} FROM {$this->dbTable} 
-        WHERE card_location IN ('board', 'placed') AND card_location_arg={$playerId}";
+        WHERE card_location IN ('board', 'placed', 'placedAnywhere') AND card_location_arg={$playerId}";
         $board = $this->game->getObjectListFromDB($sql);
 
         return $board;
@@ -101,7 +101,7 @@ class Scenes extends Cards
     public function getMaxSlot(int $playerId): int
     {
         $slot = (int) $this->game->getUniqueValueFromDB("SELECT MAX(slot) FROM {$this->dbTable} 
-        WHERE card_location IN ('board', 'placed') AND card_location_arg={$playerId} AND position=1");
+        WHERE card_location IN ('board', 'placed', 'placedAnywhere') AND card_location_arg={$playerId} AND position=1");
 
         if (!$slot) {
             return 0;
@@ -113,7 +113,7 @@ class Scenes extends Cards
     public function getNextPosition(int $playerId, int $slot): int
     {
         $nextPosition = (int) $this->game->getUniqueValueFromDB("SELECT MAX(position) FROM {$this->dbTable}
-        WHERE card_location IN ('board', 'placed') AND card_location_arg={$playerId} AND slot={$slot}") + 1;
+        WHERE card_location IN ('board', 'placed', 'placedAnywhere') AND card_location_arg={$playerId} AND slot={$slot}") + 1;
 
         if (!$nextPosition) {
             return 1;
@@ -143,7 +143,7 @@ class Scenes extends Cards
     public function getMainInSlot(int $playerId, int $slot): ?Scene
     {
         $sql = "SELECT {$this->cardFields} FROM {$this->dbTable} 
-        WHERE card_location IN ('board', 'placed') AND card_location_arg={$playerId} AND position=1 AND slot={$slot}";
+        WHERE card_location IN ('board', 'placed', 'placedAnywhere') AND card_location_arg={$playerId} AND position=1 AND slot={$slot}";
 
         $card = $this->game->getObjectFromDB($sql);
         if (!$card) {
@@ -163,6 +163,22 @@ class Scenes extends Cards
             $Scene = new Scene($this->game, $cardId);
 
             if ($Scene->isPlaceable($playerId)) {
+                $placeable[] = $cardId;
+            }
+        }
+
+        return $placeable;
+    }
+
+    public function getPlaceableAnywhere(int $playerId): array
+    {
+        $hand = $this->deck->getPlayerHand($playerId);
+
+        $placeable = [];
+        foreach ($hand as $cardId => $card) {
+            $Scene = new Scene($this->game, $cardId);
+
+            if ($Scene->isPlaceableAnywhere($playerId)) {
                 $placeable[] = $cardId;
             }
         }
@@ -272,7 +288,7 @@ class Scenes extends Cards
     public function shift(int $playerId, int $slot): void
     {
         $sql = "UPDATE {$this->dbTable} SET slot=slot+1, shifted=1 WHERE card_location_arg={$playerId} 
-        AND card_location IN ('board', 'placed') AND slot>{$slot}";
+        AND card_location IN ('board', 'placed', 'placedAnywhere') AND slot>={$slot}";
         $this->game->DbQuery($sql);
 
         $sql = "SELECT {$this->cardFields} FROM {$this->dbTable} 
@@ -284,6 +300,25 @@ class Scenes extends Cards
             "shiftScenesPrivate",
             "",
             [
+                "cards" => $cards,
+            ]
+        );
+    }
+
+    public function revealShifted(int $playerId, int $slot): void
+    {
+        $sql = "UPDATE {$this->dbTable} SET shifted=0 WHERE shifted=1 AND card_location_arg={$playerId}";
+        $this->game->DbQuery($sql);
+
+        $sql = "SELECT {$this->cardFields} FROM {$this->dbTable} 
+        WHERE slot>$slot AND card_location_arg={$playerId} ORDER BY slot DESC, position DESC";
+        $cards = $this->game->getObjectListFromDB($sql);
+
+        $this->game->notify->all(
+            "shiftScenes",
+            "",
+            [
+                "player_id" => $playerId,
                 "cards" => $cards,
             ]
         );

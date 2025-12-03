@@ -19,7 +19,8 @@ class PlayerTurn extends State {
     }
 
     const { keysToNumbers } = this.game;
-    const { placeableScenes, attachableScenes, canAttachGenre, nbr } = args;
+    const { placeable, attachable, canAttachGenre, placeableAnywhere, nbr } =
+      args;
 
     const { hand } = this.sceneManager.stocks;
     hand.setSelectionMode(canAttachGenre ? "multiple" : "single");
@@ -81,7 +82,7 @@ class PlayerTurn extends State {
           });
         },
         {
-          disabled: !placeableScenes.includes(cardId),
+          disabled: !placeable.includes(cardId),
         }
       );
 
@@ -92,7 +93,20 @@ class PlayerTurn extends State {
             cardId: cardId,
           });
         },
-        { disabled: !attachableScenes.includes(cardId) }
+        { disabled: !attachable.includes(cardId) }
+      );
+
+      this.game.addButton(
+        this.game.format_string_recursive(
+          _("place left of other scene (discard 1 ${staff_icon})"),
+          {}
+        ),
+        () => {
+          this.game.performAction("actPlaceAnywhereStart", {
+            cardId: cardId,
+          });
+        },
+        { disabled: !placeableAnywhere.includes(cardId) }
       );
 
       this.game.addButton(
@@ -125,6 +139,7 @@ class PlayerTurn extends State {
 interface ArgsPlayerTurn {
   nbr: number;
   canAttachGenre: boolean;
-  placeableScenes: number[];
-  attachableScenes: number[];
+  placeable: number[];
+  attachable: number[];
+  placeableAnywhere: number[];
 }

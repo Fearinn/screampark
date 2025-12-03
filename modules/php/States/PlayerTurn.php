@@ -45,8 +45,9 @@ class PlayerTurn extends GameState
         $args = [
             "nbr" => 2 - $draftCount,
             "canAttachGenre" => $maxSlot > 0 && $draftCount === 0,
-            "placeableScenes" => $this->scenes->getPlaceable($playerId),
-            "attachableScenes" => $this->scenes->getAttachable($playerId),
+            "placeable" => $this->scenes->getPlaceable($playerId),
+            "attachable" => $this->scenes->getAttachable($playerId),
+            "placeableAnywhere" => $this->scenes->getPlaceableAnywhere($playerId),
         ];
 
         return $args;
@@ -149,17 +150,18 @@ class PlayerTurn extends GameState
         #[IntParam(min: 1, max: 120)] int $cardId,
     ): void {
         $Scene = new Scene($this->game, $cardId);
-        if (! $Scene->isPlaceableAnywhere($currentPlayerId)) {
+        if (!$Scene->isPlaceableAnywhere($currentPlayerId)) {
             throw new \BgaVisibleSystemException("Unexpected error: 8");
         };
 
         $this->actionVariable->set($currentPlayerId, $cardId);
 
         $possibleSlots = $Scene->possibleAnywhereSlots($currentPlayerId);
-        if (count($possibleSlots) === 0) {
+        if (count($possibleSlots) === 1) {
             $slot = reset($possibleSlots);
             $PlaceAnywhere = new PlaceAnywhere($this->game);
             $PlaceAnywhere->placeAnywhere($currentPlayerId, $Scene, $slot);
+            return;
         }
 
         $this->gamestate->nextPrivateState($currentPlayerId, PlaceAnywhere::class);

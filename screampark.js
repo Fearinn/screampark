@@ -682,6 +682,7 @@ var NotifManager = /** @class */ (function () {
             "placeScene",
             "discardScene",
             "discardBoth",
+            "shiftScenes",
             "receiveCards",
         ];
         notifsToIgnore.forEach(function (notifName) {
@@ -900,6 +901,14 @@ var NotifManager = /** @class */ (function () {
     };
     NotifManager.prototype.notif_shiftScenesPrivate = function (args) {
         return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                this.notif_shiftScenes(args);
+                return [2 /*return*/];
+            });
+        });
+    };
+    NotifManager.prototype.notif_shiftScenes = function (args) {
+        return __awaiter(this, void 0, void 0, function () {
             var playerId, cards, boards, board, promises;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -909,8 +918,9 @@ var NotifManager = /** @class */ (function () {
                         board = boards[playerId];
                         promises = [];
                         cards.forEach(function (card) {
+                            var previousSlot = Number(card.slot) - 1;
                             var animation = board.addCard(card, {
-                                fromElement: document.querySelector("#scp_scenes-".concat(playerId, " [data-slot-id=\"").concat(card.slot, "\"]")),
+                                fromElement: document.querySelector("#scp_scenes-".concat(playerId, " [data-slot-id=\"").concat(previousSlot, "\"]")),
                                 fromPlaceholder: "off",
                             });
                             promises.push(animation);
@@ -1187,8 +1197,12 @@ var SceneManager = /** @class */ (function () {
                 },
                 autoPlace: function (_a) {
                     var location = _a.location, location_arg = _a.location_arg;
-                    return ((location === "board" || location === "placed") &&
-                        Number(location_arg) === playerId);
+                    var locations = [
+                        "board",
+                        "placed",
+                        "placedAnywhere",
+                    ];
+                    return (locations.includes(location) && Number(location_arg) === playerId);
                 },
             });
             fakeHands[playerId] = new BgaCards.VoidStock(_this.manager, document.getElementById("scp_fakeHand-".concat(playerId)), {});
@@ -1674,7 +1688,7 @@ var PlayerTurn = /** @class */ (function (_super) {
             return;
         }
         var keysToNumbers = this.game.keysToNumbers;
-        var placeableScenes = args.placeableScenes, attachableScenes = args.attachableScenes, canAttachGenre = args.canAttachGenre, nbr = args.nbr;
+        var placeable = args.placeable, attachable = args.attachable, canAttachGenre = args.canAttachGenre, placeableAnywhere = args.placeableAnywhere, nbr = args.nbr;
         var hand = this.sceneManager.stocks.hand;
         hand.setSelectionMode(canAttachGenre ? "multiple" : "single");
         hand.onSelectionChange = function (selection, lastChange) {
@@ -1714,13 +1728,18 @@ var PlayerTurn = /** @class */ (function (_super) {
                     cardId: cardId,
                 });
             }, {
-                disabled: !placeableScenes.includes(cardId),
+                disabled: !placeable.includes(cardId),
             });
             _this.game.addButton(_("add to other scene"), function () {
                 _this.game.performAction("actAttachSceneStart", {
                     cardId: cardId,
                 });
-            }, { disabled: !attachableScenes.includes(cardId) });
+            }, { disabled: !attachable.includes(cardId) });
+            _this.game.addButton(_this.game.format_string_recursive(_("place left of other scene (discard 1 ${staff_icon})"), {}), function () {
+                _this.game.performAction("actPlaceAnywhereStart", {
+                    cardId: cardId,
+                });
+            }, { disabled: !placeableAnywhere.includes(cardId) });
             _this.game.addButton(_this.game.format_string_recursive(_("discard and get 2 ${staff_icon}"), {}), function () {
                 _this.game.performAction("actDiscardScene", {
                     cardId: cardId,

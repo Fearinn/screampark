@@ -97,9 +97,13 @@ class SceneManager {
             return Number(slot);
           },
           autoPlace: ({ location, location_arg }) => {
+            const locations: SceneCard["location"][] = [
+              "board",
+              "placed",
+              "placedAnywhere",
+            ];
             return (
-              (location === "board" || location === "placed") &&
-              Number(location_arg) === playerId
+              locations.includes(location) && Number(location_arg) === playerId
             );
           },
         }
@@ -212,7 +216,7 @@ interface SceneStocks {
 
 interface SceneCard extends SCP_Card {
   type: "scene" | "genre";
-  location?: "hand" | "todiscard" | "board" | "placed";
+  location?: "hand" | "todiscard" | "board" | "placed" | "placedAnywhere";
   slot?: number;
   position?: number;
 }

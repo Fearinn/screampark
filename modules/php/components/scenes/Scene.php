@@ -51,12 +51,17 @@ class Scene extends Scenes
         return $this->getCard($this->cardId);
     }
 
-    private function canPayCost(int $playerId): bool
+    private function canPayCost(int $playerId, ?bool $anywhere = false): bool
     {
-        return $this->staffCost <= $this->staffCounterPrivate->get($playerId);
+        $staffCost = $this->staffCost;
+        if ($anywhere) {
+            $staffCost++;
+        }
+
+        return $staffCost <= $this->staffCounterPrivate->get($playerId);
     }
 
-    public function updateStaff(int $playerId): void
+    public function updateStaff(int $playerId, ?bool $anywhere = false): void
     {
         if ($this->staffCost > 0) {
             $this->staffCounter->inc(
@@ -73,9 +78,17 @@ class Scene extends Scenes
                 new NotificationMessage("", ["ignore" => true])
             );
         }
+
+        if ($anywhere) {
+            $this->staffCounter->inc(
+                $playerId,
+                1,
+                new NotificationMessage("", ["ignore" => true])
+            );
+        }
     }
 
-    private function updateStaffPrivate(int $playerId): void
+    private function updateStaffPrivate(int $playerId, ?bool $anywhere = false): void
     {
         if ($this->staffCost > 0) {
             $this->staffCounterPrivate->inc($playerId, -$this->staffCost);
@@ -101,6 +114,19 @@ class Scene extends Scenes
                 [
                     "name" => "staff",
                     "inc" => 1,
+                ]
+            );
+        }
+
+        if ($anywhere) {
+            $this->staffCounterPrivate->inc($playerId, -1);
+            $this->game->notify->player(
+                $playerId,
+                "setPlayerCounterPrivate",
+                "",
+                [
+                    "name" => "staff",
+                    "inc" => -1,
                 ]
             );
         }
@@ -181,7 +207,7 @@ class Scene extends Scenes
     public function isPlaceableAnywhere(int $playerId): bool
     {
         return $this->points <= $this->getMinPoints($playerId) &&
-            $this->canPayCost($playerId);
+            $this->canPayCost($playerId, true);
     }
 
     public function possibleAnywhereSlots(int $playerId): array
@@ -202,12 +228,58 @@ class Scene extends Scenes
 
     public function placeAnywhere(int $playerId, int $slot): void
     {
-        $this->updateStaffPrivate($playerId);
+        $this->updateStaffPrivate($playerId, true);
         $this->shift($playerId, $slot);
 
-        $this->game->DbQuery("UPDATE {$this->dbTable} SET card_location='placed', card_location_arg={$playerId}, 
+        $this->game->DbQuery("UPDATE {$this->dbTable} SET card_location='placedAnywhere', card_location_arg={$playerId}, 
         slot={$slot}, position=1 WHERE card_id={$this->cardId}");
         $card = $this->getCard($this->cardId);
+
+        $Scene2 = $this->getMainInSlot($playerId, $slot + 1);
+
+        $this->game->notify->player(
+            $playerId,
+            "placeScenePrivate",
+            clienttranslate('You place ${sceneLabel} as a new scene before ${sceneLabel2}'),
+            [
+                "i18n" => ["sceneLabel", "sceneLabel2"],
+                "preserve" => ["sceneId", "sceneId2"],
+                "sceneLabel" => $this->downLabel,
+                "sceneId" => $this->id,
+                "card" => $card,
+                "sceneLabel2" => $Scene2->upLabel,
+                "sceneId2" => $Scene2->id,
+            ]
+        );
+    }
+
+    public function revealPlacedAnywhere(int $playerId): void
+    {
+        $this->updateStaff($playerId, true);
+
+        $slot = (int) $this->card["slot"];
+        $this->revealShifted($playerId, $slot);
+
+        $this->move("board", $playerId);
+        $card = $this->getCard($this->cardId);
+        $slot = (int) $card["slot"];
+
+        $Scene2 = $this->getMainInSlot($playerId, $slot + 1);
+
+        $this->game->notify->all(
+            "placeScene",
+            clienttranslate('${player_name} places ${sceneLabel} before ${sceneLabel2}'),
+            [
+                "i18n" => ["sceneLabel", "sceneLabel2"],
+                "preserve" => ["sceneId", "sceneId2"],
+                "player_id" => $playerId,
+                "sceneLabel" => $this->upLabel,
+                "sceneId" => $this->id,
+                "card" => $card,
+                "sceneLabel2" => $Scene2->upLabel,
+                "sceneId2" => $Scene2->id,
+            ]
+        );
     }
 
     public function isAttachable(int $playerId): bool

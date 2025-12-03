@@ -30,11 +30,6 @@ class RevealScenes extends GameState
         $this->SCENES = $this->game->SCENES;
     }
 
-    public function getArgs(): array
-    {
-        return [];
-    }
-
     public function onEnteringState(): string
     {
         $players = $this->game->loadPlayersBasicInfos();
@@ -61,6 +56,15 @@ class RevealScenes extends GameState
 
                 $Scene = new Scene($this->game, $cardId);
                 $Scene->revealPlaced($playerId);
+            }
+
+            $sql = "SELECT {$this->scenes->cardFields} FROM {$this->scenes->dbTable}
+            WHERE card_location='placedAnywhere' AND card_location_arg={$playerId} ORDER BY slot";
+            $placedAnywhereCards = $this->game->getCollectionFromDB($sql);
+
+            foreach ($placedAnywhereCards as $cardId => $card) {
+                $Scene = new Scene($this->game, $cardId);
+                $Scene->revealPlacedAnywhere($playerId);
             }
         }
 

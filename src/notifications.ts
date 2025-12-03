@@ -22,6 +22,7 @@ class NotifManager {
       "placeScene",
       "discardScene",
       "discardBoth",
+      "shiftScenes",
       "receiveCards",
     ];
 
@@ -199,15 +200,24 @@ class NotifManager {
     player_id: number;
     cards: SceneCard[];
   }): Promise<void> {
+    this.notif_shiftScenes(args);
+  }
+
+  public async notif_shiftScenes(args: {
+    player_id: number;
+    cards: SceneCard[];
+  }): Promise<void> {
     const { player_id: playerId, cards } = args;
     const { boards } = this.sceneManager.stocks;
     const board = boards[playerId];
 
     const promises = [];
     cards.forEach((card) => {
+      const previousSlot = Number(card.slot) - 1;
+
       const animation = board.addCard(card, {
         fromElement: document.querySelector(
-          `#scp_scenes-${playerId} [data-slot-id="${card.slot}"]`
+          `#scp_scenes-${playerId} [data-slot-id="${previousSlot}"]`
         ),
         fromPlaceholder: "off",
       });
