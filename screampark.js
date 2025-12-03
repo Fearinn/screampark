@@ -1805,12 +1805,12 @@ var PlayerTurn = /** @class */ (function (_super) {
                     cardId: cardId,
                 });
             }, { disabled: !attachable.includes(cardId) });
-            _this.game.addButton(_this.game.format_string_recursive(_("place left of other scene (discard 1 ${staff_icon})"), {}), function () {
+            _this.game.addButton(_this.game.format_string_recursive(_("place to the left of another scene (-1 ${staff_icon})"), {}), function () {
                 _this.game.performAction("actPlaceAnywhereStart", {
                     cardId: cardId,
                 });
             }, { disabled: !placeableAnywhere.includes(cardId) });
-            _this.game.addButton(_this.game.format_string_recursive(_("discard and get 2 ${staff_icon}"), {}), function () {
+            _this.game.addButton(_this.game.format_string_recursive(_("discard (+2 ${staff_icon})"), {}), function () {
                 _this.game.performAction("actDiscardScene", {
                     cardId: cardId,
                 });

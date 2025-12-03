@@ -98,7 +98,7 @@ class PlayerTurn extends State {
 
       this.game.addButton(
         this.game.format_string_recursive(
-          _("place left of other scene (discard 1 ${staff_icon})"),
+          _("place to the left of another scene (-1 ${staff_icon})"),
           {}
         ),
         () => {
@@ -110,10 +110,7 @@ class PlayerTurn extends State {
       );
 
       this.game.addButton(
-        this.game.format_string_recursive(
-          _("discard and get 2 ${staff_icon}"),
-          {}
-        ),
+        this.game.format_string_recursive(_("discard (+2 ${staff_icon})"), {}),
         () => {
           this.game.performAction("actDiscardScene", {
             cardId: cardId,

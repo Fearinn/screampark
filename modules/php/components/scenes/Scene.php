@@ -241,11 +241,11 @@ class Scene extends Scenes
         $this->game->notify->player(
             $playerId,
             "placeScenePrivate",
-            clienttranslate('You place ${sceneLabel} as a new scene before ${sceneLabel2}'),
+            clienttranslate('You place ${sceneLabel} as a new scene to the left of ${sceneLabel2}'),
             [
                 "i18n" => ["sceneLabel", "sceneLabel2"],
                 "preserve" => ["sceneId", "sceneId2"],
-                "sceneLabel" => $this->downLabel,
+                "sceneLabel" => $this->upLabel,
                 "sceneId" => $this->id,
                 "card" => $card,
                 "sceneLabel2" => $Scene2->upLabel,
@@ -269,7 +269,7 @@ class Scene extends Scenes
 
         $this->game->notify->all(
             "placeScene",
-            clienttranslate('${player_name} places ${sceneLabel} before ${sceneLabel2}'),
+            clienttranslate('${player_name} places ${sceneLabel} to the left of ${sceneLabel2}'),
             [
                 "i18n" => ["sceneLabel", "sceneLabel2"],
                 "preserve" => ["sceneId", "sceneId2"],
