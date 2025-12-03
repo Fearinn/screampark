@@ -18,7 +18,7 @@ class AttachGenre extends State {
       return;
     }
 
-    const { cardsToDiscard } = args;
+    const { cardsToDiscard, maxSlot } = args;
     this.sceneManager.highlight(cardsToDiscard);
 
     this.game.addButton(
@@ -33,7 +33,12 @@ class AttachGenre extends State {
     const { boards } = this.sceneManager.stocks;
     const board = boards[playerId];
 
-    board.setSlotSelectionMode("single");
+    const selectableSlots = [];
+    for (let slot = 1; slot <= maxSlot; slot++) {
+      selectableSlots.push(slot);
+    }
+
+    board.setSlotSelectionMode("single", selectableSlots);
     board.onSlotSelectionChange = (selection, slot) => {
       this.game.clearButtons(true);
 
@@ -83,4 +88,5 @@ class AttachGenre extends State {
 
 interface ArgsAttachGenre {
   cardsToDiscard: SceneCard[];
+  maxSlot: number;
 }

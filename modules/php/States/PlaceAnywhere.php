@@ -40,10 +40,10 @@ class PlaceAnywhere extends GameState
     {
         $cardId = $this->actionVariable->get($playerId);
         $Scene = new Scene($this->game, $cardId);
-        $possibleSlots = $Scene->getPossibleAnywhereSlots($playerId);
+        $selectableSlots = $Scene->getSelectableAnywhereSlots($playerId);
 
         $args = [
-            "possibleSlots" => $possibleSlots,
+            "selectableSlots" => $selectableSlots,
             "sceneLabel" => $Scene->upLabel,
             "cardToPlace" => $Scene->card,
         ];
@@ -59,8 +59,8 @@ class PlaceAnywhere extends GameState
         array $args,
         #[IntParam(min: 1, max: 24)] int $slot,
     ) {
-        $possibleSlots = $args["possibleSlots"];
-        if (!in_array($slot, $possibleSlots)) {
+        $selectableSlots = $args["selectableSlots"];
+        if (!in_array($slot, $selectableSlots)) {
             throw new \BgaVisibleSystemException("Error code: 7");
         }
 

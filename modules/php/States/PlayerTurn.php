@@ -156,9 +156,9 @@ class PlayerTurn extends GameState
 
         $this->actionVariable->set($currentPlayerId, $cardId);
 
-        $possibleSlots = $Scene->getPossibleAnywhereSlots($currentPlayerId);
-        if (count($possibleSlots) === 1) {
-            $slot = reset($possibleSlots);
+        $selectableSlots = $Scene->getSelectableAnywhereSlots($currentPlayerId);
+        if (count($selectableSlots) === 1) {
+            $slot = reset($selectableSlots);
             $PlaceAnywhere = new PlaceAnywhere($this->game);
             $PlaceAnywhere->placeAnywhere($currentPlayerId, $Scene, $slot);
             return;

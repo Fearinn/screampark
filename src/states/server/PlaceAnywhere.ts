@@ -24,14 +24,14 @@ class PlaceAnywhere extends State {
       { type: "alert" }
     );
 
-    const { cardToPlace, possibleSlots } = args;
+    const { cardToPlace, selectableSlots } = args;
     this.sceneManager.highlight([cardToPlace]);
 
     const { player_id: playerId } = this.game;
     const { boards } = this.sceneManager.stocks;
     const board = boards[playerId];
 
-    board.setSlotSelectionMode("single", possibleSlots);
+    board.setSlotSelectionMode("single", selectableSlots);
     board.onSlotSelectionChange = (selection, slot) => {
       this.game.clearButtons(true);
 
@@ -80,5 +80,5 @@ class PlaceAnywhere extends State {
 
 interface ArgsPlaceAnywhere {
   cardToPlace: SceneCard;
-  possibleSlots: number[];
+  selectableSlots: number[];
 }

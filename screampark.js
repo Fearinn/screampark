@@ -1529,7 +1529,7 @@ var AttachGenre = /** @class */ (function (_super) {
             this.onInactiveUpdate();
             return;
         }
-        var cardsToDiscard = args.cardsToDiscard;
+        var cardsToDiscard = args.cardsToDiscard, maxSlot = args.maxSlot;
         this.sceneManager.highlight(cardsToDiscard);
         this.game.addButton(_("cancel"), function () {
             _this.game.performAction("actAttachGenreCancel");
@@ -1537,7 +1537,11 @@ var AttachGenre = /** @class */ (function (_super) {
         var playerId = this.game.player_id;
         var boards = this.sceneManager.stocks.boards;
         var board = boards[playerId];
-        board.setSlotSelectionMode("single");
+        var selectableSlots = [];
+        for (var slot = 1; slot <= maxSlot; slot++) {
+            selectableSlots.push(slot);
+        }
+        board.setSlotSelectionMode("single", selectableSlots);
         board.onSlotSelectionChange = function (selection, slot) {
             _this.game.clearButtons(true);
             if (selection.length === 0) {
@@ -1590,12 +1594,16 @@ var AttachScene = /** @class */ (function (_super) {
         this.game.addButton(_("cancel"), function () {
             _this.game.performAction("actAttachSceneCancel");
         }, { type: "alert" });
-        var cardToAttach = args.cardToAttach;
+        var cardToAttach = args.cardToAttach, maxSlot = args.maxSlot;
         this.sceneManager.highlight([cardToAttach]);
         var playerId = this.game.player_id;
         var boards = this.sceneManager.stocks.boards;
         var board = boards[playerId];
-        board.setSlotSelectionMode("single");
+        var selectableSlots = [];
+        for (var slot = 1; slot <= maxSlot; slot++) {
+            selectableSlots.push(slot);
+        }
+        board.setSlotSelectionMode("single", selectableSlots);
         board.onSlotSelectionChange = function (selection, slot) {
             _this.game.clearButtons(true);
             if (selection.length === 0) {
@@ -1701,12 +1709,12 @@ var PlaceAnywhere = /** @class */ (function (_super) {
         this.game.addButton(_("cancel"), function () {
             _this.game.performAction("actPlaceAnywhereCancel");
         }, { type: "alert" });
-        var cardToPlace = args.cardToPlace, possibleSlots = args.possibleSlots;
+        var cardToPlace = args.cardToPlace, selectableSlots = args.selectableSlots;
         this.sceneManager.highlight([cardToPlace]);
         var playerId = this.game.player_id;
         var boards = this.sceneManager.stocks.boards;
         var board = boards[playerId];
-        board.setSlotSelectionMode("single", possibleSlots);
+        board.setSlotSelectionMode("single", selectableSlots);
         board.onSlotSelectionChange = function (selection, slot) {
             _this.game.clearButtons(true);
             if (selection.length === 0) {

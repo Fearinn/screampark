@@ -24,14 +24,19 @@ class AttachScene extends State {
       { type: "alert" }
     );
 
-    const { cardToAttach } = args;
+    const { cardToAttach, maxSlot } = args;
     this.sceneManager.highlight([cardToAttach]);
 
     const { player_id: playerId } = this.game;
     const { boards } = this.sceneManager.stocks;
     const board = boards[playerId];
 
-    board.setSlotSelectionMode("single");
+    const selectableSlots = [];
+    for (let slot = 1; slot <= maxSlot; slot++) {
+      selectableSlots.push(slot);
+    }
+
+    board.setSlotSelectionMode("single", selectableSlots);
     board.onSlotSelectionChange = (selection, slot) => {
       this.game.clearButtons(true);
 
@@ -80,4 +85,5 @@ class AttachScene extends State {
 
 interface ArgsAttachScene {
   cardToAttach: SceneCard;
+  maxSlot: number;
 }

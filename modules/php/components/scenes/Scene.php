@@ -211,21 +211,21 @@ class Scene extends Scenes
             $this->canPayCost($playerId, true);
     }
 
-    public function getPossibleAnywhereSlots(int $playerId): array
+    public function getSelectableAnywhereSlots(int $playerId): array
     {
-        $possibleSlots = [];
+        $selectableSlots = [];
 
         $maxSlot = $this->getMaxSlot($playerId);
         for ($slot = 1; $slot <= $maxSlot; $slot++) {
             $Scene = $this->getMainInSlot($playerId, $slot);
 
             if ($this->points <= $Scene->points) {
-                $possibleSlots[] = $slot;
+                $selectableSlots[] = $slot;
                 break;
             }
         }
 
-        return $possibleSlots;
+        return $selectableSlots;
     }
 
     public function placeAnywhere(int $playerId, int $slot): void
