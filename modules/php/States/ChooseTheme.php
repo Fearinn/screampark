@@ -60,7 +60,7 @@ class ChooseTheme extends GameState
         $hand = $args[$currentPlayerId]["hand"];
 
         if (!in_array($cardId, $hand)) {
-            throw new \BgaVisibleSystemException("Unexpected error: 1");
+            throw new \BgaVisibleSystemException("Error code: 1");
         }
 
         $handLeft = array_filter($hand, function (int $card_id) use ($cardId) {

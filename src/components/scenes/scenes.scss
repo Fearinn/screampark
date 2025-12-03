@@ -14,10 +14,6 @@
   .slot {
     flex-direction: column;
 
-    &:empty {
-      width: 0 !important;
-    }
-
     .scp_scene {
       &:not(:first-child) {
         margin-top: -115%;

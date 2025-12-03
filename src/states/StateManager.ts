@@ -10,6 +10,7 @@ class StateManager {
       PlayerTurn: new PlayerTurn(this.game),
       AttachScene: new AttachScene(this.game),
       AttachGenre: new AttachGenre(this.game),
+      PlaceAnywhere: new PlaceAnywhere(this.game),
     };
   }
 

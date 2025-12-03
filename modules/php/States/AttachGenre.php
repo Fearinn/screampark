@@ -65,7 +65,7 @@ class AttachGenre extends GameState
         $genreId = $this->actionVariable->get($currentPlayerId);
 
         if ($args["maxSlot"] < $slot) {
-            throw new \BgaVisibleSystemException("Unexpected error: 5");
+            throw new \BgaVisibleSystemException("Error code: 5");
         }
 
         $this->attach($currentPlayerId, $genreId, $slot);

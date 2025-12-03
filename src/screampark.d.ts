@@ -64,4 +64,6 @@ type ActionName =
   | "actAttachGenreStart"
   | "actAttachGenre"
   | "actAttachGenreCancel"
-  | "actPlaceAnywhereStart";
+  | "actPlaceAnywhereStart"
+  | "actPlaceAnywhere"
+  | "actPlaceAnywhereCancel";

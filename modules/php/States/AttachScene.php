@@ -64,7 +64,7 @@ class AttachScene extends GameState
         $Scene = new Scene($this->game, $cardId);
 
         if ($args["maxSlot"] < $slot) {
-            throw new \BgaVisibleSystemException("Unexpected error: 6");
+            throw new \BgaVisibleSystemException("Error code: 6");
         }
 
         $this->attach($currentPlayerId, $Scene, $slot);

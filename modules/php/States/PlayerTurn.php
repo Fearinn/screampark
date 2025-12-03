@@ -62,7 +62,7 @@ class PlayerTurn extends GameState
     ): void {
         $Scene = new Scene($this->game, $cardId);
         if (!$Scene->isPlaceable($currentPlayerId)) {
-            throw new BgaVisibleSystemException("Unexpected error: 2");
+            throw new BgaVisibleSystemException("Error code: 2");
         }
 
         $Scene->place($currentPlayerId);
@@ -83,7 +83,7 @@ class PlayerTurn extends GameState
     ): void {
         $Scene = new Scene($this->game, $cardId);
         if (!$Scene->isDiscardable($currentPlayerId)) {
-            throw new BgaVisibleSystemException("Unexpected error: 3");
+            throw new BgaVisibleSystemException("Error code: 3");
         }
 
         $Scene->discard($currentPlayerId);
@@ -105,7 +105,7 @@ class PlayerTurn extends GameState
         $Scene = new Scene($this->game, $cardId);
 
         if (!$Scene->isAttachable($currentPlayerId)) {
-            throw new BgaVisibleSystemException("Unexpected error: 4");
+            throw new BgaVisibleSystemException("Error code: 4");
         }
 
         $this->actionVariable->set($currentPlayerId, $cardId);
@@ -128,7 +128,7 @@ class PlayerTurn extends GameState
         #[IntParam(min: 1, max: 5)] int $genreId,
     ): void {
         if (!$args["canAttachGenre"]) {
-            throw new \BgaVisibleSystemException("Unexpected error: 7");
+            throw new \BgaVisibleSystemException("Error code: 7");
         }
 
         $this->scenes->deck->moveCards($cardsIds, "todiscard", $currentPlayerId);
@@ -151,7 +151,7 @@ class PlayerTurn extends GameState
     ): void {
         $Scene = new Scene($this->game, $cardId);
         if (!$Scene->isPlaceableAnywhere($currentPlayerId)) {
-            throw new \BgaVisibleSystemException("Unexpected error: 8");
+            throw new \BgaVisibleSystemException("Error code: 8");
         };
 
         $this->actionVariable->set($currentPlayerId, $cardId);

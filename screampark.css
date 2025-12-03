@@ -177,9 +177,6 @@ p {
 .scp_scenes .slot {
   flex-direction: column;
 }
-.scp_scenes .slot:empty {
-  width: 0 !important;
-}
 .scp_scenes .slot .scp_scene:not(:first-child) {
   margin-top: -115%;
 }

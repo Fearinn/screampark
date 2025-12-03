@@ -210,7 +210,7 @@ class Scene extends Scenes
             $this->canPayCost($playerId, true);
     }
 
-    public function possibleAnywhereSlots(int $playerId): array
+    public function getPossibleAnywhereSlots(int $playerId): array
     {
         $possibleSlots = [];
 
@@ -220,6 +220,7 @@ class Scene extends Scenes
 
             if ($this->points <= $Scene->points) {
                 $possibleSlots[] = $slot;
+                break;
             }
         }
 

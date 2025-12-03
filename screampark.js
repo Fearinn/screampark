@@ -1460,6 +1460,7 @@ var StateManager = /** @class */ (function () {
             PlayerTurn: new PlayerTurn(this.game),
             AttachScene: new AttachScene(this.game),
             AttachGenre: new AttachGenre(this.game),
+            PlaceAnywhere: new PlaceAnywhere(this.game),
         };
     }
     StateManager.prototype.onEntering = function (stateName, args) {
@@ -1670,6 +1671,64 @@ var ChooseTheme = /** @class */ (function (_super) {
         boards[playerId].setSelectionMode("none");
     };
     return ChooseTheme;
+}(State));
+var PlaceAnywhere = /** @class */ (function (_super) {
+    __extends(PlaceAnywhere, _super);
+    function PlaceAnywhere(game) {
+        var _this = _super.call(this, game) || this;
+        _this.sceneManager = new SceneManager(_this.game);
+        _this.SCENES = _this.game.gamedatas.SCENES;
+        return _this;
+    }
+    PlaceAnywhere.prototype.onUpdate = function (args) {
+        var _this = this;
+        _super.prototype.onUpdate.call(this, args);
+        if (!this.game.isCurrentPlayerActive()) {
+            this.onInactiveUpdate();
+            return;
+        }
+        this.game.addButton(_("cancel"), function () {
+            _this.game.performAction("actPlaceAnywhereCancel");
+        }, { type: "alert" });
+        var cardToPlace = args.cardToPlace, possibleSlots = args.possibleSlots;
+        this.sceneManager.highlight([cardToPlace]);
+        var playerId = this.game.player_id;
+        var boards = this.sceneManager.stocks.boards;
+        var board = boards[playerId];
+        board.setSlotSelectionMode("single", possibleSlots);
+        board.onSlotSelectionChange = function (selection, slot) {
+            _this.game.clearButtons(true);
+            if (selection.length === 0) {
+                return;
+            }
+            var card = board.getCards().find(function (card) {
+                return (card.slot == slot &&
+                    card.position == 1 &&
+                    card.location_arg == playerId);
+            });
+            var sceneId = card.type_arg;
+            var UP = _this.SCENES[sceneId].UP;
+            _this.game.addButton(_this.game.format_string_recursive(_("place to left of ${sceneLabel}"), {
+                sceneLabel: _(UP.label),
+            }), function () {
+                _this.game.performAction("actPlaceAnywhere", {
+                    slot: slot,
+                });
+            });
+        };
+    };
+    PlaceAnywhere.prototype.onInactiveUpdate = function () {
+        this.onLeaving();
+    };
+    PlaceAnywhere.prototype.onLeaving = function () {
+        _super.prototype.onLeaving.call(this);
+        this.sceneManager.clearHighlight();
+        var playerId = this.game.player_id;
+        var boards = this.sceneManager.stocks.boards;
+        var board = boards[playerId];
+        board.setSlotSelectionMode("none");
+    };
+    return PlaceAnywhere;
 }(State));
 var PlayerTurn = /** @class */ (function (_super) {
     __extends(PlayerTurn, _super);
