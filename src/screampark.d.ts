@@ -20,6 +20,7 @@ interface SCP_Gamedatas extends Gamedatas<SCP_Player> {
   staffCounts: Record<number, number>;
   staffCountPrivate: number;
   day: number;
+  passToIds: Record<number, number>;
 }
 
 interface Managers {

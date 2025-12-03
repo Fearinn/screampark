@@ -424,20 +424,31 @@ var Template = /** @class */ (function () {
     Template.prototype.setupZones = function () {
         var _this = this;
         var _a = this.game, gamedatas = _a.gamedatas, keysToNumbers = _a.keysToNumbers, player_id = _a.player_id;
-        var players = gamedatas.players;
+        var players = gamedatas.players, passToIds = gamedatas.passToIds;
         keysToNumbers(players).forEach(function (playerId) {
-            var player_color = players[playerId].color;
-            var player_name = _this.game.getFormattedPlayerName(playerId);
+            var playerColor = players[playerId].color;
+            var playerName = _this.game.getFormattedPlayerName(playerId);
             var isCurrentPlayerId = player_id === playerId;
             var title = isCurrentPlayerId
                 ? _this.game.format_string_recursive(_("${player_name} (You)"), {
-                    player_name: player_name,
+                    player_name: playerName,
                 })
-                : player_name;
+                : playerName;
+            var passToId = passToIds[playerId];
+            var passToName = _this.game.getFormattedPlayerName(passToId);
+            var passTo = _this.game.format_string_recursive(_("${arrow} ${player_name}"), {
+                arrow: "<i class=\"fa6 fa6-solid fa6-arrow-right\"></i>",
+                player_name: passToName,
+            });
+            var passToColor = players[passToId].color;
             var zones = document.getElementById("scp_playerZones");
-            zones.insertAdjacentHTML("beforeend", "<div id=\"scp_playerZone-".concat(playerId, "\" class=\"scp_playerZone ").concat(isCurrentPlayerId ? "scp_playerZone-current" : "", "\">\n          <h3 class=\"scp_title\" style=\"color: #").concat(player_color, "; background-color: #").concat(player_color, "40;\">\n            ").concat(title, "\n          </h3>\n          ").concat(isCurrentPlayerId
+            zones.insertAdjacentHTML("beforeend", "<div id=\"scp_playerZone-".concat(playerId, "\" class=\"scp_playerZone ").concat(isCurrentPlayerId ? "scp_playerZone-current" : "", "\">\n          <h3 class=\"scp_title\" style=\"color: #").concat(playerColor, "; background-color: #").concat(playerColor, "40;\">\n            ").concat(title, "\n          </h3>\n          <span id=\"scp_passTo-").concat(playerId, "\" class=\"scp_title scp_passTo\" \n          style=\"color: #").concat(passToColor, "; background-color: #").concat(passToColor, "40;\">").concat(passTo, "</span>\n          ").concat(isCurrentPlayerId
                 ? "<div id=\"scp_hand\" class=\"scp_hand\"></div>"
                 : "", "\n          <div id=\"scp_fakeHand-").concat(playerId, "\" class=\"scp_fakeHand\"></div>\n          <div id=\"scp_meepleSteps-").concat(playerId, "\" class=\"scp_meepleSteps\">\n            <div id=\"scp_meepleStep-0-").concat(playerId, "\" class=\"scp_meepleStep\"></div>\n          </div>\n          <div class=\"scp_playerBoard\">\n            <div id=\"scp_themes-").concat(playerId, "\" class=\"scp_themes\"></div>\n            <div id=\"scp_scenes-").concat(playerId, "\" class=\"scp_scenes\"></div>\n          </div>\n        </div>"));
+            _this.game.addTooltip("scp_passTo-".concat(playerId), _this.game.format_string_recursive(_("${player_name} passes his hand to ${player_name2}"), {
+                player_name: playerName,
+                player_name2: passToName,
+            }), "");
         });
     };
     Template.prototype.setupStocks = function () {

@@ -37,19 +37,31 @@ class Template {
 
   public setupZones(): void {
     const { gamedatas, keysToNumbers, player_id } = this.game;
-    const { players } = gamedatas;
+    const { players, passToIds } = gamedatas;
 
     keysToNumbers(players).forEach((playerId) => {
-      const { color: player_color } = players[playerId];
-      const player_name = this.game.getFormattedPlayerName(playerId);
+      const { color: playerColor } = players[playerId];
+      const playerName = this.game.getFormattedPlayerName(playerId);
 
       const isCurrentPlayerId = player_id === playerId;
 
       const title = isCurrentPlayerId
         ? this.game.format_string_recursive(_("${player_name} (You)"), {
-            player_name,
+            player_name: playerName,
           })
-        : player_name;
+        : playerName;
+
+      const passToId = passToIds[playerId];
+      const passToName = this.game.getFormattedPlayerName(passToId);
+      const passTo = this.game.format_string_recursive(
+        _("${arrow} ${player_name}"),
+        {
+          arrow: `<i class="fa6 fa6-solid fa6-arrow-right"></i>`,
+          player_name: passToName,
+        }
+      );
+
+      const { color: passToColor } = players[passToId];
 
       const zones = document.getElementById(`scp_playerZones`);
       zones.insertAdjacentHTML(
@@ -57,9 +69,11 @@ class Template {
         `<div id="scp_playerZone-${playerId}" class="scp_playerZone ${
           isCurrentPlayerId ? "scp_playerZone-current" : ""
         }">
-          <h3 class="scp_title" style="color: #${player_color}; background-color: #${player_color}40;">
+          <h3 class="scp_title" style="color: #${playerColor}; background-color: #${playerColor}40;">
             ${title}
           </h3>
+          <span id="scp_passTo-${playerId}" class="scp_title scp_passTo" 
+          style="color: #${passToColor}; background-color: #${passToColor}40;">${passTo}</span>
           ${
             isCurrentPlayerId
               ? `<div id="scp_hand" class="scp_hand"></div>`
@@ -74,6 +88,18 @@ class Template {
             <div id="scp_scenes-${playerId}" class="scp_scenes"></div>
           </div>
         </div>`
+      );
+
+      this.game.addTooltip(
+        `scp_passTo-${playerId}`,
+        this.game.format_string_recursive(
+          _("${player_name} passes his hand to ${player_name2}"),
+          {
+            player_name: playerName,
+            player_name2: passToName,
+          }
+        ),
+        ""
       );
     });
   }

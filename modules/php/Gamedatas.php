@@ -17,6 +17,8 @@ trait Gamedatas
         $Themes = new Themes($this);
         $Scenes = new Scenes($this);
 
+        $day = $this->dayCounter->get();
+
         $gamedatas = [
             "players" => $this->getCollectionFromDb("SELECT `player_id` `id`, `player_score` `score` FROM `player`"),
             "VIPS" => $this->VIPS,
@@ -31,7 +33,8 @@ trait Gamedatas
             "scenePublic" => $Scenes->getPublic($playerId),
             "sceneBoard" => !$this->isSpectator() ? $Scenes->getBoard($playerId) : [],
             "staffCounts" => $this->staffCounter->getAll(),
-            "day" => $this->dayCounter->get(),
+            "day" => $day,
+            "passToIds" => $day === 2 ?  $this->getPrevPlayerTable() : $this->getNextPlayerTable(),
         ];
 
         if (!$this->isSpectator()) {
