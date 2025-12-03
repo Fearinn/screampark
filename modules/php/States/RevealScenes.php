@@ -34,40 +34,36 @@ class RevealScenes extends GameState
     {
         $players = $this->game->loadPlayersBasicInfos();
         foreach ($players as $playerId => $player) {
-            $discardedCards = $this->scenes->deck->getCardsInLocation("discard", $playerId);
-
-            foreach ($discardedCards as $cardId => $card) {
-                $Scene = new Scene($this->game, $cardId);
-                $Scene->revealDiscarded($playerId);
-            }
-
             $this->scenes->revealDiscardedBoth($playerId);
 
             $sql = "SELECT {$this->scenes->cardFields} FROM {$this->scenes->dbTable} 
-            WHERE card_location='placed' AND card_location_arg={$playerId} ORDER BY slot, position";
-            $placedCards = $this->game->getCollectionFromDB($sql);
+            WHERE draft>0 AND card_location_arg={$playerId} ORDER BY draft";
+            $cards = $this->game->getCollectionFromDB($sql);
 
-            foreach ($placedCards as $cardId => $card) {
+            foreach ($cards as $cardId => $card) {
                 if ($card["type"] === "genre") {
                     $Genre = new Genre($this->game, $cardId);
                     $Genre->revealAttached($playerId);
-                    continue;
                 }
 
+                $location = $card["location"];
                 $Scene = new Scene($this->game, $cardId);
-                $Scene->revealPlaced($playerId);
-            }
 
-            $sql = "SELECT {$this->scenes->cardFields} FROM {$this->scenes->dbTable}
-            WHERE card_location='placedAnywhere' AND card_location_arg={$playerId} ORDER BY slot";
-            $placedAnywhereCards = $this->game->getCollectionFromDB($sql);
+                if ($location === "discard") {
+                    $Scene->revealDiscarded($playerId);
+                }
 
-            foreach ($placedAnywhereCards as $cardId => $card) {
-                $Scene = new Scene($this->game, $cardId);
-                $Scene->revealPlacedAnywhere($playerId);
+                if ($location === "placed") {
+                    $Scene->revealPlaced($playerId);
+                }
+
+                if ($location === "placedAnywhere") {
+                    $Scene->revealPlacedAnywhere($playerId);
+                }
             }
         }
 
+        $this->game->DbQuery("UPDATE {$this->scenes->dbTable} SET draft=0 WHERE draft>0");
         return PassScenes::class;
     }
 }

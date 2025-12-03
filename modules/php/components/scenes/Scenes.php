@@ -12,15 +12,17 @@ class Scenes extends Cards
     protected readonly array $GENRES;
     protected readonly PlayerCounter $staffCounter;
     protected readonly PlayerCounter $staffCounterPrivate;
+    protected readonly PlayerCounter $draftCounter;
     protected readonly PlayerCounter $playerScore;
 
-    public function __construct($game)
+    public function __construct(Game $game)
     {
         parent::__construct($game, $game->scene_cards, "scenes");
         $this->SCENES = $this->game->SCENES;
         $this->GENRES = $this->game->GENRES;
         $this->staffCounter = $this->game->staffCounter;
         $this->staffCounterPrivate = $this->game->staffCounterPrivate;
+        $this->draftCounter = $this->game->draftCounter;
         $this->playerScore = $this->game->playerScore;
 
         $this->cardFields = "card_id id, card_location location, card_location_arg location_arg, 

@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS `scenes` (
     `slot` int(2) DEFAULT 0 NOT NULL,
     `position` int(2) DEFAULT 0 NOT NULL,
     `shifted` int(1) DEFAULT 0 NOT NULL,
+    `draft` int(1) DEFAULT 0 NOT NULL,
     PRIMARY KEY (`card_id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 AUTO_INCREMENT = 1;
 CREATE TABLE IF NOT EXISTS `themes` (

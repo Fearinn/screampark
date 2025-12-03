@@ -143,9 +143,10 @@ class Scene extends Scenes
         $this->updateStaffPrivate($playerId);
 
         $slot = $this->getMaxSlot($playerId) + 1;
+        $draft = $this->draftCounter->get($playerId) + 1;
 
         $this->game->DbQuery("UPDATE {$this->dbTable} SET card_location='placed', card_location_arg={$playerId}, 
-        slot={$slot}, position=1 WHERE card_id={$this->cardId}");
+        slot={$slot}, position=1, draft={$draft} WHERE card_id={$this->cardId}");
         $card = $this->getCard($this->cardId);
 
         $this->game->notify->player(
@@ -231,9 +232,10 @@ class Scene extends Scenes
     {
         $this->updateStaffPrivate($playerId, true);
         $this->shift($playerId, $slot);
+        $draft = $this->draftCounter->get($playerId) + 1;
 
         $this->game->DbQuery("UPDATE {$this->dbTable} SET card_location='placedAnywhere', card_location_arg={$playerId}, 
-        slot={$slot}, position=1 WHERE card_id={$this->cardId}");
+        slot={$slot}, position=1, draft={$draft} WHERE card_id={$this->cardId}");
         $card = $this->getCard($this->cardId);
 
         $Scene2 = $this->getMainInSlot($playerId, $slot + 1);
@@ -291,11 +293,11 @@ class Scene extends Scenes
     public function attach(int $playerId, int $slot): void
     {
         $this->updateStaffPrivate($playerId);
-
         $position = $this->getNextPosition($playerId, $slot);
-        $sql = "UPDATE {$this->dbTable} SET position={$position}, slot={$slot}, card_location='placed', 
-        card_location_arg={$playerId} WHERE card_id={$this->cardId}";
+        $draft = $this->draftCounter->get($playerId) + 1;
 
+        $sql = "UPDATE {$this->dbTable} SET card_location='placed', card_location_arg={$playerId}, 
+        position={$position}, slot={$slot}, draft={$draft} WHERE card_id={$this->cardId}";
         $this->game->DbQuery($sql);
 
         $card = $this->getCard($this->cardId);
@@ -320,6 +322,10 @@ class Scene extends Scenes
     public function discard(int $playerId): void
     {
         $card = $this->move("discard", $playerId);
+
+        $draft = $this->draftCounter->get($playerId) + 1;
+        $sql = "UPDATE {$this->dbTable} SET draft={$draft} WHERE card_id={$this->cardId}";
+        $this->game->DbQuery($sql);
 
         $this->game->notify->player(
             $playerId,
