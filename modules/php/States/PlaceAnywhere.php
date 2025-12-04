@@ -28,7 +28,7 @@ class PlaceAnywhere extends GameState
             id: 53,
             type: StateType::PRIVATE,
             description: clienttranslate('Other player(s) must draft 2 scene cards'),
-            descriptionMyTurn: clienttranslate('${you} may place ${sceneLabel} before other scene'),
+            descriptionMyTurn: clienttranslate('${you} may place ${sceneLabel} before another scene'),
         );
 
         $this->scenes = new Scenes($this->game);

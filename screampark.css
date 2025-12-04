@@ -288,6 +288,17 @@ p {
   bottom: 11%;
 }
 
+.scp_scene.scp_logTooltip {
+  border-radius: 8px;
+  box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.5019607843);
+  height: 285.1px;
+  width: var(--scene-width);
+}
+
+:root {
+  --theme-width: 210px;
+}
+
 .scp_themeTooltip {
   display: flex;
   flex-direction: column;
@@ -296,6 +307,13 @@ p {
 .scp_themeTooltip .scp_title {
   text-align: center;
   margin-bottom: 4px;
+}
+
+.scp_theme.scp_logTooltip {
+  border-radius: 8px;
+  box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.5019607843);
+  height: 286px;
+  width: var(--theme-width);
 }
 
 .scp_starTrack {

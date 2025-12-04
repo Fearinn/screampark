@@ -87,7 +87,7 @@ class PlayerTurn extends State {
       );
 
       this.game.addButton(
-        _("add to other scene"),
+        _("add to another scene"),
         () => {
           this.game.performAction("actAttachSceneStart", {
             cardId: cardId,

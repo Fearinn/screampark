@@ -28,7 +28,7 @@ class AttachScene extends GameState
             id: 51,
             type: StateType::PRIVATE,
             description: clienttranslate('Other player(s) must draft 2 scene cards'),
-            descriptionMyTurn: clienttranslate('${you} may add ${sceneLabel} to other scene'),
+            descriptionMyTurn: clienttranslate('${you} may add ${sceneLabel} to another scene'),
         );
 
         $this->scenes = new Scenes($this->game);

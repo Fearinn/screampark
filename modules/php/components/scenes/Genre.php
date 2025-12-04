@@ -49,8 +49,9 @@ class Genre extends Scenes
             clienttranslate('You add a ${genreLabel} card to ${sceneLabel}'),
             [
                 "i18n" => ["genreLabel", "sceneLabel"],
-                "preserve" => ["sceneId"],
+                "preserve" => ["genreId", "sceneId"],
                 "genreLabel" => $this->label,
+                "genreId" => $this->id,
                 "sceneLabel" => $Scene->upLabel,
                 "sceneId" => $this->id,
                 "card" => $card,

@@ -539,6 +539,8 @@ var SCP = /** @class */ (function (_super) {
         return _this;
     }
     SCP.prototype.setup = function (gamedatas) {
+        this._attachedTooltips = {};
+        this._registeredCustomTooltips = {};
         var template = new Template(this);
         template.setup();
         this.setupNotifications();
@@ -552,6 +554,7 @@ var SCP = /** @class */ (function (_super) {
         stateManager.onLeaving(stateName);
     };
     SCP.prototype.onUpdateActionButtons = function (stateName, args) {
+        this.attachRegisteredTooltips();
         var stateManager = new StateManager(this);
         stateManager.onUpdate(stateName, args);
     };
@@ -603,11 +606,36 @@ var SCP = /** @class */ (function (_super) {
         });
     };
     SCP.prototype.bgaFormatText = function (log, args) {
+        var _this = this;
         try {
             this.addIcons(log, args);
-            Object.keys(args).forEach(function (key) {
+            var keys = Object.keys(args);
+            keys.forEach(function (key) {
                 if (key.includes("Label")) {
-                    args[key] = "<span style=\"font-weight: bold\">".concat(_(args[key]), "</span>");
+                    var uid = "".concat(Date.now().toString(36)).concat(Math.random()
+                        .toString(36)
+                        .slice(2));
+                    var elementId = "scp_logLabel-".concat(uid);
+                    args[key] = "<span id=\"".concat(elementId, "\" style=\"font-weight: bold\">").concat(_(args[key]), "</span>");
+                    if (key.includes("sceneLabel")) {
+                        var sceneIdKey = key === "sceneLabel" ? "sceneId" : "sceneId2";
+                        var sceneId = args[sceneIdKey];
+                        var tooltip = "<div id=\"scp_tooltip-".concat(sceneId, "-").concat(uid, "\" class=\"scp_card scp_scene scp_logTooltip bga-cards_card\"\n            style=\"background-image: url(").concat(g_gamethemeurl, "img/scenes/scene_").concat(sceneId, ".jpg)\"></div>");
+                        _this.registerCustomTooltip(elementId, tooltip);
+                        return;
+                    }
+                    if (key.includes("genreLabel") && args.genreId) {
+                        var genreId = args.genreId;
+                        var tooltip = "<div id=\"scp_tooltip-".concat(genreId, "-").concat(uid, "\" class=\"scp_card scp_genre scp_scene scp_logTooltip bga-cards_card\"\n            style=\"background-image: url(").concat(g_gamethemeurl, "img/genres/genre_").concat(genreId, ".jpg)\"></div>");
+                        _this.registerCustomTooltip(elementId, tooltip);
+                        return;
+                    }
+                    if (key.includes("themeLabel") && args.themeId) {
+                        var themeId = args.themeId;
+                        var tooltip = "<div id=\"scp_tooltip-".concat(themeId, "-").concat(uid, "\" class=\"scp_card scp_theme scp_logTooltip bga-cards_card\"\n            style=\"background-image: url(").concat(g_gamethemeurl, "img/themes/theme_").concat(themeId, ".jpg)\"></div>");
+                        _this.registerCustomTooltip(elementId, tooltip);
+                        return;
+                    }
                 }
             });
         }
@@ -660,6 +688,32 @@ var SCP = /** @class */ (function (_super) {
         var scenic_id = scenicSymbols[scenicName];
         var backgroundImage = "url(".concat(g_gamethemeurl, "img/icons/scenic_").concat(scenic_id, ".png)");
         return "<span class=\"scp_icon scp_genreIcon\" style=\"background-image: ".concat(backgroundImage, ";\"></span>");
+    };
+    SCP.prototype.setLoader = function (image_progress, logs_progress) {
+        // @ts-ignore
+        this.inherited(arguments); // required, this is "super()" call, do not remove
+        if (!this.isLoadingLogsComplete && logs_progress >= 100) {
+            this.isLoadingLogsComplete = true;
+            this.onLoadingLogsComplete();
+        }
+    };
+    SCP.prototype.onLoadingLogsComplete = function () {
+        this.attachRegisteredTooltips();
+    };
+    SCP.prototype.registerCustomTooltip = function (id, tooltip) {
+        this._registeredCustomTooltips[id] = tooltip;
+        return id;
+    };
+    SCP.prototype.attachRegisteredTooltips = function () {
+        for (var id in this._registeredCustomTooltips) {
+            var tooltip = this._registeredCustomTooltips[id];
+            this.addCustomTooltip(id, tooltip);
+            this._attachedTooltips[id] = tooltip;
+        }
+        this._registeredCustomTooltips = {};
+    };
+    SCP.prototype.addCustomTooltip = function (id, tooltip) {
+        this.addTooltipHtml(id, tooltip, 1000);
     };
     return SCP;
 }(GameGui));
@@ -1808,7 +1862,7 @@ var PlayerTurn = /** @class */ (function (_super) {
             }, {
                 disabled: !placeable.includes(cardId),
             });
-            _this.game.addButton(_("add to other scene"), function () {
+            _this.game.addButton(_("add to another scene"), function () {
                 _this.game.performAction("actAttachSceneStart", {
                     cardId: cardId,
                 });

@@ -1,6 +1,9 @@
 interface SCP extends GameGui<SCP_Gamedatas> {
   managers: Managers;
   stocks: Stocks;
+  isLoadingLogsComplete: boolean;
+  _registeredCustomTooltips: Record<string, string>;
+  _attachedTooltips: Record<string, string>;
 }
 
 interface SCP_Player extends Player {}
