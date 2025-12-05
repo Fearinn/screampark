@@ -4,6 +4,7 @@ class NotifManager {
   private readonly themeManager: ThemeManager;
   private readonly sceneManager: SceneManager;
   private readonly vipManager: VipManager;
+  private readonly meepleManager: MeepleManager;
 
   constructor(game: SCP) {
     this.game = game;
@@ -11,6 +12,7 @@ class NotifManager {
     this.themeManager = new ThemeManager(this.game);
     this.sceneManager = new SceneManager(this.game);
     this.vipManager = new VipManager(this.game);
+    this.meepleManager = new MeepleManager(this.game);
   }
 
   public setIgnoreChecks() {
@@ -260,10 +262,19 @@ class NotifManager {
 
   public async notif_dayEnd(args: { previousDay: number }): Promise<void> {
     const { previousDay } = args;
+
+    const { gamedatas, keysToNumbers } = this.game;
+    const { players } = gamedatas;
+    const { tracks } = this.meepleManager.stocks;
+    keysToNumbers(players).forEach((playerId) => {
+      tracks[playerId][0].addCard({ id: playerId });
+    });
+
     const { board } = this.vipManager.stocks;
     const card = board.getCards().find((card) => {
       return Number(card.location_arg) === previousDay;
     });
+
     board.flipCard(card);
   }
 
@@ -288,17 +299,24 @@ class NotifManager {
   public async notif_scoreVip(args: {
     player_id: number;
     card: SceneCard;
+    slot: number;
   }): Promise<void> {
-    const { managers, gamedatas } = this.game;
-    const { animations } = managers;
-    const { players } = gamedatas;
+    const { player_id: playerId, card, slot } = args;
 
-    const { player_id: playerId, card } = args;
-    const { color: playerColor } = players[playerId];
+    const { tracks } = this.meepleManager.stocks;
+    const track = tracks[playerId];
+    await track[slot].addCard(
+      { id: playerId },
+      {
+        forceToElement: document.querySelector(
+          `#scp_scenes-${playerId} [data-slot-id="${slot}"]`
+        ),
+      }
+    );
 
     const { boards } = this.sceneManager.stocks;
     const cardElement = boards[playerId].getCardElement(card);
-    await animations.displayScoring(cardElement, 2, playerColor);
+    await this.displayScoring(playerId, 2, cardElement);
   }
 
   public async notif_scoreScene(args: {
@@ -306,16 +324,11 @@ class NotifManager {
     card: SceneCard;
     points: number;
   }): Promise<void> {
-    const { managers, gamedatas } = this.game;
-    const { animations } = managers;
-    const { players } = gamedatas;
-
     const { player_id: playerId, card, points } = args;
-    const { color: playerColor } = players[playerId];
 
     const { boards } = this.sceneManager.stocks;
     const cardElement = boards[playerId].getCardElement(card);
-    await animations.displayScoring(cardElement, points, playerColor);
+    await this.displayScoring(playerId, points, cardElement);
   }
 
   public notif_setPlayerCounterPrivate(args: {
@@ -339,5 +352,16 @@ class NotifManager {
       const starManager = new StarManager(this.game);
       starManager.set(playerId, value);
     }
+  }
+
+  private async displayScoring(
+    playerId: number,
+    points: number,
+    cardElement: HTMLElement
+  ): Promise<void> {
+    const { gamedatas, managers } = this.game;
+    const { players } = gamedatas;
+    const { color: playerColor } = players[playerId];
+    await managers.animations.displayScoring(cardElement, points, playerColor);
   }
 }

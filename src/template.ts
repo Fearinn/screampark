@@ -62,6 +62,10 @@ class Template {
       );
 
       const { color: passToColor } = players[passToId];
+      let meepleSteps = "";
+      for (let slot = 0; slot <= 24; slot++) {
+        meepleSteps += `<div id="scp_meepleStep-${slot}-${playerId}" class="scp_meepleStep"></div>`;
+      }
 
       const zones = document.getElementById(`scp_playerZones`);
       zones.insertAdjacentHTML(
@@ -79,9 +83,10 @@ class Template {
               ? `<div id="scp_hand" class="scp_hand"></div>`
               : ""
           }
+
           <div id="scp_fakeHand-${playerId}" class="scp_fakeHand"></div>
           <div id="scp_meepleSteps-${playerId}" class="scp_meepleSteps">
-            <div id="scp_meepleStep-0-${playerId}" class="scp_meepleStep"></div>
+            ${meepleSteps}
           </div>
           <div class="scp_playerBoard">
             <div id="scp_themes-${playerId}" class="scp_themes"></div>

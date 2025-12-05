@@ -684,6 +684,7 @@ p {
   position: relative;
   left: calc(var(--vip-width) / 2);
   padding: 0 16px;
+  height: var(--meeple-width);
 }
 
 .scp_meepleStep {
@@ -696,6 +697,12 @@ p {
 }
 .scp_meeple * {
   box-shadow: none !important;
+}
+
+.slot .scp_meeple {
+  order: -1;
+  position: absolute;
+  top: -25%;
 }
 
 .scp_card {

@@ -434,6 +434,7 @@ class Scene extends Scenes
                 [
                     "player_id" => $playerId,
                     "card" => $this->card,
+                    "slot" => $slot,
                 ]
             );
         }

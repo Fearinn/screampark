@@ -441,10 +441,14 @@ var Template = /** @class */ (function () {
                 player_name: passToName,
             });
             var passToColor = players[passToId].color;
+            var meepleSteps = "";
+            for (var slot = 0; slot <= 24; slot++) {
+                meepleSteps += "<div id=\"scp_meepleStep-".concat(slot, "-").concat(playerId, "\" class=\"scp_meepleStep\"></div>");
+            }
             var zones = document.getElementById("scp_playerZones");
             zones.insertAdjacentHTML("beforeend", "<div id=\"scp_playerZone-".concat(playerId, "\" class=\"scp_playerZone ").concat(isCurrentPlayerId ? "scp_playerZone-current" : "", "\">\n          <h3 class=\"scp_title\" style=\"color: #").concat(playerColor, "; background-color: #").concat(playerColor, "40;\">\n            ").concat(title, "\n          </h3>\n          <span id=\"scp_passTo-").concat(playerId, "\" class=\"scp_title scp_passTo\" \n          style=\"color: #").concat(passToColor, "; background-color: #").concat(passToColor, "40;\">").concat(passTo, "</span>\n          ").concat(isCurrentPlayerId
                 ? "<div id=\"scp_hand\" class=\"scp_hand\"></div>"
-                : "", "\n          <div id=\"scp_fakeHand-").concat(playerId, "\" class=\"scp_fakeHand\"></div>\n          <div id=\"scp_meepleSteps-").concat(playerId, "\" class=\"scp_meepleSteps\">\n            <div id=\"scp_meepleStep-0-").concat(playerId, "\" class=\"scp_meepleStep\"></div>\n          </div>\n          <div class=\"scp_playerBoard\">\n            <div id=\"scp_themes-").concat(playerId, "\" class=\"scp_themes\"></div>\n            <div id=\"scp_scenes-").concat(playerId, "\" class=\"scp_scenes\"></div>\n          </div>\n        </div>"));
+                : "", "\n\n          <div id=\"scp_fakeHand-").concat(playerId, "\" class=\"scp_fakeHand\"></div>\n          <div id=\"scp_meepleSteps-").concat(playerId, "\" class=\"scp_meepleSteps\">\n            ").concat(meepleSteps, "\n          </div>\n          <div class=\"scp_playerBoard\">\n            <div id=\"scp_themes-").concat(playerId, "\" class=\"scp_themes\"></div>\n            <div id=\"scp_scenes-").concat(playerId, "\" class=\"scp_scenes\"></div>\n          </div>\n        </div>"));
             _this.game.addTooltip("scp_passTo-".concat(playerId), _this.game.format_string_recursive(_("${player_name} passes his hand to ${player_name2}"), {
                 player_name: playerName,
                 player_name2: passToName,
@@ -738,6 +742,7 @@ var NotifManager = /** @class */ (function () {
         this.themeManager = new ThemeManager(this.game);
         this.sceneManager = new SceneManager(this.game);
         this.vipManager = new VipManager(this.game);
+        this.meepleManager = new MeepleManager(this.game);
     }
     NotifManager.prototype.setIgnoreChecks = function () {
         var _a = this.game, notifqueue = _a.notifqueue, player_id = _a.player_id;
@@ -1042,9 +1047,15 @@ var NotifManager = /** @class */ (function () {
     };
     NotifManager.prototype.notif_dayEnd = function (args) {
         return __awaiter(this, void 0, void 0, function () {
-            var previousDay, board, card;
-            return __generator(this, function (_a) {
+            var previousDay, _a, gamedatas, keysToNumbers, players, tracks, board, card;
+            return __generator(this, function (_b) {
                 previousDay = args.previousDay;
+                _a = this.game, gamedatas = _a.gamedatas, keysToNumbers = _a.keysToNumbers;
+                players = gamedatas.players;
+                tracks = this.meepleManager.stocks.tracks;
+                keysToNumbers(players).forEach(function (playerId) {
+                    tracks[playerId][0].addCard({ id: playerId });
+                });
                 board = this.vipManager.stocks.board;
                 card = board.getCards().find(function (card) {
                     return Number(card.location_arg) === previousDay;
@@ -1079,20 +1090,23 @@ var NotifManager = /** @class */ (function () {
     };
     NotifManager.prototype.notif_scoreVip = function (args) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, managers, gamedatas, animations, players, playerId, card, playerColor, boards, cardElement;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+            var playerId, card, slot, tracks, track, boards, cardElement;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
                     case 0:
-                        _a = this.game, managers = _a.managers, gamedatas = _a.gamedatas;
-                        animations = managers.animations;
-                        players = gamedatas.players;
-                        playerId = args.player_id, card = args.card;
-                        playerColor = players[playerId].color;
+                        playerId = args.player_id, card = args.card, slot = args.slot;
+                        tracks = this.meepleManager.stocks.tracks;
+                        track = tracks[playerId];
+                        return [4 /*yield*/, track[slot].addCard({ id: playerId }, {
+                                forceToElement: document.querySelector("#scp_scenes-".concat(playerId, " [data-slot-id=\"").concat(slot, "\"]")),
+                            })];
+                    case 1:
+                        _a.sent();
                         boards = this.sceneManager.stocks.boards;
                         cardElement = boards[playerId].getCardElement(card);
-                        return [4 /*yield*/, animations.displayScoring(cardElement, 2, playerColor)];
-                    case 1:
-                        _b.sent();
+                        return [4 /*yield*/, this.displayScoring(playerId, 2, cardElement)];
+                    case 2:
+                        _a.sent();
                         return [2 /*return*/];
                 }
             });
@@ -1100,20 +1114,16 @@ var NotifManager = /** @class */ (function () {
     };
     NotifManager.prototype.notif_scoreScene = function (args) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, managers, gamedatas, animations, players, playerId, card, points, playerColor, boards, cardElement;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+            var playerId, card, points, boards, cardElement;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
                     case 0:
-                        _a = this.game, managers = _a.managers, gamedatas = _a.gamedatas;
-                        animations = managers.animations;
-                        players = gamedatas.players;
                         playerId = args.player_id, card = args.card, points = args.points;
-                        playerColor = players[playerId].color;
                         boards = this.sceneManager.stocks.boards;
                         cardElement = boards[playerId].getCardElement(card);
-                        return [4 /*yield*/, animations.displayScoring(cardElement, points, playerColor)];
+                        return [4 /*yield*/, this.displayScoring(playerId, points, cardElement)];
                     case 1:
-                        _b.sent();
+                        _a.sent();
                         return [2 /*return*/];
                 }
             });
@@ -1130,6 +1140,23 @@ var NotifManager = /** @class */ (function () {
             var starManager = new StarManager(this.game);
             starManager.set(playerId, value);
         }
+    };
+    NotifManager.prototype.displayScoring = function (playerId, points, cardElement) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, gamedatas, managers, players, playerColor;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _a = this.game, gamedatas = _a.gamedatas, managers = _a.managers;
+                        players = gamedatas.players;
+                        playerColor = players[playerId].color;
+                        return [4 /*yield*/, managers.animations.displayScoring(cardElement, points, playerColor)];
+                    case 1:
+                        _b.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return NotifManager;
 }());
@@ -1150,23 +1177,25 @@ var MeepleManager = /** @class */ (function () {
             cardHeight: 100,
             cardWidth: 100,
             setupDiv: function (_a, element) {
-                var player_id = _a.id, player_color = _a.player_color;
+                var playerId = _a.id;
                 element.classList.add("scp_card");
+                var playerColor = players[playerId].color;
                 var colors = ["982fff", "008000", "ff0000", "72c3b1", "ffa500"];
-                var color_id = colors.indexOf(player_color) + 1;
-                element.style.backgroundImage = "url(".concat(g_gamethemeurl, "img/icons/meeple_").concat(color_id, ".png)");
+                var colorId = colors.indexOf(playerColor) + 1;
+                element.style.backgroundImage = "url(".concat(g_gamethemeurl, "img/icons/meeple_").concat(colorId, ".png)");
                 _this.game.addTooltip(element.id, _this.game.format_string_recursive(_("${player_name}'s meeple"), {
-                    player_name: _this.game.getFormattedPlayerName(player_id),
+                    player_name: _this.game.getFormattedPlayerName(playerId),
                 }), "");
             },
         });
         this.manager = managers.meeples;
         var players = gamedatas.players;
         var tracks = {};
-        keysToNumbers(players).forEach(function (player_id) {
-            tracks[player_id] = {
-                0: new BgaCards.LineStock(_this.manager, document.getElementById("scp_meepleStep-".concat(0, "-").concat(player_id))),
-            };
+        keysToNumbers(players).forEach(function (playerId) {
+            tracks[playerId] = {};
+            for (var slot = 0; slot <= 24; slot++) {
+                tracks[playerId][slot] = new BgaCards.CardStock(_this.manager, document.getElementById("scp_meepleStep-".concat(slot, "-").concat(playerId)));
+            }
         });
         stocks.meeples = { tracks: tracks };
         this.stocks = stocks.meeples;
@@ -1176,9 +1205,9 @@ var MeepleManager = /** @class */ (function () {
         var _a = this.game, gamedatas = _a.gamedatas, keysToNumbers = _a.keysToNumbers;
         var players = gamedatas.players;
         var tracks = this.stocks.tracks;
-        keysToNumbers(players).forEach(function (player_id) {
-            var player_color = players[player_id].color;
-            tracks[player_id][0].addCard({ id: player_id, player_color: player_color });
+        keysToNumbers(players).forEach(function (playerId) {
+            var track = tracks[playerId];
+            track[0].addCard({ id: playerId });
         });
     };
     return MeepleManager;

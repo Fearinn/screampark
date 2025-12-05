@@ -1,6 +1,6 @@
 class MeepleManager {
   private readonly game: SCP;
-  private stocks: MeepleStocks;
+  public stocks: MeepleStocks;
   private manager: BgaCards.Manager<MeepleCard>;
 
   constructor(game: SCP) {
@@ -19,16 +19,19 @@ class MeepleManager {
       type: "scp_meeple",
       cardHeight: 100,
       cardWidth: 100,
-      setupDiv: ({ id: player_id, player_color }, element) => {
+      setupDiv: ({ id: playerId }, element) => {
         element.classList.add("scp_card");
+
+        const { color: playerColor } = players[playerId];
         const colors = ["982fff", "008000", "ff0000", "72c3b1", "ffa500"];
-        const color_id = colors.indexOf(player_color) + 1;
-        element.style.backgroundImage = `url(${g_gamethemeurl}img/icons/meeple_${color_id}.png)`;
+        const colorId = colors.indexOf(playerColor) + 1;
+
+        element.style.backgroundImage = `url(${g_gamethemeurl}img/icons/meeple_${colorId}.png)`;
 
         this.game.addTooltip(
           element.id,
           this.game.format_string_recursive(_("${player_name}'s meeple"), {
-            player_name: this.game.getFormattedPlayerName(player_id),
+            player_name: this.game.getFormattedPlayerName(playerId),
           }),
           ""
         );
@@ -37,14 +40,16 @@ class MeepleManager {
     this.manager = managers.meeples;
 
     const { players } = gamedatas;
-    const tracks = {};
-    keysToNumbers(players).forEach((player_id) => {
-      tracks[player_id] = {
-        0: new BgaCards.LineStock(
+    const tracks: MeepleStocks["tracks"] = {};
+    keysToNumbers(players).forEach((playerId) => {
+      tracks[playerId] = {};
+
+      for (let slot = 0; slot <= 24; slot++) {
+        tracks[playerId][slot] = new BgaCards.CardStock(
           this.manager,
-          document.getElementById(`scp_meepleStep-${0}-${player_id}`)
-        ),
-      };
+          document.getElementById(`scp_meepleStep-${slot}-${playerId}`)
+        );
+      }
     });
 
     stocks.meeples = { tracks };
@@ -57,16 +62,15 @@ class MeepleManager {
     const { players } = gamedatas;
     const { tracks } = this.stocks;
 
-    keysToNumbers(players).forEach((player_id) => {
-      const { color: player_color } = players[player_id];
-      tracks[player_id][0].addCard({ id: player_id, player_color });
+    keysToNumbers(players).forEach((playerId) => {
+      const track = tracks[playerId];
+      track[0].addCard({ id: playerId });
     });
   }
 }
 
 interface MeepleCard {
   id: number;
-  player_color: string;
 }
 
 interface MeepleStocks {
