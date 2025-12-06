@@ -36,6 +36,23 @@ p {
 
 .scp_tooltip {
   font-size: 20px;
+  border-radius: 4px;
+}
+
+.scp_pref-themedBg {
+  .scp_tooltip {
+    color: white;
+    background-image: url("img/background.jpg");
+    padding: 8px;
+  }
+
+  .dijitTooltipContainer {
+    &:has(.scp_tooltip) {
+      border: none;
+      border-radius: 4px;
+      padding: 0;
+    }
+  }
 }
 
 .player-name a,
