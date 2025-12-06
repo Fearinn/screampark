@@ -54,7 +54,7 @@ class Template {
       const passToId = passToIds[playerId];
       const passToName = this.game.getFormattedPlayerName(passToId);
       const passTo = this.game.format_string_recursive(
-        _("${arrow} ${player_name}"),
+        _("${arrow} ${player_name} ${arrow}"),
         {
           arrow: `<i class="fa6 fa6-solid fa6-arrow-right"></i>`,
           player_name: passToName,
@@ -72,18 +72,19 @@ class Template {
         "beforeend",
         `<div id="scp_playerZone-${playerId}" class="scp_playerZone ${
           isCurrentPlayerId ? "scp_playerZone-current" : ""
-        }">
+        }" style="border-color: #${playerColor};">
           <h3 class="scp_title" style="color: #${playerColor}; background-color: #${playerColor}40;">
             ${title}
           </h3>
           <span id="scp_passTo-${playerId}" class="scp_title scp_passTo" 
-          style="color: #${passToColor}; background-color: #${passToColor}40;">${passTo}</span>
+          style="color: #${passToColor}; background-color: #${passToColor}40;">
+            ${passTo}
+          </span>
           ${
             isCurrentPlayerId
               ? `<div id="scp_hand" class="scp_hand"></div>`
               : ""
           }
-
           <div id="scp_fakeHand-${playerId}" class="scp_fakeHand"></div>
           <div id="scp_meepleSteps-${playerId}" class="scp_meepleSteps">
             ${meepleSteps}
@@ -97,15 +98,17 @@ class Template {
 
       this.game.addTooltipHtml(
         `scp_passTo-${playerId}`,
-        `<span class="scp_tooltip">
-        ${this.game.format_string_recursive(
-          _("${player_name} passes his hand to ${player_name2}"),
-          {
-            player_name: playerName,
-            player_name2: passToName,
-          }
-        )}
-        </span>`
+        `<div class="scp_tooltip">
+            <span>
+            ${this.game.format_string_recursive(
+              _("${player_name} passes his hand to ${player_name2}"),
+              {
+                player_name: playerName,
+                player_name2: passToName,
+              }
+            )}
+            </span>
+        </div>`
       );
     });
   }
