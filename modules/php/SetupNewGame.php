@@ -55,6 +55,7 @@ trait SetupNewGame
             $defaultGlobal[$playerId] = [];
         }
         $this->globals->set(gCompletedScenesPrivate, $defaultGlobal);
+        $this->globals->set(gCompletedScenes, []);
 
         return ChooseTheme::class;
     }

@@ -19,8 +19,8 @@ trait Gamedatas
         $Scenes = new Scenes($this);
 
         $day = $this->dayCounter->get();
-        $completedScenes = $this->globals->get(gCompletedScenes);
-        if ($isSpectator) {
+        $completedScenes = $this->globals->get(gCompletedScenes, []);
+        if (!$isSpectator) {
             $completedScenes += $this->globals->get(gCompletedScenesPrivate)[$playerId];
         }
 
