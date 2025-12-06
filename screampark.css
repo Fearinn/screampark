@@ -98,7 +98,7 @@
   order: -1;
 }
 .scp_playerZone .scp_title {
-  font-size: 24px;
+  font-size: 28px;
   font-weight: bold;
   text-shadow: black 0 0 1px, black 0 0 1px, black 0 0 1px, black 0 0 1px, black 0 0 1px, black 0 0 1px;
   border-top-left-radius: 8px;
@@ -160,6 +160,11 @@ p {
 
 .scp_tooltip {
   font-size: 20px;
+}
+
+.player-name a,
+.playername {
+  text-shadow: black 0 0 1px, black 0 0 1px, black 0 0 1px, black 0 0 1px, black 0 0 1px, black 0 0 1px;
 }
 
 :root {
