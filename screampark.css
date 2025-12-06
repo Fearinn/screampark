@@ -197,76 +197,76 @@ p {
   margin-top: -115%;
 }
 .scp_scenes .slot .scp_scene:nth-child(1) {
-  z-index: 10;
+  z-index: 23;
 }
 .scp_scenes .slot .scp_scene:nth-child(2) {
-  z-index: 9;
+  z-index: 22;
 }
 .scp_scenes .slot .scp_scene:nth-child(3) {
-  z-index: 8;
+  z-index: 21;
 }
 .scp_scenes .slot .scp_scene:nth-child(4) {
-  z-index: 7;
+  z-index: 20;
 }
 .scp_scenes .slot .scp_scene:nth-child(5) {
-  z-index: 6;
+  z-index: 19;
 }
 .scp_scenes .slot .scp_scene:nth-child(6) {
-  z-index: 5;
+  z-index: 18;
 }
 .scp_scenes .slot .scp_scene:nth-child(7) {
-  z-index: 4;
+  z-index: 17;
 }
 .scp_scenes .slot .scp_scene:nth-child(8) {
-  z-index: 3;
+  z-index: 16;
 }
 .scp_scenes .slot .scp_scene:nth-child(9) {
-  z-index: 2;
+  z-index: 15;
 }
 .scp_scenes .slot .scp_scene:nth-child(10) {
-  z-index: 1;
+  z-index: 14;
 }
 .scp_scenes .slot .scp_scene:nth-child(11) {
-  z-index: 0;
+  z-index: 13;
 }
 .scp_scenes .slot .scp_scene:nth-child(12) {
-  z-index: -1;
+  z-index: 12;
 }
 .scp_scenes .slot .scp_scene:nth-child(13) {
-  z-index: -2;
+  z-index: 11;
 }
 .scp_scenes .slot .scp_scene:nth-child(14) {
-  z-index: -3;
+  z-index: 10;
 }
 .scp_scenes .slot .scp_scene:nth-child(15) {
-  z-index: -4;
+  z-index: 9;
 }
 .scp_scenes .slot .scp_scene:nth-child(16) {
-  z-index: -5;
+  z-index: 8;
 }
 .scp_scenes .slot .scp_scene:nth-child(17) {
-  z-index: -6;
+  z-index: 7;
 }
 .scp_scenes .slot .scp_scene:nth-child(18) {
-  z-index: -7;
+  z-index: 6;
 }
 .scp_scenes .slot .scp_scene:nth-child(19) {
-  z-index: -8;
+  z-index: 5;
 }
 .scp_scenes .slot .scp_scene:nth-child(20) {
-  z-index: -9;
+  z-index: 4;
 }
 .scp_scenes .slot .scp_scene:nth-child(21) {
-  z-index: -10;
+  z-index: 3;
 }
 .scp_scenes .slot .scp_scene:nth-child(22) {
-  z-index: -11;
+  z-index: 2;
 }
 .scp_scenes .slot .scp_scene:nth-child(23) {
-  z-index: -12;
+  z-index: 1;
 }
 .scp_scenes .slot .scp_scene:nth-child(24) {
-  z-index: -13;
+  z-index: 0;
 }
 
 .scp_hand {
@@ -298,6 +298,19 @@ p {
   box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.5019607843);
   height: 285.1px;
   width: var(--scene-width);
+}
+.scp_scene-completed::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 72, 0, 0.5019607843);
+  border-radius: 8px;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  z-index: 99;
 }
 
 :root {

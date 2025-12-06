@@ -168,18 +168,30 @@ class SceneManager {
 
   public setup(): void {
     this.build();
-    const { scenePublic, sceneHand, sceneBoard } = this.game.gamedatas;
+    const { scenePublic, sceneHand, sceneBoard, completedScenes } =
+      this.game.gamedatas;
 
     sceneBoard.sort((a, b) => {
       return Number(a.position) - Number(b.position);
     });
     const sceneCards = [...scenePublic, ...sceneHand, ...sceneBoard];
     this.manager.placeCards(sceneCards);
+
+    console.log(completedScenes);
+
+    completedScenes.forEach((cardId) => {
+      const cardElement = this.manager.getCardElement({
+        id: cardId,
+        type: "scene",
+      });
+      cardElement.classList.add("scp_scene-completed");
+    });
   }
 
   public highlight(cards: SceneCard[]): void {
     cards.forEach((card) => {
-      this.manager.getCardElement(card).classList.add("scp_card-highlight");
+      const cardElement = this.manager.getCardElement(card);
+      cardElement.classList.add("scp_card-highlight");
     });
   }
 

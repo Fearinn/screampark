@@ -243,8 +243,8 @@ class Scenes extends Cards
 
     public function getScenesInSlot(int $playerId, int $slot): array
     {
-        $sql = "SELECT {$this->cardFields} FROM {$this->dbTable} WHERE card_type='scene' AND card_location='board' 
-        AND card_location_arg={$playerId} AND slot={$slot}";
+        $sql = "SELECT {$this->cardFields} FROM {$this->dbTable} WHERE card_type='scene' 
+        AND card_location IN ('board', 'placed', 'placedAnywhere') AND card_location_arg={$playerId} AND slot={$slot}";
 
         $Scenes = [];
         $cards = $this->game->getCollectionFromDB($sql);
@@ -257,8 +257,8 @@ class Scenes extends Cards
 
     private function getGenresInSlot(int $playerId, int $slot): array
     {
-        $sql = "SELECT {$this->cardFields} FROM {$this->dbTable} WHERE card_type='genre' AND card_location='board' 
-        AND card_location_arg={$playerId} AND slot={$slot}";
+        $sql = "SELECT {$this->cardFields} FROM {$this->dbTable} WHERE card_type='genre' AND 
+        card_location IN ('board', 'placed', 'placedAnywhere') AND card_location_arg={$playerId} AND slot={$slot}";
 
         $Genres = [];
         $cards = $this->game->getCollectionFromDB($sql);

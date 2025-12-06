@@ -317,6 +317,8 @@ class Scene extends Scenes
                 "sceneId2" => $Scene2->id,
             ]
         );
+
+        $Scene2->updateCompletePrivate($playerId);
     }
 
     public function discard(int $playerId): void
@@ -383,7 +385,13 @@ class Scene extends Scenes
         return $card["location"] === "hand" && (int) $card["location_arg"] === $playerId;
     }
 
-    public function isComplete(int $playerId): bool
+    public function isComplete(): bool
+    {
+        $completedScenes = $this->game->globals->get(gCompletedScenes, []);
+        return in_array($this->cardId, $completedScenes);
+    }
+
+    private function checkComplete(int $playerId): bool
     {
         $slot = (int) $this->card["slot"];
         $genreCost = $this->genreCost;
@@ -398,6 +406,55 @@ class Scene extends Scenes
         });
 
         return $totalCost <= $this->countSlotWilds($playerId, $slot);
+    }
+
+    public function updateComplete(int $playerId): void
+    {
+        $completedScenes = $this->game->globals->get(gCompletedScenes, []);
+
+        if (in_array($this->cardId, $completedScenes)) {
+            return;
+        }
+
+        if (!$this->checkComplete($playerId)) {
+            return;
+        }
+
+        $completedScenes[] = $this->cardId;
+        $this->game->globals->set(gCompletedScenes, $completedScenes);
+
+        $this->game->notify->all(
+            "completeScene",
+            "",
+            [
+                "card" => $this->card,
+            ]
+        );
+    }
+
+    public function updateCompletePrivate(int $playerId): void
+    {
+        $completedScenes = $this->game->globals->get(gCompletedScenesPrivate, []);
+
+        if (in_array($this->cardId, $completedScenes[$playerId])) {
+            return;
+        }
+
+        if (!$this->checkComplete($playerId)) {
+            return;
+        }
+
+        $completedScenes[$playerId][] = $this->cardId;
+        $this->game->globals->set(gCompletedScenesPrivate, $completedScenes);
+
+        $this->game->notify->player(
+            $playerId,
+            "completeScene",
+            "",
+            [
+                "card" => $this->card,
+            ]
+        );
     }
 
     public function scoreTheme(int $playerId): int

@@ -331,6 +331,16 @@ class NotifManager {
     await this.displayScoring(playerId, points, cardElement);
   }
 
+  public async notif_completeScene(args: {
+    player_id: number;
+    card: SceneCard;
+  }) {
+    const { player_id: playerId, card } = args;
+    const { boards } = this.sceneManager.stocks;
+    const cardElement = boards[playerId].getCardElement(card);
+    cardElement.classList.add("scp_scene-completed");
+  }
+
   public notif_setPlayerCounterPrivate(args: {
     player_id: number;
     name: "staff";

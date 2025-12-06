@@ -50,6 +50,12 @@ trait SetupNewGame
         $this->actionVariable->initDb(array_keys($players));
         $this->dayCounter->initDb(1);
 
+        $defaultGlobal = [];
+        foreach ($players as $playerId => $player) {
+            $defaultGlobal[$playerId] = [];
+        }
+        $this->globals->set(gCompletedScenesPrivate, $defaultGlobal);
+
         return ChooseTheme::class;
     }
 }

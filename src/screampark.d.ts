@@ -20,6 +20,7 @@ interface SCP_Gamedatas extends Gamedatas<SCP_Player> {
   sceneHand: SceneCard[];
   scenePublic: SceneCard[];
   sceneBoard: SceneCard[];
+  completedScenes: number[];
   staffCounts: Record<number, number>;
   staffCountPrivate: number;
   day: number;

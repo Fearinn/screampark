@@ -27,7 +27,9 @@ use Bga\Games\ScreamPark\components\scenes\Scenes;
 use Bga\Games\ScreamPark\Gamedatas;
 use Bga\Games\ScreamPark\SetupNewGame;
 use Bga\Games\ScreamPark\States\DayEnd;
-use Bga\Games\ScreamPark\States\EndScore;
+
+define("gCompletedScenes", "gCompletedScenes");
+define("gCompletedScenesPrivate", "gCompletedScenesPrivate");
 
 class Game extends \Bga\GameFramework\Table
 {
@@ -108,7 +110,8 @@ class Game extends \Bga\GameFramework\Table
         $DayEnd->onEnteringState();
     }
 
-    public function debug_shiftScenes(int $slot = 1): void {
+    public function debug_shiftScenes(int $slot = 1): void
+    {
         $playerId = (int) $this->getCurrentPlayerId();
         $Scenes = new Scenes($this);
         $Scenes->shift($playerId, $slot);

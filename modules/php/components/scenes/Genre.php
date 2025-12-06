@@ -57,6 +57,8 @@ class Genre extends Scenes
                 "card" => $card,
             ]
         );
+
+        $Scene->updateCompletePrivate($playerId);
     }
 
     public function revealAttached(int $playerId): void

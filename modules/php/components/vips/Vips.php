@@ -128,7 +128,7 @@ class Vips extends Cards
     private function ReviewBlogger(int $playerId, int $slot): bool
     {
         $Scene = $this->scenes->getMainInSlot($playerId, $slot);
-        return $Scene->isComplete($playerId);
+        return $Scene->isComplete();
     }
 
     private function TownBoardMember(int $playerId, int $slot): bool
@@ -164,6 +164,6 @@ class Vips extends Cards
     private function FireMarshal(int $playerId, int $slot): bool
     {
         $Scene = $this->scenes->getMainInSlot($playerId, $slot);
-        return !$Scene->isComplete($playerId);
+        return !$Scene->isComplete();
     }
 }

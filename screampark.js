@@ -1129,6 +1129,18 @@ var NotifManager = /** @class */ (function () {
             });
         });
     };
+    NotifManager.prototype.notif_completeScene = function (args) {
+        return __awaiter(this, void 0, void 0, function () {
+            var playerId, card, boards, cardElement;
+            return __generator(this, function (_a) {
+                playerId = args.player_id, card = args.card;
+                boards = this.sceneManager.stocks.boards;
+                cardElement = boards[playerId].getCardElement(card);
+                cardElement.classList.add("scp_scene-completed");
+                return [2 /*return*/];
+            });
+        });
+    };
     NotifManager.prototype.notif_setPlayerCounterPrivate = function (args) {
         var playerId = args.player_id, inc = args.inc, name = args.name;
         var counter = this.counters[name][playerId];
@@ -1338,18 +1350,28 @@ var SceneManager = /** @class */ (function () {
         this.stocks = this.game.stocks.scenes;
     };
     SceneManager.prototype.setup = function () {
+        var _this = this;
         this.build();
-        var _a = this.game.gamedatas, scenePublic = _a.scenePublic, sceneHand = _a.sceneHand, sceneBoard = _a.sceneBoard;
+        var _a = this.game.gamedatas, scenePublic = _a.scenePublic, sceneHand = _a.sceneHand, sceneBoard = _a.sceneBoard, completedScenes = _a.completedScenes;
         sceneBoard.sort(function (a, b) {
             return Number(a.position) - Number(b.position);
         });
         var sceneCards = __spreadArray(__spreadArray(__spreadArray([], scenePublic, true), sceneHand, true), sceneBoard, true);
         this.manager.placeCards(sceneCards);
+        console.log(completedScenes);
+        completedScenes.forEach(function (cardId) {
+            var cardElement = _this.manager.getCardElement({
+                id: cardId,
+                type: "scene",
+            });
+            cardElement.classList.add("scp_scene-completed");
+        });
     };
     SceneManager.prototype.highlight = function (cards) {
         var _this = this;
         cards.forEach(function (card) {
-            _this.manager.getCardElement(card).classList.add("scp_card-highlight");
+            var cardElement = _this.manager.getCardElement(card);
+            cardElement.classList.add("scp_card-highlight");
         });
     };
     SceneManager.prototype.clearHighlight = function () {

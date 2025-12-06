@@ -32,6 +32,7 @@ trait Gamedatas
             "sceneHand" => !$this->isSpectator() ? $Scenes->getHand($playerId) : [],
             "scenePublic" => $Scenes->getPublic($playerId),
             "sceneBoard" => !$this->isSpectator() ? $Scenes->getBoard($playerId) : [],
+            "completedScenes" => !$this->isSpectator() ? $this->globals->get(gCompletedScenesPrivate)[$playerId] : [],
             "staffCounts" => $this->staffCounter->getAll(),
             "day" => $day,
             "passToIds" => $day === 2 ?  $this->getPrevPlayerTable() : $this->getNextPlayerTable(),
