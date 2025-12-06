@@ -28,12 +28,13 @@ class MeepleManager {
 
         element.style.backgroundImage = `url(${g_gamethemeurl}img/icons/meeple_${colorId}.png)`;
 
-        this.game.addTooltip(
+        this.game.addTooltipHtml(
           element.id,
-          this.game.format_string_recursive(_("${player_name}'s meeple"), {
+          `<span class="scp_tooltip">
+          ${this.game.format_string_recursive(_("${player_name}'s meeple"), {
             player_name: this.game.getFormattedPlayerName(playerId),
-          }),
-          ""
+          })}
+          </span>`
         );
       },
     });

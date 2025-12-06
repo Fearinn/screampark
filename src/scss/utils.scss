@@ -41,9 +41,11 @@ p {
 
 .scp_pref-themedBg {
   .scp_tooltip {
+    display: flex;
+    justify-content: center;
     color: white;
     background-image: url("img/background.jpg");
-    padding: 8px;
+    padding: 6px;
   }
 
   .dijitTooltipContainer {
@@ -52,6 +54,10 @@ p {
       border-radius: 4px;
       padding: 0;
     }
+  }
+
+  .dijitTooltipConnector {
+    display: none;
   }
 }
 

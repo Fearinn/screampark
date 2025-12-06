@@ -29,12 +29,13 @@ class StarManager {
         const colorId = colors.indexOf(playerColor) + 1;
         element.style.backgroundImage = `url(${g_gamethemeurl}img/icons/star_${colorId}.png)`;
 
-        this.game.addTooltip(
+        this.game.addTooltipHtml(
           element.id,
-          this.game.format_string_recursive(_("${player_name}'s star"), {
+          `<span class="scp_tooltip">
+          ${this.game.format_string_recursive(_("${player_name}'s star"), {
             player_name: this.game.getFormattedPlayerName(playerId),
-          }),
-          ""
+          })}
+          </span>`
         );
       },
     });

@@ -29,19 +29,21 @@ class VipManager {
 
         const { label, description } = this.VIPS[vip_id];
 
-        this.game.addTooltip(
+        this.game.addTooltipHtml(
           element.id,
-          this.game.format_string_recursive(
-            _("${vipLabel}: ${vip_description}"),
-            {
-              vipLabel: _(label),
-              vip_description: {
-                log: _(description),
-                args: {},
-              },
-            }
-          ),
-          ""
+          `<div class="scp_tooltip">
+            <span>${this.game.format_string_recursive(
+              _("${vipLabel}: ${vip_description}"),
+              {
+                vipLabel: _(label),
+                vip_description: {
+                  log: _(description),
+                  args: {},
+                },
+              }
+            )}
+            </span>
+          </div>`
         );
       },
       setupFrontDiv: ({ type_arg: vip_id }, element) => {

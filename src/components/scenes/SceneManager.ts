@@ -50,12 +50,13 @@ class SceneManager {
           element.style.backgroundImage = `url(${g_gamethemeurl}img/genres/genre_${scene_id}.jpg)`;
 
           const { label: genreLabel } = this.GENRES[scene_id];
-          this.game.addTooltip(
+          this.game.addTooltipHtml(
             element.id,
-            this.game.format_string_recursive(_("${genreLabel}"), {
+            `<div class="scp_tooltip"> 
+            ${this.game.format_string_recursive(_("${genreLabel}"), {
               genreLabel,
-            }),
-            ""
+            })}
+            </div>`
           );
           return;
         }
@@ -63,13 +64,14 @@ class SceneManager {
         element.style.backgroundImage = `url(${g_gamethemeurl}img/scenes/scene_${scene_id}.jpg)`;
         const { UP, DOWN } = this.SCENES[scene_id];
 
-        this.game.addTooltip(
+        this.game.addTooltipHtml(
           element.id,
-          this.game.format_string_recursive(_("${upLabel} / ${downLabel}"), {
+          `<div class="scp_tooltip">
+          ${this.game.format_string_recursive(_("${upLabel} / ${downLabel}"), {
             upLabel: _(UP.label),
             downLabel: _(DOWN.label),
-          }),
-          ""
+          })}
+          </div>`
         );
       },
       setupBackDiv: ({ type }, element) => {

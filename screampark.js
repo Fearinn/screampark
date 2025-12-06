@@ -449,10 +449,10 @@ var Template = /** @class */ (function () {
             zones.insertAdjacentHTML("beforeend", "<div id=\"scp_playerZone-".concat(playerId, "\" class=\"scp_playerZone ").concat(isCurrentPlayerId ? "scp_playerZone-current" : "", "\">\n          <h3 class=\"scp_title\" style=\"color: #").concat(playerColor, "; background-color: #").concat(playerColor, "40;\">\n            ").concat(title, "\n          </h3>\n          <span id=\"scp_passTo-").concat(playerId, "\" class=\"scp_title scp_passTo\" \n          style=\"color: #").concat(passToColor, "; background-color: #").concat(passToColor, "40;\">").concat(passTo, "</span>\n          ").concat(isCurrentPlayerId
                 ? "<div id=\"scp_hand\" class=\"scp_hand\"></div>"
                 : "", "\n\n          <div id=\"scp_fakeHand-").concat(playerId, "\" class=\"scp_fakeHand\"></div>\n          <div id=\"scp_meepleSteps-").concat(playerId, "\" class=\"scp_meepleSteps\">\n            ").concat(meepleSteps, "\n          </div>\n          <div class=\"scp_playerBoard\">\n            <div id=\"scp_themes-").concat(playerId, "\" class=\"scp_themes\"></div>\n            <div id=\"scp_scenes-").concat(playerId, "\" class=\"scp_scenes\"></div>\n          </div>\n        </div>"));
-            _this.game.addTooltip("scp_passTo-".concat(playerId), _this.game.format_string_recursive(_("${player_name} passes his hand to ${player_name2}"), {
+            _this.game.addTooltipHtml("scp_passTo-".concat(playerId), "<span class=\"scp_tooltip\">\n        ".concat(_this.game.format_string_recursive(_("${player_name} passes his hand to ${player_name2}"), {
                 player_name: playerName,
                 player_name2: passToName,
-            }), "");
+            }), "\n        </span>"));
         });
     };
     Template.prototype.setupStocks = function () {
@@ -625,19 +625,19 @@ var SCP = /** @class */ (function (_super) {
                         var sceneIdKey = key === "sceneLabel" ? "sceneId" : "sceneId2";
                         var sceneId = args[sceneIdKey];
                         var tooltip = "<div id=\"scp_tooltip-".concat(sceneId, "-").concat(uid, "\" class=\"scp_card scp_scene scp_logTooltip bga-cards_card\"\n            style=\"background-image: url(").concat(g_gamethemeurl, "img/scenes/scene_").concat(sceneId, ".jpg)\"></div>");
-                        _this.registerCustomTooltip(elementId, tooltip);
+                        _this.registerCustomTooltip(elementId, "<div class=\"scp_tooltip\">".concat(tooltip, "</div>"));
                         return;
                     }
                     if (key.includes("genreLabel") && args.genreId) {
                         var genreId = args.genreId;
                         var tooltip = "<div id=\"scp_tooltip-".concat(genreId, "-").concat(uid, "\" class=\"scp_card scp_genre scp_scene scp_logTooltip bga-cards_card\"\n            style=\"background-image: url(").concat(g_gamethemeurl, "img/genres/genre_").concat(genreId, ".jpg)\"></div>");
-                        _this.registerCustomTooltip(elementId, tooltip);
+                        _this.registerCustomTooltip(elementId, "<div class=\"scp_tooltip\">".concat(tooltip, "</div>"));
                         return;
                     }
                     if (key.includes("themeLabel") && args.themeId) {
                         var themeId = args.themeId;
                         var tooltip = "<div id=\"scp_tooltip-".concat(themeId, "-").concat(uid, "\" class=\"scp_card scp_theme scp_logTooltip bga-cards_card\"\n            style=\"background-image: url(").concat(g_gamethemeurl, "img/themes/theme_").concat(themeId, ".jpg)\"></div>");
-                        _this.registerCustomTooltip(elementId, tooltip);
+                        _this.registerCustomTooltip(elementId, "<div class=\"scp_tooltip\">".concat(tooltip, "</div>"));
                         return;
                     }
                 }
@@ -1195,9 +1195,9 @@ var MeepleManager = /** @class */ (function () {
                 var colors = ["982fff", "008000", "ff0000", "72c3b1", "ffa500"];
                 var colorId = colors.indexOf(playerColor) + 1;
                 element.style.backgroundImage = "url(".concat(g_gamethemeurl, "img/icons/meeple_").concat(colorId, ".png)");
-                _this.game.addTooltip(element.id, _this.game.format_string_recursive(_("${player_name}'s meeple"), {
+                _this.game.addTooltipHtml(element.id, "<span class=\"scp_tooltip\">\n          ".concat(_this.game.format_string_recursive(_("${player_name}'s meeple"), {
                     player_name: _this.game.getFormattedPlayerName(playerId),
-                }), "");
+                }), "\n          </span>"));
             },
         });
         this.manager = managers.meeples;
@@ -1268,17 +1268,17 @@ var SceneManager = /** @class */ (function () {
                 if (type === "genre") {
                     element.style.backgroundImage = "url(".concat(g_gamethemeurl, "img/genres/genre_").concat(scene_id, ".jpg)");
                     var genreLabel = _this.GENRES[scene_id].label;
-                    _this.game.addTooltip(element.id, _this.game.format_string_recursive(_("${genreLabel}"), {
+                    _this.game.addTooltipHtml(element.id, "<div class=\"scp_tooltip\"> \n            ".concat(_this.game.format_string_recursive(_("${genreLabel}"), {
                         genreLabel: genreLabel,
-                    }), "");
+                    }), "\n            </div>"));
                     return;
                 }
                 element.style.backgroundImage = "url(".concat(g_gamethemeurl, "img/scenes/scene_").concat(scene_id, ".jpg)");
                 var _b = _this.SCENES[scene_id], UP = _b.UP, DOWN = _b.DOWN;
-                _this.game.addTooltip(element.id, _this.game.format_string_recursive(_("${upLabel} / ${downLabel}"), {
+                _this.game.addTooltipHtml(element.id, "<div class=\"scp_tooltip\">\n          ".concat(_this.game.format_string_recursive(_("${upLabel} / ${downLabel}"), {
                     upLabel: _(UP.label),
                     downLabel: _(DOWN.label),
-                }), "");
+                }), "\n          </div>"));
             },
             setupBackDiv: function (_a, element) {
                 var type = _a.type;
@@ -1406,9 +1406,9 @@ var StarManager = /** @class */ (function () {
                 var playerColor = players[playerId].color;
                 var colorId = colors.indexOf(playerColor) + 1;
                 element.style.backgroundImage = "url(".concat(g_gamethemeurl, "img/icons/star_").concat(colorId, ".png)");
-                _this.game.addTooltip(element.id, _this.game.format_string_recursive(_("${player_name}'s star"), {
+                _this.game.addTooltipHtml(element.id, "<span class=\"scp_tooltip\">\n          ".concat(_this.game.format_string_recursive(_("${player_name}'s star"), {
                     player_name: _this.game.getFormattedPlayerName(playerId),
-                }), "");
+                }), "\n          </span>"));
             },
         });
         this.manager = managers.stars;
@@ -1531,13 +1531,13 @@ var VipManager = /** @class */ (function () {
                 var vip_id = _a.type_arg;
                 element.classList.add("scp_card");
                 var _b = _this.VIPS[vip_id], label = _b.label, description = _b.description;
-                _this.game.addTooltip(element.id, _this.game.format_string_recursive(_("${vipLabel}: ${vip_description}"), {
+                _this.game.addTooltipHtml(element.id, "<div class=\"scp_tooltip\">\n            <span>".concat(_this.game.format_string_recursive(_("${vipLabel}: ${vip_description}"), {
                     vipLabel: _(label),
                     vip_description: {
                         log: _(description),
                         args: {},
                     },
-                }), "");
+                }), "\n            </span>\n          </div>"));
             },
             setupFrontDiv: function (_a, element) {
                 var vip_id = _a.type_arg;

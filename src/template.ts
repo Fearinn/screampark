@@ -95,16 +95,17 @@ class Template {
         </div>`
       );
 
-      this.game.addTooltip(
+      this.game.addTooltipHtml(
         `scp_passTo-${playerId}`,
-        this.game.format_string_recursive(
+        `<span class="scp_tooltip">
+        ${this.game.format_string_recursive(
           _("${player_name} passes his hand to ${player_name2}"),
           {
             player_name: playerName,
             player_name2: passToName,
           }
-        ),
-        ""
+        )}
+        </span>`
       );
     });
   }

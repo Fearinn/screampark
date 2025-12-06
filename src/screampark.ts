@@ -147,7 +147,10 @@ class SCP extends GameGui<SCP_Gamedatas> implements SCP {
 
             const tooltip = `<div id="scp_tooltip-${sceneId}-${uid}" class="scp_card scp_scene scp_logTooltip bga-cards_card"
             style="background-image: url(${g_gamethemeurl}img/scenes/scene_${sceneId}.jpg)"></div>`;
-            this.registerCustomTooltip(elementId, tooltip);
+            this.registerCustomTooltip(
+              elementId,
+              `<div class="scp_tooltip">${tooltip}</div>`
+            );
             return;
           }
 
@@ -155,7 +158,10 @@ class SCP extends GameGui<SCP_Gamedatas> implements SCP {
             const { genreId } = args;
             const tooltip = `<div id="scp_tooltip-${genreId}-${uid}" class="scp_card scp_genre scp_scene scp_logTooltip bga-cards_card"
             style="background-image: url(${g_gamethemeurl}img/genres/genre_${genreId}.jpg)"></div>`;
-            this.registerCustomTooltip(elementId, tooltip);
+            this.registerCustomTooltip(
+              elementId,
+              `<div class="scp_tooltip">${tooltip}</div>`
+            );
             return;
           }
 
@@ -163,7 +169,10 @@ class SCP extends GameGui<SCP_Gamedatas> implements SCP {
             const { themeId } = args;
             const tooltip = `<div id="scp_tooltip-${themeId}-${uid}" class="scp_card scp_theme scp_logTooltip bga-cards_card"
             style="background-image: url(${g_gamethemeurl}img/themes/theme_${themeId}.jpg)"></div>`;
-            this.registerCustomTooltip(elementId, tooltip);
+            this.registerCustomTooltip(
+              elementId,
+              `<div class="scp_tooltip">${tooltip}</div>`
+            );
             return;
           }
         }

@@ -164,14 +164,19 @@ p {
 }
 
 .scp_pref-themedBg .scp_tooltip {
+  display: flex;
+  justify-content: center;
   color: white;
   background-image: url("img/background.jpg");
-  padding: 8px;
+  padding: 6px;
 }
 .scp_pref-themedBg .dijitTooltipContainer:has(.scp_tooltip) {
   border: none;
   border-radius: 4px;
   padding: 0;
+}
+.scp_pref-themedBg .dijitTooltipConnector {
+  display: none;
 }
 
 .player-name a,
