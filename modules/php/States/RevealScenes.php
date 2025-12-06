@@ -61,6 +61,16 @@ class RevealScenes extends GameState
                     $Scene->revealPlacedAnywhere($playerId);
                 }
             }
+
+            for ($slot = 1; $slot <= 24; $slot++) {
+                $Scene = $this->scenes->getMainInSlot($playerId, $slot);
+
+                if (!$Scene) {
+                    break;
+                }
+
+                $Scene->updateComplete($playerId);
+            }
         }
 
         $this->game->DbQuery("UPDATE {$this->scenes->dbTable} SET draft=0 WHERE draft>0");

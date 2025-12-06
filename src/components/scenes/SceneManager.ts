@@ -174,10 +174,10 @@ class SceneManager {
     sceneBoard.sort((a, b) => {
       return Number(a.position) - Number(b.position);
     });
-    const sceneCards = [...scenePublic, ...sceneHand, ...sceneBoard];
-    this.manager.placeCards(sceneCards);
-
-    console.log(completedScenes);
+    scenePublic.sort((a, b) => {
+      return Number(a.position) - Number(b.position);
+    });
+    this.manager.placeCards([...scenePublic, ...sceneHand, ...sceneBoard]);
 
     completedScenes.forEach((cardId) => {
       const cardElement = this.manager.getCardElement({

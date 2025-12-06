@@ -1356,9 +1356,10 @@ var SceneManager = /** @class */ (function () {
         sceneBoard.sort(function (a, b) {
             return Number(a.position) - Number(b.position);
         });
-        var sceneCards = __spreadArray(__spreadArray(__spreadArray([], scenePublic, true), sceneHand, true), sceneBoard, true);
-        this.manager.placeCards(sceneCards);
-        console.log(completedScenes);
+        scenePublic.sort(function (a, b) {
+            return Number(a.position) - Number(b.position);
+        });
+        this.manager.placeCards(__spreadArray(__spreadArray(__spreadArray([], scenePublic, true), sceneHand, true), sceneBoard, true));
         completedScenes.forEach(function (cardId) {
             var cardElement = _this.manager.getCardElement({
                 id: cardId,
