@@ -320,15 +320,16 @@ p {
 .scp_scene-completed::before {
   content: "";
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 72, 0, 0.5019607843);
-  border-radius: 8px;
-  mix-blend-mode: multiply;
+  top: 5%;
+  left: 10%;
+  border: 3px solid #004800;
+  background-color: limegreen;
+  border-radius: 100%;
+  aspect-ratio: 1;
+  width: 21%;
   pointer-events: none;
   z-index: 99;
+  mix-blend-mode: multiply;
 }
 
 :root {
