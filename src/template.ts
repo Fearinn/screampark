@@ -36,10 +36,12 @@ class Template {
   }
 
   public setupZones(): void {
-    const { gamedatas, keysToNumbers, player_id } = this.game;
+    const { gamedatas, player_id } = this.game;
     const { players, passToIds } = gamedatas;
 
-    keysToNumbers(players).forEach((playerId) => {
+    delete passToIds[0];
+
+    this.game.keysFromMap(passToIds, player_id).forEach((playerId) => {
       const { color: playerColor } = players[playerId];
       const playerName = this.game.getFormattedPlayerName(playerId);
 

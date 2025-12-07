@@ -117,9 +117,29 @@ class SCP extends GameGui<SCP_Gamedatas> implements SCP {
   }
 
   public keysToNumbers(object: Record<number, any>) {
-    return Object.keys(object).map((key) => {
+    const keys = Object.keys(object).map((key) => {
       return Number(key);
     });
+
+    return keys;
+  }
+
+  public keysFromMap(map: Record<number, any>, startKey: number): number[] {
+    const keys = this.keysToNumbers(map);
+    const startIndex = keys.indexOf(startKey);
+
+    if (startIndex === -1) {
+      return keys;
+    }
+
+    const circularKeys = [];
+    let key = startKey;
+    for (let i = 0; i < keys.length; i++) {
+      circularKeys.push(key);
+      key = map[key];
+    }
+
+    return circularKeys;
   }
 
   public bgaFormatText(

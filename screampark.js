@@ -423,9 +423,10 @@ var Template = /** @class */ (function () {
     };
     Template.prototype.setupZones = function () {
         var _this = this;
-        var _a = this.game, gamedatas = _a.gamedatas, keysToNumbers = _a.keysToNumbers, player_id = _a.player_id;
+        var _a = this.game, gamedatas = _a.gamedatas, player_id = _a.player_id;
         var players = gamedatas.players, passToIds = gamedatas.passToIds;
-        keysToNumbers(players).forEach(function (playerId) {
+        delete passToIds[0];
+        this.game.keysFromMap(passToIds, player_id).forEach(function (playerId) {
             var playerColor = players[playerId].color;
             var playerName = _this.game.getFormattedPlayerName(playerId);
             var isCurrentPlayerId = player_id === playerId;
@@ -605,9 +606,24 @@ var SCP = /** @class */ (function (_super) {
         }
     };
     SCP.prototype.keysToNumbers = function (object) {
-        return Object.keys(object).map(function (key) {
+        var keys = Object.keys(object).map(function (key) {
             return Number(key);
         });
+        return keys;
+    };
+    SCP.prototype.keysFromMap = function (map, startKey) {
+        var keys = this.keysToNumbers(map);
+        var startIndex = keys.indexOf(startKey);
+        if (startIndex === -1) {
+            return keys;
+        }
+        var circularKeys = [];
+        var key = startKey;
+        for (var i = 0; i < keys.length; i++) {
+            circularKeys.push(key);
+            key = map[key];
+        }
+        return circularKeys;
     };
     SCP.prototype.bgaFormatText = function (log, args) {
         var _this = this;
