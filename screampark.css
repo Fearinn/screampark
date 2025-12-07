@@ -95,6 +95,7 @@
   overflow-x: visible;
   max-width: calc((var(--scene-width) + 17px) * 8);
   width: 95%;
+  scroll-margin-top: 60px;
 }
 .scp_playerZone-current {
   order: -1;
@@ -116,6 +117,9 @@
   border-top-right-radius: 4px;
   border-bottom-left-radius: 4px;
   text-overflow: ellipsis;
+}
+.scp_playerZone .scp_passTo:hover {
+  text-decoration: none;
 }
 
 .scp_playerBoard {
@@ -767,6 +771,10 @@ p {
   filter: drop-shadow(0 0 2px #adadad);
   aspect-ratio: 1;
   width: 30px;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 #bga-zoom-wrapper {

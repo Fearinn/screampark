@@ -30,6 +30,7 @@
   overflow-x: visible;
   max-width: calc((var(--scene-width) + 17px) * 8);
   width: 95%;
+  scroll-margin-top: 60px;
 
   &-current {
     order: -1;
@@ -54,6 +55,10 @@
     border-top-right-radius: 4px;
     border-bottom-left-radius: 4px;
     text-overflow: ellipsis;
+
+    &:hover {
+      text-decoration: none;
+    }
   }
 }
 

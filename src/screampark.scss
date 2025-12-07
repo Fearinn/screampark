@@ -17,6 +17,10 @@
 @use "scss/utils";
 @use "scss/components";
 
+html {
+  scroll-behavior: smooth;
+}
+
 #bga-zoom-wrapper {
   direction: ltr;
 }

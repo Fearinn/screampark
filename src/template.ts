@@ -78,10 +78,10 @@ class Template {
           <h3 class="scp_title" style="color: #${playerColor}; background-color: #${playerColor}40;">
             ${title}
           </h3>
-          <span id="scp_passTo-${playerId}" class="scp_title scp_passTo" 
+          <a href="#scp_playerZone-${passToId}" id="scp_passTo-${playerId}" class="scp_title scp_passTo" 
           style="color: #${passToColor}; background-color: #${passToColor}40;">
             ${passTo}
-          </span>
+          </a>
           ${
             isCurrentPlayerId
               ? `<div id="scp_hand" class="scp_hand"></div>`
@@ -103,9 +103,8 @@ class Template {
         `<div class="scp_tooltip">
             <span>
             ${this.game.format_string_recursive(
-              _("${player_name} passes his hand to ${player_name2}"),
+              _("Jump to ${player_name2}'s board"),
               {
-                player_name: playerName,
                 player_name2: passToName,
               }
             )}
