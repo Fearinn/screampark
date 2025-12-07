@@ -37,7 +37,7 @@ class Template {
 
   public setupZones(): void {
     const { gamedatas, player_id } = this.game;
-    const { players, passToIds } = gamedatas;
+    const { players, passToIds, receiveFromIds } = gamedatas;
 
     delete passToIds[0];
 
@@ -62,8 +62,19 @@ class Template {
           player_name: passToName,
         }
       );
-
       const { color: passToColor } = players[passToId];
+
+      const receiveFromId = receiveFromIds[playerId];
+      const receiveFromName = this.game.getFormattedPlayerName(receiveFromId);
+      const receiveFrom = this.game.format_string_recursive(
+        _("${arrow} ${player_name} ${arrow}"),
+        {
+          arrow: `<i class="fa6 fa6-solid fa6-arrow-right"></i>`,
+          player_name: receiveFromName,
+        }
+      );
+      const { color: receiveFromColor } = players[receiveFromId];
+
       let meepleSteps = "";
       for (let slot = 0; slot <= 24; slot++) {
         meepleSteps += `<div id="scp_meepleStep-${slot}-${playerId}" class="scp_meepleStep"></div>`;
@@ -75,18 +86,24 @@ class Template {
         `<div id="scp_playerZone-${playerId}" class="scp_playerZone ${
           isCurrentPlayerId ? "scp_playerZone-current" : ""
         }" style="border-color: #${playerColor};">
-          <h3 class="scp_title" style="color: #${playerColor}; background-color: #${playerColor}40;">
-            ${title}
-          </h3>
-          <a href="#scp_playerZone-${passToId}" id="scp_passTo-${playerId}" class="scp_title scp_passTo" 
-          style="color: #${passToColor}; background-color: #${passToColor}40;">
-            ${passTo}
-          </a>
-          ${
-            isCurrentPlayerId
-              ? `<div id="scp_hand" class="scp_hand"></div>`
-              : ""
-          }
+          <div class="scp_zoneTitles">
+            <a href="#scp_playerZone-${receiveFromId}" id="scp_receiveFrom-${playerId}" class="scp_title scp_passTo scp_receiveFrom" 
+            style="color: #${receiveFromColor}; background-color: #${receiveFromColor}40;">
+              ${receiveFrom}
+            </a>
+            <h3 class="scp_title" style="color: #${playerColor}; background-color: #${playerColor}40;">
+              ${title}
+            </h3>
+            <a href="#scp_playerZone-${passToId}" id="scp_passTo-${playerId}" class="scp_title scp_passTo" 
+            style="color: #${passToColor}; background-color: #${passToColor}40;">
+              ${passTo}
+            </a>
+            ${
+              isCurrentPlayerId
+                ? `<div id="scp_hand" class="scp_hand"></div>`
+                : ""
+            }
+          </div>
           <div id="scp_fakeHand-${playerId}" class="scp_fakeHand"></div>
           <div id="scp_meepleSteps-${playerId}" class="scp_meepleSteps">
             ${meepleSteps}
@@ -103,8 +120,24 @@ class Template {
         `<div class="scp_tooltip">
             <span>
             ${this.game.format_string_recursive(
-              _("Jump to ${player_name2}'s board"),
+              _("${player_name} passes cards to ${player_name2}"),
               {
+                player_name: playerName,
+                player_name2: passToName,
+              }
+            )}
+            </span>
+        </div>`
+      );
+
+      this.game.addTooltipHtml(
+        `scp_receiveFrom-${playerId}`,
+        `<div class="scp_tooltip">
+            <span>
+            ${this.game.format_string_recursive(
+              _("${player_name} receives cards from ${player_name2}"),
+              {
+                player_name: playerName,
                 player_name2: passToName,
               }
             )}

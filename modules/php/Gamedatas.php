@@ -41,6 +41,7 @@ trait Gamedatas
             "staffCounts" => $this->staffCounter->getAll(),
             "day" => $day,
             "passToIds" => $day === 2 ?  $this->getPrevPlayerTable() : $this->getNextPlayerTable(),
+            "receiveFromIds" => $day === 2 ? $this->getNextPlayerTable() : $this->getPrevPlayerTable(),
         ];
 
         if (!$isSpectator) {
