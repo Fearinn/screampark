@@ -113,14 +113,14 @@
   padding: 4px 8px;
   width: fit-content;
 }
-.scp_zoneTitles .scp_title:not(.scp_passTo) {
+.scp_zoneTitles .scp_title:not(.scp_nextPlayer) {
   flex-grow: 1;
 }
-.scp_zoneTitles .scp_passTo {
+.scp_zoneTitles .scp_nextPlayer {
   text-overflow: ellipsis;
   max-width: 33%;
 }
-.scp_zoneTitles .scp_passTo:hover {
+.scp_zoneTitles .scp_nextPlayer:hover {
   text-decoration: none;
 }
 

@@ -37,11 +37,11 @@ class Template {
 
   public setupZones(): void {
     const { gamedatas, player_id } = this.game;
-    const { players, passToIds, receiveFromIds } = gamedatas;
+    const { players, nextPlayers, prevPlayers } = gamedatas;
 
-    delete passToIds[0];
+    delete nextPlayers[0];
 
-    this.game.keysFromMap(passToIds, player_id).forEach((playerId) => {
+    this.game.keysFromMap(nextPlayers, player_id).forEach((playerId) => {
       const { color: playerColor } = players[playerId];
       const playerName = this.game.getFormattedPlayerName(playerId);
 
@@ -53,27 +53,27 @@ class Template {
           })
         : playerName;
 
-      const passToId = passToIds[playerId];
-      const passToName = this.game.getFormattedPlayerName(passToId);
-      const passTo = this.game.format_string_recursive(
+      const nextPlayerId = nextPlayers[playerId];
+      const nextPlayerName = this.game.getFormattedPlayerName(nextPlayerId);
+      const nextPlayer = this.game.format_string_recursive(
         _("${arrow} ${player_name} ${arrow}"),
         {
           arrow: `<i class="fa6 fa6-solid fa6-arrow-right"></i>`,
-          player_name: passToName,
+          player_name: nextPlayerName,
         }
       );
-      const { color: passToColor } = players[passToId];
+      const { color: nextPlayerColor } = players[nextPlayerId];
 
-      const receiveFromId = receiveFromIds[playerId];
-      const receiveFromName = this.game.getFormattedPlayerName(receiveFromId);
-      const receiveFrom = this.game.format_string_recursive(
+      const prevPlayerId = prevPlayers[playerId];
+      const prevPlayerName = this.game.getFormattedPlayerName(prevPlayerId);
+      const prevPlayer = this.game.format_string_recursive(
         _("${arrow} ${player_name} ${arrow}"),
         {
           arrow: `<i class="fa6 fa6-solid fa6-arrow-right"></i>`,
-          player_name: receiveFromName,
+          player_name: prevPlayerName,
         }
       );
-      const { color: receiveFromColor } = players[receiveFromId];
+      const { color: prevPlayerColor } = players[prevPlayerId];
 
       let meepleSteps = "";
       for (let slot = 0; slot <= 24; slot++) {
@@ -87,16 +87,16 @@ class Template {
           isCurrentPlayerId ? "scp_playerZone-current" : ""
         }" style="border-color: #${playerColor};">
           <div class="scp_zoneTitles">
-            <a href="#scp_playerZone-${receiveFromId}" id="scp_receiveFrom-${playerId}" class="scp_title scp_passTo scp_receiveFrom" 
-            style="color: #${receiveFromColor}; background-color: #${receiveFromColor}40;">
-              ${receiveFrom}
+            <a href="#scp_playerZone-${prevPlayerId}" id="scp_prevPlayer-${playerId}" class="scp_title scp_nextPlayer scp_prevPlayer" 
+            style="color: #${prevPlayerColor}; background-color: #${prevPlayerColor}40;">
+              ${prevPlayer}
             </a>
             <h3 class="scp_title" style="color: #${playerColor}; background-color: #${playerColor}40;">
               ${title}
             </h3>
-            <a href="#scp_playerZone-${passToId}" id="scp_passTo-${playerId}" class="scp_title scp_passTo" 
-            style="color: #${passToColor}; background-color: #${passToColor}40;">
-              ${passTo}
+            <a href="#scp_playerZone-${nextPlayerId}" id="scp_nextPlayer-${playerId}" class="scp_title scp_nextPlayer" 
+            style="color: #${nextPlayerColor}; background-color: #${nextPlayerColor}40;">
+              ${nextPlayer}
             </a>
             ${
               isCurrentPlayerId
@@ -116,14 +116,14 @@ class Template {
       );
 
       this.game.addTooltipHtml(
-        `scp_passTo-${playerId}`,
+        `scp_nextPlayer-${playerId}`,
         `<div class="scp_tooltip">
             <span>
             ${this.game.format_string_recursive(
               _("${player_name} passes cards to ${player_name2}"),
               {
                 player_name: playerName,
-                player_name2: passToName,
+                player_name2: nextPlayerName,
               }
             )}
             </span>
@@ -131,14 +131,14 @@ class Template {
       );
 
       this.game.addTooltipHtml(
-        `scp_receiveFrom-${playerId}`,
+        `scp_prevPlayer-${playerId}`,
         `<div class="scp_tooltip">
             <span>
             ${this.game.format_string_recursive(
               _("${player_name} receives cards from ${player_name2}"),
               {
                 player_name: playerName,
-                player_name2: passToName,
+                player_name2: nextPlayerName,
               }
             )}
             </span>

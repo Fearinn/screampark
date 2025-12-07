@@ -40,8 +40,8 @@ trait Gamedatas
             "completedScenes" => $completedScenes,
             "staffCounts" => $this->staffCounter->getAll(),
             "day" => $day,
-            "passToIds" => $day === 2 ?  $this->getPrevPlayerTable() : $this->getNextPlayerTable(),
-            "receiveFromIds" => $day === 2 ? $this->getNextPlayerTable() : $this->getPrevPlayerTable(),
+            "nextPlayers" => $day === 2 ?  $this->getPrevPlayerTable() : $this->getNextPlayerTable(),
+            "prevPlayers" => $day === 2 ? $this->getNextPlayerTable() : $this->getPrevPlayerTable(),
         ];
 
         if (!$isSpectator) {

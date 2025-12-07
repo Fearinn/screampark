@@ -50,12 +50,12 @@
     padding: 4px 8px;
     width: fit-content;
 
-    &:not(.scp_passTo) {
+    &:not(.scp_nextPlayer) {
       flex-grow: 1;
     }
   }
 
-  .scp_passTo {
+  .scp_nextPlayer {
     text-overflow: ellipsis;
     max-width: 33%;
 
