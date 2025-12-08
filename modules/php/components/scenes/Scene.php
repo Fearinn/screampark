@@ -399,6 +399,10 @@ class Scene extends Scenes
         $genres = $this->sumSlotGenres($playerId, $slot);
         foreach ($genres as $genreId => $value) {
             $genreCost[$genreId] -= $value;
+
+            if ($genreCost[$genreId] < 0) {
+                $genreCost[$genreId] = 0;
+            }
         }
 
         $totalCost = array_reduce($genreCost, function ($carry, $cost) {
