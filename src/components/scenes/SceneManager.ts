@@ -118,28 +118,9 @@ class SceneManager {
       );
     });
 
-    this.game.stocks.scenes = {
+    const stocks: SceneStocks = {
       boards,
       fakeHands,
-      hand: new BgaCards.LineStock(
-        this.manager,
-        document.getElementById("scp_hand"),
-        {
-          wrap: "nowrap",
-          gap: "16px",
-          sort: (a, b) => {
-            const SCENE = this.SCENES[a.type_arg];
-            const SCENE2 = this.SCENES[b.type_arg];
-            return SCENE.UP.points - SCENE2.UP.points;
-          },
-          autoPlace: ({ location, location_arg }) => {
-            return (
-              (location === "hand" || location === "todiscard") &&
-              Number(location_arg) === player_id
-            );
-          },
-        }
-      ),
       deck: new BgaCards.Deck(
         this.manager,
         document.getElementById("scp_sceneDeck"),
@@ -165,6 +146,30 @@ class SceneManager {
         }
       ),
     };
+
+    if (!this.game.isSpectator) {
+      stocks.hand = new BgaCards.LineStock(
+        this.manager,
+        document.getElementById("scp_hand"),
+        {
+          wrap: "nowrap",
+          gap: "16px",
+          sort: (a, b) => {
+            const SCENE = this.SCENES[a.type_arg];
+            const SCENE2 = this.SCENES[b.type_arg];
+            return SCENE.UP.points - SCENE2.UP.points;
+          },
+          autoPlace: ({ location, location_arg }) => {
+            return (
+              (location === "hand" || location === "todiscard") &&
+              Number(location_arg) === player_id
+            );
+          },
+        }
+      );
+    }
+
+    this.game.stocks.scenes = stocks;
     this.stocks = this.game.stocks.scenes;
   }
 
@@ -223,7 +228,7 @@ interface SCENE {
 interface SceneStocks {
   deck: BgaCards.Deck<SceneCard>;
   genreDeck: BgaCards.Deck<SceneCard>;
-  hand: BgaCards.LineStock<SceneCard>;
+  hand?: BgaCards.LineStock<SceneCard>;
   boards: Record<number, BgaCards.SlotStock<SceneCard>>;
   fakeHands: Record<number, BgaCards.VoidStock<SceneCard>>;
 }

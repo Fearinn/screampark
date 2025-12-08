@@ -47,14 +47,21 @@ class DealScenes extends GameState
                 "",
                 [
                     "player_id" => $playerId,
-                    "cardCount" => count($cards),
                 ],
             );
+
+            if ($this->game->isSolo()) {
+                $this->notify->all(
+                    "message",
+                    clienttranslate('${player_name} draws 8 scene cards'),
+                );
+                return PreTurn::class;
+            }
         }
 
         $this->notify->all(
             "message",
-            clienttranslate("Each player draws 8 scene cards from the deck")
+            clienttranslate("Each player draws 8 scene cards")
         );
 
         return PreTurn::class;

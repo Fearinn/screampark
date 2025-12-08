@@ -73,7 +73,7 @@ class EndScore extends \Bga\GameFramework\States\GameState
 
         $this->notify->all(
             "message",
-            clienttranslate('${player_name} scores ${points} point(s) from completed scenes'),
+            clienttranslate('${player_name} scores ${points} point(s) with completed scenes'),
             [
                 "player_id" => $playerId,
                 "points" => $scenePoints,

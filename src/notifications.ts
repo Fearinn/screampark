@@ -104,19 +104,44 @@ class NotifManager {
     await hand.addCards(cards, { fromStock: deck });
   }
 
-  public async notif_dealScenes(args: {
-    player_id: number;
-    cardCount: number;
-  }): Promise<void> {
-    const { cardCount, player_id: playerId } = args;
+  public async notif_dealScenes(args: { player_id: number }): Promise<void> {
+    const { player_id: playerId } = args;
     const { fakeHands, deck } = this.sceneManager.stocks;
 
     const fakeCards: SceneCard[] = [];
-    for (let i = 1; i <= cardCount; i++) {
+    for (let i = 1; i <= 8; i++) {
       fakeCards.push({ id: -i, type: "scene" });
     }
 
     await fakeHands[playerId].addCards(fakeCards, { fromStock: deck });
+  }
+
+  public async notif_renewHand(args: {
+    oldCards: SceneCard[];
+    newCards: SceneCard[];
+    player_id: number;
+  }): Promise<void> {
+    let { player_id: playerId, oldCards, newCards } = args;
+    const { hand, deck, fakeHands } = this.sceneManager.stocks;
+
+    if (this.game.isSpectator) {
+      const fakeHand = fakeHands[playerId];
+
+      newCards = newCards.map((card) => {
+        delete card.type_arg;
+        return card;
+      });
+      await fakeHand.addCards(newCards, { fromStock: deck });
+
+      return;
+    }
+
+    await hand.removeCards(oldCards, {
+      fadeOut: true,
+      slideTo: document.getElementById("player_boards"),
+    });
+
+    await hand.addCards(newCards, { fromStock: deck });
   }
 
   public async notif_placeScenePrivate(args: {

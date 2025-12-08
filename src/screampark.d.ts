@@ -26,6 +26,7 @@ interface SCP_Gamedatas extends Gamedatas<SCP_Player> {
   day: number;
   nextPlayers: Record<number, number>;
   prevPlayers: Record<number, number>;
+  isSolo: boolean;
 }
 
 interface Managers {

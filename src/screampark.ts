@@ -143,12 +143,13 @@ class SCP extends GameGui<SCP_Gamedatas> implements SCP {
   }
 
   public togglePassDirection(day: number): void {
-    if (day > 3) {
+    const { players, prevPlayers, nextPlayers, isSolo } = this.gamedatas;
+
+    if (day > 3 || isSolo) {
       return;
     }
 
     const isClockwise = day !== 2;
-    const { players, prevPlayers, nextPlayers } = this.gamedatas;
 
     this.keysToNumbers(players).forEach((playerId) => {
       const playerZone = document.getElementById(`scp_playerZone-${playerId}`);

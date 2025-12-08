@@ -37,7 +37,7 @@ class Template {
 
   public setupZones(): void {
     const { gamedatas, player_id } = this.game;
-    const { players, nextPlayers, prevPlayers, day } = gamedatas;
+    const { players, nextPlayers, prevPlayers, day, isSolo } = gamedatas;
 
     delete nextPlayers[0];
 
@@ -87,23 +87,33 @@ class Template {
           isCurrentPlayerId ? "scp_playerZone-current" : ""
         }" style="border-color: #${playerColor};">
           <div class="scp_zoneTitles">
-            <a href="#scp_playerZone-${prevPlayerId}" id="scp_prevPlayer-${playerId}" class="scp_title scp_nextPlayer scp_prevPlayer" 
-            style="color: #${prevPlayerColor}; background-color: #${prevPlayerColor}40;">
+            ${
+              isSolo
+                ? ""
+                : `<a href="#scp_playerZone-${prevPlayerId}" 
+                id="scp_prevPlayer-${playerId}" class="scp_title scp_nextPlayer scp_prevPlayer" 
+                style="color: #${prevPlayerColor}; background-color: #${prevPlayerColor}40;">
               ${prevPlayer}
-            </a>
+            </a>`
+            }
             <h3 class="scp_title" style="color: #${playerColor}; background-color: #${playerColor}40;">
               ${title}
             </h3>
-            <a href="#scp_playerZone-${nextPlayerId}" id="scp_nextPlayer-${playerId}" class="scp_title scp_nextPlayer" 
-            style="color: #${nextPlayerColor}; background-color: #${nextPlayerColor}40;">
+            ${
+              isSolo
+                ? ""
+                : `<a href="#scp_playerZone-${nextPlayerId}" 
+              id="scp_nextPlayer-${playerId}" class="scp_title scp_nextPlayer" 
+              style="color: #${nextPlayerColor}; background-color: #${nextPlayerColor}40;">
               ${nextPlayer}
-            </a>
+            </a>`
+            }
+          </div>
             ${
               isCurrentPlayerId
                 ? `<div id="scp_hand" class="scp_hand"></div>`
                 : ""
             }
-          </div>
           <div id="scp_fakeHand-${playerId}" class="scp_fakeHand"></div>
           <div id="scp_meepleSteps-${playerId}" class="scp_meepleSteps">
             ${meepleSteps}
@@ -114,6 +124,10 @@ class Template {
           </div>
         </div>`
       );
+
+      if (isSolo) {
+        return;
+      }
 
       this.game.addTooltipHtml(
         `scp_nextPlayer-${playerId}`,

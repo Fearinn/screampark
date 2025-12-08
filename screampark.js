@@ -424,7 +424,7 @@ var Template = /** @class */ (function () {
     Template.prototype.setupZones = function () {
         var _this = this;
         var _a = this.game, gamedatas = _a.gamedatas, player_id = _a.player_id;
-        var players = gamedatas.players, nextPlayers = gamedatas.nextPlayers, prevPlayers = gamedatas.prevPlayers, day = gamedatas.day;
+        var players = gamedatas.players, nextPlayers = gamedatas.nextPlayers, prevPlayers = gamedatas.prevPlayers, day = gamedatas.day, isSolo = gamedatas.isSolo;
         delete nextPlayers[0];
         this.game.keysFromMap(nextPlayers, player_id).forEach(function (playerId) {
             var playerColor = players[playerId].color;
@@ -454,9 +454,16 @@ var Template = /** @class */ (function () {
                 meepleSteps += "<div id=\"scp_meepleStep-".concat(slot, "-").concat(playerId, "\" class=\"scp_meepleStep\"></div>");
             }
             var zones = document.getElementById("scp_playerZones");
-            zones.insertAdjacentHTML("beforeend", "<div id=\"scp_playerZone-".concat(playerId, "\" class=\"scp_playerZone ").concat(isCurrentPlayerId ? "scp_playerZone-current" : "", "\" style=\"border-color: #").concat(playerColor, ";\">\n          <div class=\"scp_zoneTitles\">\n            <a href=\"#scp_playerZone-").concat(prevPlayerId, "\" id=\"scp_prevPlayer-").concat(playerId, "\" class=\"scp_title scp_nextPlayer scp_prevPlayer\" \n            style=\"color: #").concat(prevPlayerColor, "; background-color: #").concat(prevPlayerColor, "40;\">\n              ").concat(prevPlayer, "\n            </a>\n            <h3 class=\"scp_title\" style=\"color: #").concat(playerColor, "; background-color: #").concat(playerColor, "40;\">\n              ").concat(title, "\n            </h3>\n            <a href=\"#scp_playerZone-").concat(nextPlayerId, "\" id=\"scp_nextPlayer-").concat(playerId, "\" class=\"scp_title scp_nextPlayer\" \n            style=\"color: #").concat(nextPlayerColor, "; background-color: #").concat(nextPlayerColor, "40;\">\n              ").concat(nextPlayer, "\n            </a>\n            ").concat(isCurrentPlayerId
+            zones.insertAdjacentHTML("beforeend", "<div id=\"scp_playerZone-".concat(playerId, "\" class=\"scp_playerZone ").concat(isCurrentPlayerId ? "scp_playerZone-current" : "", "\" style=\"border-color: #").concat(playerColor, ";\">\n          <div class=\"scp_zoneTitles\">\n            ").concat(isSolo
+                ? ""
+                : "<a href=\"#scp_playerZone-".concat(prevPlayerId, "\" \n                id=\"scp_prevPlayer-").concat(playerId, "\" class=\"scp_title scp_nextPlayer scp_prevPlayer\" \n                style=\"color: #").concat(prevPlayerColor, "; background-color: #").concat(prevPlayerColor, "40;\">\n              ").concat(prevPlayer, "\n            </a>"), "\n            <h3 class=\"scp_title\" style=\"color: #").concat(playerColor, "; background-color: #").concat(playerColor, "40;\">\n              ").concat(title, "\n            </h3>\n            ").concat(isSolo
+                ? ""
+                : "<a href=\"#scp_playerZone-".concat(nextPlayerId, "\" \n              id=\"scp_nextPlayer-").concat(playerId, "\" class=\"scp_title scp_nextPlayer\" \n              style=\"color: #").concat(nextPlayerColor, "; background-color: #").concat(nextPlayerColor, "40;\">\n              ").concat(nextPlayer, "\n            </a>"), "\n          </div>\n            ").concat(isCurrentPlayerId
                 ? "<div id=\"scp_hand\" class=\"scp_hand\"></div>"
-                : "", "\n          </div>\n          <div id=\"scp_fakeHand-").concat(playerId, "\" class=\"scp_fakeHand\"></div>\n          <div id=\"scp_meepleSteps-").concat(playerId, "\" class=\"scp_meepleSteps\">\n            ").concat(meepleSteps, "\n          </div>\n          <div class=\"scp_playerBoard\">\n            <div id=\"scp_themes-").concat(playerId, "\" class=\"scp_themes\"></div>\n            <div id=\"scp_scenes-").concat(playerId, "\" class=\"scp_scenes\"></div>\n          </div>\n        </div>"));
+                : "", "\n          <div id=\"scp_fakeHand-").concat(playerId, "\" class=\"scp_fakeHand\"></div>\n          <div id=\"scp_meepleSteps-").concat(playerId, "\" class=\"scp_meepleSteps\">\n            ").concat(meepleSteps, "\n          </div>\n          <div class=\"scp_playerBoard\">\n            <div id=\"scp_themes-").concat(playerId, "\" class=\"scp_themes\"></div>\n            <div id=\"scp_scenes-").concat(playerId, "\" class=\"scp_scenes\"></div>\n          </div>\n        </div>"));
+            if (isSolo) {
+                return;
+            }
             _this.game.addTooltipHtml("scp_nextPlayer-".concat(playerId), "<div class=\"scp_tooltip\">\n            <span>\n            ".concat(_this.game.format_string_recursive(_("${player_name} passes cards to ${player_name2}"), {
                 player_name: playerName,
                 player_name2: nextPlayerName,
@@ -639,11 +646,11 @@ var SCP = /** @class */ (function (_super) {
     };
     SCP.prototype.togglePassDirection = function (day) {
         var _this = this;
-        if (day > 3) {
+        var _a = this.gamedatas, players = _a.players, prevPlayers = _a.prevPlayers, nextPlayers = _a.nextPlayers, isSolo = _a.isSolo;
+        if (day > 3 || isSolo) {
             return;
         }
         var isClockwise = day !== 2;
-        var _a = this.gamedatas, players = _a.players, prevPlayers = _a.prevPlayers, nextPlayers = _a.nextPlayers;
         this.keysToNumbers(players).forEach(function (playerId) {
             var playerZone = document.getElementById("scp_playerZone-".concat(playerId));
             playerZone.querySelectorAll("i").forEach(function (icon) {
@@ -909,18 +916,50 @@ var NotifManager = /** @class */ (function () {
     };
     NotifManager.prototype.notif_dealScenes = function (args) {
         return __awaiter(this, void 0, void 0, function () {
-            var cardCount, playerId, _a, fakeHands, deck, fakeCards, i;
+            var playerId, _a, fakeHands, deck, fakeCards, i;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        cardCount = args.cardCount, playerId = args.player_id;
+                        playerId = args.player_id;
                         _a = this.sceneManager.stocks, fakeHands = _a.fakeHands, deck = _a.deck;
                         fakeCards = [];
-                        for (i = 1; i <= cardCount; i++) {
+                        for (i = 1; i <= 8; i++) {
                             fakeCards.push({ id: -i, type: "scene" });
                         }
                         return [4 /*yield*/, fakeHands[playerId].addCards(fakeCards, { fromStock: deck })];
                     case 1:
+                        _b.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    NotifManager.prototype.notif_renewHand = function (args) {
+        return __awaiter(this, void 0, void 0, function () {
+            var playerId, oldCards, newCards, _a, hand, deck, fakeHands, fakeHand;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        playerId = args.player_id, oldCards = args.oldCards, newCards = args.newCards;
+                        _a = this.sceneManager.stocks, hand = _a.hand, deck = _a.deck, fakeHands = _a.fakeHands;
+                        if (!this.game.isSpectator) return [3 /*break*/, 2];
+                        fakeHand = fakeHands[playerId];
+                        newCards = newCards.map(function (card) {
+                            delete card.type_arg;
+                            return card;
+                        });
+                        return [4 /*yield*/, fakeHand.addCards(newCards, { fromStock: deck })];
+                    case 1:
+                        _b.sent();
+                        return [2 /*return*/];
+                    case 2: return [4 /*yield*/, hand.removeCards(oldCards, {
+                            fadeOut: true,
+                            slideTo: document.getElementById("player_boards"),
+                        })];
+                    case 3:
+                        _b.sent();
+                        return [4 /*yield*/, hand.addCards(newCards, { fromStock: deck })];
+                    case 4:
                         _b.sent();
                         return [2 /*return*/];
                 }
@@ -1382,23 +1421,9 @@ var SceneManager = /** @class */ (function () {
             });
             fakeHands[playerId] = new BgaCards.VoidStock(_this.manager, document.getElementById("scp_fakeHand-".concat(playerId)), {});
         });
-        this.game.stocks.scenes = {
+        var stocks = {
             boards: boards,
             fakeHands: fakeHands,
-            hand: new BgaCards.LineStock(this.manager, document.getElementById("scp_hand"), {
-                wrap: "nowrap",
-                gap: "16px",
-                sort: function (a, b) {
-                    var SCENE = _this.SCENES[a.type_arg];
-                    var SCENE2 = _this.SCENES[b.type_arg];
-                    return SCENE.UP.points - SCENE2.UP.points;
-                },
-                autoPlace: function (_a) {
-                    var location = _a.location, location_arg = _a.location_arg;
-                    return ((location === "hand" || location === "todiscard") &&
-                        Number(location_arg) === player_id);
-                },
-            }),
             deck: new BgaCards.Deck(this.manager, document.getElementById("scp_sceneDeck"), {
                 cardNumber: sceneDeckCount,
                 fakeCardGenerator: function (deckId) {
@@ -1416,6 +1441,23 @@ var SceneManager = /** @class */ (function () {
                 },
             }),
         };
+        if (!this.game.isSpectator) {
+            stocks.hand = new BgaCards.LineStock(this.manager, document.getElementById("scp_hand"), {
+                wrap: "nowrap",
+                gap: "16px",
+                sort: function (a, b) {
+                    var SCENE = _this.SCENES[a.type_arg];
+                    var SCENE2 = _this.SCENES[b.type_arg];
+                    return SCENE.UP.points - SCENE2.UP.points;
+                },
+                autoPlace: function (_a) {
+                    var location = _a.location, location_arg = _a.location_arg;
+                    return ((location === "hand" || location === "todiscard") &&
+                        Number(location_arg) === player_id);
+                },
+            });
+        }
+        this.game.stocks.scenes = stocks;
         this.stocks = this.game.stocks.scenes;
     };
     SceneManager.prototype.setup = function () {
@@ -1651,14 +1693,26 @@ var StateManager = /** @class */ (function () {
     }
     StateManager.prototype.onEntering = function (stateName, args) {
         var _a;
+        var isSpectator = this.game.isSpectator;
+        if (isSpectator) {
+            return;
+        }
         (_a = this.states[stateName]) === null || _a === void 0 ? void 0 : _a.onEntering(args);
     };
     StateManager.prototype.onUpdate = function (stateName, args) {
         var _a;
+        var isSpectator = this.game.isSpectator;
+        if (isSpectator) {
+            return;
+        }
         (_a = this.states[stateName]) === null || _a === void 0 ? void 0 : _a.onUpdate(args);
     };
     StateManager.prototype.onLeaving = function (stateName) {
         var _a;
+        var isSpectator = this.game.isSpectator;
+        if (isSpectator) {
+            return;
+        }
         (_a = this.states[stateName]) === null || _a === void 0 ? void 0 : _a.onLeaving();
     };
     return StateManager;
@@ -1667,23 +1721,9 @@ var State = /** @class */ (function () {
     function State(game) {
         this.game = game;
     }
-    State.prototype.onEntering = function (args) {
-        var isSpectator = this.game.isSpectator;
-        if (isSpectator) {
-            return;
-        }
-    };
-    State.prototype.onUpdate = function (args) {
-        var isSpectator = this.game.isSpectator;
-        if (isSpectator) {
-            return;
-        }
-    };
+    State.prototype.onEntering = function (args) { };
+    State.prototype.onUpdate = function (args) { };
     State.prototype.onLeaving = function () {
-        var isSpectator = this.game.isSpectator;
-        if (isSpectator) {
-            return;
-        }
         this.game.clearButtons();
     };
     return State;

@@ -36,14 +36,37 @@ class PassScenes extends GameState
     {
         $this->draftCounter->setAll(0);
 
-        if ((int) $this->scenes->deck->countCardsInLocation("hand") === 0) {
+        $handCount = (int) $this->scenes->deck->countCardsInLocation("hand");
+        if ($handCount === 0) {
             return DayEnd::class;
+        }
+
+        $players = $this->game->loadPlayersBasicInfos();
+
+        if ($this->game->isSolo()) {
+            foreach ($players as $playerId => $player) {
+                $oldCards = $this->scenes->getHand($playerId);
+                $this->scenes->deck->moveAllCardsInLocation("hand", "discard");
+                $newCards = $this->scenes->deck->pickCards($handCount, "deck", $playerId);
+
+                $this->notify->all(
+                    "renewHand",
+                    clienttranslate('${player_name} discards his hand and draws ${cardCount} new cards'),
+                    [
+                        "player_id" => $playerId,
+                        "oldCards" => $oldCards,
+                        "newCards" => array_values($newCards),
+                        "cardCount" => $handCount,
+                    ]
+                );
+            }
+
+            return PreTurn::class;
         }
 
         $day = $this->game->dayCounter->get();
         $direction = $day % 2 === 0 ? clienttranslate("counterclockwise") : clienttranslate("clockwise");
 
-        $players = $this->game->loadPlayersBasicInfos();
         foreach ($players as $playerId => $player) {
             $otherPlayerId = $this->game->getPlayerBefore($playerId);
 

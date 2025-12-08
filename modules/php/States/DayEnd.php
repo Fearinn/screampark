@@ -51,7 +51,7 @@ class DayEnd extends GameState
 
             $this->game->notify->all(
                 "scoreTheme",
-                clienttranslate('${player_name} scores ${points} point(s) from his Theme today'),
+                clienttranslate('${player_name} scores ${points} point(s) with his Theme today'),
                 [
                     "player_id" => $playerId,
                     "points" => $themePoints,
@@ -71,7 +71,7 @@ class DayEnd extends GameState
 
             $this->game->notify->all(
                 "message",
-                clienttranslate('${player_name} scores ${points} point(s) from the VIP today'),
+                clienttranslate('${player_name} scores ${points} point(s) with the VIP'),
                 [
                     "player_id" => $playerId,
                     "points" => $vipPoints,

@@ -35,9 +35,10 @@ class Genre extends Scenes
     public function attach(int $playerId, int $slot): void
     {
         $position = $this->getNextPosition($playerId, $slot);
+        $draft = $this->draftCounter->get($playerId) + 1;
 
-        $sql = "UPDATE {$this->dbTable} SET position={$position}, slot={$slot}, card_location='placed', 
-        card_location_arg={$playerId} WHERE card_id={$this->cardId}";
+        $sql = "UPDATE {$this->dbTable} SET card_location='placed', card_location_arg={$playerId}, 
+        position={$position}, slot={$slot}, draft={$draft} WHERE card_id={$this->cardId}";
         $this->game->DbQuery($sql);
         $card = $this->getCard($this->cardId);
 

@@ -42,6 +42,7 @@ trait Gamedatas
             "day" => $day,
             "nextPlayers" => $day === 2 ?  $this->getPrevPlayerTable() : $this->getNextPlayerTable(),
             "prevPlayers" => $day === 2 ? $this->getNextPlayerTable() : $this->getPrevPlayerTable(),
+            "isSolo" => $this->isSolo(),
         ];
 
         if (!$isSpectator) {

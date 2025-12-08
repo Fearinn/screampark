@@ -87,6 +87,11 @@ class Game extends \Bga\GameFramework\Table
         return $this->newGame($players, $options);
     }
 
+    public function isSolo(): bool
+    {
+        return $this->getPlayerCount() === 1;
+    }
+
     public function debug_goToState(int $state = 3)
     {
         $this->gamestate->jumpToState($state);
