@@ -36,6 +36,8 @@ class EndScore extends \Bga\GameFramework\States\GameState
 
     public function onEnteringState(): int
     {
+        $this->scoreAbilities();
+
         $players = $this->game->loadPlayersBasicInfos();
         foreach ($players as $playerId => $player) {
             $maxSlot = $this->scenes->getMaxSlot($playerId);
@@ -44,8 +46,23 @@ class EndScore extends \Bga\GameFramework\States\GameState
             $this->scoreScenic($playerId, $maxSlot);
             $this->scoreStaff($playerId);
             $this->computeTieBreakers($playerId);
+
+            if ($this->game->isSolo()) {
+                $points = $this->playerScore->get($playerId);
+
+                if ($points < 80) {
+                    $this->notify->all(
+                        "message",
+                        clienttranslate('${player_name} fails to score 80 or more points (${points})'),
+                        [
+                            "player_id" => $playerId,
+                            "points" => $points,
+                        ],
+                    );
+                    $this->playerScore->set($playerId, 0);
+                }
+            }
         }
-        $this->scoreAbilities();
 
         return ST_END_GAME;
     }
