@@ -260,11 +260,14 @@ class NotifManager {
     });
   }
 
-  public async notif_dayEnd(args: { previousDay: number }): Promise<void> {
-    const { previousDay } = args;
+  public async notif_dayEnd(args: {
+    previousDay: number;
+    day: number;
+  }): Promise<void> {
+    const { previousDay, day } = args;
 
     const { gamedatas, keysToNumbers } = this.game;
-    const { players } = gamedatas;
+    const { players, prevPlayers, nextPlayers } = gamedatas;
     const { tracks } = this.meepleManager.stocks;
     keysToNumbers(players).forEach((playerId) => {
       tracks[playerId][0].addCard({ id: playerId });
@@ -276,6 +279,8 @@ class NotifManager {
     });
 
     board.flipCard(card);
+
+    this.game.togglePassDirection(day);
   }
 
   public async notif_scoreTheme(args: {

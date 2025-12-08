@@ -97,6 +97,7 @@ class DayEnd extends GameState
                 "i18n" => ["dayLabel"],
                 "previousDay" => $previousDay,
                 "dayLabel" => $DAYS[$previousDay],
+                "day" => $day,
             ]
         );
 

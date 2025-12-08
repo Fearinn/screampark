@@ -424,7 +424,7 @@ var Template = /** @class */ (function () {
     Template.prototype.setupZones = function () {
         var _this = this;
         var _a = this.game, gamedatas = _a.gamedatas, player_id = _a.player_id;
-        var players = gamedatas.players, nextPlayers = gamedatas.nextPlayers, prevPlayers = gamedatas.prevPlayers;
+        var players = gamedatas.players, nextPlayers = gamedatas.nextPlayers, prevPlayers = gamedatas.prevPlayers, day = gamedatas.day;
         delete nextPlayers[0];
         this.game.keysFromMap(nextPlayers, player_id).forEach(function (playerId) {
             var playerColor = players[playerId].color;
@@ -466,6 +466,7 @@ var Template = /** @class */ (function () {
                 player_name2: nextPlayerName,
             }), "\n            </span>\n        </div>"));
         });
+        this.game.togglePassDirection(day);
     };
     Template.prototype.setupStocks = function () {
         var vipManager = new VipManager(this.game);
@@ -635,6 +636,46 @@ var SCP = /** @class */ (function (_super) {
             key = map[key];
         }
         return circularKeys;
+    };
+    SCP.prototype.togglePassDirection = function (day) {
+        var _this = this;
+        if (day > 3) {
+            return;
+        }
+        var isClockwise = day !== 2;
+        var _a = this.gamedatas, players = _a.players, prevPlayers = _a.prevPlayers, nextPlayers = _a.nextPlayers;
+        this.keysToNumbers(players).forEach(function (playerId) {
+            var playerZone = document.getElementById("scp_playerZone-".concat(playerId));
+            playerZone.querySelectorAll("i").forEach(function (icon) {
+                icon.classList.toggle("fa6-arrow-left", !isClockwise);
+                icon.classList.toggle("fa6-arrow-right", isClockwise);
+            });
+            var playerName = _this.getFormattedPlayerName(playerId);
+            var prevPlayerId = prevPlayers[playerId];
+            var prevPlayerName = _this.getFormattedPlayerName(prevPlayerId);
+            var prevTooltip = isClockwise
+                ? _this.format_string_recursive(_("${player_name} receives cards from ${player_name2}"), {
+                    player_name: playerName,
+                    player_name2: prevPlayerName,
+                })
+                : _this.format_string_recursive(_("${player_name} pass cards to ${player_name2}"), {
+                    player_name: playerName,
+                    player_name2: prevPlayerName,
+                });
+            _this.addTooltipHtml("scp_prevPlayer-".concat(playerId), "<div class=\"scp_tooltip\">\n            <span>\n            ".concat(prevTooltip, "\n            </span>\n        </div>"));
+            var nextPlayerId = nextPlayers[playerId];
+            var nextPlayerName = _this.getFormattedPlayerName(nextPlayerId);
+            var nextTooltip = isClockwise
+                ? _this.format_string_recursive(_("${player_name} pass cards to ${player_name2}"), {
+                    player_name: playerName,
+                    player_name2: nextPlayerName,
+                })
+                : _this.format_string_recursive(_("${player_name} receive cards from ${player_name2}"), {
+                    player_name: playerName,
+                    player_name2: nextPlayerName,
+                });
+            _this.addTooltipHtml("scp_nextPlayer-".concat(playerId), "<div class=\"scp_tooltip\">\n            <span>\n            ".concat(nextTooltip, "\n            </span>\n        </div>"));
+        });
     };
     SCP.prototype.bgaFormatText = function (log, args) {
         var _this = this;
@@ -1074,11 +1115,11 @@ var NotifManager = /** @class */ (function () {
     };
     NotifManager.prototype.notif_dayEnd = function (args) {
         return __awaiter(this, void 0, void 0, function () {
-            var previousDay, _a, gamedatas, keysToNumbers, players, tracks, board, card;
+            var previousDay, day, _a, gamedatas, keysToNumbers, players, prevPlayers, nextPlayers, tracks, board, card;
             return __generator(this, function (_b) {
-                previousDay = args.previousDay;
+                previousDay = args.previousDay, day = args.day;
                 _a = this.game, gamedatas = _a.gamedatas, keysToNumbers = _a.keysToNumbers;
-                players = gamedatas.players;
+                players = gamedatas.players, prevPlayers = gamedatas.prevPlayers, nextPlayers = gamedatas.nextPlayers;
                 tracks = this.meepleManager.stocks.tracks;
                 keysToNumbers(players).forEach(function (playerId) {
                     tracks[playerId][0].addCard({ id: playerId });
@@ -1088,6 +1129,7 @@ var NotifManager = /** @class */ (function () {
                     return Number(card.location_arg) === previousDay;
                 });
                 board.flipCard(card);
+                this.game.togglePassDirection(day);
                 return [2 /*return*/];
             });
         });

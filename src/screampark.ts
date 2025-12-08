@@ -142,6 +142,81 @@ class SCP extends GameGui<SCP_Gamedatas> implements SCP {
     return circularKeys;
   }
 
+  public togglePassDirection(day: number): void {
+    if (day > 3) {
+      return;
+    }
+
+    const isClockwise = day !== 2;
+    const { players, prevPlayers, nextPlayers } = this.gamedatas;
+
+    this.keysToNumbers(players).forEach((playerId) => {
+      const playerZone = document.getElementById(`scp_playerZone-${playerId}`);
+
+      playerZone.querySelectorAll("i").forEach((icon) => {
+        icon.classList.toggle("fa6-arrow-left", !isClockwise);
+        icon.classList.toggle("fa6-arrow-right", isClockwise);
+      });
+
+      const playerName = this.getFormattedPlayerName(playerId);
+      const prevPlayerId = prevPlayers[playerId];
+      const prevPlayerName = this.getFormattedPlayerName(prevPlayerId);
+
+      const prevTooltip = isClockwise
+        ? this.format_string_recursive(
+            _("${player_name} receives cards from ${player_name2}"),
+            {
+              player_name: playerName,
+              player_name2: prevPlayerName,
+            }
+          )
+        : this.format_string_recursive(
+            _("${player_name} pass cards to ${player_name2}"),
+            {
+              player_name: playerName,
+              player_name2: prevPlayerName,
+            }
+          );
+
+      this.addTooltipHtml(
+        `scp_prevPlayer-${playerId}`,
+        `<div class="scp_tooltip">
+            <span>
+            ${prevTooltip}
+            </span>
+        </div>`
+      );
+
+      const nextPlayerId = nextPlayers[playerId];
+      const nextPlayerName = this.getFormattedPlayerName(nextPlayerId);
+
+      const nextTooltip = isClockwise
+        ? this.format_string_recursive(
+            _("${player_name} pass cards to ${player_name2}"),
+            {
+              player_name: playerName,
+              player_name2: nextPlayerName,
+            }
+          )
+        : this.format_string_recursive(
+            _("${player_name} receive cards from ${player_name2}"),
+            {
+              player_name: playerName,
+              player_name2: nextPlayerName,
+            }
+          );
+
+      this.addTooltipHtml(
+        `scp_nextPlayer-${playerId}`,
+        `<div class="scp_tooltip">
+            <span>
+            ${nextTooltip}
+            </span>
+        </div>`
+      );
+    });
+  }
+
   public bgaFormatText(
     log: string,
     args: Record<string, any>

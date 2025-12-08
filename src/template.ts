@@ -37,7 +37,7 @@ class Template {
 
   public setupZones(): void {
     const { gamedatas, player_id } = this.game;
-    const { players, nextPlayers, prevPlayers } = gamedatas;
+    const { players, nextPlayers, prevPlayers, day } = gamedatas;
 
     delete nextPlayers[0];
 
@@ -145,6 +145,8 @@ class Template {
         </div>`
       );
     });
+
+    this.game.togglePassDirection(day);
   }
 
   private setupStocks(): void {
