@@ -25,7 +25,7 @@ class NotifManager {
       "discardScene",
       "discardBoth",
       "shiftScenes",
-      "receiveCards",
+      "receiveScenes",
     ];
 
     notifsToIgnore.forEach((notifName) => {
@@ -114,34 +114,6 @@ class NotifManager {
     }
 
     await fakeHands[playerId].addCards(fakeCards, { fromStock: deck });
-  }
-
-  public async notif_renewHand(args: {
-    oldCards: SceneCard[];
-    newCards: SceneCard[];
-    player_id: number;
-  }): Promise<void> {
-    let { player_id: playerId, oldCards, newCards } = args;
-    const { hand, deck, fakeHands } = this.sceneManager.stocks;
-
-    if (this.game.isSpectator) {
-      const fakeHand = fakeHands[playerId];
-
-      newCards = newCards.map((card) => {
-        delete card.type_arg;
-        return card;
-      });
-      await fakeHand.addCards(newCards, { fromStock: deck });
-
-      return;
-    }
-
-    await hand.removeCards(oldCards, {
-      fadeOut: true,
-      slideTo: document.getElementById("player_boards"),
-    });
-
-    await hand.addCards(newCards, { fromStock: deck });
   }
 
   public async notif_placeScenePrivate(args: {
@@ -255,7 +227,7 @@ class NotifManager {
     await Promise.all(promises);
   }
 
-  public async notif_receiveCardsPrivate(args: {
+  public async notif_receiveScenesPrivate(args: {
     player_id: number;
     cards: SceneCard[];
   }): Promise<void> {
@@ -268,7 +240,7 @@ class NotifManager {
     });
   }
 
-  public async notif_receiveCards(args: {
+  public async notif_receiveScenes(args: {
     player_id: number;
     otherPlayerId: number;
     cards: SceneCard[];
@@ -285,6 +257,40 @@ class NotifManager {
     });
   }
 
+  public async notif_renewHand(args: {
+    oldCards: SceneCard[];
+    newCards: SceneCard[];
+    player_id: number;
+  }): Promise<void> {
+    let { player_id: playerId, oldCards, newCards } = args;
+    const { hand, deck, fakeHands } = this.sceneManager.stocks;
+
+    if (this.game.isSpectator) {
+      const fakeHand = fakeHands[playerId];
+
+      newCards = newCards.map((card) => {
+        delete card.type_arg;
+        return card;
+      });
+      await fakeHand.addCards(newCards, { fromStock: deck });
+
+      return;
+    }
+
+    await hand.removeCards(oldCards, {
+      fadeOut: true,
+      slideTo: document.getElementById("player_boards"),
+    });
+
+    await hand.addCards(newCards, { fromStock: deck });
+  }
+
+  public async notif_drawToTable(args: { cards: SceneCard[] }): Promise<void> {
+    const { cards } = args;
+    const { solo, deck } = this.sceneManager.stocks;
+    await solo.addCards(cards, { fromStock: deck });
+  }
+
   public async notif_dayEnd(args: {
     previousDay: number;
     day: number;
@@ -292,7 +298,7 @@ class NotifManager {
     const { previousDay, day } = args;
 
     const { gamedatas, keysToNumbers } = this.game;
-    const { players, prevPlayers, nextPlayers } = gamedatas;
+    const { players } = gamedatas;
     const { tracks } = this.meepleManager.stocks;
     keysToNumbers(players).forEach((playerId) => {
       tracks[playerId][0].addCard({ id: playerId });

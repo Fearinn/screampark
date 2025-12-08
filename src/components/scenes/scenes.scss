@@ -1,4 +1,5 @@
 :root {
+  --scene-height: 285.1px;
   --scene-width: 150px;
 }
 
@@ -6,6 +7,28 @@
   position: absolute !important;
   left: 13%;
   bottom: 11%;
+}
+
+.scp_sceneSolo {
+  position: absolute !important;
+  left: 50%;
+  bottom: 11%;
+  display: flex;
+  gap: 4px;
+  max-width: calc(var(--scene-width) * 2);
+  overflow-x: auto;
+  overflow-y: hidden;
+  transform: translate(-50%);
+
+  .scp_scene:not(:first-child) {
+    margin-left: calc(var(--scene-width) * -0.7);
+
+    @for $i from 1 through 9 {
+      &:nth-child(#{$i}) {
+        z-index: ($i);
+      }
+    }
+  }
 }
 
 .scp_scenes {
@@ -16,7 +39,7 @@
 
     .scp_scene {
       &:not(:first-child) {
-        margin-top: -115%;
+        margin-top: calc(var(--scene-height) * -0.6);
       }
 
       @for $i from 1 through 24 {

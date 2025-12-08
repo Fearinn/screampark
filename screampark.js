@@ -697,7 +697,7 @@ var SCP = /** @class */ (function (_super) {
                     var elementId = "scp_logLabel-".concat(uid);
                     args[key] = "<span id=\"".concat(elementId, "\" style=\"font-weight: bold\">").concat(_(args[key]), "</span>");
                     if (key.includes("sceneLabel")) {
-                        var sceneIdKey = key === "sceneLabel" ? "sceneId" : "sceneId2";
+                        var sceneIdKey = "sceneId" + key.split("Label")[1];
                         var sceneId = args[sceneIdKey];
                         var tooltip = "<div id=\"scp_tooltip-".concat(sceneId, "-").concat(uid, "\" class=\"scp_card scp_scene scp_logTooltip bga-cards_card\"\n            style=\"background-image: url(").concat(g_gamethemeurl, "img/scenes/scene_").concat(sceneId, ".jpg)\"></div>");
                         _this.registerCustomTooltip(elementId, "<div class=\"scp_tooltip\">".concat(tooltip, "</div>"));
@@ -828,7 +828,7 @@ var NotifManager = /** @class */ (function () {
             "discardScene",
             "discardBoth",
             "shiftScenes",
-            "receiveCards",
+            "receiveScenes",
         ];
         notifsToIgnore.forEach(function (notifName) {
             notifqueue.setIgnoreNotificationCheck(notifName, function (notif) {
@@ -928,38 +928,6 @@ var NotifManager = /** @class */ (function () {
                         }
                         return [4 /*yield*/, fakeHands[playerId].addCards(fakeCards, { fromStock: deck })];
                     case 1:
-                        _b.sent();
-                        return [2 /*return*/];
-                }
-            });
-        });
-    };
-    NotifManager.prototype.notif_renewHand = function (args) {
-        return __awaiter(this, void 0, void 0, function () {
-            var playerId, oldCards, newCards, _a, hand, deck, fakeHands, fakeHand;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        playerId = args.player_id, oldCards = args.oldCards, newCards = args.newCards;
-                        _a = this.sceneManager.stocks, hand = _a.hand, deck = _a.deck, fakeHands = _a.fakeHands;
-                        if (!this.game.isSpectator) return [3 /*break*/, 2];
-                        fakeHand = fakeHands[playerId];
-                        newCards = newCards.map(function (card) {
-                            delete card.type_arg;
-                            return card;
-                        });
-                        return [4 /*yield*/, fakeHand.addCards(newCards, { fromStock: deck })];
-                    case 1:
-                        _b.sent();
-                        return [2 /*return*/];
-                    case 2: return [4 /*yield*/, hand.removeCards(oldCards, {
-                            fadeOut: true,
-                            slideTo: document.getElementById("player_boards"),
-                        })];
-                    case 3:
-                        _b.sent();
-                        return [4 /*yield*/, hand.addCards(newCards, { fromStock: deck })];
-                    case 4:
                         _b.sent();
                         return [2 /*return*/];
                 }
@@ -1110,7 +1078,7 @@ var NotifManager = /** @class */ (function () {
             });
         });
     };
-    NotifManager.prototype.notif_receiveCardsPrivate = function (args) {
+    NotifManager.prototype.notif_receiveScenesPrivate = function (args) {
         return __awaiter(this, void 0, void 0, function () {
             var cards, hand;
             return __generator(this, function (_a) {
@@ -1130,7 +1098,7 @@ var NotifManager = /** @class */ (function () {
             });
         });
     };
-    NotifManager.prototype.notif_receiveCards = function (args) {
+    NotifManager.prototype.notif_receiveScenes = function (args) {
         return __awaiter(this, void 0, void 0, function () {
             var player_id, playerId, otherPlayerId, cards, _a, hand, fakeHands;
             return __generator(this, function (_b) {
@@ -1152,13 +1120,61 @@ var NotifManager = /** @class */ (function () {
             });
         });
     };
+    NotifManager.prototype.notif_renewHand = function (args) {
+        return __awaiter(this, void 0, void 0, function () {
+            var playerId, oldCards, newCards, _a, hand, deck, fakeHands, fakeHand;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        playerId = args.player_id, oldCards = args.oldCards, newCards = args.newCards;
+                        _a = this.sceneManager.stocks, hand = _a.hand, deck = _a.deck, fakeHands = _a.fakeHands;
+                        if (!this.game.isSpectator) return [3 /*break*/, 2];
+                        fakeHand = fakeHands[playerId];
+                        newCards = newCards.map(function (card) {
+                            delete card.type_arg;
+                            return card;
+                        });
+                        return [4 /*yield*/, fakeHand.addCards(newCards, { fromStock: deck })];
+                    case 1:
+                        _b.sent();
+                        return [2 /*return*/];
+                    case 2: return [4 /*yield*/, hand.removeCards(oldCards, {
+                            fadeOut: true,
+                            slideTo: document.getElementById("player_boards"),
+                        })];
+                    case 3:
+                        _b.sent();
+                        return [4 /*yield*/, hand.addCards(newCards, { fromStock: deck })];
+                    case 4:
+                        _b.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    NotifManager.prototype.notif_drawToTable = function (args) {
+        return __awaiter(this, void 0, void 0, function () {
+            var cards, _a, solo, deck;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        cards = args.cards;
+                        _a = this.sceneManager.stocks, solo = _a.solo, deck = _a.deck;
+                        return [4 /*yield*/, solo.addCards(cards, { fromStock: deck })];
+                    case 1:
+                        _b.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
     NotifManager.prototype.notif_dayEnd = function (args) {
         return __awaiter(this, void 0, void 0, function () {
-            var previousDay, day, _a, gamedatas, keysToNumbers, players, prevPlayers, nextPlayers, tracks, board, card;
+            var previousDay, day, _a, gamedatas, keysToNumbers, players, tracks, board, card;
             return __generator(this, function (_b) {
                 previousDay = args.previousDay, day = args.day;
                 _a = this.game, gamedatas = _a.gamedatas, keysToNumbers = _a.keysToNumbers;
-                players = gamedatas.players, prevPlayers = gamedatas.prevPlayers, nextPlayers = gamedatas.nextPlayers;
+                players = gamedatas.players;
                 tracks = this.meepleManager.stocks.tracks;
                 keysToNumbers(players).forEach(function (playerId) {
                     tracks[playerId][0].addCard({ id: playerId });
@@ -1438,6 +1454,17 @@ var SceneManager = /** @class */ (function () {
                     var fakeCard = _this.manager.getFakeCardGenerator()(deckId);
                     fakeCard.type = "genre";
                     return fakeCard;
+                },
+            }),
+            solo: new BgaCards.CardStock(this.manager, document.getElementById("scp_sceneSolo"), {
+                autoPlace: function (_a) {
+                    var location = _a.location;
+                    return location === "solo";
+                },
+                sort: function (a, b) {
+                    var sceneA = _this.SCENES[a.type_arg];
+                    var sceneB = _this.SCENES[b.type_arg];
+                    return sceneB.DOWN.ability - sceneA.DOWN.ability;
                 },
             }),
         };

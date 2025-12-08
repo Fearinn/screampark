@@ -7,6 +7,7 @@ namespace Bga\Games\ScreamPark\States;
 use Bga\GameFramework\Components\Counters\TableCounter;
 use Bga\GameFramework\States\GameState;
 use Bga\GameFramework\StateType;
+use Bga\Games\ScreamPark\components\scenes\Scene;
 use Bga\Games\ScreamPark\components\scenes\Scenes;
 use Bga\Games\ScreamPark\components\themes\Themes;
 use Bga\Games\ScreamPark\components\vips\Vips;
@@ -75,6 +76,35 @@ class DayEnd extends GameState
                 [
                     "player_id" => $playerId,
                     "points" => $vipPoints,
+                ]
+            );
+        }
+
+        if ($this->game->isSolo()) {
+            $cards = $this->scenes->deck->pickCardsForLocation(3, "deck", "solo");
+            [$card, $card2, $card3] = $cards;
+
+            $cardId = (int) $card["id"];
+            $cardId2 = (int) $card2["id"];
+            $cardId3 = (int) $card3["id"];
+
+            $Scene = new Scene($this->game, $cardId);
+            $Scene2 = new Scene($this->game, $cardId2);
+            $Scene3 = new Scene($this->game, $cardId3);
+
+            $this->notify->all(
+                "drawToTable",
+                clienttranslate('3 cards are drawn to the table: ${sceneLabel}, ${sceneLabel2} and ${sceneLabel3}'),
+                [
+                    "i18n" => ["sceneLabel", "sceneLabel2", "sceneLabel3"],
+                    "preserve" => ["sceneId", "sceneId2", "sceneId3"],
+                    "sceneLabel" => $Scene->upLabel,
+                    "sceneId" => $Scene->id,
+                    "sceneLabel2" => $Scene2->upLabel,
+                    "sceneId2" => $Scene2->id,
+                    "sceneLabel3" => $Scene3->upLabel,
+                    "sceneId3" => $Scene3->id,
+                    "cards" => array_values($cards),
                 ]
             );
         }

@@ -238,7 +238,7 @@ class SCP extends GameGui<SCP_Gamedatas> implements SCP {
           )}</span>`;
 
           if (key.includes("sceneLabel")) {
-            const sceneIdKey = key === "sceneLabel" ? "sceneId" : "sceneId2";
+            const sceneIdKey = "sceneId" + key.split("Label")[1];
             const sceneId = args[sceneIdKey];
 
             const tooltip = `<div id="scp_tooltip-${sceneId}-${uid}" class="scp_card scp_scene scp_logTooltip bga-cards_card"

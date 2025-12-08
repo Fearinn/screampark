@@ -83,7 +83,7 @@ class PassScenes extends GameState
 
             $this->notify->player(
                 $playerId,
-                "receiveCardsPrivate",
+                "receiveScenesPrivate",
                 "",
                 [
                     "player_id" => $playerId,
@@ -97,7 +97,7 @@ class PassScenes extends GameState
             }, $cards);
 
             $this->notify->all(
-                "receiveCards",
+                "receiveScenes",
                 "",
                 [
                     "player_id" => $playerId,

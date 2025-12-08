@@ -202,6 +202,7 @@ p {
 }
 
 :root {
+  --scene-height: 285.1px;
   --scene-width: 150px;
 }
 
@@ -211,6 +212,48 @@ p {
   bottom: 11%;
 }
 
+.scp_sceneSolo {
+  position: absolute !important;
+  left: 50%;
+  bottom: 11%;
+  display: flex;
+  gap: 4px;
+  max-width: calc(var(--scene-width) * 2);
+  overflow-x: auto;
+  overflow-y: hidden;
+  transform: translate(-50%);
+}
+.scp_sceneSolo .scp_scene:not(:first-child) {
+  margin-left: calc(var(--scene-width) * -0.7);
+}
+.scp_sceneSolo .scp_scene:not(:first-child):nth-child(1) {
+  z-index: 1;
+}
+.scp_sceneSolo .scp_scene:not(:first-child):nth-child(2) {
+  z-index: 2;
+}
+.scp_sceneSolo .scp_scene:not(:first-child):nth-child(3) {
+  z-index: 3;
+}
+.scp_sceneSolo .scp_scene:not(:first-child):nth-child(4) {
+  z-index: 4;
+}
+.scp_sceneSolo .scp_scene:not(:first-child):nth-child(5) {
+  z-index: 5;
+}
+.scp_sceneSolo .scp_scene:not(:first-child):nth-child(6) {
+  z-index: 6;
+}
+.scp_sceneSolo .scp_scene:not(:first-child):nth-child(7) {
+  z-index: 7;
+}
+.scp_sceneSolo .scp_scene:not(:first-child):nth-child(8) {
+  z-index: 8;
+}
+.scp_sceneSolo .scp_scene:not(:first-child):nth-child(9) {
+  z-index: 9;
+}
+
 .scp_scenes {
   align-items: start !important;
 }
@@ -218,7 +261,7 @@ p {
   flex-direction: column;
 }
 .scp_scenes .slot .scp_scene:not(:first-child) {
-  margin-top: -115%;
+  margin-top: calc(var(--scene-height) * -0.6);
 }
 .scp_scenes .slot .scp_scene:nth-child(1) {
   z-index: 23;

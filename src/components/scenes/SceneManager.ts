@@ -145,6 +145,20 @@ class SceneManager {
           },
         }
       ),
+      solo: new BgaCards.CardStock(
+        this.manager,
+        document.getElementById("scp_sceneSolo"),
+        {
+          autoPlace: ({ location }) => {
+            return location === "solo";
+          },
+          sort: (a, b) => {
+            const sceneA = this.SCENES[a.type_arg];
+            const sceneB = this.SCENES[b.type_arg];
+            return sceneB.DOWN.ability - sceneA.DOWN.ability;
+          },
+        }
+      ),
     };
 
     if (!this.game.isSpectator) {
@@ -231,11 +245,18 @@ interface SceneStocks {
   hand?: BgaCards.LineStock<SceneCard>;
   boards: Record<number, BgaCards.SlotStock<SceneCard>>;
   fakeHands: Record<number, BgaCards.VoidStock<SceneCard>>;
+  solo: BgaCards.CardStock<SceneCard>;
 }
 
 interface SceneCard extends SCP_Card {
   type: "scene" | "genre";
-  location?: "hand" | "todiscard" | "board" | "placed" | "placedAnywhere";
+  location?:
+    | "hand"
+    | "todiscard"
+    | "board"
+    | "placed"
+    | "placedAnywhere"
+    | "solo";
   slot?: number;
   position?: number;
 }
