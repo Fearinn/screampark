@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bga\Games\ScreamPark\States;
 
+use Bga\GameFramework\Components\Counters\PlayerCounter;
 use Bga\GameFramework\StateType;
 use Bga\Games\ScreamPark\components\scenes\Scene;
 use Bga\Games\ScreamPark\components\scenes\Scenes;
@@ -16,6 +17,7 @@ class EndScore extends \Bga\GameFramework\States\GameState
 {
     protected Scenes $scenes;
     protected Themes $themes;
+    protected PlayerCounter $staffCounter;
 
     function __construct(
         protected Game $game,
@@ -29,6 +31,7 @@ class EndScore extends \Bga\GameFramework\States\GameState
 
         $this->scenes = new Scenes($this->game);
         $this->themes = new Themes($this->game);
+        $this->staffCounter = $this->game->staffCounter;
     }
 
     public function onEnteringState(): int
@@ -40,6 +43,7 @@ class EndScore extends \Bga\GameFramework\States\GameState
             $this->scoreScenes($playerId, $maxSlot);
             $this->scoreScenic($playerId, $maxSlot);
             $this->scoreStaff($playerId);
+            $this->computeTieBreakers($playerId);
         }
         $this->scoreAbilities();
 
@@ -124,10 +128,10 @@ class EndScore extends \Bga\GameFramework\States\GameState
 
         $this->notify->all(
             "message",
-            clienttranslate('${player_name} has ${sets} scenic sets and scores ${points} point(s) '),
+            clienttranslate('${player_name} has ${setCount} scenic sets and scores ${points} point(s) '),
             [
                 "player_id" => $playerId,
-                "sets" => $setCount,
+                "setCount" => $setCount,
                 "points" => $scenicPoints,
             ]
         );
@@ -172,10 +176,10 @@ class EndScore extends \Bga\GameFramework\States\GameState
 
             $this->notify->all(
                 "message",
-                clienttranslate('${player_name} has the most (${effects}) special effects and scores 3 points'),
+                clienttranslate('${player_name} has the most (${effectCount}) special effects and scores 3 points'),
                 [
                     "player_id" => $playerId,
-                    "effects" => $count,
+                    "effectCount" => $count,
                 ]
             );
 
@@ -208,5 +212,19 @@ class EndScore extends \Bga\GameFramework\States\GameState
         );
 
         $this->playerScore->inc($playerId, $staffPoints);
+    }
+
+    public function computeTieBreakers(int $playerId): void
+    {
+        $staffCount = $this->staffCounter->get($playerId);
+
+        $sql = "SELECT COUNT(card_id) FROM {$this->scenes->dbTable} 
+        WHERE card_location='board' AND card_location_arg={$playerId} AND card_type='scene'";
+        $sceneCount = $this->game->getUniqueValueFromDB($sql);
+
+        $cardCount = $this->scenes->deck->countCardInLocation("board", $playerId);
+
+        $scoreAux = $staffCount * 10000 + $sceneCount * 100 + $cardCount;
+        $this->playerScoreAux->set($playerId, $scoreAux);
     }
 }
