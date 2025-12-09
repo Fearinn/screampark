@@ -21,7 +21,10 @@ class Template {
           return this.game.bgaAnimationsActive();
         },
       }),
-      counters: {},
+      counters: {
+        player: {},
+        table: {},
+      },
     };
     this.game.stocks = {};
 
@@ -32,7 +35,7 @@ class Template {
     );
     this.setupZones();
     this.setupStocks();
-    this.setupPanels();
+    this.setupCounters();
   }
 
   public setupZones(): void {
@@ -191,33 +194,58 @@ class Template {
     starManager.setup();
   }
 
-  private setupPanels(): void {
+  private setupCounters(): void {
     const { gamedatas, keysToNumbers, managers, player_id } = this.game;
-    const { players, staffCounts, staffCountPrivate } = gamedatas;
+    const { players, staffCounts, staffCountPrivate, isSolo } = gamedatas;
+    const { counters } = managers;
 
-    const counters: Record<number, Counter> = {};
-
+    counters.player.staff = {};
     keysToNumbers(players).forEach((playerId) => {
       this.game.getPlayerPanelElement(playerId).insertAdjacentHTML(
         "beforeend",
-        `<div id="scp_staffCounter-${playerId}" class="scp_staffCounter">
+        `<div id="scp_staffCounter-${playerId}" class="scp_counter scp_staffCounter">
+          <i id="scp_staffCounterIcon-${playerId}" class="scp_staffCounterIcon"></i>
           <span id="scp_staffCounterCount-${playerId}" class="scp_staffCounterCount"></span>
-          <div id="scp_staffCounterIcon-${playerId}" class="scp_staffCounterIcon"></div>
+        </div>
+        <div id="scp_abilityCounter-${playerId}" class="scp_counter scp_abilityCounter">
+          <i id="scp_abilityCounterIcon-${playerId}" class="scp_abilityCounterIcon"></i>
+          <div id="scp_abilityCounterCounts-${playerId}" class="scp_abilityCounterCounts">
+            <span id="scp_abilityCounterCount-${playerId}" class="scp_abilityCounterCount"></span>
+            ${
+              isSolo
+                ? `x<span id="scp_soloCounterCount" class="scp_soloCounterCount"></span>`
+                : ""
+            }
+          </div>
         </div>`
       );
 
-      counters[playerId] = new ebg.counter();
-      counters[playerId].create(`scp_staffCounterCount-${playerId}`, {
+      const staffCounter = new ebg.counter();
+      staffCounter.create(`scp_staffCounterCount-${playerId}`, {
         value:
           player_id === playerId ? staffCountPrivate : staffCounts[playerId],
         playerCounter: "staff",
         playerId,
       });
+
+      const abilityCounter = new ebg.counter();
+      abilityCounter.create(`scp_abilityCounterCount-${playerId}`, {
+        playerCounter: "ability",
+        playerId,
+      });
+
+      counters.player.staff[playerId] = staffCounter;
     });
 
-    managers.counters = {
-      ...managers.counters,
-      staff: counters,
-    };
+    if (isSolo) {
+      const soloCounter = new ebg.counter();
+      soloCounter.create(`scp_soloCounterCount`, {
+        tableCounter: "solo",
+      });
+
+      counters.table.ability = soloCounter;
+    }
+
+    managers.counters = counters;
   }
 }

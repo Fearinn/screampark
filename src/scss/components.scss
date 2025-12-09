@@ -18,19 +18,42 @@
 }
 
 .player-board-game-specific-content {
-  padding: 0 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 4px 0 4px;
+}
+
+.scp_counter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+  width: fit-content;
 }
 
 .scp_staffCounter {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-
   &Icon {
     background-image: url("img/staff.png");
     background-size: cover;
     filter: drop-shadow(0 0 2px #adadad);
     aspect-ratio: 1;
     width: 30px;
+  }
+}
+
+.scp_abilityCounter {
+  &Icon {
+    background-image: url("img/icons/lightning.png");
+    background-size: cover;
+    filter: drop-shadow(0 0 2px #adadad);
+    aspect-ratio: 1;
+    width: 30px;
+  }
+
+  &Counts {
+    display: flex;
+    justify-content: center;
+    gap: 2px;
   }
 }

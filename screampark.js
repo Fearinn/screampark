@@ -381,17 +381,6 @@ var HelpManager = /** @class */ (function () {
     }
     return HelpManager;
 }());
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var Template = /** @class */ (function () {
     function Template(game) {
         this.game = game;
@@ -413,13 +402,16 @@ var Template = /** @class */ (function () {
                     return _this.game.bgaAnimationsActive();
                 },
             }),
-            counters: {},
+            counters: {
+                player: {},
+                table: {},
+            },
         };
         this.game.stocks = {};
         document.getElementById("generalactions").insertAdjacentHTML("beforebegin", "<div id=\"scp_defaultActions\" class=\"scp_defaultActions\"></div>\n      <div id=\"scp_alertActions\" class=\"scp_alertActions\"></div>");
         this.setupZones();
         this.setupStocks();
-        this.setupPanels();
+        this.setupCounters();
     };
     Template.prototype.setupZones = function () {
         var _this = this;
@@ -494,24 +486,51 @@ var Template = /** @class */ (function () {
         var starManager = new StarManager(this.game);
         starManager.setup();
     };
-    Template.prototype.setupPanels = function () {
+    Template.prototype.setupCounters = function () {
         var _this = this;
         var _a = this.game, gamedatas = _a.gamedatas, keysToNumbers = _a.keysToNumbers, managers = _a.managers, player_id = _a.player_id;
-        var players = gamedatas.players, staffCounts = gamedatas.staffCounts, staffCountPrivate = gamedatas.staffCountPrivate;
-        var counters = {};
+        var players = gamedatas.players, staffCounts = gamedatas.staffCounts, staffCountPrivate = gamedatas.staffCountPrivate, isSolo = gamedatas.isSolo;
+        var counters = managers.counters;
+        counters.player.staff = {};
         keysToNumbers(players).forEach(function (playerId) {
-            _this.game.getPlayerPanelElement(playerId).insertAdjacentHTML("beforeend", "<div id=\"scp_staffCounter-".concat(playerId, "\" class=\"scp_staffCounter\">\n          <span id=\"scp_staffCounterCount-").concat(playerId, "\" class=\"scp_staffCounterCount\"></span>\n          <div id=\"scp_staffCounterIcon-").concat(playerId, "\" class=\"scp_staffCounterIcon\"></div>\n        </div>"));
-            counters[playerId] = new ebg.counter();
-            counters[playerId].create("scp_staffCounterCount-".concat(playerId), {
+            _this.game.getPlayerPanelElement(playerId).insertAdjacentHTML("beforeend", "<div id=\"scp_staffCounter-".concat(playerId, "\" class=\"scp_counter scp_staffCounter\">\n          <i id=\"scp_staffCounterIcon-").concat(playerId, "\" class=\"scp_staffCounterIcon\"></i>\n          <span id=\"scp_staffCounterCount-").concat(playerId, "\" class=\"scp_staffCounterCount\"></span>\n        </div>\n        <div id=\"scp_abilityCounter-").concat(playerId, "\" class=\"scp_counter scp_abilityCounter\">\n          <i id=\"scp_abilityCounterIcon-").concat(playerId, "\" class=\"scp_abilityCounterIcon\"></i>\n          <div id=\"scp_abilityCounterCounts-").concat(playerId, "\" class=\"scp_abilityCounterCounts\">\n            <span id=\"scp_abilityCounterCount-").concat(playerId, "\" class=\"scp_abilityCounterCount\"></span>\n            ").concat(isSolo
+                ? "x<span id=\"scp_soloCounterCount\" class=\"scp_soloCounterCount\"></span>"
+                : "", "\n          </div>\n        </div>"));
+            var staffCounter = new ebg.counter();
+            staffCounter.create("scp_staffCounterCount-".concat(playerId), {
                 value: player_id === playerId ? staffCountPrivate : staffCounts[playerId],
                 playerCounter: "staff",
                 playerId: playerId,
             });
+            var abilityCounter = new ebg.counter();
+            abilityCounter.create("scp_abilityCounterCount-".concat(playerId), {
+                playerCounter: "ability",
+                playerId: playerId,
+            });
+            counters.player.staff[playerId] = staffCounter;
         });
-        managers.counters = __assign(__assign({}, managers.counters), { staff: counters });
+        if (isSolo) {
+            var soloCounter = new ebg.counter();
+            soloCounter.create("scp_soloCounterCount", {
+                tableCounter: "solo",
+            });
+            counters.table.ability = soloCounter;
+        }
+        managers.counters = counters;
     };
     return Template;
 }());
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -1154,13 +1173,13 @@ var NotifManager = /** @class */ (function () {
     };
     NotifManager.prototype.notif_drawToTable = function (args) {
         return __awaiter(this, void 0, void 0, function () {
-            var cards, _a, solo, deck;
+            var cards, _a, discard, deck;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         cards = args.cards;
-                        _a = this.sceneManager.stocks, solo = _a.solo, deck = _a.deck;
-                        return [4 /*yield*/, solo.addCards(cards, { fromStock: deck })];
+                        _a = this.sceneManager.stocks, discard = _a.discard, deck = _a.deck;
+                        return [4 /*yield*/, discard.addCards(cards, { fromStock: deck }, true)];
                     case 1:
                         _b.sent();
                         return [2 /*return*/];
@@ -1267,7 +1286,7 @@ var NotifManager = /** @class */ (function () {
     };
     NotifManager.prototype.notif_setPlayerCounterPrivate = function (args) {
         var playerId = args.player_id, inc = args.inc, name = args.name;
-        var counter = this.counters[name][playerId];
+        var counter = this.counters.player[name][playerId];
         counter.incValue(inc);
     };
     NotifManager.prototype.notif_setPlayerCounter = function (args) {
@@ -1456,17 +1475,7 @@ var SceneManager = /** @class */ (function () {
                     return fakeCard;
                 },
             }),
-            solo: new BgaCards.CardStock(this.manager, document.getElementById("scp_sceneSolo"), {
-                autoPlace: function (_a) {
-                    var location = _a.location;
-                    return location === "solo";
-                },
-                sort: function (a, b) {
-                    var sceneA = _this.SCENES[a.type_arg];
-                    var sceneB = _this.SCENES[b.type_arg];
-                    return sceneB.DOWN.ability - sceneA.DOWN.ability;
-                },
-            }),
+            discard: new BgaCards.VoidStock(this.manager, document.getElementById("scp_sceneDiscard"), {}),
         };
         if (!this.game.isSpectator) {
             stocks.hand = new BgaCards.LineStock(this.manager, document.getElementById("scp_hand"), {

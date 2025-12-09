@@ -6,9 +6,9 @@
     <div id="scp_starTrack" class="scp_starTrack"></div>
     <div id="scp_vips" class="scp_vips"></div>
     <div id="scp_sceneDeck" class="scp_sceneDeck"></div>
-    <div id="scp_sceneSolo" class="scp_sceneSolo"></div>
     <div id="scp_genreDeck" class="scp_genreDeck"></div>
   </div>
+  <div id="scp_sceneDiscard" class="scp_sceneDiscard"></div>
 </div>
 
 {OVERALL_GAME_FOOTER}

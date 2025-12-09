@@ -9,28 +9,6 @@
   bottom: 11%;
 }
 
-.scp_sceneSolo {
-  position: absolute !important;
-  left: 50%;
-  bottom: 11%;
-  display: flex;
-  gap: 4px;
-  max-width: calc(var(--scene-width) * 2);
-  overflow-x: auto;
-  overflow-y: hidden;
-  transform: translate(-50%);
-
-  .scp_scene:not(:first-child) {
-    margin-left: calc(var(--scene-width) * -0.7);
-
-    @for $i from 1 through 9 {
-      &:nth-child(#{$i}) {
-        z-index: ($i);
-      }
-    }
-  }
-}
-
 .scp_scenes {
   align-items: start !important;
 

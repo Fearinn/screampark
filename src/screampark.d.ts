@@ -49,7 +49,10 @@ interface Stocks {
 }
 
 interface Counters {
-  staff?: Record<number, Counter>;
+  player: {
+    staff?: Record<number, Counter>;
+  };
+  table: { ability?: Counter };
 }
 
 type SCP_Card = {

@@ -145,19 +145,10 @@ class SceneManager {
           },
         }
       ),
-      solo: new BgaCards.CardStock(
+      discard: new BgaCards.VoidStock(
         this.manager,
-        document.getElementById("scp_sceneSolo"),
-        {
-          autoPlace: ({ location }) => {
-            return location === "solo";
-          },
-          sort: (a, b) => {
-            const sceneA = this.SCENES[a.type_arg];
-            const sceneB = this.SCENES[b.type_arg];
-            return sceneB.DOWN.ability - sceneA.DOWN.ability;
-          },
-        }
+        document.getElementById("scp_sceneDiscard"),
+        {}
       ),
     };
 
@@ -245,7 +236,7 @@ interface SceneStocks {
   hand?: BgaCards.LineStock<SceneCard>;
   boards: Record<number, BgaCards.SlotStock<SceneCard>>;
   fakeHands: Record<number, BgaCards.VoidStock<SceneCard>>;
-  solo: BgaCards.CardStock<SceneCard>;
+  discard: BgaCards.VoidStock<SceneCard>;
 }
 
 interface SceneCard extends SCP_Card {

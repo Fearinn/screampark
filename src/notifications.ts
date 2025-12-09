@@ -287,8 +287,8 @@ class NotifManager {
 
   public async notif_drawToTable(args: { cards: SceneCard[] }): Promise<void> {
     const { cards } = args;
-    const { solo, deck } = this.sceneManager.stocks;
-    await solo.addCards(cards, { fromStock: deck });
+    const { discard, deck } = this.sceneManager.stocks;
+    await discard.addCards(cards, { fromStock: deck }, true);
   }
 
   public async notif_dayEnd(args: {
@@ -383,7 +383,7 @@ class NotifManager {
     inc: number;
   }): void {
     const { player_id: playerId, inc, name } = args;
-    const counter = this.counters[name][playerId];
+    const counter = this.counters.player[name][playerId];
     counter.incValue(inc);
   }
 

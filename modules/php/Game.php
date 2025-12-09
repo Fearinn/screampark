@@ -114,11 +114,4 @@ class Game extends \Bga\GameFramework\Table
         $DayEnd = new DayEnd($this);
         $DayEnd->onEnteringState();
     }
-
-    public function debug_shiftScenes(int $slot = 1): void
-    {
-        $playerId = (int) $this->getCurrentPlayerId();
-        $Scenes = new Scenes($this);
-        $Scenes->shift($playerId, $slot);
-    }
 }

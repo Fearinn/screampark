@@ -72,7 +72,7 @@ class Scenes extends Cards
 
     public function getPublic(?int $excludedPlayerId = null): array
     {
-        $sql = "SELECT {$this->cardFields} FROM {$this->dbTable} WHERE card_location IN ('board', 'solo')";
+        $sql = "SELECT {$this->cardFields} FROM {$this->dbTable} WHERE card_location IN ('board')";
 
         if ($excludedPlayerId) {
             $sql .= " AND card_location_arg<>{$excludedPlayerId}";
