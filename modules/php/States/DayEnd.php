@@ -117,7 +117,7 @@ class DayEnd extends GameState
             $Scene3 = new Scene($this->game, $cardId3);
 
             $this->notify->all(
-                "drawToTable",
+                "drawToDiscard",
                 clienttranslate('3 cards are drawn to rack up opposing ${lightning_icon}: ${sceneLabel}, ${sceneLabel2} and ${sceneLabel3}'),
                 [
                     "i18n" => ["sceneLabel", "sceneLabel2", "sceneLabel3"],

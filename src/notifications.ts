@@ -151,24 +151,9 @@ class NotifManager {
     card: SceneCard;
   }): Promise<void> {
     const { card } = args;
-    const { hand } = this.sceneManager.stocks;
+    const { discard } = this.sceneManager.stocks;
 
-    await hand.removeCard(card, {
-      fadeOut: true,
-      slideTo: document.getElementById("player_boards"),
-    });
-  }
-
-  public async notif_discardBothPrivate(args: {
-    cards: SceneCard[];
-  }): Promise<void> {
-    const { cards } = args;
-    const { hand } = this.sceneManager.stocks;
-
-    await hand.removeCards(cards, {
-      fadeOut: true,
-      slideTo: document.getElementById("player_boards"),
-    });
+    await discard.addCard(card);
   }
 
   public async notif_discardScene(args: {
@@ -176,11 +161,20 @@ class NotifManager {
     card: SceneCard;
   }): Promise<void> {
     const { player_id: playerId, card } = args;
-    const { fakeHands } = this.sceneManager.stocks;
+    const { discard, fakeHands } = this.sceneManager.stocks;
 
-    await fakeHands[playerId].removeCard(card, {
-      slideTo: document.getElementById("player_boards"),
+    await discard.addCard(card, {
+      fromStock: fakeHands[playerId],
     });
+  }
+
+  public async notif_discardBothPrivate(args: {
+    cards: SceneCard[];
+  }): Promise<void> {
+    const { cards } = args;
+    const { discard } = this.sceneManager.stocks;
+
+    await discard.addCards(cards);
   }
 
   public async notif_discardBoth(args: {
@@ -188,10 +182,10 @@ class NotifManager {
     cards: SceneCard[];
   }): Promise<void> {
     const { player_id: playerId, cards } = args;
-    const { fakeHands } = this.sceneManager.stocks;
+    const { discard, fakeHands } = this.sceneManager.stocks;
 
-    await fakeHands[playerId].removeCards(cards, {
-      slideTo: document.getElementById("player_boards"),
+    await discard.addCards(cards, {
+      fromStock: fakeHands[playerId],
     });
   }
 
@@ -263,29 +257,34 @@ class NotifManager {
     player_id: number;
   }): Promise<void> {
     let { player_id: playerId, oldCards, newCards } = args;
-    const { hand, deck, fakeHands } = this.sceneManager.stocks;
+    const { hand, deck, discard, fakeHands } = this.sceneManager.stocks;
 
     if (this.game.isSpectator) {
       const fakeHand = fakeHands[playerId];
+
+      oldCards = oldCards.map((card) => {
+        delete card.type_arg;
+        return card;
+      });
 
       newCards = newCards.map((card) => {
         delete card.type_arg;
         return card;
       });
+
+      await discard.addCards(oldCards, { fromStock: fakeHand });
       await fakeHand.addCards(newCards, { fromStock: deck });
 
       return;
     }
 
-    await hand.removeCards(oldCards, {
-      fadeOut: true,
-      slideTo: document.getElementById("player_boards"),
-    });
-
+    await discard.addCards(oldCards);
     await hand.addCards(newCards, { fromStock: deck });
   }
 
-  public async notif_drawToTable(args: { cards: SceneCard[] }): Promise<void> {
+  public async notif_drawToDiscard(args: {
+    cards: SceneCard[];
+  }): Promise<void> {
     const { cards } = args;
     const { discard, deck } = this.sceneManager.stocks;
     await discard.addCards(cards, { fromStock: deck }, true);
