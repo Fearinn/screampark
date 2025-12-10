@@ -767,7 +767,7 @@ var SCP = /** @class */ (function (_super) {
         }
         if (log.includes("${lightning_icon}")) {
             var backgroundImage = "url(".concat(g_gamethemeurl, "img/icons/lightning.png)");
-            args.lightning_icon = "<span class=\"scp_icon scp_genreIcon\" style=\"background-image: ".concat(backgroundImage, ";\"></span>");
+            args.lightning_icon = "<span class=\"scp_icon\" style=\"background-image: ".concat(backgroundImage, ";\"></span>");
         }
         if (log.includes("${staff_icon}")) {
             var backgroundImage = "url(".concat(g_gamethemeurl, "img/staff.png)");
@@ -787,7 +787,7 @@ var SCP = /** @class */ (function (_super) {
         };
         var scenic_id = scenicSymbols[scenicName];
         var backgroundImage = "url(".concat(g_gamethemeurl, "img/icons/scenic_").concat(scenic_id, ".png)");
-        return "<span class=\"scp_icon scp_genreIcon\" style=\"background-image: ".concat(backgroundImage, ";\"></span>");
+        return "<span class=\"scp_icon scp_icon-scenic\" style=\"background-image: ".concat(backgroundImage, ";\"></span>");
     };
     SCP.prototype.setLoader = function (image_progress, logs_progress) {
         // @ts-ignore

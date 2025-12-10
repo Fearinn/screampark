@@ -309,7 +309,7 @@ class SCP extends GameGui<SCP_Gamedatas> implements SCP {
 
     if (log.includes("${lightning_icon}")) {
       const backgroundImage = `url(${g_gamethemeurl}img/icons/lightning.png)`;
-      args.lightning_icon = `<span class="scp_icon scp_genreIcon" style="background-image: ${backgroundImage};"></span>`;
+      args.lightning_icon = `<span class="scp_icon" style="background-image: ${backgroundImage};"></span>`;
     }
 
     if (log.includes("${staff_icon}")) {
@@ -334,7 +334,7 @@ class SCP extends GameGui<SCP_Gamedatas> implements SCP {
     const scenic_id = scenicSymbols[scenicName];
     const backgroundImage = `url(${g_gamethemeurl}img/icons/scenic_${scenic_id}.png)`;
 
-    return `<span class="scp_icon scp_genreIcon" style="background-image: ${backgroundImage};"></span>`;
+    return `<span class="scp_icon scp_icon-scenic" style="background-image: ${backgroundImage};"></span>`;
   }
 
   private setLoader(image_progress: number, logs_progress: number): void {
