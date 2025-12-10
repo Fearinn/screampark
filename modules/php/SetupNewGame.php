@@ -50,7 +50,7 @@ trait SetupNewGame
         $this->actionVariable->initDb(array_keys($players));
         $this->abilityCounter->initDb(array_keys($players));
         $this->dayCounter->initDb(1);
-        $this->oppAbility->initDb(0);
+        $this->oppAbilityCounter->initDb(0);
 
         $defaultGlobal = [];
         foreach ($players as $playerId => $player) {

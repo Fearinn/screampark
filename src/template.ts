@@ -196,7 +196,14 @@ class Template {
 
   private setupCounters(): void {
     const { gamedatas, keysToNumbers, managers, player_id } = this.game;
-    const { players, staffCounts, staffCountPrivate, isSolo } = gamedatas;
+    const {
+      isSolo,
+      players,
+      staffCounts,
+      staffCountPrivate,
+      abilityCounts,
+      oppAbilityCount,
+    } = gamedatas;
     const { counters } = managers;
 
     counters.player.staff = {};
@@ -213,7 +220,7 @@ class Template {
             <span id="scp_abilityCounterCount-${playerId}" class="scp_abilityCounterCount"></span>
             ${
               isSolo
-                ? `x<span id="scp_oppAbilityCount" class="scp_oppAbilityCount"></span>`
+                ? `x<span id="scp_oppAbilityCounterCount" class="scp_oppAbilityCounterCount"></span>`
                 : ""
             }
           </div>
@@ -230,6 +237,7 @@ class Template {
 
       const abilityCounter = new ebg.counter();
       abilityCounter.create(`scp_abilityCounterCount-${playerId}`, {
+        value: abilityCounts[playerId],
         playerCounter: "ability",
         playerId,
       });
@@ -238,12 +246,13 @@ class Template {
     });
 
     if (isSolo) {
-      const oppAbility = new ebg.counter();
-      oppAbility.create(`scp_oppAbilityCount`, {
+      const oppAbilityCounter = new ebg.counter();
+      oppAbilityCounter.create(`scp_oppAbilityCounterCount`, {
+        value: oppAbilityCount,
         tableCounter: "oppAbility",
       });
 
-      counters.table.ability = oppAbility;
+      counters.table.ability = oppAbilityCounter;
     }
 
     managers.counters = counters;

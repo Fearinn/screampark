@@ -20,7 +20,7 @@ class EndScore extends \Bga\GameFramework\States\GameState
     protected Themes $themes;
     protected PlayerCounter $staffCounter;
     protected PlayerCounter $abilityCounter;
-    protected TableCounter $oppAbility;
+    protected TableCounter $oppAbilityCounter;
 
     function __construct(
         protected Game $game,
@@ -36,7 +36,7 @@ class EndScore extends \Bga\GameFramework\States\GameState
         $this->themes = new Themes($this->game);
         $this->staffCounter = $this->game->staffCounter;
         $this->abilityCounter = $this->game->abilityCounter;
-        $this->oppAbility = $this->game->oppAbility;
+        $this->oppAbilityCounter = $this->game->oppAbilityCounter;
     }
 
     public function onEnteringState(): int
@@ -164,43 +164,39 @@ class EndScore extends \Bga\GameFramework\States\GameState
 
     public function scoreAbilities(): void
     {
-        $abilitiesCounts = [];
         $players = $this->game->loadPlayersBasicInfos();
 
         if ($this->game->isSolo()) {
             foreach ($players as $playerId => $player) {
-                if ($this->abilityCounter->get($playerId) >= $this->oppAbility->get()) {
+                $count = $this->abilityCounter->get($playerId);
+
+                if ($count === 0) {
+                    return;
+                }
+
+                if ($count >= $this->oppAbilityCounter->get()) {
                     $this->playerScore->inc($playerId, 3);
+
+                    $this->notify->all(
+                        "message",
+                        clienttranslate('${player_name} has the most (${effectCount}) special effects and scores 3 points'),
+                        [
+                            "player_id" => $playerId,
+                            "effectCount" => $count,
+                        ]
+                    );
                 }
             }
             return;
         }
 
-        foreach ($players as $playerId => $player) {
-            $abilitiesCounts[$playerId] = 0;
-
-            $cards = $this->scenes->getBoard($playerId);
-            foreach ($cards as $card) {
-                if ($card["type"] === "genre") {
-                    continue;
-                }
-
-                $cardId = (int) $card["id"];
-                $Scene = new Scene($this->game, $cardId);
-
-                if ($Scene->ability > 0) {
-                    $abilitiesCounts[$playerId]++;
-                }
-            }
-        }
-
-        $maxCount = max($abilitiesCounts);
+        $maxCount = $this->abilityCounter->getMax();
         if ($maxCount === 0) {
             return;
         }
 
         foreach ($players as $playerId => $player) {
-            $count = $abilitiesCounts[$playerId];
+            $count = $this->abilityCounter->get($playerId);
             if ($count < $maxCount) {
                 continue;
             }

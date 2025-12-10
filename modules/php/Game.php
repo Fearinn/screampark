@@ -27,6 +27,7 @@ use Bga\Games\ScreamPark\components\scenes\Scenes;
 use Bga\Games\ScreamPark\Gamedatas;
 use Bga\Games\ScreamPark\SetupNewGame;
 use Bga\Games\ScreamPark\States\DayEnd;
+use Bga\Games\ScreamPark\States\EndScore;
 
 define("gCompletedScenes", "gCompletedScenes");
 define("gCompletedScenesPrivate", "gCompletedScenesPrivate");
@@ -50,7 +51,7 @@ class Game extends \Bga\GameFramework\Table
     public readonly PlayerCounter $abilityCounter;
     public readonly PlayerCounter $actionVariable;
     public readonly TableCounter $dayCounter;
-    public readonly TableCounter $oppAbility;
+    public readonly TableCounter $oppAbilityCounter;
 
     public function __construct()
     {
@@ -69,7 +70,7 @@ class Game extends \Bga\GameFramework\Table
         $this->abilityCounter = $this->counterFactory->createPlayerCounter("ability", 0, 2);
         $this->actionVariable = $this->counterFactory->createPlayerCounter("action");
         $this->dayCounter = $this->counterFactory->createTableCounter("day", 1, 4);
-        $this->oppAbility = $this->counterFactory->createTableCounter("oppAbility", 0, 9);
+        $this->oppAbilityCounter = $this->counterFactory->createTableCounter("oppAbility", 0, 9);
 
         $this->decorateNotifs();
     }
@@ -117,5 +118,11 @@ class Game extends \Bga\GameFramework\Table
     {
         $DayEnd = new DayEnd($this);
         $DayEnd->onEnteringState();
+    }
+
+    public function debug_EndScore(): void
+    {
+        $EndScore = new EndScore($this);
+        $EndScore->onEnteringState();
     }
 }

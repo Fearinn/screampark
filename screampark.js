@@ -489,12 +489,12 @@ var Template = /** @class */ (function () {
     Template.prototype.setupCounters = function () {
         var _this = this;
         var _a = this.game, gamedatas = _a.gamedatas, keysToNumbers = _a.keysToNumbers, managers = _a.managers, player_id = _a.player_id;
-        var players = gamedatas.players, staffCounts = gamedatas.staffCounts, staffCountPrivate = gamedatas.staffCountPrivate, isSolo = gamedatas.isSolo;
+        var isSolo = gamedatas.isSolo, players = gamedatas.players, staffCounts = gamedatas.staffCounts, staffCountPrivate = gamedatas.staffCountPrivate, abilityCounts = gamedatas.abilityCounts, oppAbilityCount = gamedatas.oppAbilityCount;
         var counters = managers.counters;
         counters.player.staff = {};
         keysToNumbers(players).forEach(function (playerId) {
             _this.game.getPlayerPanelElement(playerId).insertAdjacentHTML("beforeend", "<div id=\"scp_staffCounter-".concat(playerId, "\" class=\"scp_counter scp_staffCounter\">\n          <i id=\"scp_staffCounterIcon-").concat(playerId, "\" class=\"scp_staffCounterIcon\"></i>\n          <span id=\"scp_staffCounterCount-").concat(playerId, "\" class=\"scp_staffCounterCount\"></span>\n        </div>\n        <div id=\"scp_abilityCounter-").concat(playerId, "\" class=\"scp_counter scp_abilityCounter\">\n          <i id=\"scp_abilityCounterIcon-").concat(playerId, "\" class=\"scp_abilityCounterIcon\"></i>\n          <div id=\"scp_abilityCounterCounts-").concat(playerId, "\" class=\"scp_abilityCounterCounts\">\n            <span id=\"scp_abilityCounterCount-").concat(playerId, "\" class=\"scp_abilityCounterCount\"></span>\n            ").concat(isSolo
-                ? "x<span id=\"scp_oppAbilityCount\" class=\"scp_oppAbilityCount\"></span>"
+                ? "x<span id=\"scp_oppAbilityCounterCount\" class=\"scp_oppAbilityCounterCount\"></span>"
                 : "", "\n          </div>\n        </div>"));
             var staffCounter = new ebg.counter();
             staffCounter.create("scp_staffCounterCount-".concat(playerId), {
@@ -504,17 +504,19 @@ var Template = /** @class */ (function () {
             });
             var abilityCounter = new ebg.counter();
             abilityCounter.create("scp_abilityCounterCount-".concat(playerId), {
+                value: abilityCounts[playerId],
                 playerCounter: "ability",
                 playerId: playerId,
             });
             counters.player.staff[playerId] = staffCounter;
         });
         if (isSolo) {
-            var oppAbility = new ebg.counter();
-            oppAbility.create("scp_oppAbilityCount", {
+            var oppAbilityCounter = new ebg.counter();
+            oppAbilityCounter.create("scp_oppAbilityCounterCount", {
+                value: oppAbilityCount,
                 tableCounter: "oppAbility",
             });
-            counters.table.ability = oppAbility;
+            counters.table.ability = oppAbilityCounter;
         }
         managers.counters = counters;
     };

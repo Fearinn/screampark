@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bga\Games\ScreamPark\States;
 
+use Bga\GameFramework\Components\Counters\PlayerCounter;
 use Bga\GameFramework\Components\Counters\TableCounter;
 use Bga\GameFramework\NotificationMessage;
 use Bga\GameFramework\States\GameState;
@@ -20,7 +21,8 @@ class DayEnd extends GameState
     protected Scenes $scenes;
     protected Themes $themes;
     protected Vips $vips;
-    protected TableCounter $oppAbility;
+    protected PlayerCounter $abilityCounter;
+    protected TableCounter $oppAbilityCounter;
     protected TableCounter $dayCounter;
 
     function __construct(
@@ -37,7 +39,7 @@ class DayEnd extends GameState
         $this->themes = new Themes($this->game);
         $this->vips = new Vips($this->game);
         $this->dayCounter = $this->game->dayCounter;
-        $this->oppAbility = $this->game->oppAbility;
+        $this->oppAbilityCounter = $this->game->oppAbilityCounter;
     }
 
     public function onEnteringState(): string
@@ -45,6 +47,24 @@ class DayEnd extends GameState
         $players = $this->game->loadPlayersBasicInfos();
 
         foreach ($players as $playerId => $player) {
+            $abilityCount = 0;
+            $sceneCards = $this->scenes->getBoard($playerId);
+            foreach ($sceneCards as $card) {
+                foreach ($sceneCards as $card) {
+                    if ($card["type"] === "genre") {
+                        continue;
+                    }
+
+                    $cardId = (int) $card["id"];
+                    $Scene = new Scene($this->game, $cardId);
+
+                    if ($Scene->ability > 0) {
+                        $abilityCount++;
+                    }
+                }
+            }
+            $this->game->abilityCounter->set($playerId, $abilityCount);
+
             $maxSlot = $this->scenes->getMaxSlot($playerId);
 
             $themePoints = 0;
@@ -56,7 +76,7 @@ class DayEnd extends GameState
 
             $this->game->notify->all(
                 "scoreTheme",
-                clienttranslate('${player_name} scores ${points} point(s) with his Theme today'),
+                clienttranslate('${player_name} scores ${points} point(s) with his Theme'),
                 [
                     "player_id" => $playerId,
                     "points" => $themePoints,
@@ -120,7 +140,7 @@ class DayEnd extends GameState
                 }
             }
 
-            $this->oppAbility->inc($abilityCount);
+            $this->oppAbilityCounter->inc($abilityCount);
         }
 
         $DAYS = [
@@ -131,7 +151,6 @@ class DayEnd extends GameState
 
         $day = $this->dayCounter->inc(1);
         $previousDay = $day - 1;
-
         $message = $day <= 3 ? clienttranslate('${dayLabel} ends. A new day begins') : clienttranslate('${dayLabel} ends');
 
         $this->notify->all(

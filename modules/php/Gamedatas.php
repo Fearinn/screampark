@@ -39,6 +39,8 @@ trait Gamedatas
             "sceneBoard" => !$isSpectator ? $Scenes->getBoard($playerId) : [],
             "completedScenes" => $completedScenes,
             "staffCounts" => $this->staffCounter->getAll(),
+            "abilityCounts" => $this->abilityCounter->getAll(),
+            "oppAbilityCount" => $this->oppAbilityCounter->get(),
             "day" => $day,
             "nextPlayers" => $day === 2 ?  $this->getPrevPlayerTable() : $this->getNextPlayerTable(),
             "prevPlayers" => $day === 2 ? $this->getNextPlayerTable() : $this->getPrevPlayerTable(),

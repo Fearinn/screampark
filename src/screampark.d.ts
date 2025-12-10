@@ -23,6 +23,8 @@ interface SCP_Gamedatas extends Gamedatas<SCP_Player> {
   completedScenes: number[];
   staffCounts: Record<number, number>;
   staffCountPrivate: number;
+  abilityCounts: Record<number, number>;
+  oppAbilityCount: number;
   day: number;
   nextPlayers: Record<number, number>;
   prevPlayers: Record<number, number>;
