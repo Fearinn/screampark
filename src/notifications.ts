@@ -333,17 +333,14 @@ class NotifManager {
     points: number;
   }): Promise<void> {
     const { managers, gamedatas } = this.game;
-    const { animations } = managers;
-    const { players } = gamedatas;
 
     const { player_id: playerId, points } = args;
-    const { color: playerColor } = players[playerId];
     const { boards } = this.themeManager.stocks;
     const board = boards[playerId];
 
     const card = board.getCards()[0];
     const cardElement = board.getCardElement(card);
-    await animations.displayScoring(cardElement, points, playerColor);
+    this.displayScoring(playerId, points, cardElement);
   }
 
   public async notif_scoreVip(args: {

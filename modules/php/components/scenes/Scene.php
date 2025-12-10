@@ -491,11 +491,13 @@ class Scene extends Scenes
         if ($points > 0) {
             $this->game->notify->all(
                 "scoreVip",
-                "",
+                clienttranslate('The VIP enters ${sceneLabel}'),
                 [
+                    "i18n" => ["sceneLabel"],
                     "player_id" => $playerId,
                     "card" => $this->card,
                     "slot" => $slot,
+                    "sceneLabel" => $this->upLabel,
                 ]
             );
         }

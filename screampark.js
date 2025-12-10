@@ -1217,24 +1217,16 @@ var NotifManager = /** @class */ (function () {
     };
     NotifManager.prototype.notif_scoreTheme = function (args) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, managers, gamedatas, animations, players, playerId, points, playerColor, boards, board, card, cardElement;
+            var _a, managers, gamedatas, playerId, points, boards, board, card, cardElement;
             return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        _a = this.game, managers = _a.managers, gamedatas = _a.gamedatas;
-                        animations = managers.animations;
-                        players = gamedatas.players;
-                        playerId = args.player_id, points = args.points;
-                        playerColor = players[playerId].color;
-                        boards = this.themeManager.stocks.boards;
-                        board = boards[playerId];
-                        card = board.getCards()[0];
-                        cardElement = board.getCardElement(card);
-                        return [4 /*yield*/, animations.displayScoring(cardElement, points, playerColor)];
-                    case 1:
-                        _b.sent();
-                        return [2 /*return*/];
-                }
+                _a = this.game, managers = _a.managers, gamedatas = _a.gamedatas;
+                playerId = args.player_id, points = args.points;
+                boards = this.themeManager.stocks.boards;
+                board = boards[playerId];
+                card = board.getCards()[0];
+                cardElement = board.getCardElement(card);
+                this.displayScoring(playerId, points, cardElement);
+                return [2 /*return*/];
             });
         });
     };
