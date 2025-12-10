@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Bga\Games\ScreamPark\States;
 
 use Bga\GameFramework\Components\Counters\PlayerCounter;
+use Bga\GameFramework\Components\Counters\TableCounter;
 use Bga\GameFramework\StateType;
 use Bga\Games\ScreamPark\components\scenes\Scene;
 use Bga\Games\ScreamPark\components\scenes\Scenes;
@@ -18,6 +19,8 @@ class EndScore extends \Bga\GameFramework\States\GameState
     protected Scenes $scenes;
     protected Themes $themes;
     protected PlayerCounter $staffCounter;
+    protected PlayerCounter $abilityCounter;
+    protected TableCounter $oppAbility;
 
     function __construct(
         protected Game $game,
@@ -32,6 +35,8 @@ class EndScore extends \Bga\GameFramework\States\GameState
         $this->scenes = new Scenes($this->game);
         $this->themes = new Themes($this->game);
         $this->staffCounter = $this->game->staffCounter;
+        $this->abilityCounter = $this->game->abilityCounter;
+        $this->oppAbility = $this->game->oppAbility;
     }
 
     public function onEnteringState(): int
@@ -160,8 +165,17 @@ class EndScore extends \Bga\GameFramework\States\GameState
     public function scoreAbilities(): void
     {
         $abilitiesCounts = [];
-
         $players = $this->game->loadPlayersBasicInfos();
+
+        if ($this->game->isSolo()) {
+            foreach ($players as $playerId => $player) {
+                if ($this->abilityCounter->get($playerId) >= $this->oppAbility->get()) {
+                    $this->playerScore->inc($playerId, 3);
+                }
+            }
+            return;
+        }
+
         foreach ($players as $playerId => $player) {
             $abilitiesCounts[$playerId] = 0;
 

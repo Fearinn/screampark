@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Bga\Games\ScreamPark\States;
 
 use Bga\GameFramework\Components\Counters\TableCounter;
+use Bga\GameFramework\NotificationMessage;
 use Bga\GameFramework\States\GameState;
 use Bga\GameFramework\StateType;
+use Bga\GameFramework\Table;
 use Bga\Games\ScreamPark\components\scenes\Scene;
 use Bga\Games\ScreamPark\components\scenes\Scenes;
 use Bga\Games\ScreamPark\components\themes\Themes;
@@ -15,10 +17,11 @@ use Bga\Games\ScreamPark\Game;
 
 class DayEnd extends GameState
 {
-    protected TableCounter $dayCounter;
     protected Scenes $scenes;
     protected Themes $themes;
     protected Vips $vips;
+    protected TableCounter $oppAbility;
+    protected TableCounter $dayCounter;
 
     function __construct(
         protected Game $game,
@@ -30,10 +33,11 @@ class DayEnd extends GameState
             description: clienttranslate('Ending day...'),
         );
 
-        $this->dayCounter = $this->game->dayCounter;
         $this->scenes = new Scenes($this->game);
         $this->themes = new Themes($this->game);
         $this->vips = new Vips($this->game);
+        $this->dayCounter = $this->game->dayCounter;
+        $this->oppAbility = $this->game->oppAbility;
     }
 
     public function onEnteringState(): string
@@ -81,7 +85,7 @@ class DayEnd extends GameState
         }
 
         if ($this->game->isSolo()) {
-            $cards = $this->scenes->deck->pickCardsForLocation(3, "deck", "solo");
+            $cards = $this->scenes->deck->pickCardsForLocation(3, "deck", "oppAbility");
             [$card, $card2, $card3] = $cards;
 
             $cardId = (int) $card["id"];
@@ -94,7 +98,7 @@ class DayEnd extends GameState
 
             $this->notify->all(
                 "drawToTable",
-                clienttranslate('3 cards are drawn to the table: ${sceneLabel}, ${sceneLabel2} and ${sceneLabel3}'),
+                clienttranslate('3 cards are drawn to rack up opposing ${lightning_icon}: ${sceneLabel}, ${sceneLabel2} and ${sceneLabel3}'),
                 [
                     "i18n" => ["sceneLabel", "sceneLabel2", "sceneLabel3"],
                     "preserve" => ["sceneId", "sceneId2", "sceneId3"],
@@ -107,6 +111,16 @@ class DayEnd extends GameState
                     "cards" => array_values($cards),
                 ]
             );
+
+            $abilityCount = 0;
+
+            foreach ([$Scene->ability, $Scene2->ability, $Scene3->ability] as $ability) {
+                if ($ability > 0) {
+                    $abilityCount++;
+                }
+            }
+
+            $this->oppAbility->inc($abilityCount);
         }
 
         $DAYS = [

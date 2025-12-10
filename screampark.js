@@ -494,7 +494,7 @@ var Template = /** @class */ (function () {
         counters.player.staff = {};
         keysToNumbers(players).forEach(function (playerId) {
             _this.game.getPlayerPanelElement(playerId).insertAdjacentHTML("beforeend", "<div id=\"scp_staffCounter-".concat(playerId, "\" class=\"scp_counter scp_staffCounter\">\n          <i id=\"scp_staffCounterIcon-").concat(playerId, "\" class=\"scp_staffCounterIcon\"></i>\n          <span id=\"scp_staffCounterCount-").concat(playerId, "\" class=\"scp_staffCounterCount\"></span>\n        </div>\n        <div id=\"scp_abilityCounter-").concat(playerId, "\" class=\"scp_counter scp_abilityCounter\">\n          <i id=\"scp_abilityCounterIcon-").concat(playerId, "\" class=\"scp_abilityCounterIcon\"></i>\n          <div id=\"scp_abilityCounterCounts-").concat(playerId, "\" class=\"scp_abilityCounterCounts\">\n            <span id=\"scp_abilityCounterCount-").concat(playerId, "\" class=\"scp_abilityCounterCount\"></span>\n            ").concat(isSolo
-                ? "x<span id=\"scp_soloCounterCount\" class=\"scp_soloCounterCount\"></span>"
+                ? "x<span id=\"scp_oppAbilityCount\" class=\"scp_oppAbilityCount\"></span>"
                 : "", "\n          </div>\n        </div>"));
             var staffCounter = new ebg.counter();
             staffCounter.create("scp_staffCounterCount-".concat(playerId), {
@@ -510,11 +510,11 @@ var Template = /** @class */ (function () {
             counters.player.staff[playerId] = staffCounter;
         });
         if (isSolo) {
-            var soloCounter = new ebg.counter();
-            soloCounter.create("scp_soloCounterCount", {
-                tableCounter: "solo",
+            var oppAbility = new ebg.counter();
+            oppAbility.create("scp_oppAbilityCount", {
+                tableCounter: "oppAbility",
             });
-            counters.table.ability = soloCounter;
+            counters.table.ability = oppAbility;
         }
         managers.counters = counters;
     };

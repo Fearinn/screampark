@@ -48,7 +48,9 @@ trait SetupNewGame
         $this->staffCounterPrivate->initDb(array_keys($players), 2);
         $this->draftCounter->initDb(array_keys($players));
         $this->actionVariable->initDb(array_keys($players));
+        $this->abilityCounter->initDb(array_keys($players));
         $this->dayCounter->initDb(1);
+        $this->oppAbility->initDb(0);
 
         $defaultGlobal = [];
         foreach ($players as $playerId => $player) {

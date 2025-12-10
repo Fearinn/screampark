@@ -213,7 +213,7 @@ class Template {
             <span id="scp_abilityCounterCount-${playerId}" class="scp_abilityCounterCount"></span>
             ${
               isSolo
-                ? `x<span id="scp_soloCounterCount" class="scp_soloCounterCount"></span>`
+                ? `x<span id="scp_oppAbilityCount" class="scp_oppAbilityCount"></span>`
                 : ""
             }
           </div>
@@ -238,12 +238,12 @@ class Template {
     });
 
     if (isSolo) {
-      const soloCounter = new ebg.counter();
-      soloCounter.create(`scp_soloCounterCount`, {
-        tableCounter: "solo",
+      const oppAbility = new ebg.counter();
+      oppAbility.create(`scp_oppAbilityCount`, {
+        tableCounter: "oppAbility",
       });
 
-      counters.table.ability = soloCounter;
+      counters.table.ability = oppAbility;
     }
 
     managers.counters = counters;

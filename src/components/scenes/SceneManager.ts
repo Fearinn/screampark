@@ -247,7 +247,6 @@ interface SceneCard extends SCP_Card {
     | "board"
     | "placed"
     | "placedAnywhere"
-    | "solo";
   slot?: number;
   position?: number;
 }
