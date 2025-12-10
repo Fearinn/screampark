@@ -221,31 +221,44 @@ class NotifManager {
     await Promise.all(promises);
   }
 
+  public async notif_passScenes(args: {
+    player_id: number;
+    player_id2: number;
+  }): Promise<void> {
+    const { player_id2: playerId2 } = args;
+    const { hand, fakeHands } = this.sceneManager.stocks;
+    const cards = hand.getCards();
+    await fakeHands[playerId2].addCards(cards);
+  }
+
   public async notif_receiveScenesPrivate(args: {
     player_id: number;
+    player_id2: number;
     cards: SceneCard[];
   }): Promise<void> {
-    const { cards } = args;
-    const { hand } = this.sceneManager.stocks;
-    await hand.addCards(cards, {
-      duration: 1000,
-      toPlaceholder: "on",
-      fromPlaceholder: "off",
+    const { cards, player_id2: playerId2 } = args;
+
+    const { hand, fakeHands } = this.sceneManager.stocks;
+    hand.addCards(cards, {
+      fromStock: fakeHands[playerId2],
     });
   }
 
   public async notif_receiveScenes(args: {
     player_id: number;
-    otherPlayerId: number;
+    player_id2: number;
     cards: SceneCard[];
   }): Promise<void> {
     const { player_id } = this.game;
-    const { player_id: playerId, otherPlayerId, cards } = args;
-    const { hand, fakeHands } = this.sceneManager.stocks;
+    const { player_id: playerId, player_id2: playerId2, cards } = args;
+    const { fakeHands } = this.sceneManager.stocks;
 
-    await fakeHands[playerId].addCards(cards, {
-      fromStock: otherPlayerId === player_id ? hand : fakeHands[otherPlayerId],
-      duration: 1000,
+    if (playerId2 === player_id) {
+      return;
+    }
+
+    fakeHands[playerId].addCards(cards, {
+      fromStock: fakeHands[playerId2],
       toPlaceholder: "off",
       fromPlaceholder: "on",
     });

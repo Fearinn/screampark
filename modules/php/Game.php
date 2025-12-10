@@ -28,6 +28,7 @@ use Bga\Games\ScreamPark\Gamedatas;
 use Bga\Games\ScreamPark\SetupNewGame;
 use Bga\Games\ScreamPark\States\DayEnd;
 use Bga\Games\ScreamPark\States\EndScore;
+use Bga\Games\ScreamPark\States\PassScenes;
 
 define("gCompletedScenes", "gCompletedScenes");
 define("gCompletedScenesPrivate", "gCompletedScenesPrivate");
@@ -118,6 +119,12 @@ class Game extends \Bga\GameFramework\Table
     {
         $DayEnd = new DayEnd($this);
         $DayEnd->onEnteringState();
+    }
+
+    public function debug_PassScenes(): void
+    {
+        $PassScenes = new PassScenes($this);
+        $PassScenes->onEnteringState();
     }
 
     public function debug_EndScore(): void

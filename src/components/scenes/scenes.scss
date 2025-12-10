@@ -31,11 +31,13 @@
 
 .scp_hand {
   justify-content: start !important;
+  height: var(--scene-height);
   padding: 12px;
+  overflow-y: hidden;
   overflow-x: auto;
 
   &:empty {
-    display: none !important;
+    visibility: hidden;
   }
 }
 
@@ -45,6 +47,7 @@
   left: 50%;
   transform: translateY(-50%);
   display: flex;
+  height: var(--scene-height);
   pointer-events: none;
 }
 

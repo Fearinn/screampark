@@ -65,19 +65,34 @@ class PassScenes extends GameState
         }
 
         $day = $this->game->dayCounter->get();
-        $direction = $day % 2 === 0 ? clienttranslate("counterclockwise") : clienttranslate("clockwise");
+        $direction = $day === 2 ? clienttranslate("counterclockwise") : clienttranslate("clockwise");
 
         foreach ($players as $playerId => $player) {
-            $otherPlayerId = $this->game->getPlayerBefore($playerId);
+            $playerId2 = $this->game->getPlayerBefore($playerId);
 
-            if ($direction === "counterclockwise") {
-                $otherPlayerId = $this->game->getPlayerAfter($playerId);
+            if ($direction === "clockwise") {
+                $playerId2 = $this->game->getPlayerAfter($playerId);
             }
 
-            $this->scenes->deck->moveAllCardsInLocation("hand", "prehand", $otherPlayerId, $playerId);
+            $this->scenes->deck->moveAllCardsInLocation("hand", "prehand", $playerId2, $playerId);
+
+            $this->notify->player(
+                $playerId,
+                "passScenes",
+                "",
+                [
+                    "player_id2" => $playerId2,
+                ]
+            );
         }
 
         foreach ($players as $playerId => $player) {
+            $playerId2 = $this->game->getPlayerBefore($playerId);
+
+            if ($direction === "clockwise") {
+                $playerId2 = $this->game->getPlayerAfter($playerId);
+            }
+
             $this->scenes->deck->moveAllCardsInLocation("prehand", "hand", $playerId, $playerId);
             $cards = $this->scenes->getHand($playerId);
 
@@ -87,6 +102,7 @@ class PassScenes extends GameState
                 "",
                 [
                     "player_id" => $playerId,
+                    "player_id2" => $playerId2,
                     "cards" => $cards,
                 ],
             );
@@ -101,7 +117,7 @@ class PassScenes extends GameState
                 "",
                 [
                     "player_id" => $playerId,
-                    "otherPlayerId" => $otherPlayerId,
+                    "player_id2" => $playerId2,
                     "cards" => $cards,
                 ]
             );

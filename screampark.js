@@ -1093,45 +1093,52 @@ var NotifManager = /** @class */ (function () {
             });
         });
     };
-    NotifManager.prototype.notif_receiveScenesPrivate = function (args) {
+    NotifManager.prototype.notif_passScenes = function (args) {
         return __awaiter(this, void 0, void 0, function () {
-            var cards, hand;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            var playerId2, _a, hand, fakeHands, cards;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
-                        cards = args.cards;
-                        hand = this.sceneManager.stocks.hand;
-                        return [4 /*yield*/, hand.addCards(cards, {
-                                duration: 1000,
-                                toPlaceholder: "on",
-                                fromPlaceholder: "off",
-                            })];
+                        playerId2 = args.player_id2;
+                        _a = this.sceneManager.stocks, hand = _a.hand, fakeHands = _a.fakeHands;
+                        cards = hand.getCards();
+                        return [4 /*yield*/, fakeHands[playerId2].addCards(cards)];
                     case 1:
-                        _a.sent();
+                        _b.sent();
                         return [2 /*return*/];
                 }
             });
         });
     };
+    NotifManager.prototype.notif_receiveScenesPrivate = function (args) {
+        return __awaiter(this, void 0, void 0, function () {
+            var cards, playerId2, _a, hand, fakeHands;
+            return __generator(this, function (_b) {
+                cards = args.cards, playerId2 = args.player_id2;
+                _a = this.sceneManager.stocks, hand = _a.hand, fakeHands = _a.fakeHands;
+                hand.addCards(cards, {
+                    fromStock: fakeHands[playerId2],
+                });
+                return [2 /*return*/];
+            });
+        });
+    };
     NotifManager.prototype.notif_receiveScenes = function (args) {
         return __awaiter(this, void 0, void 0, function () {
-            var player_id, playerId, otherPlayerId, cards, _a, hand, fakeHands;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        player_id = this.game.player_id;
-                        playerId = args.player_id, otherPlayerId = args.otherPlayerId, cards = args.cards;
-                        _a = this.sceneManager.stocks, hand = _a.hand, fakeHands = _a.fakeHands;
-                        return [4 /*yield*/, fakeHands[playerId].addCards(cards, {
-                                fromStock: otherPlayerId === player_id ? hand : fakeHands[otherPlayerId],
-                                duration: 1000,
-                                toPlaceholder: "off",
-                                fromPlaceholder: "on",
-                            })];
-                    case 1:
-                        _b.sent();
-                        return [2 /*return*/];
+            var player_id, playerId, playerId2, cards, fakeHands;
+            return __generator(this, function (_a) {
+                player_id = this.game.player_id;
+                playerId = args.player_id, playerId2 = args.player_id2, cards = args.cards;
+                fakeHands = this.sceneManager.stocks.fakeHands;
+                if (playerId2 === player_id) {
+                    return [2 /*return*/];
                 }
+                fakeHands[playerId].addCards(cards, {
+                    fromStock: fakeHands[playerId2],
+                    toPlaceholder: "off",
+                    fromPlaceholder: "on",
+                });
+                return [2 /*return*/];
             });
         });
     };
