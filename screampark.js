@@ -1203,7 +1203,7 @@ var NotifManager = /** @class */ (function () {
                 players = gamedatas.players;
                 tracks = this.meepleManager.stocks.tracks;
                 keysToNumbers(players).forEach(function (playerId) {
-                    tracks[playerId][0].addCard({ id: playerId });
+                    tracks[playerId][0].addCard({ id: playerId }, { fromPlaceholder: "off", toPlaceholder: "off" });
                 });
                 board = this.vipManager.stocks.board;
                 card = board.getCards().find(function (card) {
@@ -1249,6 +1249,8 @@ var NotifManager = /** @class */ (function () {
                         track = tracks[playerId];
                         return [4 /*yield*/, track[slot].addCard({ id: playerId }, {
                                 forceToElement: document.querySelector("#scp_scenes-".concat(playerId, " [data-slot-id=\"").concat(slot, "\"]")),
+                                fromPlaceholder: "off",
+                                toPlaceholder: "off",
                             })];
                     case 1:
                         _a.sent();

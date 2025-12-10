@@ -78,8 +78,8 @@
 
 .scp_playerZones {
   display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
   gap: 24px;
   width: 100%;
 }
@@ -761,7 +761,7 @@ p {
 .slot .scp_meeple {
   order: -1;
   position: absolute;
-  top: -25%;
+  bottom: 100%;
 }
 
 .scp_card {

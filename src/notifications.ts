@@ -313,14 +313,16 @@ class NotifManager {
     const { players } = gamedatas;
     const { tracks } = this.meepleManager.stocks;
     keysToNumbers(players).forEach((playerId) => {
-      tracks[playerId][0].addCard({ id: playerId });
+      tracks[playerId][0].addCard(
+        { id: playerId },
+        { fromPlaceholder: "off", toPlaceholder: "off" }
+      );
     });
 
     const { board } = this.vipManager.stocks;
     const card = board.getCards().find((card) => {
       return Number(card.location_arg) === previousDay;
     });
-
     board.flipCard(card);
 
     this.game.togglePassDirection(day);
@@ -359,6 +361,8 @@ class NotifManager {
         forceToElement: document.querySelector(
           `#scp_scenes-${playerId} [data-slot-id="${slot}"]`
         ),
+        fromPlaceholder: "off",
+        toPlaceholder: "off",
       }
     );
 
