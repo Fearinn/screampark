@@ -318,7 +318,7 @@ class Scene extends Scenes
             ]
         );
 
-        $Scene2->updateCompletePrivate($playerId);
+        $Scene2->updateCompletedPrivate($playerId);
     }
 
     public function discard(int $playerId): void
@@ -412,7 +412,7 @@ class Scene extends Scenes
         return $totalCost <= $this->countSlotWilds($playerId, $slot);
     }
 
-    public function updateComplete(int $playerId): void
+    public function updateCompleted(int $playerId): void
     {
         $completedScenes = $this->game->globals->get(gCompletedScenes, []);
 
@@ -436,7 +436,7 @@ class Scene extends Scenes
         );
     }
 
-    public function updateCompletePrivate(int $playerId): void
+    public function updateCompletedPrivate(int $playerId): void
     {
         $completedScenes = $this->game->globals->get(gCompletedScenesPrivate, []);
 

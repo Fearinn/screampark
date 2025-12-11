@@ -47,23 +47,6 @@ class DayEnd extends GameState
         $players = $this->game->loadPlayersBasicInfos();
 
         foreach ($players as $playerId => $player) {
-            $abilityCount = 0;
-            $sceneCards = $this->scenes->getBoard($playerId);
-
-            foreach ($sceneCards as $card) {
-                if ($card["type"] === "genre") {
-                    continue;
-                }
-
-                $cardId = (int) $card["id"];
-                $Scene = new Scene($this->game, $cardId);
-
-                if ($Scene->ability > 0) {
-                    $abilityCount++;
-                }
-            }
-            $this->game->abilityCounter->set($playerId, $abilityCount);
-
             $maxSlot = $this->scenes->getMaxSlot($playerId);
 
             $themePoints = 0;

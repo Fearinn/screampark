@@ -62,14 +62,27 @@ class RevealScenes extends GameState
                 }
             }
 
-            for ($slot = 1; $slot <= 24; $slot++) {
-                $Scene = $this->scenes->getMainInSlot($playerId, $slot);
+            $abilityCount = 0;
+            $cards = $this->scenes->getBoard($playerId);
 
-                if (!$Scene) {
-                    break;
+            foreach ($cards as $card) {
+                if ($card["type"] === "genre") {
+                    continue;
                 }
 
-                $Scene->updateComplete($playerId);
+                $cardId = (int) $card["id"];
+                $Scene = new Scene($this->game, $cardId);
+
+                if ($Scene->ability > 0) {
+                    $abilityCount++;
+                }
+            }
+            $this->game->abilityCounter->set($playerId, $abilityCount);
+
+            $maxSlot = $this->scenes->getMaxSlot($playerId);
+            for ($slot = 1; $slot <= $maxSlot; $slot++) {
+                $Scene = $this->scenes->getMainInSlot($playerId, $slot);
+                $Scene->updateCompleted($playerId);
             }
         }
 

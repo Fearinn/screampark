@@ -59,7 +59,7 @@ class Genre extends Scenes
             ]
         );
 
-        $Scene->updateCompletePrivate($playerId);
+        $Scene->updateCompletedPrivate($playerId);
     }
 
     public function revealAttached(int $playerId): void
