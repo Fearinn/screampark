@@ -102,3 +102,14 @@
   gap: 4px;
   max-width: calc(1.5 * var(--scene-width));
 }
+
+.scp_button {
+  .scp_icon-genre {
+    margin: -4px;
+    width: 36px;
+  }
+}
+
+.scp_icon-genre {
+  filter: drop-shadow(0 0 2px #adadad);
+}
