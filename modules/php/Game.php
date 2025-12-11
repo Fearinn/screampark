@@ -244,4 +244,9 @@ class Game extends \Bga\GameFramework\Table
         $EndScore = new EndScore($this);
         $EndScore->onEnteringState();
     }
+
+    public function debug_incScore(): void
+    {
+        $this->playerScore->set(2392034, 80);
+    }
 }

@@ -87,7 +87,7 @@ class EndScore extends \Bga\GameFramework\States\GameState
         $tiedPlayers = [];
         foreach ($players as $playerId => $player) {
             $themeId = $this->themes->getId($playerId);
-            
+
             if ($this->playerScore->getMax() === $this->playerScore->get($playerId)) {
                 $tiedPlayers[$playerId] = $themeId;
                 continue;

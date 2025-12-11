@@ -61,17 +61,23 @@ class StarManager {
     this.build();
     const { gamedatas, keysToNumbers } = this.game;
     const { players } = gamedatas;
-    const { board } = this.stocks;
 
     keysToNumbers(players).forEach((playerId) => {
       const { score } = players[playerId];
-      board[score].addCard({ id: playerId });
+      this.set(playerId, Number(score));
     });
   }
 
   public set(playerId: number, score: number): void {
     const { board } = this.stocks;
-    board[score].addCard({ id: playerId });
+    let starHouse = Number(score);
+
+    if (starHouse >= 80) {
+      const excess = Math.floor(starHouse / 80) * 80;
+      starHouse -= excess;
+    }
+
+    board[starHouse].addCard({ id: playerId });
   }
 }
 

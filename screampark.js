@@ -1570,18 +1570,23 @@ var StarManager = /** @class */ (function () {
         this.stocks = stocks.stars;
     };
     StarManager.prototype.setup = function () {
+        var _this = this;
         this.build();
         var _a = this.game, gamedatas = _a.gamedatas, keysToNumbers = _a.keysToNumbers;
         var players = gamedatas.players;
-        var board = this.stocks.board;
         keysToNumbers(players).forEach(function (playerId) {
             var score = players[playerId].score;
-            board[score].addCard({ id: playerId });
+            _this.set(playerId, Number(score));
         });
     };
     StarManager.prototype.set = function (playerId, score) {
         var board = this.stocks.board;
-        board[score].addCard({ id: playerId });
+        var starHouse = Number(score);
+        if (starHouse >= 80) {
+            var excess = Math.floor(starHouse / 80) * 80;
+            starHouse -= excess;
+        }
+        board[starHouse].addCard({ id: playerId });
     };
     return StarManager;
 }());
