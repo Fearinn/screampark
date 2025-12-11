@@ -29,8 +29,8 @@ class Themes extends Cards
         $this->deck->shuffle("deck");
 
         $players = $this->game->loadPlayersBasicInfos();
-        foreach ($players as $player_id => $player) {
-            $this->deck->pickCards(2, "deck", $player_id);
+        foreach ($players as $playerId => $player) {
+            $this->deck->pickCards(2, "deck", $playerId);
         }
     }
 
@@ -40,12 +40,12 @@ class Themes extends Cards
 
         $players = $this->game->loadPlayersBasicInfos();
 
-        foreach ($players as $player_id => $player) {
-            if ($excludedPlayerId === $player_id) {
-                $hand = $this->getHand($player_id);
+        foreach ($players as $playerId => $player) {
+            if ($excludedPlayerId === $playerId) {
+                $hand = $this->getHand($playerId);
             } else {
                 $sql = "SELECT card_id id, card_location location, card_location_arg location_arg FROM {$this->dbTable} 
-                WHERE card_location='hand' AND card_location_arg={$player_id}";
+                WHERE card_location='hand' AND card_location_arg={$playerId}";
                 $hand = $this->game->getObjectListFromDB($sql);
             }
 
@@ -55,10 +55,15 @@ class Themes extends Cards
         return $hands;
     }
 
-    public function getCost(int $playerId): array
-    {
+    public function getId(int $playerId): int {
         $sql = "SELECT card_type_arg FROM {$this->dbTable} WHERE card_location='board' AND card_location_arg={$playerId}";
         $themeId = (int) $this->game->getUniqueValueFromDB($sql);
+        return $themeId;
+    }
+
+    public function getCost(int $playerId): array
+    {
+        $themeId = $this->getId($playerId);
         return $this->THEMES[$themeId]["genreCost"];
     }
 }

@@ -31,7 +31,7 @@ class RevealThemes extends GameState
     public function onEnteringState(): string
     {
         $players = $this->game->loadPlayersBasicInfos();
-        
+
         foreach ($players as $playerId => $player) {
             $sql = "SELECT card_id FROM {$this->themes->dbTable} WHERE card_location='hand' AND card_location_arg={$playerId}";
             $cardId = $this->game->getUniqueValueFromDB($sql);
@@ -39,6 +39,7 @@ class RevealThemes extends GameState
             $card = $this->themes->deck->getCard($cardId);
 
             $themeId = (int) $card["type_arg"];
+            $this->tableStats->init("statTheme{$themeId}", 0);
 
             $this->notify->all(
                 "revealTheme",

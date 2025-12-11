@@ -33,6 +33,14 @@ use Bga\Games\ScreamPark\States\PassScenes;
 
 define("gCompletedScenes", "gCompletedScenes");
 define("gCompletedScenesPrivate", "gCompletedScenesPrivate");
+define('statScore', 'statScore');
+define('statCompletedScenes', 'statCompletedScenes');
+define('statTotalScenes', 'statTotalScenes');
+define('statGenre1', 'statGenre1');
+define('statGenre2', 'statGenre2');
+define('statGenre3', 'statGenre3');
+define('statGenre4', 'statGenre4');
+define('statGenre5', 'statGenre5');
 
 class Game extends \Bga\GameFramework\Table
 {
@@ -167,14 +175,14 @@ class Game extends \Bga\GameFramework\Table
         $Themes->setup();
 
         $this->playerStats->init([
-            "statScore",
-            "statCompletedScenes",
-            "statTotalScenes",
-            "statGenre1",
-            "statGenre2",
-            "statGenre3",
-            "statGenre4",
-            "statGenre5"
+            statScore,
+            statCompletedScenes,
+            statTotalScenes,
+            statGenre1,
+            statGenre2,
+            statGenre3,
+            statGenre4,
+            statGenre5
         ], 0);
 
         $this->staffCounter->initDb(array_keys($players), 2);

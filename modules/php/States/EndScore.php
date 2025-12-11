@@ -47,13 +47,23 @@ class EndScore extends \Bga\GameFramework\States\GameState
         foreach ($players as $playerId => $player) {
             $maxSlot = $this->scenes->getMaxSlot($playerId);
 
+            for ($slot = 1; $slot <= $maxSlot; $slot++) {
+                $genres = $this->scenes->sumSlotGenres($playerId, $slot);
+                foreach ($genres as $genreId => $value) {
+                    $this->playerStats->inc("statGenre{$genreId}", $value, $playerId);
+                }
+            }
+
             $this->scoreScenes($playerId, $maxSlot);
             $this->scoreScenic($playerId, $maxSlot);
             $this->scoreStaff($playerId);
             $this->computeTieBreakers($playerId);
 
+            $points = $this->playerScore->get($playerId);
+            $this->playerStats->set(statScore, $points, $playerId);
+
             if ($this->game->isSolo()) {
-                $points = $this->playerScore->get($playerId);
+                $themeId = $this->themes->getId($playerId);
 
                 if ($points < 80) {
                     $this->notify->all(
@@ -64,8 +74,36 @@ class EndScore extends \Bga\GameFramework\States\GameState
                             "points" => $points,
                         ],
                     );
+
+                    $this->tableStats->set("statTheme{$themeId}", 0);
                     $this->playerScore->set($playerId, 0);
                 }
+
+                $this->tableStats->set("statTheme{$themeId}", 100);
+                return ST_END_GAME;
+            }
+        }
+
+        $tiedPlayers = [];
+        foreach ($players as $playerId => $player) {
+            $themeId = $this->themes->getId($playerId);
+            
+            if ($this->playerScore->getMax() === $this->playerScore->get($playerId)) {
+                $tiedPlayers[$playerId] = $themeId;
+                continue;
+            }
+
+            $this->tableStats->set("statTheme{$themeId}", 0);
+        }
+
+        if (count($tiedPlayers) > 1) {
+            foreach ($tiedPlayers as $playerId => $themeId) {
+                if ($this->playerScoreAux->getMax() === $this->playerScoreAux->get($playerId)) {
+                    $this->tableStats->set("statTheme{$themeId}", 100);
+                    continue;
+                }
+
+                $this->tableStats->set("statTheme{$themeId}", 0);
             }
         }
 
@@ -83,7 +121,6 @@ class EndScore extends \Bga\GameFramework\States\GameState
             }
 
             $scenePoints += $Scene->points;
-
             $this->notify->all(
                 "scoreScene",
                 "",
@@ -94,6 +131,7 @@ class EndScore extends \Bga\GameFramework\States\GameState
                 ],
             );
 
+            $this->playerStats->inc(statCompletedScenes, 1, $playerId);
             $this->playerScore->inc($playerId, $scenePoints);
         }
 
@@ -247,7 +285,9 @@ class EndScore extends \Bga\GameFramework\States\GameState
 
         $sql = "SELECT COUNT(card_id) FROM {$this->scenes->dbTable} 
         WHERE card_location='board' AND card_location_arg={$playerId} AND card_type='scene'";
-        $sceneCount = $this->game->getUniqueValueFromDB($sql);
+
+        $sceneCount = (int) $this->game->getUniqueValueFromDB($sql);
+        $this->playerStats->set(statTotalScenes, $sceneCount, $playerId);
 
         $cardCount = $this->scenes->deck->countCardInLocation("board", $playerId);
 
