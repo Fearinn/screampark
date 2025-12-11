@@ -1670,8 +1670,8 @@ $this->SCENES = [
                 4 => 1,
                 5 => 0,
             ],
-            "scenic" => 0,
-            "ability" => 3,
+            "scenic" => 3,
+            "ability" => 0,
             "staffCost" => 0,
         ]
     ],
