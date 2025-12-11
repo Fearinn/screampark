@@ -40,7 +40,7 @@ class ThemeManager {
           element.id,
           `<div class="scp_tooltip scp_themeTooltip">
             <h4 class="scp_title scp_tooltipTitle">${_(label)}</h4>
-            <div class="scp_flexWrapper" style="--direction: column; --gap: 4px">
+            <div class="scp_themeTooltipContent">
                 <p>End of round/day:</p>
                 <p class="scp_tooltipContent">
                 ${this.game.format_string_recursive(

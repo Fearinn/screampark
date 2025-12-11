@@ -9,12 +9,13 @@ interface SCP extends GameGui<SCP_Gamedatas> {
 interface SCP_Player extends Player {}
 
 interface SCP_Gamedatas extends Gamedatas<SCP_Player> {
-  VIPS: VIP[];
+  VIPS: Record<number, VIP>;
   vipCards: VipCard[];
-  GENRES: GENRE[];
-  SCENES: SCENE[];
+  GENRES: Record<number, GENRE>;
+  SCENES: Record<number, SCENE>;
   sceneDeckCount: number;
-  THEMES: THEME[];
+  ABILITIES: Record<number, string>;
+  THEMES: Record<number, THEME>;
   themeHands: ThemeCard[];
   themeCards: ThemeCard[];
   sceneHand: SceneCard[];

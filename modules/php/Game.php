@@ -44,6 +44,7 @@ class Game extends \Bga\GameFramework\Table
     public readonly array $GENRES;
     public readonly array $SCENES;
     public readonly Deck $scene_cards;
+    public readonly array $ABILITIES;
     public readonly array $THEMES;
     public readonly Deck $theme_cards;
     public readonly PlayerCounter $staffCounter;

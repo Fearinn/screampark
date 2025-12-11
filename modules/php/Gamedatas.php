@@ -31,6 +31,7 @@ trait Gamedatas
             "GENRES" => $this->GENRES,
             "SCENES" => $this->SCENES,
             "sceneDeckCount" => $Scenes->getDeckCount(),
+            "ABILITIES" => $this->ABILITIES,
             "THEMES" => $this->THEMES,
             "themeCards" => $Themes->getPublic(),
             "themeHands" => $Themes->getHands($playerId),

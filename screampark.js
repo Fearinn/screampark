@@ -1376,6 +1376,7 @@ var SceneManager = /** @class */ (function () {
         this.stocks = stocks.scenes;
         this.GENRES = gamedatas.GENRES;
         this.SCENES = gamedatas.SCENES;
+        this.ABILITIES = gamedatas.ABILITIES;
     }
     SceneManager.prototype.build = function () {
         var _this = this;
@@ -1405,24 +1406,24 @@ var SceneManager = /** @class */ (function () {
                 }
             },
             setupFrontDiv: function (_a, element) {
-                var type = _a.type, scene_id = _a.type_arg;
-                if (!(scene_id > 0)) {
+                var type = _a.type, sceneId = _a.type_arg;
+                if (!(sceneId > 0)) {
                     return;
                 }
                 if (type === "genre") {
-                    element.style.backgroundImage = "url(".concat(g_gamethemeurl, "img/genres/genre_").concat(scene_id, ".jpg)");
-                    var genreLabel = _this.GENRES[scene_id].label;
+                    element.style.backgroundImage = "url(".concat(g_gamethemeurl, "img/genres/genre_").concat(sceneId, ".jpg)");
+                    var genreLabel = _this.GENRES[sceneId].label;
                     _this.game.addTooltipHtml(element.id, "<div class=\"scp_tooltip\"> \n            ".concat(_this.game.format_string_recursive(_("${genreLabel}"), {
                         genreLabel: genreLabel,
                     }), "\n            </div>"));
                     return;
                 }
-                element.style.backgroundImage = "url(".concat(g_gamethemeurl, "img/scenes/scene_").concat(scene_id, ".jpg)");
-                var _b = _this.SCENES[scene_id], UP = _b.UP, DOWN = _b.DOWN;
-                _this.game.addTooltipHtml(element.id, "<div class=\"scp_tooltip\">\n          ".concat(_this.game.format_string_recursive(_("${upLabel} / ${downLabel}"), {
-                    upLabel: _(UP.label),
-                    downLabel: _(DOWN.label),
-                }), "\n          </div>"));
+                element.style.backgroundImage = "url(".concat(g_gamethemeurl, "img/scenes/scene_").concat(sceneId, ".jpg)");
+                var _b = _this.SCENES[sceneId], UP = _b.UP, DOWN = _b.DOWN;
+                var tooltip = "<div class=\"scp_card scp_scene scp_logTooltip bga-cards_card\"\n            style=\"background-image: url(".concat(g_gamethemeurl, "img/scenes/scene_").concat(sceneId, ".jpg)\"></div>");
+                _this.game.addTooltipHtml(element.id, "<div class=\"scp_tooltip scp_tooltip-scene\">\n            <h4 class=\"scp_title\">".concat(_(UP.label), "</h4>\n            ").concat(tooltip, "\n            <h5 class=\"scp_title\">").concat(_(DOWN.label), "</h5>\n            ").concat(DOWN.ability > 0
+                    ? "<span>".concat(_(_this.ABILITIES[DOWN.ability]), "</span>")
+                    : "", "\n          </div>"));
             },
             setupBackDiv: function (_a, element) {
                 var type = _a.type;
@@ -1617,7 +1618,7 @@ var ThemeManager = /** @class */ (function () {
                 }
                 element.style.backgroundImage = "url(".concat(g_gamethemeurl, "img/themes/theme_").concat(theme_id, ".jpg)");
                 var _b = _this.THEMES[theme_id], label = _b.label, genreCost = _b.genreCost;
-                _this.game.addTooltipHtml(element.id, "<div class=\"scp_tooltip scp_themeTooltip\">\n            <h4 class=\"scp_title scp_tooltipTitle\">".concat(_(label), "</h4>\n            <div class=\"scp_flexWrapper\" style=\"--direction: column; --gap: 4px\">\n                <p>End of round/day:</p>\n                <p class=\"scp_tooltipContent\">\n                ").concat(_this.game.format_string_recursive(_("1 point for each scene with any ${genre_icon}"), {
+                _this.game.addTooltipHtml(element.id, "<div class=\"scp_tooltip scp_themeTooltip\">\n            <h4 class=\"scp_title scp_tooltipTitle\">".concat(_(label), "</h4>\n            <div class=\"scp_themeTooltipContent\">\n                <p>End of round/day:</p>\n                <p class=\"scp_tooltipContent\">\n                ").concat(_this.game.format_string_recursive(_("1 point for each scene with any ${genre_icon}"), {
                     themeLabel: _(label),
                     genreId: genreCost[0],
                 }), "\n                </p>\n                <p class=\"scp_tooltipContent\">\n                ").concat(_this.game.format_string_recursive(_("1 point for each scene with any ${genre_icon}"), {

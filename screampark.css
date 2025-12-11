@@ -137,6 +137,10 @@ p {
   margin: 0;
 }
 
+.scp_title {
+  font-weight: bold;
+}
+
 .scp_defaultActions,
 .scp_alertActions {
   display: inline-flex;
@@ -355,6 +359,15 @@ p {
   right: -50%;
 }
 
+.scp_tooltip-scene {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  max-width: calc(1.5 * var(--scene-width));
+}
+
 :root {
   --theme-width: 210px;
 }
@@ -366,6 +379,11 @@ p {
 .scp_themeTooltip .scp_title {
   text-align: center;
   margin-bottom: 4px;
+}
+.scp_themeTooltipContent {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .scp_theme.scp_logTooltip {

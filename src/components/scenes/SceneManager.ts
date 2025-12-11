@@ -2,8 +2,9 @@ class SceneManager {
   private readonly game: SCP;
   public stocks: SceneStocks;
   private manager: BgaCards.Manager<SceneCard>;
-  private readonly GENRES: Record<number, GENRE>;
-  private readonly SCENES: Record<number, SCENE>;
+  private readonly GENRES: SCP_Gamedatas["GENRES"];
+  private readonly SCENES: SCP_Gamedatas["SCENES"];
+  private readonly ABILITIES: SCP_Gamedatas["ABILITIES"];
 
   constructor(game: SCP) {
     this.game = game;
@@ -13,6 +14,7 @@ class SceneManager {
     this.stocks = stocks.scenes;
     this.GENRES = gamedatas.GENRES;
     this.SCENES = gamedatas.SCENES;
+    this.ABILITIES = gamedatas.ABILITIES;
   }
 
   private build(): void {
@@ -41,15 +43,15 @@ class SceneManager {
           element.classList.add("scp_genre");
         }
       },
-      setupFrontDiv: ({ type, type_arg: scene_id }, element) => {
-        if (!(scene_id > 0)) {
+      setupFrontDiv: ({ type, type_arg: sceneId }, element) => {
+        if (!(sceneId > 0)) {
           return;
         }
 
         if (type === "genre") {
-          element.style.backgroundImage = `url(${g_gamethemeurl}img/genres/genre_${scene_id}.jpg)`;
+          element.style.backgroundImage = `url(${g_gamethemeurl}img/genres/genre_${sceneId}.jpg)`;
 
-          const { label: genreLabel } = this.GENRES[scene_id];
+          const { label: genreLabel } = this.GENRES[sceneId];
           this.game.addTooltipHtml(
             element.id,
             `<div class="scp_tooltip"> 
@@ -61,16 +63,23 @@ class SceneManager {
           return;
         }
 
-        element.style.backgroundImage = `url(${g_gamethemeurl}img/scenes/scene_${scene_id}.jpg)`;
-        const { UP, DOWN } = this.SCENES[scene_id];
+        element.style.backgroundImage = `url(${g_gamethemeurl}img/scenes/scene_${sceneId}.jpg)`;
+        const { UP, DOWN } = this.SCENES[sceneId];
+
+        const tooltip = `<div class="scp_card scp_scene scp_logTooltip bga-cards_card"
+            style="background-image: url(${g_gamethemeurl}img/scenes/scene_${sceneId}.jpg)"></div>`;
 
         this.game.addTooltipHtml(
           element.id,
-          `<div class="scp_tooltip">
-          ${this.game.format_string_recursive(_("${upLabel} / ${downLabel}"), {
-            upLabel: _(UP.label),
-            downLabel: _(DOWN.label),
-          })}
+          `<div class="scp_tooltip scp_tooltip-scene">
+            <h4 class="scp_title">${_(UP.label)}</h4>
+            ${tooltip}
+            <h5 class="scp_title">${_(DOWN.label)}</h5>
+            ${
+              DOWN.ability > 0
+                ? `<span>${_(this.ABILITIES[DOWN.ability])}</span>`
+                : ""
+            }
           </div>`
         );
       },
@@ -241,12 +250,7 @@ interface SceneStocks {
 
 interface SceneCard extends SCP_Card {
   type: "scene" | "genre";
-  location?:
-    | "hand"
-    | "todiscard"
-    | "board"
-    | "placed"
-    | "placedAnywhere"
+  location?: "hand" | "todiscard" | "board" | "placed" | "placedAnywhere";
   slot?: number;
   position?: number;
 }

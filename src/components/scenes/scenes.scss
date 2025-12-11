@@ -89,3 +89,12 @@
   top: -50%;
   right: -50%;
 }
+
+.scp_tooltip-scene {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  max-width: calc(1.5 * var(--scene-width));
+}

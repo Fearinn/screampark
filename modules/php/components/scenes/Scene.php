@@ -494,10 +494,12 @@ class Scene extends Scenes
                 clienttranslate('The VIP enters ${sceneLabel}'),
                 [
                     "i18n" => ["sceneLabel"],
+                    "preserve" => ["sceneId"],
                     "player_id" => $playerId,
+                    "sceneLabel" => $this->upLabel,
+                    "sceneId" => $this->id,
                     "card" => $this->card,
                     "slot" => $slot,
-                    "sceneLabel" => $this->upLabel,
                 ]
             );
         }
