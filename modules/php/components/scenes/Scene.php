@@ -216,13 +216,14 @@ class Scene extends Scenes
         $selectableSlots = [];
 
         $maxSlot = $this->getMaxSlot($playerId);
-        for ($slot = 1; $slot <= $maxSlot; $slot++) {
+        for ($slot = $maxSlot; $slot >= $maxSlot; $slot--) {
             $Scene = $this->getMainInSlot($playerId, $slot);
 
-            if ($this->points <= $Scene->points) {
-                $selectableSlots[] = $slot;
+            if ($this->points > $Scene->points) {
                 break;
             }
+
+            $selectableSlots[] = $slot;
         }
 
         return $selectableSlots;
