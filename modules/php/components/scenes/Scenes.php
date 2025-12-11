@@ -241,6 +241,14 @@ class Scenes extends Cards
         );
     }
 
+    public function countCardsInSlot(int $playerId, int $slot): int
+    {
+        $sql = "SELECT COUNT(card_id) FROM {$this->dbTable} WHERE card_location IN ('board', 'placed', 'placedAnywhere') 
+        AND card_location_arg={$playerId} AND slot={$slot}";
+
+        return (int) $this->game->getUniqueValueFromDB($sql);
+    }
+
     public function getScenesInSlot(int $playerId, int $slot): array
     {
         $sql = "SELECT {$this->cardFields} FROM {$this->dbTable} WHERE card_type='scene' 

@@ -112,8 +112,8 @@ class Vips extends Cards
 
     private function NewsCrew(int $playerId, int $slot): bool
     {
-        $Scenes = $this->scenes->getScenesInSlot($playerId, $slot);
-        return count($Scenes) >= 3;
+        $cardCount = $this->scenes->countCardsInSlot($playerId, $slot);
+        return $cardCount >= 3;
     }
 
     private function PoliceChief(int $playerId, int $slot): bool
