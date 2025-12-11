@@ -1,1 +1,96 @@
-{}
+{
+  "player": {
+    "statScore": {
+      "id": 11,
+      "name": "Total score",
+      "type": "int"
+    },
+    "statCompletedScenes": {
+      "id": 12,
+      "name": "Scenes completed",
+      "type": "int"
+    },
+    "statTotalScenes": {
+      "id": 13,
+      "name": "Total scenes",
+      "type": "int"
+    },
+    "statGenre1": {
+      "id": 14,
+      "name": "Creepy symbols played",
+      "type": "int"
+    },
+    "statGenre2": {
+      "id": 15,
+      "name": "Gore symbols played",
+      "type": "int"
+    },
+    "statGenre3": {
+      "id": 16,
+      "name": "Lore symbols played",
+      "type": "int"
+    },
+    "statGenre4": {
+      "id": 17,
+      "name": "Mistery symbols played",
+      "type": "int"
+    },
+    "statGenre5": {
+      "id": 18,
+      "name": "Sci-Fi symbols played",
+      "type": "int"
+    }
+  },
+  "table": {
+    "statTheme1": {
+      "id": 19,
+      "name": "Win% of Abduction Junction",
+      "type": "float"
+    },
+    "statTheme2": {
+      "id": 20,
+      "name": "Win% of Cirque du Macabre",
+      "type": "float"
+    },
+    "statTheme3": {
+      "id": 21,
+      "name": "Win% of Outpost 15",
+      "type": "float"
+    },
+    "statTheme4": {
+      "id": 22,
+      "name": "Win% of Lair of the Torture Puppet",
+      "type": "float"
+    },
+    "statTheme5": {
+      "id": 23,
+      "name": "Win% of Manor of 1000 Ghosts",
+      "type": "float"
+    },
+    "statTheme6": {
+      "id": 24,
+      "name": "Win% of Sanguine Cathedral",
+      "type": "float"
+    },
+    "statTheme7": {
+      "id": 25,
+      "name": "Win% of Camp Raven Lake",
+      "type": "float"
+    },
+    "statTheme8": {
+      "id": 26,
+      "name": "Win% of The Twisted Wasteland",
+      "type": "float"
+    },
+    "statTheme9": {
+      "id": 27,
+      "name": "Win% of Castle Grimm",
+      "type": "float"
+    },
+    "statTheme10": {
+      "id": 28,
+      "name": "Win% of The Infinite Nightmare",
+      "type": "float"
+    }
+  }
+}

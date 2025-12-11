@@ -24,8 +24,9 @@ use Bga\GameFramework\Components\Counters\PlayerCounter;
 use Bga\GameFramework\Components\Counters\TableCounter;
 use Bga\GameFramework\Components\Deck;
 use Bga\Games\ScreamPark\components\scenes\Scenes;
-use Bga\Games\ScreamPark\Gamedatas;
-use Bga\Games\ScreamPark\SetupNewGame;
+use Bga\Games\ScreamPark\components\themes\Themes;
+use Bga\Games\ScreamPark\components\vips\Vips;
+use Bga\Games\ScreamPark\States\ChooseTheme;
 use Bga\Games\ScreamPark\States\DayEnd;
 use Bga\Games\ScreamPark\States\EndScore;
 use Bga\Games\ScreamPark\States\PassScenes;
@@ -35,8 +36,6 @@ define("gCompletedScenesPrivate", "gCompletedScenesPrivate");
 
 class Game extends \Bga\GameFramework\Table
 {
-    use Gamedatas;
-    use SetupNewGame;
     use Notifs;
 
     public readonly array $VIPS;
@@ -86,12 +85,114 @@ class Game extends \Bga\GameFramework\Table
 
     protected function getAllDatas(): array
     {
-        return $this->getGamedatas($this);
+        $playerId = (int) $this->getCurrentPlayerId();
+        $players = $this->loadPlayersBasicInfos();
+        $isSpectator = $this->isSpectator();
+
+        $Vips = new Vips($this);
+        $Scenes = new Scenes($this);
+        $Themes = new Themes($this);
+        $Scenes = new Scenes($this);
+
+        $day = $this->dayCounter->get();
+        $completedScenes = $this->globals->get(gCompletedScenes, []);
+        if (!$isSpectator) {
+            $completedScenes += $this->globals->get(gCompletedScenesPrivate)[$playerId];
+        }
+
+        $gamedatas = [
+            "players" => $this->getCollectionFromDb("SELECT `player_id` `id`, `player_score` `score` FROM `player`"),
+            "VIPS" => $this->VIPS,
+            "vipCards" => $Vips->getPublic(),
+            "GENRES" => $this->GENRES,
+            "SCENES" => $this->SCENES,
+            "sceneDeckCount" => $Scenes->getDeckCount(),
+            "ABILITIES" => $this->ABILITIES,
+            "THEMES" => $this->THEMES,
+            "themeCards" => $Themes->getPublic(),
+            "themeHands" => $Themes->getHands($playerId),
+            "sceneHand" => !$isSpectator ? $Scenes->getHand($playerId) : [],
+            "scenePublic" => $Scenes->getPublic($playerId),
+            "sceneBoard" => !$isSpectator ? $Scenes->getBoard($playerId) : [],
+            "completedScenes" => $completedScenes,
+            "staffCounts" => $this->staffCounter->getAll(),
+            "abilityCounts" => $this->abilityCounter->getAll(),
+            "oppAbilityCount" => $this->oppAbilityCounter->get(),
+            "day" => $day,
+            "nextPlayers" => $day === 2 ?  $this->getPrevPlayerTable($players) : $this->getNextPlayerTable(),
+            "prevPlayers" => $day === 2 ? $this->getNextPlayerTable() : $this->getPrevPlayerTable($players),
+            "isSolo" => $this->isSolo(),
+        ];
+
+        if (!$isSpectator) {
+            $gamedatas["staffCountPrivate"] = $this->staffCounterPrivate->get($playerId);
+        }
+
+        return $gamedatas;
     }
 
     protected function setupNewGame($players, $options = [])
     {
-        return $this->newGame($players, $options);
+        $gameinfos = $this->getGameinfos();
+        $default_colors = $gameinfos['player_colors'];
+
+        foreach ($players as $playerId => $player) {
+            $query_values[] = vsprintf("('%s', '%s', '%s', '%s', '%s')", [
+                $playerId,
+                array_shift($default_colors),
+                $player["player_canal"],
+                addslashes($player["player_name"]),
+                addslashes($player["player_avatar"]),
+            ]);
+        }
+
+        $this->DbQuery(
+            sprintf(
+                "INSERT INTO player (player_id, player_color, player_canal, player_name, player_avatar) VALUES %s",
+                implode(",", $query_values)
+            )
+        );
+
+        $this->reattributeColorsBasedOnPreferences($players, $gameinfos["player_colors"]);
+        $this->reloadPlayersBasicInfos();
+        $this->activeNextPlayer();
+
+        $Vips = new Vips($this);
+        $Vips->setup();
+
+        $Scenes = new Scenes($this);
+        $Scenes->setup();
+
+        $Themes = new Themes($this);
+        $Themes->setup();
+
+        $this->playerStats->init([
+            "statScore",
+            "statCompletedScenes",
+            "statTotalScenes",
+            "statGenre1",
+            "statGenre2",
+            "statGenre3",
+            "statGenre4",
+            "statGenre5"
+        ], 0);
+
+        $this->staffCounter->initDb(array_keys($players), 2);
+        $this->staffCounterPrivate->initDb(array_keys($players), 2);
+        $this->draftCounter->initDb(array_keys($players));
+        $this->actionVariable->initDb(array_keys($players));
+        $this->abilityCounter->initDb(array_keys($players));
+        $this->dayCounter->initDb(1);
+        $this->oppAbilityCounter->initDb(0);
+
+        $defaultGlobal = [];
+        foreach ($players as $playerId => $player) {
+            $defaultGlobal[$playerId] = [];
+        }
+        $this->globals->set(gCompletedScenesPrivate, $defaultGlobal);
+        $this->globals->set(gCompletedScenes, []);
+
+        return ChooseTheme::class;
     }
 
     public function isSolo(): bool

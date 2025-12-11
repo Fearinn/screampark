@@ -315,6 +315,10 @@ p {
   visibility: hidden;
 }
 
+.gamestate_ChooseTheme .scp_hand:empty {
+  display: none;
+}
+
 .scp_fakeHand {
   position: absolute !important;
   top: 50%;
