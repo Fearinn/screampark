@@ -2,7 +2,7 @@ class ThemeManager {
   private readonly game: SCP;
   public stocks: ThemeStocks;
   private manager: BgaCards.Manager<ThemeCard>;
-  private THEMES: THEME[];
+  private THEMES: SCP_Gamedatas["THEMES"];
 
   constructor(game: SCP) {
     this.game = game;

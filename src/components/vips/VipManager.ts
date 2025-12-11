@@ -2,7 +2,7 @@ class VipManager {
   private readonly game: SCP;
   public stocks: VipStocks;
   private manager: BgaCards.Manager<SCP_Card>;
-  private VIPS: VIP[];
+  private VIPS: SCP_Gamedatas["VIPS"];
 
   constructor(game: SCP) {
     this.game = game;

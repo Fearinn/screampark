@@ -1,6 +1,6 @@
 class ChooseTheme extends State {
   private themeManager: ThemeManager;
-  private THEMES: THEME[];
+  private THEMES: SCP_Gamedatas["THEMES"];
 
   constructor(game: SCP) {
     super(game);
