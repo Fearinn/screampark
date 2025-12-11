@@ -220,9 +220,9 @@ p {
 
 .scp_scenes {
   align-items: start !important;
-  overflow-x: auto;
 }
 .scp_scenes .slot {
+  position: relative;
   flex-direction: column;
 }
 .scp_scenes .slot:empty {
@@ -790,7 +790,8 @@ p {
 .slot .scp_meeple {
   order: -1;
   position: absolute;
-  bottom: 100%;
+  top: calc(var(--scene-height) * 0.25);
+  z-index: 99;
 }
 
 .scp_card {

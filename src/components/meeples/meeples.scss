@@ -25,5 +25,6 @@
 .slot .scp_meeple {
   order: -1;
   position: absolute;
-  bottom: 100%;
+  top: calc(var(--scene-height) * 0.25);
+  z-index: 99;
 }

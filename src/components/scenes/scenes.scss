@@ -11,9 +11,9 @@
 
 .scp_scenes {
   align-items: start !important;
-  overflow-x: auto;
 
   .slot {
+    position: relative;
     flex-direction: column;
 
     &:empty {
