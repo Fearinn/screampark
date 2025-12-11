@@ -2,16 +2,12 @@
   --meeple-width: 100px;
 }
 
-.scp_meepleSteps {
-  position: relative;
+.scp_meepleHouse {
   left: calc(var(--vip-width) / 2);
-  padding: 0 16px;
   height: var(--meeple-width);
-}
-
-.scp_meepleStep {
-  transform: translateX(-50%);
   width: var(--meeple-width);
+  padding: 0 16px;
+  transform: translateX(-50%);
 }
 
 .scp_meeple {

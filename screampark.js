@@ -443,10 +443,6 @@ var Template = /** @class */ (function () {
                 player_name: prevPlayerName,
             });
             var prevPlayerColor = players[prevPlayerId].color;
-            var meepleSteps = "";
-            for (var slot = 0; slot <= 24; slot++) {
-                meepleSteps += "<div id=\"scp_meepleStep-".concat(slot, "-").concat(playerId, "\" class=\"scp_meepleStep\"></div>");
-            }
             var zones = document.getElementById("scp_playerZones");
             zones.insertAdjacentHTML("beforeend", "<div id=\"scp_playerZone-".concat(playerId, "\" class=\"scp_playerZone ").concat(isCurrentPlayerId ? "scp_playerZone-current" : "", "\" style=\"border-color: #").concat(playerColor, ";\">\n          <div class=\"scp_zoneTitles\">\n            ").concat(isSolo
                 ? ""
@@ -454,7 +450,7 @@ var Template = /** @class */ (function () {
                 ? ""
                 : "<a href=\"#scp_playerZone-".concat(nextPlayerId, "\" \n              id=\"scp_nextPlayer-").concat(playerId, "\" class=\"scp_title scp_nextPlayer\" \n              style=\"color: #").concat(nextPlayerColor, "; background-color: #").concat(nextPlayerColor, "40;\">\n              ").concat(nextPlayer, "\n            </a>"), "\n          </div>\n            ").concat(isCurrentPlayerId
                 ? "<div id=\"scp_hand\" class=\"scp_hand\"></div>"
-                : "", "\n          <div id=\"scp_fakeHand-").concat(playerId, "\" class=\"scp_fakeHand\"></div>\n          <div id=\"scp_meepleSteps-").concat(playerId, "\" class=\"scp_meepleSteps\">\n            ").concat(meepleSteps, "\n          </div>\n          <div class=\"scp_playerBoard\">\n            <div id=\"scp_themes-").concat(playerId, "\" class=\"scp_themes\"></div>\n            <div id=\"scp_scenes-").concat(playerId, "\" class=\"scp_scenes\"></div>\n          </div>\n        </div>"));
+                : "", "\n          <div id=\"scp_fakeHand-").concat(playerId, "\" class=\"scp_fakeHand\"></div>\n          <div id=\"scp_meepleHouse-").concat(playerId, "\" class=\"scp_meepleHouse\"></div>\n          <div class=\"scp_playerBoard\">\n            <div id=\"scp_themes-").concat(playerId, "\" class=\"scp_themes\"></div>\n            <div id=\"scp_scenes-").concat(playerId, "\" class=\"scp_scenes\"></div>\n          </div>\n        </div>"));
             if (isSolo) {
                 return;
             }
@@ -1358,7 +1354,7 @@ var MeepleManager = /** @class */ (function () {
         keysToNumbers(players).forEach(function (playerId) {
             tracks[playerId] = {};
             for (var slot = 0; slot <= 24; slot++) {
-                tracks[playerId][slot] = new BgaCards.CardStock(_this.manager, document.getElementById("scp_meepleStep-".concat(slot, "-").concat(playerId)));
+                tracks[playerId][slot] = new BgaCards.CardStock(_this.manager, document.getElementById("scp_meepleHouse-".concat(playerId)));
             }
         });
         stocks.meeples = { tracks: tracks };

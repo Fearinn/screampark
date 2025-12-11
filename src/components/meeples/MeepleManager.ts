@@ -48,7 +48,7 @@ class MeepleManager {
       for (let slot = 0; slot <= 24; slot++) {
         tracks[playerId][slot] = new BgaCards.CardStock(
           this.manager,
-          document.getElementById(`scp_meepleStep-${slot}-${playerId}`)
+          document.getElementById(`scp_meepleHouse-${playerId}`)
         );
       }
     });
