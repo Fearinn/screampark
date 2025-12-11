@@ -753,14 +753,14 @@ var SCP = /** @class */ (function (_super) {
             var backgroundImage = "url(".concat(g_gamethemeurl, "img/icons/genre_").concat(args.genreId, ".png)");
             args.genre_icon = "<span class=\"scp_icon scp_icon-genre\" style=\"background-image: ".concat(backgroundImage, ";\"></span>");
         }
-        if (log.includes("${candlestick_icon}")) {
-            args.candlestick_icon = this.getScenicIcon("candlestick");
+        if (log.includes("${candelabra_icon}")) {
+            args.candelabra_icon = this.getScenicIcon("candelabra");
         }
-        if (log.includes("${light_icon}")) {
-            args.light_icon = this.getScenicIcon("light");
+        if (log.includes("${lightbulbicon}")) {
+            args.lightbulbicon = this.getScenicIcon("light");
         }
-        if (log.includes("${sound_icon}")) {
-            args.sound_icon = this.getScenicIcon("sound");
+        if (log.includes("${audio_icon}")) {
+            args.audio_icon = this.getScenicIcon("audio");
         }
         if (log.includes("${skull_icon}")) {
             args.skull_icon = this.getScenicIcon("skull");
@@ -779,14 +779,7 @@ var SCP = /** @class */ (function (_super) {
         }
     };
     SCP.prototype.getScenicIcon = function (scenicName) {
-        var scenicSymbols = {
-            candlestick: 1,
-            light: 2,
-            sound: 3,
-            skull: 4,
-        };
-        var scenic_id = scenicSymbols[scenicName];
-        var backgroundImage = "url(".concat(g_gamethemeurl, "img/icons/scenic_").concat(scenic_id, ".png)");
+        var backgroundImage = "url(".concat(g_gamethemeurl, "img/icons/scenic_").concat(scenicName, ".png)");
         return "<span class=\"scp_icon scp_icon-scenic\" style=\"background-image: ".concat(backgroundImage, ";\"></span>");
     };
     SCP.prototype.setLoader = function (image_progress, logs_progress) {

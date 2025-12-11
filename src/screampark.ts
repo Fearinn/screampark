@@ -291,16 +291,16 @@ class SCP extends GameGui<SCP_Gamedatas> implements SCP {
       args.genre_icon = `<span class="scp_icon scp_icon-genre" style="background-image: ${backgroundImage};"></span>`;
     }
 
-    if (log.includes("${candlestick_icon}")) {
-      args.candlestick_icon = this.getScenicIcon("candlestick");
+    if (log.includes("${candelabra_icon}")) {
+      args.candelabra_icon = this.getScenicIcon("candelabra");
     }
 
-    if (log.includes("${light_icon}")) {
-      args.light_icon = this.getScenicIcon("light");
+    if (log.includes("${lightbulbicon}")) {
+      args.lightbulbicon = this.getScenicIcon("light");
     }
 
-    if (log.includes("${sound_icon}")) {
-      args.sound_icon = this.getScenicIcon("sound");
+    if (log.includes("${audio_icon}")) {
+      args.audio_icon = this.getScenicIcon("audio");
     }
 
     if (log.includes("${skull_icon}")) {
@@ -324,16 +324,7 @@ class SCP extends GameGui<SCP_Gamedatas> implements SCP {
   }
 
   private getScenicIcon(scenicName: string): string {
-    const scenicSymbols = {
-      candlestick: 1,
-      light: 2,
-      sound: 3,
-      skull: 4,
-    };
-
-    const scenic_id = scenicSymbols[scenicName];
-    const backgroundImage = `url(${g_gamethemeurl}img/icons/scenic_${scenic_id}.png)`;
-
+    const backgroundImage = `url(${g_gamethemeurl}img/icons/scenic_${scenicName}.png)`;
     return `<span class="scp_icon scp_icon-scenic" style="background-image: ${backgroundImage};"></span>`;
   }
 

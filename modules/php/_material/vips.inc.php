@@ -11,7 +11,7 @@ $this->VIPS = [
         "id" => 2,
         "name" => "newinvestor",
         "label" => clienttranslate('New Investor'),
-        "description" => clienttranslate('Advance if the next scene any ${candlestick_icon} / ${light_icon} / ${sound_icon} / ${skull_icon}'),
+        "description" => clienttranslate('Advance if the next scene any ${candelabra_icon} / ${lightbulbicon} / ${audio_icon} / ${skull_icon}'),
     ],
     3 => [
         "id" => 3,
