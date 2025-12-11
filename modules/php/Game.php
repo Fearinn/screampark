@@ -86,7 +86,9 @@ class Game extends \Bga\GameFramework\Table
 
     public function getGameProgression()
     {
-        return 0;
+        $day = $this->dayCounter->get();
+        $progression = 100 / 3 * ($day - 1);
+        return round($progression);
     }
 
     public function upgradeTableDb($from_version) {}

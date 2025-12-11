@@ -23,6 +23,7 @@ class PreTurn extends GameState
             type: StateType::MULTIPLE_ACTIVE_PLAYER,
             description: clienttranslate('Other player(s) must draft 2 scene cards'),
             initialPrivate: PlayerTurn::class,
+            updateGameProgression: true,
         );
     }
 
