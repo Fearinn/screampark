@@ -1066,8 +1066,12 @@ var NotifManager = /** @class */ (function () {
     NotifManager.prototype.notif_shiftScenesPrivate = function (args) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                this.notif_shiftScenes(args);
-                return [2 /*return*/];
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.notif_shiftScenes(args)];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
             });
         });
     };

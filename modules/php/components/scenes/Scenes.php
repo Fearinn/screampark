@@ -294,7 +294,7 @@ class Scenes extends Cards
         $this->game->DbQuery($sql);
 
         $sql = "SELECT {$this->cardFields} FROM {$this->dbTable} 
-        WHERE shifted=1 AND card_location_arg={$playerId} ORDER BY slot DESC, position DESC";
+        WHERE shifted=1 AND card_location_arg={$playerId} ORDER BY slot DESC, position";
         $cards = $this->game->getObjectListFromDB($sql);
 
         $this->game->notify->player(
@@ -313,7 +313,7 @@ class Scenes extends Cards
         $this->game->DbQuery($sql);
 
         $sql = "SELECT {$this->cardFields} FROM {$this->dbTable} 
-        WHERE slot>$slot AND card_location_arg={$playerId} ORDER BY slot DESC, position DESC";
+        WHERE slot>$slot AND card_location_arg={$playerId} ORDER BY slot DESC, position";
         $cards = $this->game->getObjectListFromDB($sql);
 
         $this->game->notify->all(

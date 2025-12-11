@@ -193,7 +193,7 @@ class NotifManager {
     player_id: number;
     cards: SceneCard[];
   }): Promise<void> {
-    this.notif_shiftScenes(args);
+    await this.notif_shiftScenes(args);
   }
 
   public async notif_shiftScenes(args: {

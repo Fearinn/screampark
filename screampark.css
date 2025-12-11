@@ -220,7 +220,6 @@ p {
 
 .scp_scenes {
   align-items: start !important;
-  overflow-y: hidden;
   overflow-x: auto;
 }
 .scp_scenes .slot {
