@@ -33,6 +33,15 @@ class Template {
       `<div id="scp_defaultActions" class="scp_defaultActions"></div>
       <div id="scp_alertActions" class="scp_alertActions"></div>`
     );
+    this.game.addTooltipHtml(
+      `scp_sceneDeck`,
+      `<div class="scp_tooltip"><span>${_("scene cards")}</span></div>`
+    );
+    this.game.addTooltipHtml(
+      `scp_genreDeck`,
+      `<div class="scp_tooltip"><span>${_("genre cards")}</span></div>`
+    );
+
     this.setupZones();
     this.setupStocks();
     this.setupCounters();
@@ -227,6 +236,11 @@ class Template {
         </div>`
       );
 
+      this.game.addTooltipHtml(
+        `scp_staffCounter-${playerId}`,
+        `<div class="scp_tooltip"><span>${_("staff tokens")}</span></div>`
+      );
+
       const staffCounter = new ebg.counter();
       staffCounter.create(`scp_staffCounterCount-${playerId}`, {
         value:
@@ -234,6 +248,13 @@ class Template {
         playerCounter: "staff",
         playerId,
       });
+
+      this.game.addTooltipHtml(
+        `scp_abilityCounter-${playerId}`,
+        `<div class="scp_tooltip"><span>${_(
+          "special effects played"
+        )}</span></div>`
+      );
 
       const abilityCounter = new ebg.counter();
       abilityCounter.create(`scp_abilityCounterCount-${playerId}`, {

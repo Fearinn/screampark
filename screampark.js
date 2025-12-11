@@ -409,6 +409,8 @@ var Template = /** @class */ (function () {
         };
         this.game.stocks = {};
         document.getElementById("generalactions").insertAdjacentHTML("beforebegin", "<div id=\"scp_defaultActions\" class=\"scp_defaultActions\"></div>\n      <div id=\"scp_alertActions\" class=\"scp_alertActions\"></div>");
+        this.game.addTooltipHtml("scp_sceneDeck", "<div class=\"scp_tooltip\"><span>".concat(_("scene cards"), "</span></div>"));
+        this.game.addTooltipHtml("scp_genreDeck", "<div class=\"scp_tooltip\"><span>".concat(_("genre cards"), "</span></div>"));
         this.setupZones();
         this.setupStocks();
         this.setupCounters();
@@ -496,12 +498,14 @@ var Template = /** @class */ (function () {
             _this.game.getPlayerPanelElement(playerId).insertAdjacentHTML("beforeend", "<div id=\"scp_staffCounter-".concat(playerId, "\" class=\"scp_counter scp_staffCounter\">\n          <i id=\"scp_staffCounterIcon-").concat(playerId, "\" class=\"scp_staffCounterIcon\"></i>\n          <span id=\"scp_staffCounterCount-").concat(playerId, "\" class=\"scp_staffCounterCount\"></span>\n        </div>\n        <div id=\"scp_abilityCounter-").concat(playerId, "\" class=\"scp_counter scp_abilityCounter\">\n          <i id=\"scp_abilityCounterIcon-").concat(playerId, "\" class=\"scp_abilityCounterIcon\"></i>\n          <div id=\"scp_abilityCounterCounts-").concat(playerId, "\" class=\"scp_abilityCounterCounts\">\n            <span id=\"scp_abilityCounterCount-").concat(playerId, "\" class=\"scp_abilityCounterCount\"></span>\n            ").concat(isSolo
                 ? "x<span id=\"scp_oppAbilityCounterCount\" class=\"scp_oppAbilityCounterCount\"></span>"
                 : "", "\n          </div>\n        </div>"));
+            _this.game.addTooltipHtml("scp_staffCounter-".concat(playerId), "<div class=\"scp_tooltip\"><span>".concat(_("staff tokens"), "</span></div>"));
             var staffCounter = new ebg.counter();
             staffCounter.create("scp_staffCounterCount-".concat(playerId), {
                 value: player_id === playerId ? staffCountPrivate : staffCounts[playerId],
                 playerCounter: "staff",
                 playerId: playerId,
             });
+            _this.game.addTooltipHtml("scp_abilityCounter-".concat(playerId), "<div class=\"scp_tooltip\"><span>".concat(_("special effects played"), "</span></div>"));
             var abilityCounter = new ebg.counter();
             abilityCounter.create("scp_abilityCounterCount-".concat(playerId), {
                 value: abilityCounts[playerId],
