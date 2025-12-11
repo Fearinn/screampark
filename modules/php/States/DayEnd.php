@@ -49,18 +49,17 @@ class DayEnd extends GameState
         foreach ($players as $playerId => $player) {
             $abilityCount = 0;
             $sceneCards = $this->scenes->getBoard($playerId);
+
             foreach ($sceneCards as $card) {
-                foreach ($sceneCards as $card) {
-                    if ($card["type"] === "genre") {
-                        continue;
-                    }
+                if ($card["type"] === "genre") {
+                    continue;
+                }
 
-                    $cardId = (int) $card["id"];
-                    $Scene = new Scene($this->game, $cardId);
+                $cardId = (int) $card["id"];
+                $Scene = new Scene($this->game, $cardId);
 
-                    if ($Scene->ability > 0) {
-                        $abilityCount++;
-                    }
+                if ($Scene->ability > 0) {
+                    $abilityCount++;
                 }
             }
             $this->game->abilityCounter->set($playerId, $abilityCount);
