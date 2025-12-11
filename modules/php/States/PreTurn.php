@@ -28,6 +28,11 @@ class PreTurn extends GameState
 
     public function onEnteringState(): void
     {
+        $players = $this->game->loadPlayersBasicInfos();
+        foreach ($players as $playerId => $player) {
+            $this->game->giveExtraTime($playerId);
+        }
+
         $this->gamestate->setAllPlayersMultiactive();
         $this->gamestate->initializePrivateStateForAllActivePlayers();
     }
