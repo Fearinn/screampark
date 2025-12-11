@@ -132,7 +132,7 @@ class EndScore extends \Bga\GameFramework\States\GameState
             );
 
             $this->playerStats->inc(statCompletedScenes, 1, $playerId);
-            $this->playerScore->inc($playerId, $scenePoints);
+            $this->playerScore->inc($playerId, $Scene->points);
         }
 
         $this->notify->all(
