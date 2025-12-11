@@ -36,16 +36,15 @@
 
 .scp_hand {
   justify-content: start !important;
-  min-height: var(--scene-height);
   padding: 12px;
 
   &:empty {
-    visibility: hidden;
+    display: none;
   }
 }
 
-.gamestate_ChooseTheme .scp_hand:empty {
-  display: none;
+.gamestate_PassScenes .scp_hand:empty {
+  min-height: var(--scene-height);
 }
 
 .scp_fakeHand {
