@@ -98,8 +98,9 @@ class SceneManager {
         this.manager,
         document.getElementById(`scp_scenes-${playerId}`),
         {
-          gap: "16px",
+          center: false,
           wrap: "nowrap",
+          gap: "16px",
           slotsIds: [
             1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
             20, 21, 22, 23, 24,
@@ -166,7 +167,7 @@ class SceneManager {
         this.manager,
         document.getElementById("scp_hand"),
         {
-          wrap: "nowrap",
+          wrap: "wrap",
           gap: "16px",
           sort: (a, b) => {
             const SCENE = this.SCENES[a.type_arg];

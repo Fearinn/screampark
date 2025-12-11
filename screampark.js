@@ -1440,8 +1440,9 @@ var SceneManager = /** @class */ (function () {
         var fakeHands = {};
         keysToNumbers(players).forEach(function (playerId) {
             boards[playerId] = new BgaCards.SlotStock(_this.manager, document.getElementById("scp_scenes-".concat(playerId)), {
-                gap: "16px",
+                center: false,
                 wrap: "nowrap",
+                gap: "16px",
                 slotsIds: [
                     1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
                     20, 21, 22, 23, 24,
@@ -1485,7 +1486,7 @@ var SceneManager = /** @class */ (function () {
         };
         if (!this.game.isSpectator) {
             stocks.hand = new BgaCards.LineStock(this.manager, document.getElementById("scp_hand"), {
-                wrap: "nowrap",
+                wrap: "wrap",
                 gap: "16px",
                 sort: function (a, b) {
                     var SCENE = _this.SCENES[a.type_arg];

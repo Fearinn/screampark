@@ -11,9 +11,15 @@
 
 .scp_scenes {
   align-items: start !important;
+  overflow-y: hidden;
+  overflow-x: auto;
 
   .slot {
     flex-direction: column;
+
+    &:empty {
+      display: none !important;
+    }
 
     .scp_scene {
       &:not(:first-child) {
@@ -31,10 +37,8 @@
 
 .scp_hand {
   justify-content: start !important;
-  height: var(--scene-height);
+  min-height: var(--scene-height);
   padding: 12px;
-  overflow-y: hidden;
-  overflow-x: auto;
 
   &:empty {
     visibility: hidden;

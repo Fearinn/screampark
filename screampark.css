@@ -129,6 +129,7 @@
   align-items: start;
   gap: 12px;
   padding: 0 12px 12px 12px;
+  overflow-x: visible;
 }
 
 h3,
@@ -219,9 +220,14 @@ p {
 
 .scp_scenes {
   align-items: start !important;
+  overflow-y: hidden;
+  overflow-x: auto;
 }
 .scp_scenes .slot {
   flex-direction: column;
+}
+.scp_scenes .slot:empty {
+  display: none !important;
 }
 .scp_scenes .slot .scp_scene:not(:first-child) {
   margin-top: calc(var(--scene-height) * -0.6);
@@ -301,10 +307,8 @@ p {
 
 .scp_hand {
   justify-content: start !important;
-  height: var(--scene-height);
+  min-height: var(--scene-height);
   padding: 12px;
-  overflow-y: hidden;
-  overflow-x: auto;
 }
 .scp_hand:empty {
   visibility: hidden;
