@@ -76,7 +76,7 @@ class Game extends \Bga\GameFramework\Table
         $this->staffCounter = $this->counterFactory->createPlayerCounter("staff");
         $this->staffCounterPrivate = $this->counterFactory->createPlayerCounter("staffPrivate");
         $this->draftCounter = $this->counterFactory->createPlayerCounter("draft", 0, 2);
-        $this->abilityCounter = $this->counterFactory->createPlayerCounter("ability", 0, 2);
+        $this->abilityCounter = $this->counterFactory->createPlayerCounter("ability");
         $this->actionVariable = $this->counterFactory->createPlayerCounter("action");
         $this->dayCounter = $this->counterFactory->createTableCounter("day", 1, 4);
         $this->oppAbilityCounter = $this->counterFactory->createTableCounter("oppAbility", 0, 9);
