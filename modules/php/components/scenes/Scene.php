@@ -214,16 +214,18 @@ class Scene extends Scenes
     public function getSelectableAnywhereSlots(int $playerId): array
     {
         $selectableSlots = [];
-
         $maxSlot = $this->getMaxSlot($playerId);
-        for ($slot = $maxSlot; $slot >= $maxSlot; $slot--) {
+
+        for ($slot = 1; $slot <= $maxSlot; $slot++) {
             $Scene = $this->getMainInSlot($playerId, $slot);
 
-            if ($this->points > $Scene->points) {
-                break;
+            if ($this->points <= $Scene->points) {
+                $selectableSlots[] = $slot;
             }
 
-            $selectableSlots[] = $slot;
+            if ($this->points < $Scene->points) {
+                break;
+            }
         }
 
         return $selectableSlots;
