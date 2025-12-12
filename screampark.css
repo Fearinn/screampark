@@ -302,11 +302,11 @@ p {
   justify-content: start !important;
   padding: 12px;
 }
+.scp_hand:empty {
+  display: none !important;
+}
 .scp_hand .bga-cards_selectable-card {
   outline: none !important;
-}
-.scp_hand:empty {
-  display: none;
 }
 
 :where(.gamestate_PassScenes, .gamestate_DealScenes, .gamestate_RevealScenes) .scp_hand {

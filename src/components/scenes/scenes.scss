@@ -38,12 +38,12 @@
   justify-content: start !important;
   padding: 12px;
 
-  .bga-cards_selectable-card {
-    outline: none !important;
+  &:empty {
+    display: none !important;
   }
 
-  &:empty {
-    display: none;
+  .bga-cards_selectable-card {
+    outline: none !important;
   }
 }
 
