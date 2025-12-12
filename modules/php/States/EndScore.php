@@ -54,9 +54,9 @@ class EndScore extends \Bga\GameFramework\States\GameState
                 }
             }
 
-            $this->scoreScenes($playerId, $maxSlot);
             $this->scoreScenic($playerId, $maxSlot);
             $this->scoreStaff($playerId);
+            $this->scoreScenes($playerId, $maxSlot);
             $this->computeTieBreakers($playerId);
 
             $points = $this->playerScore->get($playerId);
@@ -150,45 +150,99 @@ class EndScore extends \Bga\GameFramework\States\GameState
     public function scoreScenic(int $playerId, int $maxSlot): int
     {
         $scenicsCounts = array_fill(1, 4, 0);
+        $availableCopies = [];
 
         for ($slot = 1; $slot <= $maxSlot; $slot++) {
-            $slotScenics = array_fill(1, 4, 0);
-            $copies = 0;
+            $slotScenics = [];
+            $copyCount = 0;
 
             $Scenes = $this->scenes->getScenesInSlot($playerId, $slot);
             foreach ($Scenes as $Scene) {
                 $scenic = (int) $Scene->scenic;
 
-                if ($scenic > 0) {
-                    $slotScenics[$scenic];
+                if ($scenic > 0 && !in_array($scenic, $slotScenics)) {
+                    $slotScenics[] = $scenic;
+                    $scenicsCounts[$scenic]++;
                 }
 
                 if ($Scene->ability === 2) {
-                    $copies++;
+                    $copyCount++;
                 }
             }
 
-            if (min($scenicsCounts) === 0) {
-                continue;
-            }
-
-            for ($i = 1; $i <= $copies; $i++) {
-                $min = min($slotScenics);
-                $scenic = array_search($min, $slotScenics);
-                $slotScenics[$scenic]++;
-            }
-
-            foreach ($slotScenics as $scenic => $count) {
-                $scenicsCounts[$scenic] += $count;
+            if (!empty($slotScenics) && $copyCount > 0) {
+                $availableCopies[$slot] = [
+                    "scenics" => $slotScenics,
+                    "count" => $copyCount
+                ];
             }
         }
 
-        $setCount = min($scenicsCounts);
+        $maxSetCount = min($scenicsCounts);
+        $totalAvailableCopies = 0;
+        foreach ($availableCopies as $options) {
+            $totalAvailableCopies += $options["count"];
+        }
+
+        $initialState = [
+            "counts" => $scenicsCounts,
+            "slotsUsed" => array_fill(1, $maxSlot, 0)
+        ];
+
+        $states = [$initialState];
+
+        for ($level = 1; $level <= $totalAvailableCopies; $level++) {
+            $newStates = [];
+            $seenStates = [];
+
+            foreach ($states as $state) {
+                $counts = $state["counts"];
+                $slotsUsed = $state["slotsUsed"];
+
+                foreach ($availableCopies as $slot => $options) {
+                    $remainingCopies = $options["count"] - $slotsUsed[$slot];
+
+                    if ($remainingCopies > 0) {
+                        foreach ($options["scenics"] as $scenic) {
+                            if ($counts[$scenic] > 0) {
+                                $newCounts = $counts;
+                                $newCounts[$scenic]++;
+                                $newMin = min($newCounts);
+
+                                if ($newMin > $maxSetCount) {
+                                    $maxSetCount = $newMin;
+                                }
+
+                                $newSlotsUsed = $slotsUsed;
+                                $newSlotsUsed[$slot]++;
+
+                                $stateKey = json_encode($newCounts) . "|" . json_encode($newSlotsUsed);
+
+                                if (!isset($seenStates[$stateKey])) {
+                                    $seenStates[$stateKey] = true;
+                                    $newStates[] = [
+                                        "counts" => $newCounts,
+                                        "slotsUsed" => $newSlotsUsed
+                                    ];
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            $states = $newStates;
+            if (empty($states)) {
+                break;
+            }
+        }
+
+        $setCount = $maxSetCount;
         $scenicPoints = $setCount * 6;
 
         $this->notify->all(
             "message",
-            clienttranslate('${player_name} has ${setCount} scenic sets and scores ${points} point(s) '),
+            clienttranslate('${player_name} has ${setCount} scenic set(s) and scores ${points} point(s)'),
             [
                 "player_id" => $playerId,
                 "setCount" => $setCount,
