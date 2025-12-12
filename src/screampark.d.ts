@@ -54,6 +54,10 @@ interface Stocks {
 interface Counters {
   player: {
     staff?: Record<number, Counter>;
+    candelabra?: Record<number, Counter>;
+    lightbulb?: Record<number, Counter>;
+    audio?: Record<number, Counter>;
+    skull?: Record<number, Counter>;
   };
   table: { ability?: Counter };
 }

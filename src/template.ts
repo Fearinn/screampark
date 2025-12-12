@@ -208,24 +208,46 @@ class Template {
     } = gamedatas;
     const { counters } = managers;
 
-    counters.player.staff = {};
+    counters.player = {
+      staff: {},
+      candelabra: {},
+      lightbulb: {},
+      audio: {},
+      skull: {},
+    };
     keysToNumbers(players).forEach((playerId) => {
       this.game.getPlayerPanelElement(playerId).insertAdjacentHTML(
         "beforeend",
         `<div id="scp_staffCounter-${playerId}" class="scp_counter scp_staffCounter">
           <i id="scp_staffCounterIcon-${playerId}" class="scp_staffCounterIcon"></i>
-          <span id="scp_staffCounterCount-${playerId}" class="scp_staffCounterCount"></span>
+          <span id="scp_staffCounterCount-${playerId}" class="scp_count"></span>
         </div>
         <div id="scp_abilityCounter-${playerId}" class="scp_counter scp_abilityCounter">
           <i id="scp_abilityCounterIcon-${playerId}" class="scp_abilityCounterIcon"></i>
           <div id="scp_abilityCounterCounts-${playerId}" class="scp_abilityCounterCounts">
-            <span id="scp_abilityCounterCount-${playerId}" class="scp_abilityCounterCount"></span>
+            <span id="scp_abilityCounterCount-${playerId}" class="scp_count"></span>
             ${
               isSolo
-                ? `x<span id="scp_oppAbilityCounterCount" class="scp_oppAbilityCounterCount"></span>`
+                ? `x<span id="scp_oppAbilityCounterCount" class="scp_count"></span>`
                 : ""
             }
           </div>
+        </div>
+        <div id="scp_candelabraCounter-${playerId}" class="scp_counter scp_candelabraCounter">
+          <i id="scp_candelabraCounterIcon-${playerId}" class="scp_candelabraCounterIcon"></i>
+          <span id="scp_candelabraCounterCount-${playerId}" class="scp_counterCount"></span>
+        </div>
+        <div id="scp_lightbulbCounter-${playerId}" class="scp_counter scp_lightbulbCounter">
+          <i id="scp_lightbulbCounterIcon-${playerId}" class="scp_lightbulbCounterIcon"></i>
+          <span id="scp_lightbulbCounterCount-${playerId}" class="scp_count"></span>
+        </div>
+        <div id="scp_audioCounter-${playerId}" class="scp_counter scp_audioCounter">
+          <i id="scp_audioCounterIcon-${playerId}" class="scp_audioCounterIcon"></i>
+          <span id="scp_audioCounterCount-${playerId}" class="scp_count"></span>
+        </div>
+        <div id="scp_skullCounter-${playerId}" class="scp_counter scp_skullCounter">
+          <i id="scp_skullCounterIcon-${playerId}" class="scp_skullCounterIcon"></i>
+          <span id="scp_skullCounterCount-${playerId}" class="scp_count"></span>
         </div>`
       );
 
@@ -233,7 +255,6 @@ class Template {
         `scp_staffCounter-${playerId}`,
         `<div class="scp_tooltip"><span>${_("staff tokens")}</span></div>`
       );
-
       const staffCounter = new ebg.counter();
       staffCounter.create(`scp_staffCounterCount-${playerId}`, {
         value:
@@ -243,12 +264,51 @@ class Template {
       });
 
       this.game.addTooltipHtml(
+        `scp_candelabraCounter-${playerId}`,
+        `<div class="scp_tooltip"><span>${_("candelabra symbols")}</span></div>`
+      );
+      const candelabraCounter = new ebg.counter();
+      candelabraCounter.create(`scp_candelabraCounterCount-${playerId}`, {
+        playerCounter: "candelabra",
+        playerId,
+      });
+
+      this.game.addTooltipHtml(
+        `scp_lightbulbCounter-${playerId}`,
+        `<div class="scp_tooltip"><span>${_("lightbulb symbols")}</span></div>`
+      );
+      const lightbulbCounter = new ebg.counter();
+      lightbulbCounter.create(`scp_lightbulbCounterCount-${playerId}`, {
+        playerCounter: "lightbulb",
+        playerId,
+      });
+
+      this.game.addTooltipHtml(
+        `scp_audioCounter-${playerId}`,
+        `<div class="scp_tooltip"><span>${_("audio symbols")}</span></div>`
+      );
+      const audioCounter = new ebg.counter();
+      audioCounter.create(`scp_audioCounterCount-${playerId}`, {
+        playerCounter: "audio",
+        playerId,
+      });
+
+      this.game.addTooltipHtml(
+        `scp_skullCounter-${playerId}`,
+        `<div class="scp_tooltip"><span>${_("skull symbols")}</span></div>`
+      );
+      const skullCounter = new ebg.counter();
+      skullCounter.create(`scp_skullCounterCount-${playerId}`, {
+        playerCounter: "skull",
+        playerId,
+      });
+
+      this.game.addTooltipHtml(
         `scp_abilityCounter-${playerId}`,
         `<div class="scp_tooltip"><span>${_(
           "special effects played"
         )}</span></div>`
       );
-
       const abilityCounter = new ebg.counter();
       abilityCounter.create(`scp_abilityCounterCount-${playerId}`, {
         value: abilityCounts[playerId],

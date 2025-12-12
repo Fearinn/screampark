@@ -489,16 +489,46 @@ var Template = /** @class */ (function () {
         var _a = this.game, gamedatas = _a.gamedatas, keysToNumbers = _a.keysToNumbers, managers = _a.managers, player_id = _a.player_id;
         var isSolo = gamedatas.isSolo, players = gamedatas.players, staffCounts = gamedatas.staffCounts, staffCountPrivate = gamedatas.staffCountPrivate, abilityCounts = gamedatas.abilityCounts, oppAbilityCount = gamedatas.oppAbilityCount;
         var counters = managers.counters;
-        counters.player.staff = {};
+        counters.player = {
+            staff: {},
+            candelabra: {},
+            lightbulb: {},
+            audio: {},
+            skull: {},
+        };
         keysToNumbers(players).forEach(function (playerId) {
-            _this.game.getPlayerPanelElement(playerId).insertAdjacentHTML("beforeend", "<div id=\"scp_staffCounter-".concat(playerId, "\" class=\"scp_counter scp_staffCounter\">\n          <i id=\"scp_staffCounterIcon-").concat(playerId, "\" class=\"scp_staffCounterIcon\"></i>\n          <span id=\"scp_staffCounterCount-").concat(playerId, "\" class=\"scp_staffCounterCount\"></span>\n        </div>\n        <div id=\"scp_abilityCounter-").concat(playerId, "\" class=\"scp_counter scp_abilityCounter\">\n          <i id=\"scp_abilityCounterIcon-").concat(playerId, "\" class=\"scp_abilityCounterIcon\"></i>\n          <div id=\"scp_abilityCounterCounts-").concat(playerId, "\" class=\"scp_abilityCounterCounts\">\n            <span id=\"scp_abilityCounterCount-").concat(playerId, "\" class=\"scp_abilityCounterCount\"></span>\n            ").concat(isSolo
-                ? "x<span id=\"scp_oppAbilityCounterCount\" class=\"scp_oppAbilityCounterCount\"></span>"
-                : "", "\n          </div>\n        </div>"));
+            _this.game.getPlayerPanelElement(playerId).insertAdjacentHTML("beforeend", "<div id=\"scp_staffCounter-".concat(playerId, "\" class=\"scp_counter scp_staffCounter\">\n          <i id=\"scp_staffCounterIcon-").concat(playerId, "\" class=\"scp_staffCounterIcon\"></i>\n          <span id=\"scp_staffCounterCount-").concat(playerId, "\" class=\"scp_count\"></span>\n        </div>\n        <div id=\"scp_abilityCounter-").concat(playerId, "\" class=\"scp_counter scp_abilityCounter\">\n          <i id=\"scp_abilityCounterIcon-").concat(playerId, "\" class=\"scp_abilityCounterIcon\"></i>\n          <div id=\"scp_abilityCounterCounts-").concat(playerId, "\" class=\"scp_abilityCounterCounts\">\n            <span id=\"scp_abilityCounterCount-").concat(playerId, "\" class=\"scp_count\"></span>\n            ").concat(isSolo
+                ? "x<span id=\"scp_oppAbilityCounterCount\" class=\"scp_count\"></span>"
+                : "", "\n          </div>\n        </div>\n        <div id=\"scp_candelabraCounter-").concat(playerId, "\" class=\"scp_counter scp_candelabraCounter\">\n          <i id=\"scp_candelabraCounterIcon-").concat(playerId, "\" class=\"scp_candelabraCounterIcon\"></i>\n          <span id=\"scp_candelabraCounterCount-").concat(playerId, "\" class=\"scp_counterCount\"></span>\n        </div>\n        <div id=\"scp_lightbulbCounter-").concat(playerId, "\" class=\"scp_counter scp_lightbulbCounter\">\n          <i id=\"scp_lightbulbCounterIcon-").concat(playerId, "\" class=\"scp_lightbulbCounterIcon\"></i>\n          <span id=\"scp_lightbulbCounterCount-").concat(playerId, "\" class=\"scp_count\"></span>\n        </div>\n        <div id=\"scp_audioCounter-").concat(playerId, "\" class=\"scp_counter scp_audioCounter\">\n          <i id=\"scp_audioCounterIcon-").concat(playerId, "\" class=\"scp_audioCounterIcon\"></i>\n          <span id=\"scp_audioCounterCount-").concat(playerId, "\" class=\"scp_count\"></span>\n        </div>\n        <div id=\"scp_skullCounter-").concat(playerId, "\" class=\"scp_counter scp_skullCounter\">\n          <i id=\"scp_skullCounterIcon-").concat(playerId, "\" class=\"scp_skullCounterIcon\"></i>\n          <span id=\"scp_skullCounterCount-").concat(playerId, "\" class=\"scp_count\"></span>\n        </div>"));
             _this.game.addTooltipHtml("scp_staffCounter-".concat(playerId), "<div class=\"scp_tooltip\"><span>".concat(_("staff tokens"), "</span></div>"));
             var staffCounter = new ebg.counter();
             staffCounter.create("scp_staffCounterCount-".concat(playerId), {
                 value: player_id === playerId ? staffCountPrivate : staffCounts[playerId],
                 playerCounter: "staff",
+                playerId: playerId,
+            });
+            _this.game.addTooltipHtml("scp_candelabraCounter-".concat(playerId), "<div class=\"scp_tooltip\"><span>".concat(_("candelabra symbols"), "</span></div>"));
+            var candelabraCounter = new ebg.counter();
+            candelabraCounter.create("scp_candelabraCounterCount-".concat(playerId), {
+                playerCounter: "candelabra",
+                playerId: playerId,
+            });
+            _this.game.addTooltipHtml("scp_lightbulbCounter-".concat(playerId), "<div class=\"scp_tooltip\"><span>".concat(_("lightbulb symbols"), "</span></div>"));
+            var lightbulbCounter = new ebg.counter();
+            lightbulbCounter.create("scp_lightbulbCounterCount-".concat(playerId), {
+                playerCounter: "lightbulb",
+                playerId: playerId,
+            });
+            _this.game.addTooltipHtml("scp_audioCounter-".concat(playerId), "<div class=\"scp_tooltip\"><span>".concat(_("audio symbols"), "</span></div>"));
+            var audioCounter = new ebg.counter();
+            audioCounter.create("scp_audioCounterCount-".concat(playerId), {
+                playerCounter: "audio",
+                playerId: playerId,
+            });
+            _this.game.addTooltipHtml("scp_skullCounter-".concat(playerId), "<div class=\"scp_tooltip\"><span>".concat(_("skull symbols"), "</span></div>"));
+            var skullCounter = new ebg.counter();
+            skullCounter.create("scp_skullCounterCount-".concat(playerId), {
+                playerCounter: "skull",
                 playerId: playerId,
             });
             _this.game.addTooltipHtml("scp_abilityCounter-".concat(playerId), "<div class=\"scp_tooltip\"><span>".concat(_("special effects played"), "</span></div>"));

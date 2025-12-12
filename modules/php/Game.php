@@ -58,6 +58,10 @@ class Game extends \Bga\GameFramework\Table
     public readonly PlayerCounter $staffCounterPrivate;
     public readonly PlayerCounter $draftCounter;
     public readonly PlayerCounter $abilityCounter;
+    public readonly PlayerCounter $candelabraCounter;
+    public readonly PlayerCounter $lightbulbCounter;
+    public readonly PlayerCounter $audioCounter;
+    public readonly PlayerCounter $skullCounter;
     public readonly PlayerCounter $actionVariable;
     public readonly TableCounter $dayCounter;
     public readonly TableCounter $oppAbilityCounter;
@@ -77,6 +81,10 @@ class Game extends \Bga\GameFramework\Table
         $this->staffCounterPrivate = $this->counterFactory->createPlayerCounter("staffPrivate");
         $this->draftCounter = $this->counterFactory->createPlayerCounter("draft", 0, 2);
         $this->abilityCounter = $this->counterFactory->createPlayerCounter("ability");
+        $this->candelabraCounter = $this->counterFactory->createPlayerCounter("candelabra");
+        $this->lightbulbCounter = $this->counterFactory->createPlayerCounter("lightbulb");
+        $this->audioCounter = $this->counterFactory->createPlayerCounter("audio");
+        $this->skullCounter = $this->counterFactory->createPlayerCounter("skull");
         $this->actionVariable = $this->counterFactory->createPlayerCounter("action");
         $this->dayCounter = $this->counterFactory->createTableCounter("day", 1, 4);
         $this->oppAbilityCounter = $this->counterFactory->createTableCounter("oppAbility", 0, 9);
@@ -190,8 +198,12 @@ class Game extends \Bga\GameFramework\Table
         $this->staffCounter->initDb(array_keys($players), 2);
         $this->staffCounterPrivate->initDb(array_keys($players), 2);
         $this->draftCounter->initDb(array_keys($players));
-        $this->actionVariable->initDb(array_keys($players));
         $this->abilityCounter->initDb(array_keys($players));
+        $this->candelabraCounter->initDb(array_keys($players));
+        $this->lightbulbCounter->initDb(array_keys($players));
+        $this->audioCounter->initDb(array_keys($players));
+        $this->skullCounter->initDb(array_keys($players));
+        $this->actionVariable->initDb(array_keys($players));
         $this->dayCounter->initDb(1);
         $this->oppAbilityCounter->initDb(0);
 

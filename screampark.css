@@ -807,26 +807,40 @@ p {
   justify-content: start;
   width: fit-content;
 }
-
-.scp_staffCounterIcon {
-  background-image: url("img/staff.png");
+.scp_counter i {
   background-size: cover;
   filter: drop-shadow(0 0 2px #adadad);
   aspect-ratio: 1;
   width: 30px;
 }
 
+.scp_staffCounterIcon {
+  background-image: url("img/staff.png");
+}
+
 .scp_abilityCounterIcon {
   background-image: url("img/icons/lightning.png");
-  background-size: cover;
-  filter: drop-shadow(0 0 2px #adadad);
-  aspect-ratio: 1;
-  width: 30px;
 }
 .scp_abilityCounterCounts {
   display: flex;
   justify-content: center;
   gap: 2px;
+}
+
+.scp_candelabraCounterIcon {
+  background-image: url("img/icons/candelabra.png");
+}
+
+.scp_lightbulbCounterIcon {
+  background-image: url("img/icons/lightbulb.png");
+}
+
+.scp_audioCounterIcon {
+  background-image: url("img/icons/audio.png");
+}
+
+.scp_skullCounterIcon {
+  background-image: url("img/icons/skull.png");
 }
 
 html {

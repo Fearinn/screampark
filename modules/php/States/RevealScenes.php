@@ -79,11 +79,33 @@ class RevealScenes extends GameState
             }
             $this->game->abilityCounter->set($playerId, $abilityCount);
 
+            $scenicsCounts = array_fill(1, 4, 0);
+
             $maxSlot = $this->scenes->getMaxSlot($playerId);
             for ($slot = 1; $slot <= $maxSlot; $slot++) {
                 $Scene = $this->scenes->getMainInSlot($playerId, $slot);
                 $Scene->updateCompleted($playerId);
+
+                $slotScenics = [];
+
+                $Scenes = $this->scenes->getScenesInSlot($playerId, $slot);
+                foreach ($Scenes as $Scene) {
+                    $scenic = (int) $Scene->scenic;
+
+                    if ($scenic > 0) {
+                        if (!in_array($scenic, $slotScenics)) {
+                            $slotScenics[] = $scenic;
+                        }
+
+                        $scenicsCounts[$scenic]++;
+                    }
+                }
             }
+
+            $this->game->candelabraCounter->set($playerId, $scenicsCounts[1]);
+            $this->game->lightbulbCounter->set($playerId, $scenicsCounts[2]);
+            $this->game->audioCounter->set($playerId, $scenicsCounts[3]);
+            $this->game->skullCounter->set($playerId, $scenicsCounts[4]);
         }
 
         $this->game->DbQuery("UPDATE {$this->scenes->dbTable} SET draft=0 WHERE draft>0");

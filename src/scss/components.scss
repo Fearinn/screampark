@@ -30,30 +30,50 @@
   align-items: center;
   justify-content: start;
   width: fit-content;
+
+  i {
+    background-size: cover;
+    filter: drop-shadow(0 0 2px #adadad);
+    aspect-ratio: 1;
+    width: 30px;
+  }
 }
 
 .scp_staffCounter {
   &Icon {
     background-image: url("img/staff.png");
-    background-size: cover;
-    filter: drop-shadow(0 0 2px #adadad);
-    aspect-ratio: 1;
-    width: 30px;
   }
 }
 
 .scp_abilityCounter {
   &Icon {
     background-image: url("img/icons/lightning.png");
-    background-size: cover;
-    filter: drop-shadow(0 0 2px #adadad);
-    aspect-ratio: 1;
-    width: 30px;
   }
 
   &Counts {
     display: flex;
     justify-content: center;
     gap: 2px;
+  }
+}
+
+.scp_candelabraCounter {
+  &Icon {
+    background-image: url("img/icons/candelabra.png");
+  }
+}
+.scp_lightbulbCounter {
+  &Icon {
+    background-image: url("img/icons/lightbulb.png");
+  }
+}
+.scp_audioCounter {
+  &Icon {
+    background-image: url("img/icons/audio.png");
+  }
+}
+.scp_skullCounter {
+  &Icon {
+    background-image: url("img/icons/skull.png");
   }
 }

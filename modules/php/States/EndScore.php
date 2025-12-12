@@ -160,8 +160,11 @@ class EndScore extends \Bga\GameFramework\States\GameState
             foreach ($Scenes as $Scene) {
                 $scenic = (int) $Scene->scenic;
 
-                if ($scenic > 0 && !in_array($scenic, $slotScenics)) {
-                    $slotScenics[] = $scenic;
+                if ($scenic > 0) {
+                    if (!in_array($scenic, $slotScenics)) {
+                        $slotScenics[] = $scenic;
+                    }
+                    
                     $scenicsCounts[$scenic]++;
                 }
 
