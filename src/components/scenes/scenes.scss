@@ -38,12 +38,17 @@
   justify-content: start !important;
   padding: 12px;
 
+  .bga-cards_selectable-card {
+    outline: none !important;
+  }
+
   &:empty {
     display: none;
   }
 }
 
-.gamestate_PassScenes .scp_hand:empty {
+:where(.gamestate_PassScenes, .gamestate_DealScenes, .gamestate_RevealScenes)
+  .scp_hand {
   min-height: var(--scene-height);
 }
 

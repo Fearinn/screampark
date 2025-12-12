@@ -302,11 +302,14 @@ p {
   justify-content: start !important;
   padding: 12px;
 }
+.scp_hand .bga-cards_selectable-card {
+  outline: none !important;
+}
 .scp_hand:empty {
   display: none;
 }
 
-.gamestate_PassScenes .scp_hand:empty {
+:where(.gamestate_PassScenes, .gamestate_DealScenes, .gamestate_RevealScenes) .scp_hand {
   min-height: var(--scene-height);
 }
 
@@ -395,6 +398,9 @@ p {
   box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.5019607843);
   height: 286px;
   width: var(--theme-width);
+}
+.scp_theme .bga-cards_selectable-card {
+  outline: none !important;
 }
 
 .scp_starTrack {
