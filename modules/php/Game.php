@@ -35,7 +35,7 @@ define("gCompletedScenes", "gCompletedScenes");
 define("gCompletedScenesPrivate", "gCompletedScenesPrivate");
 define("statScore", "statScore");
 define("statCompletedScenes", "statCompletedScenes");
-define("statTotalScenes", "statTotalScenes");
+define("statCardsPlayed", "statCardsPlayed");
 define("statGenre1", "statGenre1");
 define("statGenre2", "statGenre2");
 define("statGenre3", "statGenre3");
@@ -188,7 +188,7 @@ class Game extends \Bga\GameFramework\Table
         $this->playerStats->init([
             statScore,
             statCompletedScenes,
-            statTotalScenes,
+            statCardsPlayed,
             statGenre1,
             statGenre2,
             statGenre3,
