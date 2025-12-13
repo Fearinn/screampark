@@ -17,7 +17,8 @@
     flex-direction: column;
 
     &:empty {
-      display: none !important;
+      min-height: unset !important;
+      outline: none !important;
     }
 
     .scp_scene {
