@@ -133,6 +133,7 @@ class Game extends \Bga\GameFramework\Table
             "scenePublic" => $Scenes->getPublic($playerId),
             "sceneBoard" => !$isSpectator ? $Scenes->getBoard($playerId) : [],
             "completedScenes" => $completedScenes,
+            "vipFulfillingSlots" => $Scenes->getVipFulfillingSlots(),
             "staffCounts" => $this->staffCounter->getAll(),
             "abilityCounts" => $this->abilityCounter->getAll(),
             "oppAbilityCount" => $this->oppAbilityCounter->get(),

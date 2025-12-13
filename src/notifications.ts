@@ -325,6 +325,12 @@ class NotifManager {
     });
     board.flipCard(card);
 
+    document
+      .querySelectorAll(".scp_slot-vipFulfilling")
+      .forEach((slotElement) => {
+        slotElement.classList.remove("scp_slot-vipFulfilling");
+      });
+
     this.game.togglePassDirection(day);
   }
 
@@ -395,15 +401,12 @@ class NotifManager {
     slot: number;
   }) {
     const { player_id: playerId, slot } = args;
-    const { players } = this.game.gamedatas;
-    const { color: playerColor } = players[playerId];
 
     const slotElement: HTMLElement = document.querySelector(
       `#scp_scenes-${playerId} [data-slot-id="${slot}"]`
     );
 
-    slotElement.classList.add("scp_slot-fulfillsVip");
-    slotElement.style.setProperty("--playerColor", `#${playerColor}`);
+    slotElement.classList.add("scp_slot-vipFulfilling");
   }
 
   public notif_setPlayerCounterPrivate(args: {

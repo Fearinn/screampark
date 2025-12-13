@@ -190,8 +190,15 @@ class SceneManager {
 
   public setup(): void {
     this.build();
-    const { scenePublic, sceneHand, sceneBoard, completedScenes } =
-      this.game.gamedatas;
+    const { keysToNumbers, gamedatas } = this.game;
+    const {
+      scenePublic,
+      sceneHand,
+      sceneBoard,
+      completedScenes,
+      vipFulfillingSlots,
+      players,
+    } = gamedatas;
 
     sceneBoard.sort((a, b) => {
       return Number(a.position) - Number(b.position);
@@ -207,6 +214,16 @@ class SceneManager {
         type: "scene",
       });
       cardElement.classList.add("scp_scene-completed");
+    });
+
+    keysToNumbers(vipFulfillingSlots).forEach((playerId) => {
+      vipFulfillingSlots[playerId].forEach((slot) => {
+        const slotElement: HTMLElement = document.querySelector(
+          `#scp_scenes-${playerId} [data-slot-id="${slot}"]`
+        );
+
+        slotElement.classList.add("scp_slot-vipFulfilling");
+      });
     });
   }
 

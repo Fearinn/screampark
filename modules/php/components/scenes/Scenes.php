@@ -207,9 +207,11 @@ class Scenes extends Cards
 
     public function getGenre(int $genreId): Genre
     {
-        $sql = "SELECT card_id FROM {$this->dbTable} WHERE card_location='genreDeck' AND card_type='genre' AND card_type_arg={$genreId} LIMIT 1";
+        $sql = "SELECT card_id FROM {$this->dbTable} WHERE card_location='genreDeck' AND card_type='genre' 
+        AND card_type_arg={$genreId} LIMIT 1";
         $cardId = (int) $this->game->getUniqueValueFromDB($sql);
         $Genre = new Genre($this->game, $cardId);
+
         return $Genre;
     }
 
@@ -347,5 +349,22 @@ class Scenes extends Cards
         }
 
         return $wildCount;
+    }
+
+    public function getVipFulfillingSlots(): array
+    {
+        $slots = [];
+        $players = $this->game->loadPlayersBasicInfos();
+
+        foreach ($players as $playerId => $player) {
+            $slot[$playerId] = [];
+            
+            $maxSlot = $this->getMaxSlot($playerId);
+            for ($slot = 1; $slot <= $maxSlot; $slot++) {
+                $slots[$playerId][] = $slot;
+            }
+        }
+
+        return $slots;
     }
 }
