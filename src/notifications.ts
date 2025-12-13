@@ -326,9 +326,9 @@ class NotifManager {
     board.flipCard(card);
 
     document
-      .querySelectorAll(".scp_slot-vipFulfilling")
-      .forEach((slotElement) => {
-        slotElement.classList.remove("scp_slot-vipFulfilling");
+      .querySelectorAll(".scp_scene-vipFulfilling")
+      .forEach((cardElement) => {
+        cardElement.classList.remove("scp_scene-vipFulfilling");
       });
 
     this.game.togglePassDirection(day);
@@ -398,15 +398,12 @@ class NotifManager {
 
   public async notif_sceneFulfillsVip(args: {
     player_id: number;
-    slot: number;
+    card: SceneCard;
   }) {
-    const { player_id: playerId, slot } = args;
-
-    const slotElement: HTMLElement = document.querySelector(
-      `#scp_scenes-${playerId} [data-slot-id="${slot}"]`
-    );
-
-    slotElement.classList.add("scp_slot-vipFulfilling");
+    const { player_id: playerId, card } = args;
+    const { boards } = this.sceneManager.stocks;
+    const cardElement = boards[playerId].getCardElement(card);
+    cardElement.classList.add("scp_scene-vipFulfilling");
   }
 
   public notif_setPlayerCounterPrivate(args: {

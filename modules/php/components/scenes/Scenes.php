@@ -15,6 +15,7 @@ class Scenes extends Cards
     protected readonly PlayerCounter $staffCounterPrivate;
     protected readonly PlayerCounter $draftCounter;
     protected readonly PlayerCounter $playerScore;
+    protected readonly Vips $vips;
 
     public function __construct(Game $game)
     {
@@ -146,7 +147,8 @@ class Scenes extends Cards
     public function getMainInSlot(int $playerId, int $slot): ?Scene
     {
         $sql = "SELECT {$this->cardFields} FROM {$this->dbTable} 
-        WHERE card_location IN ('board', 'placed', 'placedAnywhere') AND card_location_arg={$playerId} AND position=1 AND slot={$slot}";
+        WHERE card_location IN ('board', 'placed', 'placedAnywhere') AND card_location_arg={$playerId} 
+        AND position=1 AND slot={$slot}";
 
         $card = $this->game->getObjectFromDB($sql);
         if (!$card) {
@@ -351,20 +353,26 @@ class Scenes extends Cards
         return $wildCount;
     }
 
-    public function getVipFulfillingSlots(): array
+    public function getVipFulfilling(): array
     {
-        $slots = [];
         $players = $this->game->loadPlayersBasicInfos();
+        $Vips = new Vips($this->game);
+        $cardsIds = [];
 
         foreach ($players as $playerId => $player) {
             $slot[$playerId] = [];
-            
             $maxSlot = $this->getMaxSlot($playerId);
+
             for ($slot = 1; $slot <= $maxSlot; $slot++) {
-                $slots[$playerId][] = $slot;
+                if (!$Vips->isFulfilled($playerId, $slot)) {
+                    continue;
+                }
+
+                $Scene = $this->getMainInSlot($playerId, $slot);
+                $cardsIds[] = $Scene->cardId;
             }
         }
 
-        return $slots;
+        return $cardsIds;
     }
 }

@@ -11,7 +11,7 @@ class Scene extends Scenes
 {
     public readonly array $GENRES;
     public readonly array $card;
-    private readonly int $cardId;
+    public readonly int $cardId;
     public readonly int $id;
     public readonly int $points;
     public readonly string $upLabel;
@@ -471,7 +471,8 @@ class Scene extends Scenes
 
     public function updateFulfillsVip(int $playerId): void
     {
-        $slot = (int) $this->getCard($this->cardId)["slot"];
+        $card = $this->getCard($this->cardId);
+        $slot = (int) $card["slot"];
 
         $Vips = new Vips($this->game);
         if ($Vips->isFulfilled($playerId, $slot)) {
@@ -480,7 +481,7 @@ class Scene extends Scenes
                 "",
                 [
                     "player_id" => $playerId,
-                    "slot" => $slot,
+                    "card" => $card,
                 ]
             );
         }
@@ -488,7 +489,8 @@ class Scene extends Scenes
 
     public function updateFulfillsVipPrivate(int $playerId): void
     {
-        $slot = (int) $this->getCard($this->cardId)["slot"];
+        $card = $this->getCard($this->cardId);
+        $slot = (int) $card["slot"];
 
         $Vips = new Vips($this->game);
         if ($Vips->isFulfilled($playerId, $slot)) {
@@ -497,7 +499,7 @@ class Scene extends Scenes
                 "sceneFulfillsVip",
                 "",
                 [
-                    "slot" => $slot,
+                    "card" => $card,
                 ]
             );
         }

@@ -20,18 +20,6 @@
       display: none !important;
     }
 
-    &.scp_slot-vipFulfilling {
-      &::before {
-        content: "";
-        position: absolute;
-        top: -16px;
-        left: 0;
-        background-color: #08cb00;
-        height: calc(var(--sceneWidth) * 0.05);
-        width: var(--sceneWidth);
-      }
-    }
-
     .scp_scene {
       &:not(:first-child) {
         margin-top: calc(var(--sceneHeight) * -0.6);
@@ -89,7 +77,7 @@
   }
 
   &-completed {
-    &::before {
+    &::after {
       content: "";
       position: absolute;
       box-sizing: border-box;
@@ -103,6 +91,18 @@
       transform: translate(-50%, -50%);
       z-index: 99;
       mix-blend-mode: multiply;
+    }
+  }
+
+  &-vipFulfilling {
+    &::before {
+      content: "";
+      position: absolute;
+      top: -16px;
+      left: 0;
+      background-color: #08cb00;
+      height: calc(var(--sceneWidth) * 0.05);
+      width: var(--sceneWidth);
     }
   }
 }

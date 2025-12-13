@@ -1238,9 +1238,9 @@ var NotifManager = /** @class */ (function () {
                 });
                 board.flipCard(card);
                 document
-                    .querySelectorAll(".scp_slot-vipFulfilling")
-                    .forEach(function (slotElement) {
-                    slotElement.classList.remove("scp_slot-vipFulfilling");
+                    .querySelectorAll(".scp_scene-vipFulfilling")
+                    .forEach(function (cardElement) {
+                    cardElement.classList.remove("scp_scene-vipFulfilling");
                 });
                 this.game.togglePassDirection(day);
                 return [2 /*return*/];
@@ -1319,11 +1319,12 @@ var NotifManager = /** @class */ (function () {
     };
     NotifManager.prototype.notif_sceneFulfillsVip = function (args) {
         return __awaiter(this, void 0, void 0, function () {
-            var playerId, slot, slotElement;
+            var playerId, card, boards, cardElement;
             return __generator(this, function (_a) {
-                playerId = args.player_id, slot = args.slot;
-                slotElement = document.querySelector("#scp_scenes-".concat(playerId, " [data-slot-id=\"").concat(slot, "\"]"));
-                slotElement.classList.add("scp_slot-vipFulfilling");
+                playerId = args.player_id, card = args.card;
+                boards = this.sceneManager.stocks.boards;
+                cardElement = boards[playerId].getCardElement(card);
+                cardElement.classList.add("scp_scene-vipFulfilling");
                 return [2 /*return*/];
             });
         });
@@ -1545,8 +1546,7 @@ var SceneManager = /** @class */ (function () {
     SceneManager.prototype.setup = function () {
         var _this = this;
         this.build();
-        var _a = this.game, keysToNumbers = _a.keysToNumbers, gamedatas = _a.gamedatas;
-        var scenePublic = gamedatas.scenePublic, sceneHand = gamedatas.sceneHand, sceneBoard = gamedatas.sceneBoard, completedScenes = gamedatas.completedScenes, vipFulfillingSlots = gamedatas.vipFulfillingSlots, players = gamedatas.players;
+        var _a = this.game.gamedatas, scenePublic = _a.scenePublic, sceneHand = _a.sceneHand, sceneBoard = _a.sceneBoard, completedScenes = _a.completedScenes, vipFulfillingScenes = _a.vipFulfillingScenes;
         sceneBoard.sort(function (a, b) {
             return Number(a.position) - Number(b.position);
         });
@@ -1561,11 +1561,12 @@ var SceneManager = /** @class */ (function () {
             });
             cardElement.classList.add("scp_scene-completed");
         });
-        keysToNumbers(vipFulfillingSlots).forEach(function (playerId) {
-            vipFulfillingSlots[playerId].forEach(function (slot) {
-                var slotElement = document.querySelector("#scp_scenes-".concat(playerId, " [data-slot-id=\"").concat(slot, "\"]"));
-                slotElement.classList.add("scp_slot-vipFulfilling");
+        vipFulfillingScenes.forEach(function (cardId) {
+            var cardElement = _this.manager.getCardElement({
+                id: cardId,
+                type: "scene",
             });
+            cardElement.classList.add("scp_scene-vipFulfilling");
         });
     };
     SceneManager.prototype.highlight = function (cards) {

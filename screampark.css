@@ -222,15 +222,6 @@ p {
 .scp_scenes .slot:empty {
   display: none !important;
 }
-.scp_scenes .slot.scp_slot-vipFulfilling::before {
-  content: "";
-  position: absolute;
-  top: -16px;
-  left: 0;
-  background-color: #08cb00;
-  height: calc(var(--sceneWidth) * 0.05);
-  width: var(--sceneWidth);
-}
 .scp_scenes .slot .scp_scene:not(:first-child) {
   margin-top: calc(var(--sceneHeight) * -0.6);
 }
@@ -344,7 +335,7 @@ p {
   height: 285.1px;
   width: var(--sceneWidth);
 }
-.scp_scene-completed::before {
+.scp_scene-completed::after {
   content: "";
   position: absolute;
   box-sizing: border-box;
@@ -358,6 +349,15 @@ p {
   transform: translate(-50%, -50%);
   z-index: 99;
   mix-blend-mode: multiply;
+}
+.scp_scene-vipFulfilling::before {
+  content: "";
+  position: absolute;
+  top: -16px;
+  left: 0;
+  background-color: #08cb00;
+  height: calc(var(--sceneWidth) * 0.05);
+  width: var(--sceneWidth);
 }
 
 .scp_sceneDiscard {
