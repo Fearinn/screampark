@@ -48,7 +48,7 @@ class Vips extends Cards
         return $vipId;
     }
 
-    public function isFullfilled(int $playerId, int $slot): bool
+    public function isFulfilled(int $playerId, int $slot): bool
     {
         $Scenes = $this->scenes->getScenesInSlot($playerId, $slot);
         foreach ($Scenes as $Scene) {

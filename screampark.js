@@ -1312,6 +1312,20 @@ var NotifManager = /** @class */ (function () {
             });
         });
     };
+    NotifManager.prototype.notif_sceneFulfillsVip = function (args) {
+        return __awaiter(this, void 0, void 0, function () {
+            var playerId, slot, players, playerColor, slotElement;
+            return __generator(this, function (_a) {
+                playerId = args.player_id, slot = args.slot;
+                players = this.game.gamedatas.players;
+                playerColor = players[playerId].color;
+                slotElement = document.querySelector("#scp_scenes-".concat(playerId, " [data-slot-id=\"").concat(slot, "\"]"));
+                slotElement.classList.add("scp_slot-fulfillsVip");
+                slotElement.style.setProperty("--playerColor", "#".concat(playerColor));
+                return [2 /*return*/];
+            });
+        });
+    };
     NotifManager.prototype.notif_setPlayerCounterPrivate = function (args) {
         var playerId = args.player_id, inc = args.inc, name = args.name;
         var counter = this.counters.player[name][playerId];

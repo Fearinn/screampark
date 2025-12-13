@@ -4,6 +4,7 @@ namespace Bga\Games\ScreamPark\components\scenes;
 
 use Bga\GameFramework\Components\Counters\PlayerCounter;
 use Bga\Games\ScreamPark\components\Cards;
+use Bga\Games\ScreamPark\components\vips\Vips;
 use Bga\Games\ScreamPark\Game;
 
 class Scenes extends Cards

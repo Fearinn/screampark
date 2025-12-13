@@ -161,6 +161,8 @@ class Scene extends Scenes
                 "card" => $card,
             ]
         );
+
+        $this->updateFulfillsVipPrivate($playerId);
     }
 
     public function revealPlaced(int $playerId): void
@@ -257,6 +259,8 @@ class Scene extends Scenes
                 "sceneId2" => $Scene2->id,
             ]
         );
+
+        $this->updateFulfillsVipPrivate($playerId);
     }
 
     public function revealPlacedAnywhere(int $playerId): void
@@ -322,6 +326,7 @@ class Scene extends Scenes
         );
 
         $Scene2->updateCompletedPrivate($playerId);
+        $Scene2->updateFulfillsVipPrivate($playerId);
     }
 
     public function discard(int $playerId): void
@@ -464,6 +469,40 @@ class Scene extends Scenes
         );
     }
 
+    public function updateFulfillsVip(int $playerId): void
+    {
+        $slot = (int) $this->getCard($this->cardId)["slot"];
+
+        $Vips = new Vips($this->game);
+        if ($Vips->isFulfilled($playerId, $slot)) {
+            $this->game->notify->all(
+                "sceneFulfillsVip",
+                "",
+                [
+                    "player_id" => $playerId,
+                    "slot" => $slot,
+                ]
+            );
+        }
+    }
+
+    public function updateFulfillsVipPrivate(int $playerId): void
+    {
+        $slot = (int) $this->getCard($this->cardId)["slot"];
+
+        $Vips = new Vips($this->game);
+        if ($Vips->isFulfilled($playerId, $slot)) {
+            $this->game->notify->player(
+                $playerId,
+                "sceneFulfillsVip",
+                "",
+                [
+                    "slot" => $slot,
+                ]
+            );
+        }
+    }
+
     public function scoreTheme(int $playerId): int
     {
         $points = 0;
@@ -488,7 +527,7 @@ class Scene extends Scenes
         $slot = (int) $this->card["slot"];
         $Vips = new Vips($this->game);
 
-        $points = $Vips->isFullfilled($playerId, $slot) ? 2 : 0;
+        $points = $Vips->isFulfilled($playerId, $slot) ? 2 : 0;
         $this->playerScore->inc($playerId, $points);
 
         if ($points > 0) {

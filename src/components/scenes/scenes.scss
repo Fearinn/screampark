@@ -20,6 +20,10 @@
       display: none !important;
     }
 
+    &.scp_slot-fulfillsVip {
+      border-top: 8px solid var(--playerColor);
+    }
+
     .scp_scene {
       &:not(:first-child) {
         margin-top: calc(var(--scene-height) * -0.6);

@@ -9,12 +9,14 @@ use Bga\GameFramework\StateType;
 use Bga\Games\ScreamPark\components\scenes\Genre;
 use Bga\Games\ScreamPark\components\scenes\Scene;
 use Bga\Games\ScreamPark\components\scenes\Scenes;
+use Bga\Games\ScreamPark\components\vips\Vips;
 use Bga\Games\ScreamPark\Game;
 
 class RevealScenes extends GameState
 {
     protected Scenes $scenes;
     protected array $SCENES;
+    protected Vips $vips;
 
     function __construct(
         protected Game $game,
@@ -28,6 +30,7 @@ class RevealScenes extends GameState
 
         $this->scenes = new Scenes($this->game);
         $this->SCENES = $this->game->SCENES;
+        $this->vips = new Vips($this->game);
     }
 
     public function onEnteringState(): string
@@ -80,11 +83,12 @@ class RevealScenes extends GameState
             $this->game->abilityCounter->set($playerId, $abilityCount);
 
             $scenicsCounts = array_fill(1, 4, 0);
-
             $maxSlot = $this->scenes->getMaxSlot($playerId);
+
             for ($slot = 1; $slot <= $maxSlot; $slot++) {
                 $Scene = $this->scenes->getMainInSlot($playerId, $slot);
                 $Scene->updateCompleted($playerId);
+                $Scene->updateFulfillsVip($playerId);
 
                 $slotScenics = [];
 

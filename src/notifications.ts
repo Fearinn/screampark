@@ -390,6 +390,22 @@ class NotifManager {
     cardElement.classList.add("scp_scene-completed");
   }
 
+  public async notif_sceneFulfillsVip(args: {
+    player_id: number;
+    slot: number;
+  }) {
+    const { player_id: playerId, slot } = args;
+    const { players } = this.game.gamedatas;
+    const { color: playerColor } = players[playerId];
+
+    const slotElement: HTMLElement = document.querySelector(
+      `#scp_scenes-${playerId} [data-slot-id="${slot}"]`
+    );
+
+    slotElement.classList.add("scp_slot-fulfillsVip");
+    slotElement.style.setProperty("--playerColor", `#${playerColor}`);
+  }
+
   public notif_setPlayerCounterPrivate(args: {
     player_id: number;
     name: "staff";

@@ -33,14 +33,14 @@ use Bga\Games\ScreamPark\States\PassScenes;
 
 define("gCompletedScenes", "gCompletedScenes");
 define("gCompletedScenesPrivate", "gCompletedScenesPrivate");
-define('statScore', 'statScore');
-define('statCompletedScenes', 'statCompletedScenes');
-define('statTotalScenes', 'statTotalScenes');
-define('statGenre1', 'statGenre1');
-define('statGenre2', 'statGenre2');
-define('statGenre3', 'statGenre3');
-define('statGenre4', 'statGenre4');
-define('statGenre5', 'statGenre5');
+define("statScore", "statScore");
+define("statCompletedScenes", "statCompletedScenes");
+define("statTotalScenes", "statTotalScenes");
+define("statGenre1", "statGenre1");
+define("statGenre2", "statGenre2");
+define("statGenre3", "statGenre3");
+define("statGenre4", "statGenre4");
+define("statGenre5", "statGenre5");
 
 class Game extends \Bga\GameFramework\Table
 {
