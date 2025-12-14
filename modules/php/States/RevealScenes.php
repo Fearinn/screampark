@@ -47,6 +47,7 @@ class RevealScenes extends GameState
                 if ($card["type"] === "genre") {
                     $Genre = new Genre($this->game, $cardId);
                     $Genre->revealAttached($playerId);
+                    continue;
                 }
 
                 $location = $card["location"];
