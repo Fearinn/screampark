@@ -1,7 +1,7 @@
 class SceneManager {
   private readonly game: SCP;
   public stocks: SceneStocks;
-  private manager: BgaCards.Manager<SceneCard>;
+  public manager: BgaCards.Manager<SceneCard>;
   private readonly GENRES: SCP_Gamedatas["GENRES"];
   private readonly SCENES: SCP_Gamedatas["SCENES"];
   private readonly ABILITIES: SCP_Gamedatas["ABILITIES"];

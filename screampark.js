@@ -1223,9 +1223,10 @@ var NotifManager = /** @class */ (function () {
     };
     NotifManager.prototype.notif_dayEnd = function (args) {
         return __awaiter(this, void 0, void 0, function () {
-            var previousDay, day, _a, gamedatas, keysToNumbers, players, tracks, board, card;
+            var previousDay, day, vipFulfillingScenes, _a, gamedatas, keysToNumbers, players, tracks, board, card;
+            var _this = this;
             return __generator(this, function (_b) {
-                previousDay = args.previousDay, day = args.day;
+                previousDay = args.previousDay, day = args.day, vipFulfillingScenes = args.vipFulfillingScenes;
                 _a = this.game, gamedatas = _a.gamedatas, keysToNumbers = _a.keysToNumbers;
                 players = gamedatas.players;
                 tracks = this.meepleManager.stocks.tracks;
@@ -1241,6 +1242,13 @@ var NotifManager = /** @class */ (function () {
                     .querySelectorAll(".scp_scene-vipFulfilling")
                     .forEach(function (cardElement) {
                     cardElement.classList.remove("scp_scene-vipFulfilling");
+                });
+                vipFulfillingScenes.forEach(function (cardId) {
+                    var cardElement = _this.sceneManager.manager.getCardElement({
+                        id: cardId,
+                        type: "scene",
+                    });
+                    cardElement.classList.add("scp_scene-vipFulfilling");
                 });
                 this.game.togglePassDirection(day);
                 return [2 /*return*/];

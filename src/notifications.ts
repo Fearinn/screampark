@@ -306,8 +306,9 @@ class NotifManager {
   public async notif_dayEnd(args: {
     previousDay: number;
     day: number;
+    vipFulfillingScenes: number[];
   }): Promise<void> {
-    const { previousDay, day } = args;
+    const { previousDay, day, vipFulfillingScenes } = args;
 
     const { gamedatas, keysToNumbers } = this.game;
     const { players } = gamedatas;
@@ -330,6 +331,14 @@ class NotifManager {
       .forEach((cardElement) => {
         cardElement.classList.remove("scp_scene-vipFulfilling");
       });
+
+    vipFulfillingScenes.forEach((cardId) => {
+      const cardElement = this.sceneManager.manager.getCardElement({
+        id: cardId,
+        type: "scene",
+      });
+      cardElement.classList.add("scp_scene-vipFulfilling");
+    });
 
     this.game.togglePassDirection(day);
   }

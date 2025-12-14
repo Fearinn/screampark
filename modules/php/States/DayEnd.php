@@ -133,6 +133,7 @@ class DayEnd extends GameState
 
         $day = $this->dayCounter->inc(1);
         $previousDay = $day - 1;
+        $vipFulfillingScenes = $this->scenes->getVipFulfilling();
         $message = $day <= 3 ? clienttranslate('${dayLabel} ends. A new day begins') : clienttranslate('${dayLabel} ends');
 
         $this->notify->all(
@@ -143,6 +144,7 @@ class DayEnd extends GameState
                 "previousDay" => $previousDay,
                 "dayLabel" => $DAYS[$previousDay],
                 "day" => $day,
+                "vipFulfillingScenes" => $vipFulfillingScenes,
             ]
         );
 
