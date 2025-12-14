@@ -133,7 +133,7 @@ class DayEnd extends GameState
 
         $day = $this->dayCounter->inc(1);
         $previousDay = $day - 1;
-        $vipFulfillingScenes = $this->scenes->getVipFulfilling();
+        $vipFulfillingScenes = $day <= 3 ? $this->scenes->getVipFulfilling() : [];
         $message = $day <= 3 ? clienttranslate('${dayLabel} ends. A new day begins') : clienttranslate('${dayLabel} ends');
 
         $this->notify->all(
@@ -151,7 +151,6 @@ class DayEnd extends GameState
         if ($day > 3) {
             return EndScore::class;
         }
-
         return DealScenes::class;
     }
 }
