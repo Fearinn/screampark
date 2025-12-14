@@ -344,7 +344,7 @@ class EndScore extends \Bga\GameFramework\States\GameState
         WHERE card_location='board' AND card_location_arg={$playerId} AND card_type='scene'";
         $sceneCount = (int) $this->game->getUniqueValueFromDB($sql);
 
-        $cardCount = $this->scenes->deck->countCardInLocation("board", $playerId);
+        $cardCount = (int) $this->scenes->deck->countCardInLocation("board", $playerId);
         $this->playerStats->set(statCardsPlayed, $cardCount, $playerId);
 
         $scoreAux = $staffCount * 10000 + $sceneCount * 100 + $cardCount;
