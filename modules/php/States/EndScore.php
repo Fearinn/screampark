@@ -164,7 +164,7 @@ class EndScore extends \Bga\GameFramework\States\GameState
                     if (!in_array($scenic, $slotScenics)) {
                         $slotScenics[] = $scenic;
                     }
-                    
+
                     $scenicsCounts[$scenic]++;
                 }
 
@@ -342,11 +342,10 @@ class EndScore extends \Bga\GameFramework\States\GameState
 
         $sql = "SELECT COUNT(card_id) FROM {$this->scenes->dbTable} 
         WHERE card_location='board' AND card_location_arg={$playerId} AND card_type='scene'";
-
         $sceneCount = (int) $this->game->getUniqueValueFromDB($sql);
-        $this->playerStats->set(statCardsPlayed, $sceneCount, $playerId);
 
         $cardCount = $this->scenes->deck->countCardInLocation("board", $playerId);
+        $this->playerStats->set(statCardsPlayed, $cardCount, $playerId);
 
         $scoreAux = $staffCount * 10000 + $sceneCount * 100 + $cardCount;
         $this->playerScoreAux->set($playerId, $scoreAux);
