@@ -94,8 +94,8 @@ class PlaceAnywhere extends GameState
 
     public function zombie(int $playerId, array $args): void
     {
-        $maxSlot = $args["maxSlot"];
-        $slot = bga_rand(1, $maxSlot);
+        $selectableSlots = $args["selectableSlots"];
+        $slot = $this->getRandomZombieChoice($selectableSlots);
         $this->actPlaceAnywhere($playerId, $args, $slot);
     }
 }
