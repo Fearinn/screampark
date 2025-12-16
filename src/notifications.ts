@@ -121,9 +121,14 @@ class NotifManager {
     card: SceneCard;
   }): Promise<void> {
     const { player_id: playerId, card } = args;
+
+    if (card.type === "scene") {
+      this.playSound("hammer");
+    }
+
     const { boards, genreDeck } = this.sceneManager.stocks;
 
-    boards[playerId].addCard(card, {
+    await boards[playerId].addCard(card, {
       fromStock: card.type === "genre" ? genreDeck : undefined,
       toPlaceholder: "off",
     });
@@ -133,6 +138,8 @@ class NotifManager {
     player_id: number;
     card: SceneCard;
   }): Promise<void> {
+    this.playSound("hammer");
+
     const { player_id: playerId, card } = args;
     const { boards, genreDeck } = this.sceneManager.stocks;
 
@@ -150,6 +157,8 @@ class NotifManager {
     player_id: number;
     card: SceneCard;
   }): Promise<void> {
+    this.playSound("door");
+
     const { card } = args;
     const { discard } = this.sceneManager.stocks;
 
@@ -160,6 +169,8 @@ class NotifManager {
     player_id: number;
     card: SceneCard;
   }): Promise<void> {
+    this.playSound("door");
+
     const { player_id: playerId, card } = args;
     const { discard, fakeHands } = this.sceneManager.stocks;
 
@@ -171,6 +182,8 @@ class NotifManager {
   public async notif_discardBothPrivate(args: {
     cards: SceneCard[];
   }): Promise<void> {
+    this.playSound("insect");
+
     const { cards } = args;
     const { discard } = this.sceneManager.stocks;
 
@@ -181,6 +194,8 @@ class NotifManager {
     player_id: number;
     cards: SceneCard[];
   }): Promise<void> {
+    this.playSound("insect");
+
     const { player_id: playerId, cards } = args;
     const { discard, fakeHands } = this.sceneManager.stocks;
 
@@ -347,8 +362,6 @@ class NotifManager {
     player_id: number;
     points: number;
   }): Promise<void> {
-    const { managers, gamedatas } = this.game;
-
     const { player_id: playerId, points } = args;
     const { boards } = this.themeManager.stocks;
     const board = boards[playerId];
@@ -363,6 +376,8 @@ class NotifManager {
     card: SceneCard;
     slot: number;
   }): Promise<void> {
+    this.playSound("steps");
+
     const { player_id: playerId, card, slot } = args;
 
     const { tracks } = this.meepleManager.stocks;
@@ -447,5 +462,14 @@ class NotifManager {
     const { players } = gamedatas;
     const { color: playerColor } = players[playerId];
     await managers.animations.displayScoring(cardElement, points, playerColor);
+  }
+
+  private playSound(soundId: "hammer" | "door" | "steps" | "insect"): void {
+    if (this.game.getGameUserPreference(101) === 0) {
+      return;
+    }
+
+    this.game.disableNextMoveSound();
+    this.game.sounds.play(soundId);
   }
 }

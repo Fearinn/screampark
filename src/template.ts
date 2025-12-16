@@ -42,12 +42,21 @@ class Template {
       `<div class="scp_tooltip"><span>${_("genre cards")}</span></div>`
     );
 
+    this.loadSounds();
     this.setupZones();
     this.setupStocks();
     this.setupCounters();
   }
 
-  public setupZones(): void {
+  private loadSounds(): void {
+    const { sounds } = this.game;
+    sounds.load("hammer", "hammer");
+    sounds.load("door", "door");
+    sounds.load("violin", "violin");
+    sounds.load("steps", "steps");
+  }
+
+  private setupZones(): void {
     const { gamedatas, player_id } = this.game;
     const { players, nextPlayers, prevPlayers, day, isSolo } = gamedatas;
 

@@ -411,9 +411,17 @@ var Template = /** @class */ (function () {
         document.getElementById("generalactions").insertAdjacentHTML("beforebegin", "<div id=\"scp_defaultActions\" class=\"scp_defaultActions\"></div>\n      <div id=\"scp_alertActions\" class=\"scp_alertActions\"></div>");
         this.game.addTooltipHtml("scp_sceneDeck", "<div class=\"scp_tooltip\"><span>".concat(_("scene cards"), "</span></div>"));
         this.game.addTooltipHtml("scp_genreDeck", "<div class=\"scp_tooltip\"><span>".concat(_("genre cards"), "</span></div>"));
+        this.loadSounds();
         this.setupZones();
         this.setupStocks();
         this.setupCounters();
+    };
+    Template.prototype.loadSounds = function () {
+        var sounds = this.game.sounds;
+        sounds.load("hammer", "hammer");
+        sounds.load("door", "door");
+        sounds.load("violin", "violin");
+        sounds.load("steps", "steps");
     };
     Template.prototype.setupZones = function () {
         var _this = this;
@@ -982,13 +990,21 @@ var NotifManager = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             var playerId, card, _a, boards, genreDeck;
             return __generator(this, function (_b) {
-                playerId = args.player_id, card = args.card;
-                _a = this.sceneManager.stocks, boards = _a.boards, genreDeck = _a.genreDeck;
-                boards[playerId].addCard(card, {
-                    fromStock: card.type === "genre" ? genreDeck : undefined,
-                    toPlaceholder: "off",
-                });
-                return [2 /*return*/];
+                switch (_b.label) {
+                    case 0:
+                        playerId = args.player_id, card = args.card;
+                        if (card.type === "scene") {
+                            this.playSound("hammer");
+                        }
+                        _a = this.sceneManager.stocks, boards = _a.boards, genreDeck = _a.genreDeck;
+                        return [4 /*yield*/, boards[playerId].addCard(card, {
+                                fromStock: card.type === "genre" ? genreDeck : undefined,
+                                toPlaceholder: "off",
+                            })];
+                    case 1:
+                        _b.sent();
+                        return [2 /*return*/];
+                }
             });
         });
     };
@@ -998,6 +1014,7 @@ var NotifManager = /** @class */ (function () {
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
+                        this.playSound("hammer");
                         playerId = args.player_id, card = args.card;
                         _a = this.sceneManager.stocks, boards = _a.boards, genreDeck = _a.genreDeck;
                         return [4 /*yield*/, boards[playerId].addCard(card, {
@@ -1020,6 +1037,7 @@ var NotifManager = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
+                        this.playSound("door");
                         card = args.card;
                         discard = this.sceneManager.stocks.discard;
                         return [4 /*yield*/, discard.addCard(card)];
@@ -1036,6 +1054,7 @@ var NotifManager = /** @class */ (function () {
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
+                        this.playSound("door");
                         playerId = args.player_id, card = args.card;
                         _a = this.sceneManager.stocks, discard = _a.discard, fakeHands = _a.fakeHands;
                         return [4 /*yield*/, discard.addCard(card, {
@@ -1054,6 +1073,7 @@ var NotifManager = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
+                        this.playSound("insect");
                         cards = args.cards;
                         discard = this.sceneManager.stocks.discard;
                         return [4 /*yield*/, discard.addCards(cards)];
@@ -1070,6 +1090,7 @@ var NotifManager = /** @class */ (function () {
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
+                        this.playSound("insect");
                         playerId = args.player_id, cards = args.cards;
                         _a = this.sceneManager.stocks, discard = _a.discard, fakeHands = _a.fakeHands;
                         return [4 /*yield*/, discard.addCards(cards, {
@@ -1257,9 +1278,8 @@ var NotifManager = /** @class */ (function () {
     };
     NotifManager.prototype.notif_scoreTheme = function (args) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, managers, gamedatas, playerId, points, boards, board, card, cardElement;
-            return __generator(this, function (_b) {
-                _a = this.game, managers = _a.managers, gamedatas = _a.gamedatas;
+            var playerId, points, boards, board, card, cardElement;
+            return __generator(this, function (_a) {
                 playerId = args.player_id, points = args.points;
                 boards = this.themeManager.stocks.boards;
                 board = boards[playerId];
@@ -1276,6 +1296,7 @@ var NotifManager = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
+                        this.playSound("steps");
                         playerId = args.player_id, card = args.card, slot = args.slot;
                         tracks = this.meepleManager.stocks.tracks;
                         track = tracks[playerId];
@@ -1365,6 +1386,13 @@ var NotifManager = /** @class */ (function () {
                 }
             });
         });
+    };
+    NotifManager.prototype.playSound = function (soundId) {
+        if (this.game.getGameUserPreference(101) === 0) {
+            return;
+        }
+        this.game.disableNextMoveSound();
+        this.game.sounds.play(soundId);
     };
     return NotifManager;
 }());

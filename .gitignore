@@ -18,3 +18,5 @@ yarn.lock
 # Images
 *.png
 *.jpg
+*.ogg
+*.mp3
