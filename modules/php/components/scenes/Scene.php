@@ -393,9 +393,9 @@ class Scene extends Scenes
         return $card["location"] === "hand" && (int) $card["location_arg"] === $playerId;
     }
 
-    public function isComplete(): bool
+    public function isComplete(int $playerId): bool
     {
-        $completedScenes = $this->game->globals->get(gCompletedScenes, []);
+        $completedScenes = $this->game->globals->get(gCompletedScenes)[$playerId];
         return in_array($this->cardId, $completedScenes);
     }
 

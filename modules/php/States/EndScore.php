@@ -116,7 +116,7 @@ class EndScore extends \Bga\GameFramework\States\GameState
         for ($slot = 1; $slot <= $maxSlot; $slot++) {
             $Scene = $this->scenes->getMainInSlot($playerId, $slot);
 
-            if (!$Scene->isComplete()) {
+            if (!$Scene->isComplete($playerId)) {
                 continue;
             }
 
