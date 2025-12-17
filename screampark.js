@@ -1244,10 +1244,9 @@ var NotifManager = /** @class */ (function () {
     };
     NotifManager.prototype.notif_dayEnd = function (args) {
         return __awaiter(this, void 0, void 0, function () {
-            var previousDay, day, vipFulfillingScenes, _a, gamedatas, keysToNumbers, players, tracks, board, card;
-            var _this = this;
+            var previousDay, day, _a, gamedatas, keysToNumbers, players, tracks, board, card;
             return __generator(this, function (_b) {
-                previousDay = args.previousDay, day = args.day, vipFulfillingScenes = args.vipFulfillingScenes;
+                previousDay = args.previousDay, day = args.day;
                 _a = this.game, gamedatas = _a.gamedatas, keysToNumbers = _a.keysToNumbers;
                 players = gamedatas.players;
                 tracks = this.meepleManager.stocks.tracks;
@@ -1259,18 +1258,6 @@ var NotifManager = /** @class */ (function () {
                     return Number(card.location_arg) === previousDay;
                 });
                 board.flipCard(card);
-                document
-                    .querySelectorAll(".scp_scene-vipFulfilling")
-                    .forEach(function (cardElement) {
-                    cardElement.classList.remove("scp_scene-vipFulfilling");
-                });
-                vipFulfillingScenes.forEach(function (cardId) {
-                    var cardElement = _this.sceneManager.manager.getCardElement({
-                        id: cardId,
-                        type: "scene",
-                    });
-                    cardElement.classList.add("scp_scene-vipFulfilling");
-                });
                 this.game.togglePassDirection(day);
                 return [2 /*return*/];
             });
@@ -1346,14 +1333,14 @@ var NotifManager = /** @class */ (function () {
             });
         });
     };
-    NotifManager.prototype.notif_sceneFulfillsVip = function (args) {
+    NotifManager.prototype.notif_updateVipFulfilling = function (args) {
         return __awaiter(this, void 0, void 0, function () {
-            var playerId, card, boards, cardElement;
+            var playerId, card, fulfills, boards, cardElement;
             return __generator(this, function (_a) {
-                playerId = args.player_id, card = args.card;
+                playerId = args.player_id, card = args.card, fulfills = args.fulfills;
                 boards = this.sceneManager.stocks.boards;
                 cardElement = boards[playerId].getCardElement(card);
-                cardElement.classList.add("scp_scene-vipFulfilling");
+                cardElement.classList.toggle("scp_scene-vipFulfilling", fulfills);
                 return [2 /*return*/];
             });
         });

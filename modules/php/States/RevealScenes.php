@@ -87,10 +87,6 @@ class RevealScenes extends GameState
             $maxSlot = $this->scenes->getMaxSlot($playerId);
 
             for ($slot = 1; $slot <= $maxSlot; $slot++) {
-                $Scene = $this->scenes->getMainInSlot($playerId, $slot);
-                $Scene->updateCompleted($playerId);
-                $Scene->updateVipFulfilling($playerId);
-
                 $slotScenics = [];
 
                 $Scenes = $this->scenes->getScenesInSlot($playerId, $slot);

@@ -162,7 +162,7 @@ class Scene extends Scenes
             ]
         );
 
-        $this->updateVipFulfillingPrivate($playerId);
+        $this->updateVipFulfilling($playerId);
     }
 
     public function revealPlaced(int $playerId): void
@@ -260,7 +260,7 @@ class Scene extends Scenes
             ]
         );
 
-        $this->updateVipFulfillingPrivate($playerId);
+        $this->updateVipFulfilling($playerId);
     }
 
     public function revealPlacedAnywhere(int $playerId): void
@@ -325,8 +325,8 @@ class Scene extends Scenes
             ]
         );
 
-        $Scene2->updateCompletedPrivate($playerId);
-        $Scene2->updateVipFulfillingPrivate($playerId);
+        $Scene2->updateCompleted($playerId);
+        $Scene2->updateVipFulfilling($playerId);
     }
 
     public function discard(int $playerId): void
@@ -424,30 +424,6 @@ class Scene extends Scenes
     {
         $completedScenes = $this->game->globals->get(gCompletedScenes, []);
 
-        if (in_array($this->cardId, $completedScenes)) {
-            return;
-        }
-
-        if (!$this->checkComplete($playerId)) {
-            return;
-        }
-
-        $completedScenes[] = $this->cardId;
-        $this->game->globals->set(gCompletedScenes, $completedScenes);
-
-        $this->game->notify->all(
-            "completeScene",
-            "",
-            [
-                "card" => $this->card,
-            ]
-        );
-    }
-
-    public function updateCompletedPrivate(int $playerId): void
-    {
-        $completedScenes = $this->game->globals->get(gCompletedScenesPrivate, []);
-
         if (in_array($this->cardId, $completedScenes[$playerId])) {
             return;
         }
@@ -457,7 +433,7 @@ class Scene extends Scenes
         }
 
         $completedScenes[$playerId][] = $this->cardId;
-        $this->game->globals->set(gCompletedScenesPrivate, $completedScenes);
+        $this->game->globals->set(gCompletedScenes, $completedScenes);
 
         $this->game->notify->player(
             $playerId,
@@ -475,34 +451,17 @@ class Scene extends Scenes
         $slot = (int) $card["slot"];
 
         $Vips = new Vips($this->game);
-        if ($Vips->isFulfilled($playerId, $slot)) {
-            $this->game->notify->all(
-                "sceneFulfillsVip",
-                "",
-                [
-                    "player_id" => $playerId,
-                    "card" => $card,
-                ]
-            );
-        }
-    }
+        $fulfills = $Vips->isFulfilled($playerId, $slot);
 
-    public function updateVipFulfillingPrivate(int $playerId): void
-    {
-        $card = $this->getCard($this->cardId);
-        $slot = (int) $card["slot"];
-
-        $Vips = new Vips($this->game);
-        if ($Vips->isFulfilled($playerId, $slot, true)) {
-            $this->game->notify->player(
-                $playerId,
-                "sceneFulfillsVip",
-                "",
-                [
-                    "card" => $card,
-                ]
-            );
-        }
+        $this->game->notify->player(
+            $playerId,
+            "updateVipFulfilling",
+            "",
+            [
+                "card" => $card,
+                "fulfills" => $fulfills,
+            ]
+        );
     }
 
     public function scoreTheme(int $playerId): int

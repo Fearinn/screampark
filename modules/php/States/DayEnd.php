@@ -84,6 +84,21 @@ class DayEnd extends GameState
                     "points" => $vipPoints,
                 ]
             );
+
+            $vipFulfillingScenes = $this->scenes->getVipFulfilling($playerId);
+            foreach ($vipFulfillingScenes as $cardId) {
+                $Scene = new Scene($this->game, $cardId);
+
+                $this->game->notify->player(
+                    $playerId,
+                    "updateVipFulfilling",
+                    "",
+                    [
+                        "card" => $Scene->card,
+                        "fulfills" => true,
+                    ]
+                );
+            }
         }
 
         if ($this->game->isSolo()) {
@@ -133,7 +148,6 @@ class DayEnd extends GameState
 
         $day = $this->dayCounter->inc(1);
         $previousDay = $day - 1;
-        $vipFulfillingScenes = $day <= 3 ? $this->scenes->getVipFulfilling() : [];
         $message = $day <= 3 ? clienttranslate('${dayLabel} ends. A new day begins') : clienttranslate('${dayLabel} ends');
 
         $this->notify->all(
@@ -144,7 +158,6 @@ class DayEnd extends GameState
                 "previousDay" => $previousDay,
                 "dayLabel" => $DAYS[$previousDay],
                 "day" => $day,
-                "vipFulfillingScenes" => $vipFulfillingScenes,
             ]
         );
 
