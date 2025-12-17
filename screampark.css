@@ -214,6 +214,7 @@ p {
 
 .scp_scenes {
   align-items: start !important;
+  row-gap: 32px !important;
 }
 .scp_scenes .slot {
   position: relative;
