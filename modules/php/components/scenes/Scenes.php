@@ -353,6 +353,10 @@ class Scenes extends Cards
         return $wildCount;
     }
 
+    // public function getCompleted(int $currentPlayerId = null): array {
+
+    // }
+
     public function getVipFulfilling(): array
     {
         if ($this->game->dayCounter->get() > 3) {
@@ -364,7 +368,6 @@ class Scenes extends Cards
         $cardsIds = [];
 
         foreach ($players as $playerId => $player) {
-            $slot[$playerId] = [];
             $maxSlot = $this->getMaxSlot($playerId);
 
             for ($slot = 1; $slot <= $maxSlot; $slot++) {
