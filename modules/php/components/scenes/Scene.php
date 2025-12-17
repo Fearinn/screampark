@@ -162,7 +162,7 @@ class Scene extends Scenes
             ]
         );
 
-        $this->updateFulfillsVipPrivate($playerId);
+        $this->updateVipFulfillingPrivate($playerId);
     }
 
     public function revealPlaced(int $playerId): void
@@ -260,7 +260,7 @@ class Scene extends Scenes
             ]
         );
 
-        $this->updateFulfillsVipPrivate($playerId);
+        $this->updateVipFulfillingPrivate($playerId);
     }
 
     public function revealPlacedAnywhere(int $playerId): void
@@ -326,7 +326,7 @@ class Scene extends Scenes
         );
 
         $Scene2->updateCompletedPrivate($playerId);
-        $Scene2->updateFulfillsVipPrivate($playerId);
+        $Scene2->updateVipFulfillingPrivate($playerId);
     }
 
     public function discard(int $playerId): void
@@ -469,7 +469,7 @@ class Scene extends Scenes
         );
     }
 
-    public function updateFulfillsVip(int $playerId): void
+    public function updateVipFulfilling(int $playerId): void
     {
         $card = $this->getCard($this->cardId);
         $slot = (int) $card["slot"];
@@ -487,13 +487,13 @@ class Scene extends Scenes
         }
     }
 
-    public function updateFulfillsVipPrivate(int $playerId): void
+    public function updateVipFulfillingPrivate(int $playerId): void
     {
         $card = $this->getCard($this->cardId);
         $slot = (int) $card["slot"];
 
         $Vips = new Vips($this->game);
-        if ($Vips->isFulfilled($playerId, $slot)) {
+        if ($Vips->isFulfilled($playerId, $slot, true)) {
             $this->game->notify->player(
                 $playerId,
                 "sceneFulfillsVip",

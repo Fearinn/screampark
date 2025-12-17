@@ -113,10 +113,6 @@ class Game extends \Bga\GameFramework\Table
         $Scenes = new Scenes($this);
 
         $day = $this->dayCounter->get();
-        $completedScenes = $this->globals->get(gCompletedScenes, []);
-        if (!$isSpectator) {
-            $completedScenes += $this->globals->get(gCompletedScenesPrivate)[$playerId];
-        }
 
         $gamedatas = [
             "players" => $this->getCollectionFromDb("SELECT `player_id` `id`, `player_score` `score` FROM `player`"),
@@ -132,8 +128,8 @@ class Game extends \Bga\GameFramework\Table
             "sceneHand" => !$isSpectator ? $Scenes->getHand($playerId) : [],
             "scenePublic" => $Scenes->getPublic($playerId),
             "sceneBoard" => !$isSpectator ? $Scenes->getBoard($playerId) : [],
-            "completedScenes" => $completedScenes,
-            "vipFulfillingScenes" => $Scenes->getVipFulfilling(),
+            "completedScenes" => $this->globals->get(gCompletedScenesPrivate)[$playerId],
+            "vipFulfillingScenes" => !$isSpectator ? $Scenes->getVipFulfilling($playerId) : [],
             "staffCounts" => $this->staffCounter->getAll(),
             "abilityCounts" => $this->abilityCounter->getAll(),
             "oppAbilityCount" => $this->oppAbilityCounter->get(),

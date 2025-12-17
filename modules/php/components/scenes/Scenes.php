@@ -353,31 +353,23 @@ class Scenes extends Cards
         return $wildCount;
     }
 
-    // public function getCompleted(int $currentPlayerId = null): array {
-
-    // }
-
-    public function getVipFulfilling(): array
+    public function getVipFulfilling(int $playerId): array
     {
         if ($this->game->dayCounter->get() > 3) {
             return [];
         }
 
-        $players = $this->game->loadPlayersBasicInfos();
         $Vips = new Vips($this->game);
         $cardsIds = [];
 
-        foreach ($players as $playerId => $player) {
-            $maxSlot = $this->getMaxSlot($playerId);
-
-            for ($slot = 1; $slot <= $maxSlot; $slot++) {
-                if (!$Vips->isFulfilled($playerId, $slot)) {
-                    continue;
-                }
-
-                $Scene = $this->getMainInSlot($playerId, $slot);
-                $cardsIds[] = $Scene->cardId;
+        $maxSlot = $this->getMaxSlot($playerId);
+        for ($slot = 1; $slot <= $maxSlot; $slot++) {
+            if (!$Vips->isFulfilled($playerId, $slot)) {
+                continue;
             }
+
+            $Scene = $this->getMainInSlot($playerId, $slot);
+            $cardsIds[] = $Scene->cardId;
         }
 
         return $cardsIds;
