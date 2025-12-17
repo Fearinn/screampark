@@ -355,6 +355,10 @@ class Scenes extends Cards
 
     public function getVipFulfilling(): array
     {
+        if ($this->game->dayCounter->get() > 3) {
+            return [];
+        }
+
         $players = $this->game->loadPlayersBasicInfos();
         $Vips = new Vips($this->game);
         $cardsIds = [];

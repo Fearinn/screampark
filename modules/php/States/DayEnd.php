@@ -151,6 +151,7 @@ class DayEnd extends GameState
         if ($day > 3) {
             return EndScore::class;
         }
+
         return DealScenes::class;
     }
 }
