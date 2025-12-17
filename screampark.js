@@ -817,7 +817,7 @@ var SCP = /** @class */ (function (_super) {
         }
     };
     SCP.prototype.getScenicIcon = function (scenicName) {
-        var backgroundImage = "url(".concat(g_gamethemeurl, "img/icons/scenic_").concat(scenicName, ".png)");
+        var backgroundImage = "url(".concat(g_gamethemeurl, "img/icons/").concat(scenicName, ".png)");
         return "<span class=\"scp_icon scp_icon-scenic\" style=\"background-image: ".concat(backgroundImage, ";\"></span>");
     };
     SCP.prototype.setLoader = function (image_progress, logs_progress) {

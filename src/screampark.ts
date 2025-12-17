@@ -324,7 +324,7 @@ class SCP extends GameGui<SCP_Gamedatas> implements SCP {
   }
 
   private getScenicIcon(scenicName: string): string {
-    const backgroundImage = `url(${g_gamethemeurl}img/icons/scenic_${scenicName}.png)`;
+    const backgroundImage = `url(${g_gamethemeurl}img/icons/${scenicName}.png)`;
     return `<span class="scp_icon scp_icon-scenic" style="background-image: ${backgroundImage};"></span>`;
   }
 
