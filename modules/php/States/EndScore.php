@@ -46,6 +46,7 @@ class EndScore extends \Bga\GameFramework\States\GameState
         $players = $this->game->loadPlayersBasicInfos();
         foreach ($players as $playerId => $player) {
             $maxSlot = $this->scenes->getMaxSlot($playerId);
+            $this->playerStats->set(statTotalScenes, $maxSlot, $playerId);
 
             for ($slot = 1; $slot <= $maxSlot; $slot++) {
                 $genres = $this->scenes->sumSlotGenres($playerId, $slot);

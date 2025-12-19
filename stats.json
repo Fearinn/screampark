@@ -10,6 +10,11 @@
       "name": "Scenes completed",
       "type": "int"
     },
+    "statTotalScenes": {
+      "id": 29,
+      "name": "Total scenes",
+      "type": "int"
+    },
     "statCardsPlayed": {
       "id": 13,
       "name": "Cards played",
