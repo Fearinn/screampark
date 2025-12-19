@@ -412,6 +412,7 @@ var Template = /** @class */ (function () {
         this.game.addTooltipHtml("scp_sceneDeck", "<div class=\"scp_tooltip\"><span>".concat(_("scene cards"), "</span></div>"));
         this.game.addTooltipHtml("scp_genreDeck", "<div class=\"scp_tooltip\"><span>".concat(_("genre cards"), "</span></div>"));
         this.loadSounds();
+        this.setupReferences();
         this.setupZones();
         this.setupStocks();
         this.setupCounters();
@@ -422,6 +423,28 @@ var Template = /** @class */ (function () {
         sounds.load("door", "door");
         sounds.load("violin", "violin");
         sounds.load("steps", "steps");
+    };
+    Template.prototype.setupReferences = function () {
+        var _a = this.game, gamedatas = _a.gamedatas, player_id = _a.player_id;
+        var players = gamedatas.players;
+        var playerColor = players[player_id].color;
+        var colors = ["982fff", "008000", "ff0000", "72c3b1", "ffa500"];
+        var colorId = colors.indexOf(playerColor) + 1;
+        new HelpManager(this.game, {
+            buttons: [
+                new BgaHelpExpandableButton({
+                    expandedHeight: "320px",
+                    expandedWidth: "235px",
+                    foldedHtml: "<div class=\"scp_foldedHelp\">?</div>",
+                    unfoldedHtml: "<div id=\"scp_reference\" class=\"scp_card scp_reference\"\n          style=\"background-image: url(".concat(g_gamethemeurl, "img/references/reference_").concat(colorId, ".jpg)\">\n          </div>"),
+                }),
+            ],
+        });
+        this.game.addTooltipHtml("scp_reference", "<div class=\"scp_tooltip scp_tooltip-reference\">\n        <h3 class=\"scp_title\">".concat(_("Scoring"), "</h3>\n        <div>\n          <h4 class=\"scp_title\">").concat(_("End of Round (Day)"), "</h4>\n          <ul>\n            <li>").concat(_("Up to 2 points per scene (Theme)"), "</li>\n            <li>").concat(_("2 points per scene the VIP has entered"), "</li>\n          </ul>\n        </div>\n        <div>\n          <h4 class=\"scp_title\">").concat(_("End of Game"), "</h4>\n          <ul>\n            <li>").concat(_("Score completed scenes"), "</li>\n            <li>").concat(this.game.format_string_recursive(_("3 points for players with most ${lightning_icon}"), {
+            lightning_icon: "",
+        }), "</li>\n            <li>").concat(this.game.format_string_recursive(_("1 point each ${staffCost_icon} icon"), {
+            staffing_icon: "",
+        }), "</li>\n            <li>").concat(_("6 points for set of scenic symbols"), "</li>\n          </ul>\n        </div>\n      </div>"));
     };
     Template.prototype.setupZones = function () {
         var _this = this;
@@ -794,8 +817,8 @@ var SCP = /** @class */ (function (_super) {
         if (log.includes("${candelabra_icon}")) {
             args.candelabra_icon = this.getScenicIcon("candelabra");
         }
-        if (log.includes("${lightbulbicon}")) {
-            args.lightbulbicon = this.getScenicIcon("light");
+        if (log.includes("${lightbulb_icon}")) {
+            args.lightbulb_icon = this.getScenicIcon("lightbulb");
         }
         if (log.includes("${audio_icon}")) {
             args.audio_icon = this.getScenicIcon("audio");

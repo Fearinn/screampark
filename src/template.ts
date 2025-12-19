@@ -43,6 +43,7 @@ class Template {
     );
 
     this.loadSounds();
+    this.setupReferences();
     this.setupZones();
     this.setupStocks();
     this.setupCounters();
@@ -54,6 +55,61 @@ class Template {
     sounds.load("door", "door");
     sounds.load("violin", "violin");
     sounds.load("steps", "steps");
+  }
+
+  private setupReferences(): void {
+    const { gamedatas, player_id } = this.game;
+    const { players } = gamedatas;
+    const { color: playerColor } = players[player_id];
+
+    const colors = ["982fff", "008000", "ff0000", "72c3b1", "ffa500"];
+    const colorId = colors.indexOf(playerColor) + 1;
+
+    new HelpManager(this.game, {
+      buttons: [
+        new BgaHelpExpandableButton({
+          expandedHeight: "320px",
+          expandedWidth: "235px",
+          foldedHtml: `<div class="scp_foldedHelp">?</div>`,
+          unfoldedHtml: `<div id="scp_reference" class="scp_card scp_reference"
+          style="background-image: url(${g_gamethemeurl}img/references/reference_${colorId}.jpg)">
+          </div>`,
+        }),
+      ],
+    });
+
+    this.game.addTooltipHtml(
+      "scp_reference",
+      `<div class="scp_tooltip scp_tooltip-reference">
+        <h3 class="scp_title">${_("Scoring")}</h3>
+        <div>
+          <h4 class="scp_title">${_("End of Round (Day)")}</h4>
+          <ul>
+            <li>${_("Up to 2 points per scene (Theme)")}</li>
+            <li>${_("2 points per scene the VIP has entered")}</li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="scp_title">${_("End of Game")}</h4>
+          <ul>
+            <li>${_("Score completed scenes")}</li>
+            <li>${this.game.format_string_recursive(
+              _("3 points for players with most ${lightning_icon}"),
+              {
+                lightning_icon: "",
+              }
+            )}</li>
+            <li>${this.game.format_string_recursive(
+              _("1 point each ${staffCost_icon} icon"),
+              {
+                staffing_icon: "",
+              }
+            )}</li>
+            <li>${_("6 points for set of scenic symbols")}</li>
+          </ul>
+        </div>
+      </div>`
+    );
   }
 
   private setupZones(): void {

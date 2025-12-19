@@ -295,8 +295,8 @@ class SCP extends GameGui<SCP_Gamedatas> implements SCP {
       args.candelabra_icon = this.getScenicIcon("candelabra");
     }
 
-    if (log.includes("${lightbulbicon}")) {
-      args.lightbulbicon = this.getScenicIcon("light");
+    if (log.includes("${lightbulb_icon}")) {
+      args.lightbulb_icon = this.getScenicIcon("lightbulb");
     }
 
     if (log.includes("${audio_icon}")) {
