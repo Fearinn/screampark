@@ -1513,6 +1513,8 @@ var SceneManager = /** @class */ (function () {
                 var tooltip = "<div class=\"scp_card scp_scene scp_logTooltip bga-cards_card\"\n            style=\"background-image: url(".concat(g_gamethemeurl, "img/scenes/scene_").concat(sceneId, ".jpg)\"></div>");
                 _this.game.addTooltipHtml(element.id, "<div class=\"scp_tooltip scp_tooltip-scene\">\n            <h4 class=\"scp_title\">".concat(_(UP.label), "</h4>\n            ").concat(tooltip, "\n            <h5 class=\"scp_title\">").concat(_(DOWN.label), "</h5>\n            ").concat(DOWN.ability > 0
                     ? "<span>".concat(_(_this.ABILITIES[DOWN.ability]), "</span>")
+                    : "", "\n            ").concat(DOWN.staffCost > 0
+                    ? "<span>".concat(_("You must discard a staff token to play this card"), "</span")
                     : "", "\n          </div>"));
             },
             setupBackDiv: function (_a, element) {

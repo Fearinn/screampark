@@ -80,6 +80,13 @@ class SceneManager {
                 ? `<span>${_(this.ABILITIES[DOWN.ability])}</span>`
                 : ""
             }
+            ${
+              DOWN.staffCost > 0
+                ? `<span>${_(
+                    "You must discard a staff token to play this card"
+                  )}</span`
+                : ""
+            }
           </div>`
         );
       },
