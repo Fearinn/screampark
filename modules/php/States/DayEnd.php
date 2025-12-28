@@ -21,7 +21,6 @@ class DayEnd extends GameState
     protected Scenes $scenes;
     protected Themes $themes;
     protected Vips $vips;
-    protected PlayerCounter $abilityCounter;
     protected TableCounter $oppAbilityCounter;
     protected TableCounter $dayCounter;
 

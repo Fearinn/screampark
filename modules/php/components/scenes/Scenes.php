@@ -93,10 +93,19 @@ class Scenes extends Cards
         return $hand;
     }
 
-    public function getBoard(int $playerId): array
+    public function getBoard(int $playerId, ?bool $publicOnly = false): array
     {
         $sql = "SELECT {$this->cardFields} FROM {$this->dbTable} 
         WHERE card_location IN ('board', 'placed', 'placedAnywhere') AND card_location_arg={$playerId}";
+
+        if ($publicOnly) {
+            $sql = str_replace(
+                "('board', 'placed', 'placedAnywhere')",
+                "('board')",
+                $sql
+            );
+        }
+
         $board = $this->game->getObjectListFromDB($sql);
 
         return $board;
@@ -373,5 +382,73 @@ class Scenes extends Cards
         }
 
         return $cardsIds;
+    }
+
+    public function countAbilities(int $playerId): int
+    {
+        $abilityCount = 0;
+        $cards = $this->getBoard($playerId, true);
+
+        foreach ($cards as $card) {
+            if ($card["type"] === "genre") {
+                continue;
+            }
+
+            $cardId = (int) $card["id"];
+            $Scene = new Scene($this->game, $cardId);
+
+            if ($Scene->ability > 0) {
+                $abilityCount++;
+            }
+        }
+
+        return $abilityCount;
+    }
+
+    public function getAbilityCounts(): array
+    {
+        $abilityCounts = [];
+
+        $players = $this->game->loadPlayersBasicInfos();
+        foreach ($players as $playerId => $player) {
+            $abilityCounts[$playerId] = $this->countAbilities($playerId);
+        }
+
+        return $abilityCounts;
+    }
+
+    public function countScenics(int $playerId): array
+    {
+        $scenicCounts = array_fill(1, 4, 0);
+        $cards = $this->getBoard($playerId, true);
+
+        foreach ($cards as $card) {
+            if ($card["type"] === "genre") {
+                continue;
+            }
+
+            $cardId = (int) $card["id"];
+            $Scene = new Scene($this->game, $cardId);
+
+            $scenic = $Scene->scenic;
+
+            if ($scenic > 0) {
+                $scenicCounts[$scenic]++;
+            }
+        }
+
+        return $scenicCounts;
+    }
+
+    public function getScenicsCounts(): array
+    {
+        $scenicsCounts = [];
+
+        $players = $this->game->loadPlayersBasicInfos();
+        foreach ($players as $playerId => $player) {
+            $scenicsCounts[$playerId] = $this->countScenics($playerId);
+        }
+
+        return $scenicsCounts;
     }
 }

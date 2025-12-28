@@ -270,15 +270,15 @@ class Template {
       staffCountPrivate,
       abilityCounts,
       oppAbilityCount,
+      scenicsCounts,
+      SCENICS,
     } = gamedatas;
     const { counters } = managers;
 
     counters.player = {
       staff: {},
-      candelabra: {},
-      lightbulb: {},
-      audio: {},
-      skull: {},
+      ability: {},
+      scenics: {},
     };
     keysToNumbers(players).forEach((playerId) => {
       this.game.getPlayerPanelElement(playerId).insertAdjacentHTML(
@@ -327,46 +327,7 @@ class Template {
         playerCounter: "staff",
         playerId,
       });
-
-      this.game.addTooltipHtml(
-        `scp_candelabraCounter-${playerId}`,
-        `<div class="scp_tooltip"><span>${_("candelabra symbols")}</span></div>`
-      );
-      const candelabraCounter = new ebg.counter();
-      candelabraCounter.create(`scp_candelabraCounterCount-${playerId}`, {
-        playerCounter: "candelabra",
-        playerId,
-      });
-
-      this.game.addTooltipHtml(
-        `scp_lightbulbCounter-${playerId}`,
-        `<div class="scp_tooltip"><span>${_("lightbulb symbols")}</span></div>`
-      );
-      const lightbulbCounter = new ebg.counter();
-      lightbulbCounter.create(`scp_lightbulbCounterCount-${playerId}`, {
-        playerCounter: "lightbulb",
-        playerId,
-      });
-
-      this.game.addTooltipHtml(
-        `scp_audioCounter-${playerId}`,
-        `<div class="scp_tooltip"><span>${_("audio symbols")}</span></div>`
-      );
-      const audioCounter = new ebg.counter();
-      audioCounter.create(`scp_audioCounterCount-${playerId}`, {
-        playerCounter: "audio",
-        playerId,
-      });
-
-      this.game.addTooltipHtml(
-        `scp_skullCounter-${playerId}`,
-        `<div class="scp_tooltip"><span>${_("skull symbols")}</span></div>`
-      );
-      const skullCounter = new ebg.counter();
-      skullCounter.create(`scp_skullCounterCount-${playerId}`, {
-        playerCounter: "skull",
-        playerId,
-      });
+      counters.player.staff[playerId] = staffCounter;
 
       this.game.addTooltipHtml(
         `scp_abilityCounter-${playerId}`,
@@ -377,11 +338,32 @@ class Template {
       const abilityCounter = new ebg.counter();
       abilityCounter.create(`scp_abilityCounterCount-${playerId}`, {
         value: abilityCounts[playerId],
-        playerCounter: "ability",
         playerId,
       });
 
-      counters.player.staff[playerId] = staffCounter;
+      counters.player.ability[playerId] = abilityCounter;
+
+      counters.player.scenics[playerId] = {};
+      Object.keys(scenicsCounts[playerId]).forEach((scenicId) => {
+        const value = scenicsCounts[playerId][scenicId];
+        const scenicName = SCENICS[scenicId];
+
+        this.game.addTooltipHtml(
+          `scp_${scenicName}Counter-${playerId}`,
+          `<div class="scp_tooltip"><span>${this.game.format_string_recursive(
+            _("${scenicLabel} symbols"),
+            { scenicLabel: _(scenicName) }
+          )}</span></div>`
+        );
+
+        const counter = new ebg.counter();
+        counter.create(`scp_${scenicName}CounterCount-${playerId}`, {
+          playerId,
+          value,
+        });
+
+        counters.player.scenics[playerId][scenicName] = counter;
+      });
     });
 
     if (isSolo) {

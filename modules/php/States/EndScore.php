@@ -19,7 +19,6 @@ class EndScore extends \Bga\GameFramework\States\GameState
     protected Scenes $scenes;
     protected Themes $themes;
     protected PlayerCounter $staffCounter;
-    protected PlayerCounter $abilityCounter;
     protected TableCounter $oppAbilityCounter;
 
     function __construct(
@@ -35,7 +34,6 @@ class EndScore extends \Bga\GameFramework\States\GameState
         $this->scenes = new Scenes($this->game);
         $this->themes = new Themes($this->game);
         $this->staffCounter = $this->game->staffCounter;
-        $this->abilityCounter = $this->game->abilityCounter;
         $this->oppAbilityCounter = $this->game->oppAbilityCounter;
     }
 
@@ -260,12 +258,10 @@ class EndScore extends \Bga\GameFramework\States\GameState
 
     public function scoreAbilities(): void
     {
-        $players = $this->game->loadPlayersBasicInfos();
+        $abilityCounts = $this->scenes->getAbilityCounts();
 
         if ($this->game->isSolo()) {
-            foreach ($players as $playerId => $player) {
-                $count = $this->abilityCounter->get($playerId);
-
+            foreach ($abilityCounts as $playerId => $count) {
                 if ($count === 0) {
                     return;
                 }
@@ -275,10 +271,10 @@ class EndScore extends \Bga\GameFramework\States\GameState
 
                     $this->notify->all(
                         "message",
-                        clienttranslate('${player_name} has the most (${effectCount}) special effects and scores 3 points'),
+                        clienttranslate('${player_name} has the most (${abilityCount}) abilities and scores 3 points'),
                         [
                             "player_id" => $playerId,
-                            "effectCount" => $count,
+                            "abilityCount" => $count,
                         ]
                     );
                 }
@@ -286,23 +282,23 @@ class EndScore extends \Bga\GameFramework\States\GameState
             return;
         }
 
-        $maxCount = $this->abilityCounter->getMax();
+
+        $maxCount = max($abilityCounts);
         if ($maxCount === 0) {
             return;
         }
 
-        foreach ($players as $playerId => $player) {
-            $count = $this->abilityCounter->get($playerId);
+        foreach ($abilityCounts as $playerId => $count) {
             if ($count < $maxCount) {
                 continue;
             }
 
             $this->notify->all(
                 "message",
-                clienttranslate('${player_name} has the most (${effectCount}) special effects and scores 3 points'),
+                clienttranslate('${player_name} has the most (${abilityCount}) abilities and scores 3 points'),
                 [
                     "player_id" => $playerId,
-                    "effectCount" => $count,
+                    "abilityCount" => $count,
                 ]
             );
 

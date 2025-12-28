@@ -428,14 +428,31 @@ class NotifManager {
 
   public notif_setPlayerCounter(args: {
     playerId: number;
-    name: "player_score";
     value: number;
+    name:
+      | "player_score"
+      | "ability"
+      | "candelabra"
+      | "lightbulb"
+      | "audio"
+      | "skull";
+    manual: boolean;
   }): void {
-    const { playerId, value, name } = args;
+    const { playerId, value, name, manual } = args;
 
     if (name === "player_score") {
       const starManager = new StarManager(this.game);
       starManager.set(playerId, value);
+      return;
+    }
+
+    if (manual) {
+      const counters = this.counters.player;
+      const counter =
+        name === "ability"
+          ? counters[name][playerId]
+          : counters.scenics[playerId][name];
+      counter.toValue(value);
     }
   }
 

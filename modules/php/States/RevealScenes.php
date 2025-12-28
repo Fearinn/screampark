@@ -16,6 +16,7 @@ class RevealScenes extends GameState
 {
     protected Scenes $scenes;
     protected array $SCENES;
+    protected array $SCENICS;
     protected Vips $vips;
 
     function __construct(
@@ -30,6 +31,7 @@ class RevealScenes extends GameState
 
         $this->scenes = new Scenes($this->game);
         $this->SCENES = $this->game->SCENES;
+        $this->SCENICS = $this->game->SCENICS;
         $this->vips = new Vips($this->game);
     }
 
@@ -66,47 +68,27 @@ class RevealScenes extends GameState
                 }
             }
 
-            $abilityCount = 0;
-            $cards = $this->scenes->getBoard($playerId);
-
-            foreach ($cards as $card) {
-                if ($card["type"] === "genre") {
-                    continue;
-                }
-
-                $cardId = (int) $card["id"];
-                $Scene = new Scene($this->game, $cardId);
-
-                if ($Scene->ability > 0) {
-                    $abilityCount++;
-                }
-            }
-            $this->game->abilityCounter->set($playerId, $abilityCount);
-
-            $scenicsCounts = array_fill(1, 4, 0);
-            $maxSlot = $this->scenes->getMaxSlot($playerId);
-
-            for ($slot = 1; $slot <= $maxSlot; $slot++) {
-                $slotScenics = [];
-
-                $Scenes = $this->scenes->getScenesInSlot($playerId, $slot);
-                foreach ($Scenes as $Scene) {
-                    $scenic = (int) $Scene->scenic;
-
-                    if ($scenic > 0) {
-                        if (!in_array($scenic, $slotScenics)) {
-                            $slotScenics[] = $scenic;
-                        }
-
-                        $scenicsCounts[$scenic]++;
-                    }
-                }
+            $abilityCounts = $this->scenes->getAbilityCounts();
+            foreach ($abilityCounts as $playerId => $count) {
+                $this->notify->all("setPlayerCounter", "", [
+                    "playerId" => $playerId,
+                    "name" => "ability",
+                    "value" => $count,
+                    "manual" => true,
+                ]);
             }
 
-            $this->game->candelabraCounter->set($playerId, $scenicsCounts[1]);
-            $this->game->lightbulbCounter->set($playerId, $scenicsCounts[2]);
-            $this->game->audioCounter->set($playerId, $scenicsCounts[3]);
-            $this->game->skullCounter->set($playerId, $scenicsCounts[4]);
+            $scenicsCounts = $this->scenes->getScenicsCounts();
+            foreach ($scenicsCounts as $playerId => $counts) {
+                foreach ($counts as $scenicId => $count) {
+                    $this->notify->all("setPlayerCounter", "", [
+                        "playerId" => $playerId,
+                        "name" => $this->SCENICS[$scenicId],
+                        "value" => $count,
+                        "manual" => true,
+                    ]);
+                }
+            }
         }
 
         $this->game->DbQuery("UPDATE {$this->scenes->dbTable} SET draft=0 WHERE draft>0");

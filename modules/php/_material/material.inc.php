@@ -5,3 +5,4 @@ require "genres.inc.php";
 require "scenes.inc.php";
 require "themes.inc.php";
 require "abilities.inc.php";
+require "scenics.inc.php";

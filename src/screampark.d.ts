@@ -27,6 +27,8 @@ interface SCP_Gamedatas extends Gamedatas<SCP_Player> {
   staffCountPrivate: number;
   abilityCounts: Record<number, number>;
   oppAbilityCount: number;
+  SCENICS: Record<number, string>;
+  scenicsCounts: Record<number, Record<number, number>>;
   day: number;
   nextPlayers: Record<number, number>;
   prevPlayers: Record<number, number>;
@@ -55,10 +57,16 @@ interface Stocks {
 interface Counters {
   player: {
     staff?: Record<number, Counter>;
-    candelabra?: Record<number, Counter>;
-    lightbulb?: Record<number, Counter>;
-    audio?: Record<number, Counter>;
-    skull?: Record<number, Counter>;
+    ability?: Record<number, Counter>;
+    scenics?: Record<
+      number,
+      {
+        candelabra?: Counter;
+        lightbulb?: Counter;
+        audio?: Counter;
+        skull?: Counter;
+      }
+    >;
   };
   table: { ability?: Counter };
 }

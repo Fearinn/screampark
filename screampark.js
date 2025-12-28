@@ -518,14 +518,12 @@ var Template = /** @class */ (function () {
     Template.prototype.setupCounters = function () {
         var _this = this;
         var _a = this.game, gamedatas = _a.gamedatas, keysToNumbers = _a.keysToNumbers, managers = _a.managers, player_id = _a.player_id;
-        var isSolo = gamedatas.isSolo, players = gamedatas.players, staffCounts = gamedatas.staffCounts, staffCountPrivate = gamedatas.staffCountPrivate, abilityCounts = gamedatas.abilityCounts, oppAbilityCount = gamedatas.oppAbilityCount;
+        var isSolo = gamedatas.isSolo, players = gamedatas.players, staffCounts = gamedatas.staffCounts, staffCountPrivate = gamedatas.staffCountPrivate, abilityCounts = gamedatas.abilityCounts, oppAbilityCount = gamedatas.oppAbilityCount, scenicsCounts = gamedatas.scenicsCounts, SCENICS = gamedatas.SCENICS;
         var counters = managers.counters;
         counters.player = {
             staff: {},
-            candelabra: {},
-            lightbulb: {},
-            audio: {},
-            skull: {},
+            ability: {},
+            scenics: {},
         };
         keysToNumbers(players).forEach(function (playerId) {
             _this.game.getPlayerPanelElement(playerId).insertAdjacentHTML("beforeend", "<div id=\"scp_staffCounter-".concat(playerId, "\" class=\"scp_counter scp_staffCounter\">\n          <i id=\"scp_staffCounterIcon-").concat(playerId, "\" class=\"scp_staffCounterIcon\"></i>\n          <span id=\"scp_staffCounterCount-").concat(playerId, "\" class=\"scp_count\"></span>\n        </div>\n        <div id=\"scp_abilityCounter-").concat(playerId, "\" class=\"scp_counter scp_abilityCounter\">\n          <i id=\"scp_abilityCounterIcon-").concat(playerId, "\" class=\"scp_abilityCounterIcon\"></i>\n          <div id=\"scp_abilityCounterCounts-").concat(playerId, "\" class=\"scp_abilityCounterCounts\">\n            <span id=\"scp_abilityCounterCount-").concat(playerId, "\" class=\"scp_count\"></span>\n            ").concat(isSolo
@@ -538,38 +536,26 @@ var Template = /** @class */ (function () {
                 playerCounter: "staff",
                 playerId: playerId,
             });
-            _this.game.addTooltipHtml("scp_candelabraCounter-".concat(playerId), "<div class=\"scp_tooltip\"><span>".concat(_("candelabra symbols"), "</span></div>"));
-            var candelabraCounter = new ebg.counter();
-            candelabraCounter.create("scp_candelabraCounterCount-".concat(playerId), {
-                playerCounter: "candelabra",
-                playerId: playerId,
-            });
-            _this.game.addTooltipHtml("scp_lightbulbCounter-".concat(playerId), "<div class=\"scp_tooltip\"><span>".concat(_("lightbulb symbols"), "</span></div>"));
-            var lightbulbCounter = new ebg.counter();
-            lightbulbCounter.create("scp_lightbulbCounterCount-".concat(playerId), {
-                playerCounter: "lightbulb",
-                playerId: playerId,
-            });
-            _this.game.addTooltipHtml("scp_audioCounter-".concat(playerId), "<div class=\"scp_tooltip\"><span>".concat(_("audio symbols"), "</span></div>"));
-            var audioCounter = new ebg.counter();
-            audioCounter.create("scp_audioCounterCount-".concat(playerId), {
-                playerCounter: "audio",
-                playerId: playerId,
-            });
-            _this.game.addTooltipHtml("scp_skullCounter-".concat(playerId), "<div class=\"scp_tooltip\"><span>".concat(_("skull symbols"), "</span></div>"));
-            var skullCounter = new ebg.counter();
-            skullCounter.create("scp_skullCounterCount-".concat(playerId), {
-                playerCounter: "skull",
-                playerId: playerId,
-            });
+            counters.player.staff[playerId] = staffCounter;
             _this.game.addTooltipHtml("scp_abilityCounter-".concat(playerId), "<div class=\"scp_tooltip\"><span>".concat(_("special effects played"), "</span></div>"));
             var abilityCounter = new ebg.counter();
             abilityCounter.create("scp_abilityCounterCount-".concat(playerId), {
                 value: abilityCounts[playerId],
-                playerCounter: "ability",
                 playerId: playerId,
             });
-            counters.player.staff[playerId] = staffCounter;
+            counters.player.ability[playerId] = abilityCounter;
+            counters.player.scenics[playerId] = {};
+            Object.keys(scenicsCounts[playerId]).forEach(function (scenicId) {
+                var value = scenicsCounts[playerId][scenicId];
+                var scenicName = SCENICS[scenicId];
+                _this.game.addTooltipHtml("scp_".concat(scenicName, "Counter-").concat(playerId), "<div class=\"scp_tooltip\"><span>".concat(_this.game.format_string_recursive(_("${scenicLabel} symbols"), { scenicLabel: _(scenicName) }), "</span></div>"));
+                var counter = new ebg.counter();
+                counter.create("scp_".concat(scenicName, "CounterCount-").concat(playerId), {
+                    playerId: playerId,
+                    value: value,
+                });
+                counters.player.scenics[playerId][scenicName] = counter;
+            });
         });
         if (isSolo) {
             var oppAbilityCounter = new ebg.counter();
@@ -1374,10 +1360,18 @@ var NotifManager = /** @class */ (function () {
         counter.incValue(inc);
     };
     NotifManager.prototype.notif_setPlayerCounter = function (args) {
-        var playerId = args.playerId, value = args.value, name = args.name;
+        var playerId = args.playerId, value = args.value, name = args.name, manual = args.manual;
         if (name === "player_score") {
             var starManager = new StarManager(this.game);
             starManager.set(playerId, value);
+            return;
+        }
+        if (manual) {
+            var counters = this.counters.player;
+            var counter = name === "ability"
+                ? counters[name][playerId]
+                : counters.scenics[playerId][name];
+            counter.toValue(value);
         }
     };
     NotifManager.prototype.displayScoring = function (playerId, points, cardElement) {
