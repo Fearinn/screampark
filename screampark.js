@@ -1268,6 +1268,11 @@ var NotifManager = /** @class */ (function () {
                 });
                 board.flipCard(card);
                 this.game.togglePassDirection(day);
+                document
+                    .querySelectorAll(".scp_scene-vipFulfilling")
+                    .forEach(function (cardElement) {
+                    cardElement.classList.remove("scp_scene-vipFulfilling");
+                });
                 return [2 /*return*/];
             });
         });

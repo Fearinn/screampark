@@ -341,6 +341,12 @@ class NotifManager {
     board.flipCard(card);
 
     this.game.togglePassDirection(day);
+
+    document
+      .querySelectorAll(".scp_scene-vipFulfilling")
+      .forEach((cardElement) => {
+        cardElement.classList.remove("scp_scene-vipFulfilling");
+      });
   }
 
   public async notif_scoreTheme(args: {

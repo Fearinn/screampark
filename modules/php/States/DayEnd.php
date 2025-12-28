@@ -83,21 +83,6 @@ class DayEnd extends GameState
                     "points" => $vipPoints,
                 ]
             );
-
-            $vipFulfillingScenes = $this->scenes->getVipFulfilling($playerId);
-            foreach ($vipFulfillingScenes as $cardId) {
-                $Scene = new Scene($this->game, $cardId);
-
-                $this->game->notify->player(
-                    $playerId,
-                    "updateVipFulfilling",
-                    "",
-                    [
-                        "card" => $Scene->card,
-                        "fulfills" => true,
-                    ]
-                );
-            }
         }
 
         if ($this->game->isSolo()) {
@@ -159,6 +144,24 @@ class DayEnd extends GameState
                 "day" => $day,
             ]
         );
+
+        foreach ($players as $playerId => $player) {
+            $vipFulfillingScenes = $this->scenes->getVipFulfilling($playerId);
+            
+            foreach ($vipFulfillingScenes as $cardId) {
+                $Scene = new Scene($this->game, $cardId);
+
+                $this->game->notify->player(
+                    $playerId,
+                    "updateVipFulfilling",
+                    "",
+                    [
+                        "card" => $Scene->card,
+                        "fulfills" => true,
+                    ]
+                );
+            }
+        }
 
         if ($day > 3) {
             return EndScore::class;

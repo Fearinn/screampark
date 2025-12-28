@@ -77,6 +77,10 @@ class Vips extends Cards
     {
         $Scene = $this->scenes->getMainInSlot($playerId, $slot);
 
+        if (!$Scene->isComplete($playerId)) {
+            return false;
+        }
+
         $genreCost = $Scene->genreCost;
         $genres = $this->scenes->sumSlotGenres($playerId, $slot);
         foreach ($genres as $genreId => $value) {
