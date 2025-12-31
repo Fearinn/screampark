@@ -348,8 +348,9 @@ class Scene extends Scenes
             "discardScenePrivate",
             clienttranslate('You discard ${sceneLabel} and get 2 ${staff_icon}'),
             [
-                "i18n" => ["sceneLabel"],
+                "i18n" => ["sceneLabel", "staff_icon"],
                 "preserve" => ["sceneId"],
+                "staff_icon" => clienttranslate("staff tokens"),
                 "sceneLabel" => $this->upLabel,
                 "sceneId" => $this->id,
                 "card" => $card,
@@ -377,8 +378,9 @@ class Scene extends Scenes
             "discardScene",
             clienttranslate('${player_name} discards ${sceneLabel} and gets 2 ${staff_icon}'),
             [
-                "i18n" => ["sceneLabel"],
+                "i18n" => ["sceneLabel", "staff_icon"],
                 "preserve" => ["sceneId"],
+                "staff_icon" => clienttranslate("staff tokens"),
                 "player_id" => $playerId,
                 "sceneLabel" => $this->upLabel,
                 "sceneId" => $this->id,

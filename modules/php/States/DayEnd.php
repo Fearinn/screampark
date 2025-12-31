@@ -101,8 +101,9 @@ class DayEnd extends GameState
                 "drawToDiscard",
                 clienttranslate('3 cards are drawn to rack up opposing ${lightning_icon}: ${sceneLabel}, ${sceneLabel2} and ${sceneLabel3}'),
                 [
-                    "i18n" => ["sceneLabel", "sceneLabel2", "sceneLabel3"],
+                    "i18n" => ["sceneLabel", "sceneLabel2", "sceneLabel3", "lightning_icon"],
                     "preserve" => ["sceneId", "sceneId2", "sceneId3"],
+                    "lightning_icon" => clienttranslate("abilities"),
                     "sceneLabel" => $Scene->upLabel,
                     "sceneId" => $Scene->id,
                     "sceneLabel2" => $Scene2->upLabel,
@@ -147,7 +148,7 @@ class DayEnd extends GameState
 
         foreach ($players as $playerId => $player) {
             $vipFulfillingScenes = $this->scenes->getVipFulfilling($playerId);
-            
+
             foreach ($vipFulfillingScenes as $cardId) {
                 $Scene = new Scene($this->game, $cardId);
 
