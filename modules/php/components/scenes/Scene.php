@@ -163,6 +163,8 @@ class Scene extends Scenes
         );
 
         $this->updateVipFulfilling($playerId);
+        $this->updateScenicsPrivate($playerId);
+        $this->updateAbilityPrivate($playerId);
     }
 
     public function revealPlaced(int $playerId): void
@@ -261,6 +263,8 @@ class Scene extends Scenes
         );
 
         $this->updateVipFulfilling($playerId);
+        $this->updateScenicsPrivate($playerId);
+        $this->updateAbilityPrivate($playerId);
     }
 
     public function revealPlacedAnywhere(int $playerId): void
@@ -325,6 +329,8 @@ class Scene extends Scenes
             ]
         );
 
+        $this->updateScenicsPrivate($playerId);
+        $this->updateAbilityPrivate($playerId);
         $Scene2->updateCompleted($playerId);
         $Scene2->updateVipFulfilling($playerId);
     }
@@ -508,5 +514,41 @@ class Scene extends Scenes
         }
 
         return $points;
+    }
+
+    private function updateScenicsPrivate(int $playerId): void
+    {
+        if ($this->scenic === 0) {
+            return;
+        }
+
+        $this->game->notify->player(
+            $playerId,
+            "setPlayerCounterPrivate",
+            "",
+            [
+                "player_id" => $playerId,
+                "name" => $this->SCENICS[$this->scenic],
+                "inc" => 1,
+            ]
+        );
+    }
+
+    private function updateAbilityPrivate(int $playerId): void
+    {
+        if ($this->ability === 0) {
+            return;
+        }
+
+        $this->game->notify->player(
+            $playerId,
+            "setPlayerCounterPrivate",
+            "",
+            [
+                "player_id" => $playerId,
+                "name" => "ability",
+                "inc" => 1,
+            ]
+        );
     }
 }

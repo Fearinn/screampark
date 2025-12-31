@@ -523,7 +523,10 @@ var Template = /** @class */ (function () {
         counters.player = {
             staff: {},
             ability: {},
-            scenics: {},
+            candelabra: {},
+            lightbulb: {},
+            audio: {},
+            skull: {},
         };
         keysToNumbers(players).forEach(function (playerId) {
             _this.game.getPlayerPanelElement(playerId).insertAdjacentHTML("beforeend", "<div id=\"scp_staffCounter-".concat(playerId, "\" class=\"scp_counter scp_staffCounter\">\n          <i id=\"scp_staffCounterIcon-").concat(playerId, "\" class=\"scp_staffCounterIcon\"></i>\n          <span id=\"scp_staffCounterCount-").concat(playerId, "\" class=\"scp_count\"></span>\n        </div>\n        <div id=\"scp_abilityCounter-").concat(playerId, "\" class=\"scp_counter scp_abilityCounter\">\n          <i id=\"scp_abilityCounterIcon-").concat(playerId, "\" class=\"scp_abilityCounterIcon\"></i>\n          <div id=\"scp_abilityCounterCounts-").concat(playerId, "\" class=\"scp_abilityCounterCounts\">\n            <span id=\"scp_abilityCounterCount-").concat(playerId, "\" class=\"scp_count\"></span>\n            ").concat(isSolo
@@ -544,7 +547,6 @@ var Template = /** @class */ (function () {
                 playerId: playerId,
             });
             counters.player.ability[playerId] = abilityCounter;
-            counters.player.scenics[playerId] = {};
             Object.keys(scenicsCounts[playerId]).forEach(function (scenicId) {
                 var value = scenicsCounts[playerId][scenicId];
                 var scenicName = SCENICS[scenicId];
@@ -554,7 +556,7 @@ var Template = /** @class */ (function () {
                     playerId: playerId,
                     value: value,
                 });
-                counters.player.scenics[playerId][scenicName] = counter;
+                counters.player[scenicName][playerId] = counter;
             });
         });
         if (isSolo) {
@@ -1360,8 +1362,12 @@ var NotifManager = /** @class */ (function () {
         });
     };
     NotifManager.prototype.notif_setPlayerCounterPrivate = function (args) {
-        var playerId = args.player_id, inc = args.inc, name = args.name;
+        var playerId = args.player_id, name = args.name, value = args.value, inc = args.inc;
         var counter = this.counters.player[name][playerId];
+        if (value) {
+            counter.toValue(value);
+            return;
+        }
         counter.incValue(inc);
     };
     NotifManager.prototype.notif_setPlayerCounter = function (args) {
@@ -1372,10 +1378,7 @@ var NotifManager = /** @class */ (function () {
             return;
         }
         if (manual) {
-            var counters = this.counters.player;
-            var counter = name === "ability"
-                ? counters[name][playerId]
-                : counters.scenics[playerId][name];
+            var counter = this.counters.player[name][playerId];
             counter.toValue(value);
         }
     };

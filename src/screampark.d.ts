@@ -58,15 +58,10 @@ interface Counters {
   player: {
     staff?: Record<number, Counter>;
     ability?: Record<number, Counter>;
-    scenics?: Record<
-      number,
-      {
-        candelabra?: Counter;
-        lightbulb?: Counter;
-        audio?: Counter;
-        skull?: Counter;
-      }
-    >;
+    candelabra?: Record<number, Counter>;
+    lightbulb?: Record<number, Counter>;
+    audio?: Record<number, Counter>;
+    skull?: Record<number, Counter>;
   };
   table: { ability?: Counter };
 }

@@ -424,11 +424,19 @@ class NotifManager {
 
   public notif_setPlayerCounterPrivate(args: {
     player_id: number;
-    name: "staff";
-    inc: number;
+    name: "staff" | "candelabra" | "lightbulb" | "audio" | "skull";
+    value?: number;
+    inc?: number;
   }): void {
-    const { player_id: playerId, inc, name } = args;
+    const { player_id: playerId, name, value, inc } = args;
+
     const counter = this.counters.player[name][playerId];
+
+    if (value) {
+      counter.toValue(value);
+      return;
+    }
+
     counter.incValue(inc);
   }
 
@@ -442,7 +450,7 @@ class NotifManager {
       | "lightbulb"
       | "audio"
       | "skull";
-    manual: boolean;
+    manual?: boolean;
   }): void {
     const { playerId, value, name, manual } = args;
 
@@ -453,11 +461,7 @@ class NotifManager {
     }
 
     if (manual) {
-      const counters = this.counters.player;
-      const counter =
-        name === "ability"
-          ? counters[name][playerId]
-          : counters.scenics[playerId][name];
+      const counter = this.counters.player[name][playerId];
       counter.toValue(value);
     }
   }

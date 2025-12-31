@@ -11,6 +11,7 @@ class Scenes extends Cards
 {
     protected readonly array $SCENES;
     protected readonly array $GENRES;
+    protected readonly array $SCENICS;
     protected readonly PlayerCounter $staffCounter;
     protected readonly PlayerCounter $staffCounterPrivate;
     protected readonly PlayerCounter $draftCounter;
@@ -22,6 +23,7 @@ class Scenes extends Cards
         parent::__construct($game, $game->scene_cards, "scenes");
         $this->SCENES = $this->game->SCENES;
         $this->GENRES = $this->game->GENRES;
+        $this->SCENICS = $this->game->SCENICS;
         $this->staffCounter = $this->game->staffCounter;
         $this->staffCounterPrivate = $this->game->staffCounterPrivate;
         $this->draftCounter = $this->game->draftCounter;
@@ -384,10 +386,10 @@ class Scenes extends Cards
         return $cardsIds;
     }
 
-    public function countAbilities(int $playerId): int
+    public function countAbilities(int $playerId, bool $publicOnly): int
     {
         $abilityCount = 0;
-        $cards = $this->getBoard($playerId, true);
+        $cards = $this->getBoard($playerId, $publicOnly);
 
         foreach ($cards as $card) {
             if ($card["type"] === "genre") {
@@ -405,22 +407,23 @@ class Scenes extends Cards
         return $abilityCount;
     }
 
-    public function getAbilityCounts(): array
+    public function getAbilityCounts(?int $currentPlayerId = null): array
     {
         $abilityCounts = [];
 
         $players = $this->game->loadPlayersBasicInfos();
         foreach ($players as $playerId => $player) {
-            $abilityCounts[$playerId] = $this->countAbilities($playerId);
+            $publicOnly = $currentPlayerId !== $playerId;
+            $abilityCounts[$playerId] = $this->countAbilities($playerId, $publicOnly);
         }
 
         return $abilityCounts;
     }
 
-    public function countScenics(int $playerId): array
+    public function countScenics(int $playerId, bool $publicOnly): array
     {
         $scenicCounts = array_fill(1, 4, 0);
-        $cards = $this->getBoard($playerId, true);
+        $cards = $this->getBoard($playerId, $publicOnly);
 
         foreach ($cards as $card) {
             if ($card["type"] === "genre") {
@@ -440,13 +443,14 @@ class Scenes extends Cards
         return $scenicCounts;
     }
 
-    public function getScenicsCounts(): array
+    public function getScenicsCounts(?int $currentPlayerId = null): array
     {
         $scenicsCounts = [];
 
         $players = $this->game->loadPlayersBasicInfos();
         foreach ($players as $playerId => $player) {
-            $scenicsCounts[$playerId] = $this->countScenics($playerId);
+            $publicOnly = $currentPlayerId !== $playerId;
+            $scenicsCounts[$playerId] = $this->countScenics($playerId, $publicOnly);
         }
 
         return $scenicsCounts;

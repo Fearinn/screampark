@@ -278,7 +278,10 @@ class Template {
     counters.player = {
       staff: {},
       ability: {},
-      scenics: {},
+      candelabra: {},
+      lightbulb: {},
+      audio: {},
+      skull: {},
     };
     keysToNumbers(players).forEach((playerId) => {
       this.game.getPlayerPanelElement(playerId).insertAdjacentHTML(
@@ -343,7 +346,6 @@ class Template {
 
       counters.player.ability[playerId] = abilityCounter;
 
-      counters.player.scenics[playerId] = {};
       Object.keys(scenicsCounts[playerId]).forEach((scenicId) => {
         const value = scenicsCounts[playerId][scenicId];
         const scenicName = SCENICS[scenicId];
@@ -362,7 +364,7 @@ class Template {
           value,
         });
 
-        counters.player.scenics[playerId][scenicName] = counter;
+        counters.player[scenicName][playerId] = counter;
       });
     });
 
