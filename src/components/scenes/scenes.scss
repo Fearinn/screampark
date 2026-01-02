@@ -11,14 +11,18 @@
 
 .scp_scenes {
   align-items: start !important;
+  row-gap: 32px !important;
 
   .slot {
     position: relative;
     flex-direction: column;
 
     &:empty {
-      min-height: unset !important;
-      outline: none !important;
+      display: none !important;
+
+      &:has(+ .slot:not(:empty)) {
+        display: flex !important;
+      }
     }
 
     .scp_scene {
