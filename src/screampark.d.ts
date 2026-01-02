@@ -87,4 +87,5 @@ type ActionName =
   | "actAttachGenreCancel"
   | "actPlaceAnywhereStart"
   | "actPlaceAnywhere"
-  | "actPlaceAnywhereCancel";
+  | "actPlaceAnywhereCancel"
+  | "actResetTurn";

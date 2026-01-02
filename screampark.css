@@ -231,12 +231,21 @@ p {
 }
 
 .scp_defaultActions,
-.scp_alertActions {
+.scp_alertActions,
+.scp_undoActions {
   display: inline-flex;
 }
 .scp_defaultActions:empty,
-.scp_alertActions:empty {
+.scp_alertActions:empty,
+.scp_undoActions:empty {
   display: none;
+}
+
+.scp_undoActions {
+  float: right;
+  position: relative;
+  top: 2px;
+  margin-right: 4px;
 }
 
 .scp_icon {

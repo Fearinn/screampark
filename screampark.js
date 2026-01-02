@@ -409,6 +409,9 @@ var Template = /** @class */ (function () {
         };
         this.game.stocks = {};
         document.getElementById("generalactions").insertAdjacentHTML("beforebegin", "<div id=\"scp_defaultActions\" class=\"scp_defaultActions\"></div>\n      <div id=\"scp_alertActions\" class=\"scp_alertActions\"></div>");
+        document
+            .getElementById("gotonexttable_wrap")
+            .insertAdjacentHTML("afterend", "<div id=\"scp_undoActions\" class=\"scp_undoActions\"></div>");
         this.game.addTooltipHtml("scp_sceneDeck", "<div class=\"scp_tooltip\"><span>".concat(_("scene cards"), "</span></div>"));
         this.game.addTooltipHtml("scp_genreDeck", "<div class=\"scp_tooltip\"><span>".concat(_("genre cards"), "</span></div>"));
         this.loadSounds();
@@ -682,7 +685,8 @@ var SCP = /** @class */ (function (_super) {
             params.destination ||
                 document.getElementById("scp_".concat(params.type, "Actions"));
         params.color =
-            params.color || (params.type === "alert" ? "alert" : "primary");
+            params.color ||
+                (["alert", "undo"].includes(params.type) ? "alert" : "primary");
         this.statusBar.addActionButton(label, function () {
             callback();
         }, __assign({ id: id, classes: ["scp_button"] }, params));
@@ -1381,6 +1385,46 @@ var NotifManager = /** @class */ (function () {
             var counter = this.counters.player[name][playerId];
             counter.toValue(value);
         }
+    };
+    NotifManager.prototype.notif_resetTurn = function (args) {
+        return __awaiter(this, void 0, void 0, function () {
+            var playerId, staff, ability, candelabra, lightbulb, audio, skull, cards, _a, hand, genreDeck, discard, _i, cards_1, card, counters;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        playerId = args.player_id, staff = args.staff, ability = args.ability, candelabra = args.candelabra, lightbulb = args.lightbulb, audio = args.audio, skull = args.skull, cards = args.cards;
+                        _a = this.sceneManager.stocks, hand = _a.hand, genreDeck = _a.genreDeck, discard = _a.discard;
+                        _i = 0, cards_1 = cards;
+                        _b.label = 1;
+                    case 1:
+                        if (!(_i < cards_1.length)) return [3 /*break*/, 6];
+                        card = cards_1[_i];
+                        if (!(card.type === "genre")) return [3 /*break*/, 3];
+                        return [4 /*yield*/, genreDeck.addCard(card)];
+                    case 2:
+                        _b.sent();
+                        return [3 /*break*/, 5];
+                    case 3: return [4 /*yield*/, hand.addCard(card, {
+                            fromStock: card.location === "todiscard" ? discard : undefined,
+                        })];
+                    case 4:
+                        _b.sent();
+                        _b.label = 5;
+                    case 5:
+                        _i++;
+                        return [3 /*break*/, 1];
+                    case 6:
+                        counters = this.counters.player;
+                        counters.staff[playerId].toValue(staff);
+                        counters.ability[playerId].toValue(ability);
+                        counters.candelabra[playerId].toValue(candelabra);
+                        counters.lightbulb[playerId].toValue(lightbulb);
+                        counters.audio[playerId].toValue(audio);
+                        counters.skull[playerId].toValue(skull);
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     NotifManager.prototype.displayScoring = function (playerId, points, cardElement) {
         return __awaiter(this, void 0, void 0, function () {
@@ -2121,12 +2165,21 @@ var PlayerTurn = /** @class */ (function (_super) {
     PlayerTurn.prototype.onUpdate = function (args) {
         var _this = this;
         _super.prototype.onUpdate.call(this, args);
+        var keysToNumbers = this.game.keysToNumbers;
+        var placeable = args.placeable, attachable = args.attachable, canAttachGenre = args.canAttachGenre, placeableAnywhere = args.placeableAnywhere, nbr = args.nbr;
+        this.game.addButton("<i class=\"fa6-solid fa6-backward-fast\"></i>", function () {
+            _this.game.performAction("actResetTurn", {}, { checkAction: false, checkPossibleActions: true });
+        }, {
+            id: "scp_resetTurnButton",
+            type: "undo",
+            disabled: nbr === 2,
+            confirm: _("This will reset your latest turn"),
+        });
+        this.game.addTooltipHtml("scp_resetTurnButton", "<div class=\"scp_tooltip\">\n        <span>".concat(_("reset your turn"), "</span>\n      </div>"));
         if (!this.game.isCurrentPlayerActive()) {
             this.onInactiveUpdate();
             return;
         }
-        var keysToNumbers = this.game.keysToNumbers;
-        var placeable = args.placeable, attachable = args.attachable, canAttachGenre = args.canAttachGenre, placeableAnywhere = args.placeableAnywhere, nbr = args.nbr;
         var hand = this.sceneManager.stocks.hand;
         hand.setSelectionMode(canAttachGenre ? "multiple" : "single");
         hand.onSelectionChange = function (selection, lastChange) {
@@ -2186,12 +2239,13 @@ var PlayerTurn = /** @class */ (function (_super) {
         };
     };
     PlayerTurn.prototype.onInactiveUpdate = function () {
-        this.onLeaving();
+        var hand = this.sceneManager.stocks.hand;
+        hand.setSelectionMode("none");
     };
     PlayerTurn.prototype.onLeaving = function () {
         _super.prototype.onLeaving.call(this);
-        var hand = this.sceneManager.stocks.hand;
-        hand.setSelectionMode("none");
+        this.onInactiveUpdate();
+        document.getElementById("scp_undoActions").innerHTML = "";
     };
     return PlayerTurn;
 }(State));
@@ -2213,6 +2267,7 @@ var PreTurn = /** @class */ (function (_super) {
         this.onLeaving();
     };
     PreTurn.prototype.onLeaving = function () {
+        var _this = this;
         _super.prototype.onLeaving.call(this);
         var playerId = this.game.player_id;
         this.sceneManager.clearHighlight();
@@ -2220,6 +2275,14 @@ var PreTurn = /** @class */ (function (_super) {
         hand.setSelectionMode("none");
         var board = boards[playerId];
         board.setSlotSelectionMode("none");
+        this.game.addButton("<i class=\"fa6-solid fa6-backward-fast\"></i>", function () {
+            _this.game.performAction("actResetTurn", {}, { checkAction: false, checkPossibleActions: true });
+        }, {
+            id: "scp_resetTurnButton",
+            type: "undo",
+            confirm: _("This will reset your latest turn"),
+        });
+        this.game.addTooltipHtml("scp_resetTurnButton", "<div class=\"scp_tooltip\">\n        <span>".concat(_("reset your turn"), "</span>\n      </div>"));
     };
     return PreTurn;
 }(State));

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bga\Games\ScreamPark\States;
 
+use Bga\GameFramework\Actions\CheckAction;
 use Bga\GameFramework\Actions\Types\IntArrayParam;
 use Bga\GameFramework\Actions\Types\IntParam;
 use Bga\GameFramework\Components\Counters\PlayerCounter;
@@ -165,6 +166,44 @@ class PlayerTurn extends GameState
         }
 
         $this->gamestate->nextPrivateState($currentPlayerId, PlaceAnywhere::class);
+    }
+
+    #[PossibleAction]
+    #[CheckAction(false)]
+    public function actResetTurn(
+        int $currentPlayerId,
+    ): void {
+        $undo = $this->game->getObjectFromDB("SELECT staff, ability, candelabra, lightbulb, audio, skull 
+        FROM player WHERE player_id={$currentPlayerId}");
+
+        $cards = $this->game->getCollectionFromDB("SELECT {$this->scenes->cardFields} FROM {$this->scenes->dbTable} 
+        WHERE draft>0 AND card_location_arg={$currentPlayerId} ORDER BY draft");
+
+        $this->game->DbQuery("UPDATE {$this->scenes->dbTable} SET draft=0, card_location='hand' 
+        WHERE draft>0 AND card_location_arg={$currentPlayerId}");
+
+        $this->game->DbQuery("UPDATE {$this->scenes->dbTable} SET card_location='genreDeck', card_location_arg=0 
+        WHERE card_type='genre' AND card_location='hand' AND card_location_arg={$currentPlayerId}");
+
+        $this->draftCounter->set($currentPlayerId, 0);
+
+        $this->notify->player(
+            $currentPlayerId,
+            "resetTurn",
+            clienttranslate("You reset your turn"),
+            [
+                "staff" => (int) $undo["staff"],
+                "ability" => (int) $undo["ability"],
+                "candelabra" => (int) $undo["candelabra"],
+                "lightbulb" => (int) $undo["lightbulb"],
+                "audio" => (int) $undo["audio"],
+                "skull" => (int) $undo["skull"],
+                "cards" => array_values($cards),
+            ],
+        );
+
+        $this->gamestate->setPlayersMultiactive([$currentPlayerId], PlayerTurn::class);
+        $this->gamestate->nextPrivateState($currentPlayerId, PlayerTurn::class);
     }
 
     public function zombie(int $playerId, array $args): void

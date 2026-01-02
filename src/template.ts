@@ -33,6 +33,14 @@ class Template {
       `<div id="scp_defaultActions" class="scp_defaultActions"></div>
       <div id="scp_alertActions" class="scp_alertActions"></div>`
     );
+
+    document
+      .getElementById("gotonexttable_wrap")
+      .insertAdjacentHTML(
+        "afterend",
+        `<div id="scp_undoActions" class="scp_undoActions"></div>`
+      );
+
     this.game.addTooltipHtml(
       `scp_sceneDeck`,
       `<div class="scp_tooltip"><span>${_("scene cards")}</span></div>`

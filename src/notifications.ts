@@ -466,6 +466,48 @@ class NotifManager {
     }
   }
 
+  public async notif_resetTurn(args: {
+    player_id: number;
+    staff: number;
+    ability: number;
+    candelabra: number;
+    lightbulb: number;
+    audio: number;
+    skull: number;
+    cards: SceneCard[];
+  }): Promise<void> {
+    const {
+      player_id: playerId,
+      staff,
+      ability,
+      candelabra,
+      lightbulb,
+      audio,
+      skull,
+      cards,
+    } = args;
+
+    const { hand, genreDeck, discard } = this.sceneManager.stocks;
+    for (const card of cards) {
+      if (card.type === "genre") {
+        await genreDeck.addCard(card);
+        continue;
+      }
+
+      await hand.addCard(card, {
+        fromStock: card.location === "todiscard" ? discard : undefined,
+      });
+    }
+
+    const counters = this.counters.player;
+    counters.staff[playerId].toValue(staff);
+    counters.ability[playerId].toValue(ability);
+    counters.candelabra[playerId].toValue(candelabra);
+    counters.lightbulb[playerId].toValue(lightbulb);
+    counters.audio[playerId].toValue(audio);
+    counters.skull[playerId].toValue(skull);
+  }
+
   private async displayScoring(
     playerId: number,
     points: number,

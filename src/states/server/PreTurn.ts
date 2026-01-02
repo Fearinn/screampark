@@ -27,8 +27,32 @@ class PreTurn extends State {
     this.sceneManager.clearHighlight();
     const { hand, boards } = this.sceneManager.stocks;
     hand.setSelectionMode("none");
+
     const board = boards[playerId];
     board.setSlotSelectionMode("none");
+
+    this.game.addButton(
+      `<i class="fa6-solid fa6-backward-fast"></i>`,
+      () => {
+        this.game.performAction(
+          "actResetTurn",
+          {},
+          { checkAction: false, checkPossibleActions: true }
+        );
+      },
+      {
+        id: "scp_resetTurnButton",
+        type: "undo",
+        confirm: _("This will reset your latest turn"),
+      }
+    );
+
+    this.game.addTooltipHtml(
+      "scp_resetTurnButton",
+      `<div class="scp_tooltip">
+        <span>${_("reset your turn")}</span>
+      </div>`
+    );
   }
 }
 

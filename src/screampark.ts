@@ -69,7 +69,7 @@ class SCP extends GameGui<SCP_Gamedatas> implements SCP {
     callback: () => void,
     params: {
       id?: string;
-      type?: "default" | "alert";
+      type?: "default" | "alert" | "undo";
       color?: "primary" | "secondary" | "alert";
       destination?: HTMLElement;
       classes?: string[];
@@ -93,7 +93,8 @@ class SCP extends GameGui<SCP_Gamedatas> implements SCP {
       document.getElementById(`scp_${params.type}Actions`);
 
     params.color =
-      params.color || (params.type === "alert" ? "alert" : "primary");
+      params.color ||
+      (["alert", "undo"].includes(params.type) ? "alert" : "primary");
 
     this.statusBar.addActionButton(
       label,

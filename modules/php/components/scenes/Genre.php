@@ -40,8 +40,8 @@ class Genre extends Scenes
         $sql = "UPDATE {$this->dbTable} SET card_location='placed', card_location_arg={$playerId}, 
         position={$position}, slot={$slot}, draft={$draft} WHERE card_id={$this->cardId}";
         $this->game->DbQuery($sql);
-        $card = $this->getCard($this->cardId);
 
+        $card = $this->getCard($this->cardId);
         $Scene = $this->getMainInSlot($playerId, $slot);
 
         $this->game->notify->player(

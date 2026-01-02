@@ -1,6 +1,6 @@
 -- ------
 -- BGA framework: Gregory Isabelli & Emmanuel Colin & BoardGameArena
--- ScreamPark implementation : © <Your name here> <Your email address here>
+-- ScreamPark implementation : © Matheus Gomes matheusgomesforwork@gmail.com
 -- 
 -- This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
 -- See http://en.boardgamearena.com/#!doc/Studio for more information.
@@ -34,3 +34,15 @@ CREATE TABLE IF NOT EXISTS `themes` (
     `card_location_arg` int(11) NOT NULL,
     PRIMARY KEY (`card_id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 AUTO_INCREMENT = 1;
+ALTER TABLE `player`
+ADD `staff` SMALLINT UNSIGNED NOT NULL DEFAULT 0;
+ALTER TABLE `player`
+ADD `ability` SMALLINT UNSIGNED NOT NULL DEFAULT 0;
+ALTER TABLE `player`
+ADD `candelabra` SMALLINT UNSIGNED NOT NULL DEFAULT 0;
+ALTER TABLE `player`
+ADD `lightbulb` SMALLINT UNSIGNED NOT NULL DEFAULT 0;
+ALTER TABLE `player`
+ADD `audio` SMALLINT UNSIGNED NOT NULL DEFAULT 0;
+ALTER TABLE `player`
+ADD `skull` SMALLINT UNSIGNED NOT NULL DEFAULT 0;

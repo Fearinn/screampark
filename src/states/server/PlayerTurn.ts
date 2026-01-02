@@ -13,20 +13,45 @@ class PlayerTurn extends State {
   public onUpdate(args: ArgsPlayerTurn): void {
     super.onUpdate(args);
 
+    const { keysToNumbers } = this.game;
+    const { placeable, attachable, canAttachGenre, placeableAnywhere, nbr } =
+      args;
+
+    this.game.addButton(
+      `<i class="fa6-solid fa6-backward-fast"></i>`,
+      () => {
+        this.game.performAction(
+          "actResetTurn",
+          {},
+          { checkAction: false, checkPossibleActions: true }
+        );
+      },
+      {
+        id: "scp_resetTurnButton",
+        type: "undo",
+        disabled: nbr === 2,
+        confirm: _("This will reset your latest turn"),
+      }
+    );
+
+    this.game.addTooltipHtml(
+      "scp_resetTurnButton",
+      `<div class="scp_tooltip">
+        <span>${_("reset your turn")}</span>
+      </div>`
+    );
+
     if (!this.game.isCurrentPlayerActive()) {
       this.onInactiveUpdate();
       return;
     }
-
-    const { keysToNumbers } = this.game;
-    const { placeable, attachable, canAttachGenre, placeableAnywhere, nbr } =
-      args;
 
     const { hand } = this.sceneManager.stocks;
     hand.setSelectionMode(canAttachGenre ? "multiple" : "single");
 
     hand.onSelectionChange = (selection, lastChange) => {
       this.game.clearButtons();
+
       this.game.statusBar.setTitle(
         _("${you} must play or discard a scene card (${nbr} left)"),
         {
@@ -122,14 +147,15 @@ class PlayerTurn extends State {
   }
 
   private onInactiveUpdate(): void {
-    this.onLeaving();
+    const { hand } = this.sceneManager.stocks;
+    hand.setSelectionMode("none");
   }
 
   public onLeaving(): void {
     super.onLeaving();
+    this.onInactiveUpdate();
 
-    const { hand } = this.sceneManager.stocks;
-    hand.setSelectionMode("none");
+    document.getElementById("scp_undoActions").innerHTML = "";
   }
 }
 
