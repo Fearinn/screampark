@@ -30,7 +30,7 @@ class PlayerTurn extends GameState
             id: 50,
             type: StateType::PRIVATE,
             description: clienttranslate('Other player(s) must draft 2 scene cards'),
-            descriptionMyTurn: clienttranslate('${you} must play or discard a scene card (${nbr} left)'),
+            descriptionMyTurn: clienttranslate('${you} must draft a scene card (${nbr} left)'),
         );
 
         $this->scenes = new Scenes($this->game);

@@ -207,6 +207,7 @@
 .scp_zoneTitles .scp_nextPlayer {
   text-overflow: ellipsis;
   max-width: 33%;
+  white-space: nowrap;
 }
 .scp_zoneTitles .scp_nextPlayer:hover {
   text-decoration: none;
@@ -245,7 +246,6 @@ p {
   float: right;
   position: relative;
   top: 2px;
-  margin-right: 4px;
 }
 
 .scp_icon {

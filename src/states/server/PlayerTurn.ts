@@ -53,7 +53,7 @@ class PlayerTurn extends State {
       this.game.clearButtons();
 
       this.game.statusBar.setTitle(
-        _("${you} must play or discard a scene card (${nbr} left)"),
+        _("${you} must draft a scene card (${nbr} left)"),
         {
           nbr,
         }
@@ -65,7 +65,7 @@ class PlayerTurn extends State {
 
       if (selection.length === 2) {
         this.game.statusBar.setTitle(
-          _("${you} may discard both scenes to pick any genre card")
+          _("${you} may discard both scenes to pick a genre card")
         );
 
         keysToNumbers(this.GENRES).forEach((genreId) => {
@@ -112,7 +112,7 @@ class PlayerTurn extends State {
       );
 
       this.game.addButton(
-        _("add to another scene"),
+        _("add to another"),
         () => {
           this.game.performAction("actAttachSceneStart", {
             cardId: cardId,
@@ -123,7 +123,7 @@ class PlayerTurn extends State {
 
       this.game.addButton(
         this.game.format_string_recursive(
-          _("place to the left of another scene (-1 ${staff_icon})"),
+          _("place to the left (-1 ${staff_icon})"),
           {}
         ),
         () => {

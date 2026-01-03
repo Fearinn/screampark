@@ -58,6 +58,7 @@
   .scp_nextPlayer {
     text-overflow: ellipsis;
     max-width: 33%;
+    white-space: nowrap;
 
     &:hover {
       text-decoration: none;

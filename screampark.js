@@ -2184,14 +2184,14 @@ var PlayerTurn = /** @class */ (function (_super) {
         hand.setSelectionMode(canAttachGenre ? "multiple" : "single");
         hand.onSelectionChange = function (selection, lastChange) {
             _this.game.clearButtons();
-            _this.game.statusBar.setTitle(_("${you} must play or discard a scene card (${nbr} left)"), {
+            _this.game.statusBar.setTitle(_("${you} must draft a scene card (${nbr} left)"), {
                 nbr: nbr,
             });
             if (selection.length === 0) {
                 return;
             }
             if (selection.length === 2) {
-                _this.game.statusBar.setTitle(_("${you} may discard both scenes to pick any genre card"));
+                _this.game.statusBar.setTitle(_("${you} may discard both scenes to pick a genre card"));
                 keysToNumbers(_this.GENRES).forEach(function (genreId) {
                     var label = _this.GENRES[genreId].label;
                     _this.game.addButton(_this.game.format_string_recursive(_("${genre_icon}"), {
@@ -2221,12 +2221,12 @@ var PlayerTurn = /** @class */ (function (_super) {
             }, {
                 disabled: !placeable.includes(cardId),
             });
-            _this.game.addButton(_("add to another scene"), function () {
+            _this.game.addButton(_("add to another"), function () {
                 _this.game.performAction("actAttachSceneStart", {
                     cardId: cardId,
                 });
             }, { disabled: !attachable.includes(cardId) });
-            _this.game.addButton(_this.game.format_string_recursive(_("place to the left of another scene (-1 ${staff_icon})"), {}), function () {
+            _this.game.addButton(_this.game.format_string_recursive(_("place to the left (-1 ${staff_icon})"), {}), function () {
                 _this.game.performAction("actPlaceAnywhereStart", {
                     cardId: cardId,
                 });
