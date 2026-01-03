@@ -68,10 +68,10 @@ class Template {
   private setupReferences(): void {
     const { gamedatas, player_id } = this.game;
     const { players } = gamedatas;
-    const { color: playerColor } = players[player_id];
+    const playerColor = players[player_id]?.color;
 
     const colors = ["982fff", "008000", "ff0000", "72c3b1", "ffa500"];
-    const colorId = colors.indexOf(playerColor) + 1;
+    const colorId = playerColor ? colors.indexOf(playerColor) + 1 : 1;
 
     new HelpManager(this.game, {
       buttons: [

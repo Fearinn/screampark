@@ -428,11 +428,12 @@ var Template = /** @class */ (function () {
         sounds.load("steps", "steps");
     };
     Template.prototype.setupReferences = function () {
-        var _a = this.game, gamedatas = _a.gamedatas, player_id = _a.player_id;
+        var _a;
+        var _b = this.game, gamedatas = _b.gamedatas, player_id = _b.player_id;
         var players = gamedatas.players;
-        var playerColor = players[player_id].color;
+        var playerColor = (_a = players[player_id]) === null || _a === void 0 ? void 0 : _a.color;
         var colors = ["982fff", "008000", "ff0000", "72c3b1", "ffa500"];
-        var colorId = colors.indexOf(playerColor) + 1;
+        var colorId = playerColor ? colors.indexOf(playerColor) + 1 : 1;
         new HelpManager(this.game, {
             buttons: [
                 new BgaHelpExpandableButton({
