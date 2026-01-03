@@ -31,7 +31,6 @@ use Bga\Games\ScreamPark\States\DayEnd;
 use Bga\Games\ScreamPark\States\EndScore;
 use Bga\Games\ScreamPark\States\PassScenes;
 
-define("gCompletedScenes", "gCompletedScenes");
 define("statScore", "statScore");
 define("statCompletedScenes", "statCompletedScenes");
 define("statTotalScenes", "statTotalScenes");
@@ -119,7 +118,7 @@ class Game extends \Bga\GameFramework\Table
             "sceneHand" => !$isSpectator ? $Scenes->getHand($playerId) : [],
             "scenePublic" => $Scenes->getPublic($playerId),
             "sceneBoard" => !$isSpectator ? $Scenes->getBoard($playerId) : [],
-            "completedScenes" => $this->globals->get(gCompletedScenes)[$playerId],
+            "completedScenes" => !$isSpectator ? $Scenes->getCompleted($playerId) : [],
             "vipFulfillingScenes" => !$isSpectator ? $Scenes->getVipFulfilling($playerId) : [],
             "staffCounts" => $this->staffCounter->getAll(),
             "abilityCounts" => $Scenes->getAbilityCounts($playerId),
@@ -192,12 +191,6 @@ class Game extends \Bga\GameFramework\Table
         $this->actionVariable->initDb(array_keys($players));
         $this->dayCounter->initDb(1);
         $this->oppAbilityCounter->initDb(0);
-
-        $defaultGlobal = [];
-        foreach ($players as $playerId => $player) {
-            $defaultGlobal[$playerId] = [];
-        }
-        $this->globals->set(gCompletedScenes, $defaultGlobal);
 
         return ChooseTheme::class;
     }

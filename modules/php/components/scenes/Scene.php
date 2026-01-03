@@ -403,12 +403,6 @@ class Scene extends Scenes
 
     public function isComplete(int $playerId): bool
     {
-        $completedScenes = $this->game->globals->get(gCompletedScenes)[$playerId];
-        return in_array($this->cardId, $completedScenes);
-    }
-
-    private function checkComplete(int $playerId): bool
-    {
         $slot = (int) $this->card["slot"];
         $genreCost = $this->genreCost;
 
@@ -430,18 +424,9 @@ class Scene extends Scenes
 
     public function updateCompleted(int $playerId): void
     {
-        $completedScenes = $this->game->globals->get(gCompletedScenes, []);
-
-        if (in_array($this->cardId, $completedScenes[$playerId])) {
+        if (!$this->isComplete($playerId)) {
             return;
         }
-
-        if (!$this->checkComplete($playerId)) {
-            return;
-        }
-
-        $completedScenes[$playerId][] = $this->cardId;
-        $this->game->globals->set(gCompletedScenes, $completedScenes);
 
         $this->game->notify->player(
             $playerId,

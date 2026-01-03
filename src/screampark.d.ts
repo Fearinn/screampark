@@ -88,4 +88,4 @@ type ActionName =
   | "actPlaceAnywhereStart"
   | "actPlaceAnywhere"
   | "actPlaceAnywhereCancel"
-  | "actResetTurn";
+  | "actUndoTurn";

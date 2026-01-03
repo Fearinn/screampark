@@ -35,22 +35,22 @@ class PreTurn extends State {
       `<i class="fa6-solid fa6-backward-fast"></i>`,
       () => {
         this.game.performAction(
-          "actResetTurn",
+          "actUndoTurn",
           {},
           { checkAction: false, checkPossibleActions: true }
         );
       },
       {
-        id: "scp_resetTurnButton",
+        id: "scp_undoTurnButton",
         type: "undo",
-        confirm: _("This will reset your latest turn"),
+        confirm: _("This will restart your turn"),
       }
     );
 
     this.game.addTooltipHtml(
-      "scp_resetTurnButton",
+      "scp_undoTurnButton",
       `<div class="scp_tooltip">
-        <span>${_("reset your turn")}</span>
+        <span>${_("undo your turn")}</span>
       </div>`
     );
   }

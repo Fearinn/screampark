@@ -466,7 +466,7 @@ class NotifManager {
     }
   }
 
-  public async notif_resetTurn(args: {
+  public async notif_undoTurn(args: {
     player_id: number;
     staff: number;
     ability: number;
@@ -475,6 +475,8 @@ class NotifManager {
     audio: number;
     skull: number;
     cards: SceneCard[];
+    completedScenes: number[];
+    vipFulfilling: number[];
   }): Promise<void> {
     const {
       player_id: playerId,
@@ -485,12 +487,37 @@ class NotifManager {
       audio,
       skull,
       cards,
+      completedScenes,
+      vipFulfilling,
     } = args;
 
-    const { hand, genreDeck, discard } = this.sceneManager.stocks;
+    document.querySelectorAll(".scp_scene-completed").forEach((cardElement) => {
+      const cardId = Number(cardElement.id.split("scp_scene-")[1]);
+
+      cardElement.classList.toggle(
+        "scp_scene-completed",
+        completedScenes.includes(cardId)
+      );
+    });
+
+    document
+      .querySelectorAll(".scp_scene-vipFulfilling")
+      .forEach((cardElement) => {
+        const cardId = Number(cardElement.id.split("scp_scene-")[1]);
+
+        cardElement.classList.toggle(
+          "scp_scene-vipFulfilling",
+          vipFulfilling.includes(cardId)
+        );
+      });
+
+    const { hand, boards, discard } = this.sceneManager.stocks;
     for (const card of cards) {
       if (card.type === "genre") {
-        await genreDeck.addCard(card);
+        await boards[playerId].removeCard(card, {
+          fadeOut: true,
+          slideTo: document.getElementById("scp_genreDeck"),
+        });
         continue;
       }
 

@@ -1386,21 +1386,34 @@ var NotifManager = /** @class */ (function () {
             counter.toValue(value);
         }
     };
-    NotifManager.prototype.notif_resetTurn = function (args) {
+    NotifManager.prototype.notif_undoTurn = function (args) {
         return __awaiter(this, void 0, void 0, function () {
-            var playerId, staff, ability, candelabra, lightbulb, audio, skull, cards, _a, hand, genreDeck, discard, _i, cards_1, card, counters;
+            var playerId, staff, ability, candelabra, lightbulb, audio, skull, cards, completedScenes, vipFulfilling, _a, hand, boards, discard, _i, cards_1, card, counters;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        playerId = args.player_id, staff = args.staff, ability = args.ability, candelabra = args.candelabra, lightbulb = args.lightbulb, audio = args.audio, skull = args.skull, cards = args.cards;
-                        _a = this.sceneManager.stocks, hand = _a.hand, genreDeck = _a.genreDeck, discard = _a.discard;
+                        playerId = args.player_id, staff = args.staff, ability = args.ability, candelabra = args.candelabra, lightbulb = args.lightbulb, audio = args.audio, skull = args.skull, cards = args.cards, completedScenes = args.completedScenes, vipFulfilling = args.vipFulfilling;
+                        document.querySelectorAll(".scp_scene-completed").forEach(function (cardElement) {
+                            var cardId = Number(cardElement.id.split("scp_scene-")[1]);
+                            cardElement.classList.toggle("scp_scene-completed", completedScenes.includes(cardId));
+                        });
+                        document
+                            .querySelectorAll(".scp_scene-vipFulfilling")
+                            .forEach(function (cardElement) {
+                            var cardId = Number(cardElement.id.split("scp_scene-")[1]);
+                            cardElement.classList.toggle("scp_scene-vipFulfilling", vipFulfilling.includes(cardId));
+                        });
+                        _a = this.sceneManager.stocks, hand = _a.hand, boards = _a.boards, discard = _a.discard;
                         _i = 0, cards_1 = cards;
                         _b.label = 1;
                     case 1:
                         if (!(_i < cards_1.length)) return [3 /*break*/, 6];
                         card = cards_1[_i];
                         if (!(card.type === "genre")) return [3 /*break*/, 3];
-                        return [4 /*yield*/, genreDeck.addCard(card)];
+                        return [4 /*yield*/, boards[playerId].removeCard(card, {
+                                fadeOut: true,
+                                slideTo: document.getElementById("scp_genreDeck"),
+                            })];
                     case 2:
                         _b.sent();
                         return [3 /*break*/, 5];
@@ -2168,14 +2181,14 @@ var PlayerTurn = /** @class */ (function (_super) {
         var keysToNumbers = this.game.keysToNumbers;
         var placeable = args.placeable, attachable = args.attachable, canAttachGenre = args.canAttachGenre, placeableAnywhere = args.placeableAnywhere, nbr = args.nbr;
         this.game.addButton("<i class=\"fa6-solid fa6-backward-fast\"></i>", function () {
-            _this.game.performAction("actResetTurn", {}, { checkAction: false, checkPossibleActions: true });
+            _this.game.performAction("actUndoTurn", {}, { checkAction: false, checkPossibleActions: true });
         }, {
-            id: "scp_resetTurnButton",
+            id: "scp_undoTurnButton",
             type: "undo",
             disabled: nbr === 2,
-            confirm: _("This will reset your latest turn"),
+            confirm: _("This will restart your turn"),
         });
-        this.game.addTooltipHtml("scp_resetTurnButton", "<div class=\"scp_tooltip\">\n        <span>".concat(_("reset your turn"), "</span>\n      </div>"));
+        this.game.addTooltipHtml("scp_undoTurnButton", "<div class=\"scp_tooltip\">\n        <span>".concat(_("undo your turn"), "</span>\n      </div>"));
         if (!this.game.isCurrentPlayerActive()) {
             this.onInactiveUpdate();
             return;
@@ -2276,13 +2289,13 @@ var PreTurn = /** @class */ (function (_super) {
         var board = boards[playerId];
         board.setSlotSelectionMode("none");
         this.game.addButton("<i class=\"fa6-solid fa6-backward-fast\"></i>", function () {
-            _this.game.performAction("actResetTurn", {}, { checkAction: false, checkPossibleActions: true });
+            _this.game.performAction("actUndoTurn", {}, { checkAction: false, checkPossibleActions: true });
         }, {
-            id: "scp_resetTurnButton",
+            id: "scp_undoTurnButton",
             type: "undo",
-            confirm: _("This will reset your latest turn"),
+            confirm: _("This will restart your turn"),
         });
-        this.game.addTooltipHtml("scp_resetTurnButton", "<div class=\"scp_tooltip\">\n        <span>".concat(_("reset your turn"), "</span>\n      </div>"));
+        this.game.addTooltipHtml("scp_undoTurnButton", "<div class=\"scp_tooltip\">\n        <span>".concat(_("undo your turn"), "</span>\n      </div>"));
     };
     return PreTurn;
 }(State));

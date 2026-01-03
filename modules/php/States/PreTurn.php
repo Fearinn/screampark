@@ -47,10 +47,10 @@ class PreTurn extends GameState
 
     #[PossibleAction]
     #[CheckAction(false)]
-    public function actResetTurn(int $currentPlayerId): void
+    public function actUndoTurn(int $currentPlayerId): void
     {
         $PlayerTurn = new PlayerTurn($this->game);
-        $PlayerTurn->actResetTurn($currentPlayerId);
+        $PlayerTurn->actUndoTurn($currentPlayerId);
     }
 
     private function storeUndo(int $playerId): void

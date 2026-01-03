@@ -170,7 +170,7 @@ class PlayerTurn extends GameState
 
     #[PossibleAction]
     #[CheckAction(false)]
-    public function actResetTurn(
+    public function actUndoTurn(
         int $currentPlayerId,
     ): void {
         $undo = $this->game->getObjectFromDB("SELECT staff, ability, candelabra, lightbulb, audio, skull 
@@ -189,8 +189,8 @@ class PlayerTurn extends GameState
 
         $this->notify->player(
             $currentPlayerId,
-            "resetTurn",
-            clienttranslate("You reset your turn"),
+            "undoTurn",
+            clienttranslate("You undo your turn"),
             [
                 "staff" => (int) $undo["staff"],
                 "ability" => (int) $undo["ability"],
@@ -199,6 +199,8 @@ class PlayerTurn extends GameState
                 "audio" => (int) $undo["audio"],
                 "skull" => (int) $undo["skull"],
                 "cards" => array_values($cards),
+                "completedScenes" => $this->scenes->getCompleted($currentPlayerId),
+                "vipFulfilling" => $this->scenes->getVipFulfilling($currentPlayerId),
             ],
         );
 
