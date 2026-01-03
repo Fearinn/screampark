@@ -522,7 +522,9 @@ class NotifManager {
       }
 
       await hand.addCard(card, {
-        fromStock: card.location === "todiscard" ? discard : undefined,
+        fromStock: ["todiscard", "discard"].includes(card.location)
+          ? discard
+          : undefined,
       });
     }
 

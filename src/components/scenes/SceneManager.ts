@@ -271,7 +271,13 @@ interface SceneStocks {
 
 interface SceneCard extends SCP_Card {
   type: "scene" | "genre";
-  location?: "hand" | "todiscard" | "board" | "placed" | "placedAnywhere";
+  location?:
+    | "hand"
+    | "todiscard"
+    | "discard"
+    | "board"
+    | "placed"
+    | "placedAnywhere";
   slot?: number;
   position?: number;
 }

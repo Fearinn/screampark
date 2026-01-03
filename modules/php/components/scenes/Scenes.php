@@ -230,7 +230,7 @@ class Scenes extends Cards
 
     public function revealDiscardedBoth(int $playerId): void
     {
-        $cards = $this->deck->getCardsInLocation("discardboth", $playerId);
+        $cards = $this->deck->getCardsInLocation("discard", $playerId);
         if (count($cards) !== 2) {
             return;
         }

@@ -73,14 +73,11 @@ class AttachGenre extends GameState
 
     public function attach(int $currentPlayerId, int $genreId, int $slot): void
     {
-        $this->scenes->deck->moveAllCardsInLocation(
-            "todiscard",
-            "discardboth",
-            $currentPlayerId,
-            $currentPlayerId
-        );
+        $sql = "UPDATE {$this->scenes->dbTable} SET card_location='discard', draft=2 
+        WHERE card_location='todiscard' AND card_location_arg={$currentPlayerId}";
+        $this->game->DbQuery($sql);
 
-        $cards = $this->scenes->deck->getCardsInLocation("discardboth", $currentPlayerId);
+        $cards = $this->scenes->deck->getCardsInLocation("discard", $currentPlayerId);
         $cardsIds = array_keys($cards);
         [$cardId, $cardId2] = $cardsIds;
 

@@ -1418,7 +1418,9 @@ var NotifManager = /** @class */ (function () {
                         _b.sent();
                         return [3 /*break*/, 5];
                     case 3: return [4 /*yield*/, hand.addCard(card, {
-                            fromStock: card.location === "todiscard" ? discard : undefined,
+                            fromStock: ["todiscard", "discard"].includes(card.location)
+                                ? discard
+                                : undefined,
                         })];
                     case 4:
                         _b.sent();
