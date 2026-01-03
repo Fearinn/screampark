@@ -21,6 +21,7 @@ class PlayerTurn extends GameState
     protected Scenes $scenes;
     protected PlayerCounter $draftCounter;
     protected PlayerCounter $actionVariable;
+    protected PlayerCounter $staffCounterPrivate;
 
     function __construct(
         protected Game $game,
@@ -35,6 +36,7 @@ class PlayerTurn extends GameState
 
         $this->scenes = new Scenes($this->game);
         $this->draftCounter = $this->game->draftCounter;
+        $this->staffCounterPrivate = $this->game->staffCounterPrivate;
         $this->actionVariable = $this->game->actionVariable;
     }
 
@@ -187,12 +189,15 @@ class PlayerTurn extends GameState
 
         $this->draftCounter->set($currentPlayerId, 0);
 
+        $staff = (int) $undo["staff"];
+        $this->staffCounterPrivate->set($currentPlayerId, $staff);
+
         $this->notify->player(
             $currentPlayerId,
             "undoTurn",
             clienttranslate("You undo your turn"),
             [
-                "staff" => (int) $undo["staff"],
+                "staff" => $staff,
                 "ability" => (int) $undo["ability"],
                 "candelabra" => (int) $undo["candelabra"],
                 "lightbulb" => (int) $undo["lightbulb"],
