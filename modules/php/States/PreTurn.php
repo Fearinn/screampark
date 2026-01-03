@@ -55,6 +55,11 @@ class PreTurn extends GameState
 
     private function storeUndo(int $playerId): void
     {
+        $columnsExist = $this->game->getUniqueValueFromDB("SHOW COLUMNS FROM player LIKE 'staff'");
+        if (!$columnsExist) {
+            return;
+        }
+
         $staff = $this->game->staffCounter->get($playerId);
         $ability = $this->scenes->countAbilities($playerId, true);
 
