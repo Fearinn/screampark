@@ -85,12 +85,16 @@ class ChooseTheme extends GameState
     #[CheckAction(false)]
     public function actUndoChooseTheme(int $currentPlayerId)
     {
-        if ($this->game->isSpectator()) {
-            throw new \BgaVisibleSystemException("Unexpected Error: 99");
+        if ($this->game->isSpectator()  || $this->game->isCurrentPlayerZombie()) {
+            throw new \BgaVisibleSystemException("Error code: 99");
         }
 
         $sql = "SELECT card_id FROM {$this->themes->dbTable} WHERE card_location='box' AND card_location_arg={$currentPlayerId}";
         $cardId = (int) $this->game->getUniqueValueFromDB($sql);
+
+        if (!$cardId) {
+            throw new \BgaVisibleSystemException("Error code: 9");
+        }
 
         $this->themes->deck->moveCard($cardId, "hand", $currentPlayerId);
         $card = $this->themes->deck->getCard($cardId);

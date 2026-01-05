@@ -41,14 +41,14 @@ class PreTurn extends State {
         );
       },
       {
-        id: "scp_undoTurnButton",
+        id: "scp_undoButton",
         type: "undo",
         confirm: _("This will restart your turn"),
       }
     );
 
     this.game.addTooltipHtml(
-      "scp_undoTurnButton",
+      "scp_undoButton",
       `<div class="scp_tooltip">
         <span>${_("undo your turn")}</span>
       </div>`

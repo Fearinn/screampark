@@ -2069,6 +2069,7 @@ var ChooseTheme = /** @class */ (function (_super) {
     ChooseTheme.prototype.onUpdate = function (args) {
         var _this = this;
         _super.prototype.onUpdate.call(this, args);
+        document.getElementById("scp_undoActions").innerHTML = "";
         if (!this.game.isCurrentPlayerActive()) {
             this.onInactiveUpdate();
             return;
@@ -2097,11 +2098,13 @@ var ChooseTheme = /** @class */ (function (_super) {
     ChooseTheme.prototype.onInactiveUpdate = function () {
         var _this = this;
         this.onLeaving();
-        this.game.addButton(_("change mind"), function () {
+        this.game.addButton("<i class=\"fa6 fa6-backward\"></i>", function () {
             _this.game.performAction("actUndoChooseTheme", undefined, {
                 checkAction: false,
+                checkPossibleActions: true,
             });
-        }, { color: "secondary" });
+        }, { id: "scp_undoButton", type: "undo" });
+        this.game.addTooltipHtml("scp_undoButton", "<div class=\"scp_tooltip\">\n        <span>".concat(_("change Theme"), "</span>\n      </div>"));
     };
     ChooseTheme.prototype.onLeaving = function () {
         _super.prototype.onLeaving.call(this);
@@ -2186,12 +2189,12 @@ var PlayerTurn = /** @class */ (function (_super) {
         this.game.addButton("<i class=\"fa6-solid fa6-backward-fast\"></i>", function () {
             _this.game.performAction("actUndoTurn", {}, { checkAction: false, checkPossibleActions: true });
         }, {
-            id: "scp_undoTurnButton",
+            id: "scp_undoButton",
             type: "undo",
             disabled: nbr === 2,
             confirm: _("This will restart your turn"),
         });
-        this.game.addTooltipHtml("scp_undoTurnButton", "<div class=\"scp_tooltip\">\n        <span>".concat(_("undo your turn"), "</span>\n      </div>"));
+        this.game.addTooltipHtml("scp_undoButton", "<div class=\"scp_tooltip\">\n        <span>".concat(_("undo your turn"), "</span>\n      </div>"));
         if (!this.game.isCurrentPlayerActive()) {
             this.onInactiveUpdate();
             return;
@@ -2294,11 +2297,11 @@ var PreTurn = /** @class */ (function (_super) {
         this.game.addButton("<i class=\"fa6-solid fa6-backward-fast\"></i>", function () {
             _this.game.performAction("actUndoTurn", {}, { checkAction: false, checkPossibleActions: true });
         }, {
-            id: "scp_undoTurnButton",
+            id: "scp_undoButton",
             type: "undo",
             confirm: _("This will restart your turn"),
         });
-        this.game.addTooltipHtml("scp_undoTurnButton", "<div class=\"scp_tooltip\">\n        <span>".concat(_("undo your turn"), "</span>\n      </div>"));
+        this.game.addTooltipHtml("scp_undoButton", "<div class=\"scp_tooltip\">\n        <span>".concat(_("undo your turn"), "</span>\n      </div>"));
     };
     return PreTurn;
 }(State));

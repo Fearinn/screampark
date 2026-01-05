@@ -27,7 +27,7 @@ class PlayerTurn extends State {
         );
       },
       {
-        id: "scp_undoTurnButton",
+        id: "scp_undoButton",
         type: "undo",
         disabled: nbr === 2,
         confirm: _("This will restart your turn"),
@@ -35,7 +35,7 @@ class PlayerTurn extends State {
     );
 
     this.game.addTooltipHtml(
-      "scp_undoTurnButton",
+      "scp_undoButton",
       `<div class="scp_tooltip">
         <span>${_("undo your turn")}</span>
       </div>`

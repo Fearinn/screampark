@@ -11,6 +11,8 @@ class ChooseTheme extends State {
   public onUpdate(args: ArgsChooseTheme): void {
     super.onUpdate(args);
 
+    document.getElementById("scp_undoActions").innerHTML = "";
+
     if (!this.game.isCurrentPlayerActive()) {
       this.onInactiveUpdate();
       return;
@@ -50,13 +52,21 @@ class ChooseTheme extends State {
     this.onLeaving();
 
     this.game.addButton(
-      _("change mind"),
+      `<i class="fa6 fa6-backward"></i>`,
       () => {
         this.game.performAction("actUndoChooseTheme", undefined, {
           checkAction: false,
+          checkPossibleActions: true,
         });
       },
-      { color: "secondary" }
+      { id: "scp_undoButton", type: "undo" }
+    );
+
+    this.game.addTooltipHtml(
+      "scp_undoButton",
+      `<div class="scp_tooltip">
+        <span>${_("change Theme")}</span>
+      </div>`
     );
   }
 
