@@ -2108,6 +2108,7 @@ var ChooseTheme = /** @class */ (function (_super) {
     };
     ChooseTheme.prototype.onLeaving = function () {
         _super.prototype.onLeaving.call(this);
+        document.getElementById("scp_undoActions").innerHTML = "";
         var playerId = this.game.player_id;
         var boards = this.themeManager.stocks.boards;
         boards[playerId].setSelectionMode("none");

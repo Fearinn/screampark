@@ -73,6 +73,8 @@ class ChooseTheme extends State {
   public onLeaving(): void {
     super.onLeaving();
 
+    document.getElementById("scp_undoActions").innerHTML = "";
+
     const { player_id: playerId } = this.game;
     const { boards } = this.themeManager.stocks;
     boards[playerId].setSelectionMode("none");
