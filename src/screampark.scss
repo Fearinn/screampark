@@ -36,16 +36,3 @@ html {
   gap: 32px;
   width: 100%;
 }
-
-.scp_pref-themedBg {
-  background-image: url("img/background.jpg");
-  background-size: cover;
-  background-attachment: fixed;
-
-  .player-board {
-    background-image: url("img/background.jpg");
-    background-size: cover;
-    background-position: bottom;
-    color: white;
-  }
-}

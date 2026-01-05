@@ -290,11 +290,11 @@ p {
 }
 
 .bga-help_button {
-  background-image: url("img/background.jpg");
+  background-color: black;
   background-size: cover;
 }
 .bga-help_button > div {
-  background-image: url("img/background.jpg");
+  background-color: black;
 }
 
 .scp_foldedHelp {
@@ -303,10 +303,27 @@ p {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-image: url("img/background.jpg");
+  background-color: black;
   height: 101%;
 }
 
+.player-name a,
+.playername {
+  text-shadow: 1px 0 1px black, 0 -1px 1px black, 0 1px 1px black, -1px 0 1px black;
+}
+
+.scp_pref-themedBg {
+  background-image: url("img/background.jpg");
+  background-size: cover;
+  background-attachment: fixed;
+}
+.scp_pref-themedBg .player-board {
+  background-color: black;
+  color: white;
+}
+.scp_pref-themedBg .player-board.spectator-mode * {
+  background-color: black;
+}
 .scp_pref-themedBg .scp_tooltip {
   display: flex;
   justify-content: center;
@@ -321,11 +338,6 @@ p {
 }
 .scp_pref-themedBg .dijitTooltipConnector {
   display: none;
-}
-
-.player-name a,
-.playername {
-  text-shadow: 1px 0 1px black, 0 -1px 1px black, 0 1px 1px black, -1px 0 1px black;
 }
 
 :root {
@@ -1017,16 +1029,4 @@ html {
   padding: 8px 0;
   gap: 32px;
   width: 100%;
-}
-
-.scp_pref-themedBg {
-  background-image: url("img/background.jpg");
-  background-size: cover;
-  background-attachment: fixed;
-}
-.scp_pref-themedBg .player-board {
-  background-image: url("img/background.jpg");
-  background-size: cover;
-  background-position: bottom;
-  color: white;
 }
