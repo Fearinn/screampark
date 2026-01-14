@@ -24,7 +24,6 @@ class PassScenes extends GameState
             id: 7,
             type: StateType::GAME,
             description: clienttranslate('Passing scene cards...'),
-            initialPrivate: 51,
         );
 
         $this->scenes = new Scenes($this->game);

@@ -35,6 +35,8 @@ class PreTurn extends GameState
 
     public function onEnteringState(): void
     {
+        $this->gamestate->unsetPrivateStateForAllPlayers();
+
         $players = $this->game->loadPlayersBasicInfos();
         foreach ($players as $playerId => $player) {
             $this->storeUndo($playerId);
