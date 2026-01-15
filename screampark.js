@@ -1142,11 +1142,7 @@ var NotifManager = /** @class */ (function () {
                         board = boards[playerId];
                         promises = [];
                         cards.forEach(function (card) {
-                            var previousSlot = Number(card.slot) - 1;
-                            var animation = board.addCard(card, {
-                                fromElement: document.querySelector("#scp_scenes-".concat(playerId, " [data-slot-id=\"").concat(previousSlot, "\"]")),
-                                fromPlaceholder: "off",
-                            });
+                            var animation = board.addCard(card);
                             promises.push(animation);
                         });
                         return [4 /*yield*/, Promise.all(promises)];
@@ -1389,11 +1385,11 @@ var NotifManager = /** @class */ (function () {
     };
     NotifManager.prototype.notif_undoTurn = function (args) {
         return __awaiter(this, void 0, void 0, function () {
-            var playerId, staff, ability, candelabra, lightbulb, audio, skull, cards, completedScenes, vipFulfilling, _a, hand, boards, discard, _i, cards_1, card, counters;
+            var playerId, staff, ability, candelabra, lightbulb, audio, skull, draftedCards, shiftedCards, completedScenes, vipFulfilling, _a, hand, boards, discard, _i, draftedCards_1, card, counters;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        playerId = args.player_id, staff = args.staff, ability = args.ability, candelabra = args.candelabra, lightbulb = args.lightbulb, audio = args.audio, skull = args.skull, cards = args.cards, completedScenes = args.completedScenes, vipFulfilling = args.vipFulfilling;
+                        playerId = args.player_id, staff = args.staff, ability = args.ability, candelabra = args.candelabra, lightbulb = args.lightbulb, audio = args.audio, skull = args.skull, draftedCards = args.draftedCards, shiftedCards = args.shiftedCards, completedScenes = args.completedScenes, vipFulfilling = args.vipFulfilling;
                         document.querySelectorAll(".scp_scene-completed").forEach(function (cardElement) {
                             var cardId = Number(cardElement.id.split("scp_scene-")[1]);
                             cardElement.classList.toggle("scp_scene-completed", completedScenes.includes(cardId));
@@ -1405,11 +1401,11 @@ var NotifManager = /** @class */ (function () {
                             cardElement.classList.toggle("scp_scene-vipFulfilling", vipFulfilling.includes(cardId));
                         });
                         _a = this.sceneManager.stocks, hand = _a.hand, boards = _a.boards, discard = _a.discard;
-                        _i = 0, cards_1 = cards;
+                        _i = 0, draftedCards_1 = draftedCards;
                         _b.label = 1;
                     case 1:
-                        if (!(_i < cards_1.length)) return [3 /*break*/, 6];
-                        card = cards_1[_i];
+                        if (!(_i < draftedCards_1.length)) return [3 /*break*/, 6];
+                        card = draftedCards_1[_i];
                         if (!(card.type === "genre")) return [3 /*break*/, 3];
                         return [4 /*yield*/, boards[playerId].removeCard(card, {
                                 fadeOut: true,
@@ -1430,6 +1426,7 @@ var NotifManager = /** @class */ (function () {
                         _i++;
                         return [3 /*break*/, 1];
                     case 6:
+                        this.notif_shiftScenes({ player_id: playerId, cards: shiftedCards });
                         counters = this.counters.player;
                         counters.staff[playerId].toValue(staff);
                         counters.ability[playerId].toValue(ability);

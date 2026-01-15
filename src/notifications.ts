@@ -221,15 +221,7 @@ class NotifManager {
 
     const promises = [];
     cards.forEach((card) => {
-      const previousSlot = Number(card.slot) - 1;
-
-      const animation = board.addCard(card, {
-        fromElement: document.querySelector(
-          `#scp_scenes-${playerId} [data-slot-id="${previousSlot}"]`
-        ),
-        fromPlaceholder: "off",
-      });
-
+      const animation = board.addCard(card);
       promises.push(animation);
     });
 
@@ -474,7 +466,8 @@ class NotifManager {
     lightbulb: number;
     audio: number;
     skull: number;
-    cards: SceneCard[];
+    draftedCards: SceneCard[];
+    shiftedCards: SceneCard[];
     completedScenes: number[];
     vipFulfilling: number[];
   }): Promise<void> {
@@ -486,7 +479,8 @@ class NotifManager {
       lightbulb,
       audio,
       skull,
-      cards,
+      draftedCards,
+      shiftedCards,
       completedScenes,
       vipFulfilling,
     } = args;
@@ -512,7 +506,7 @@ class NotifManager {
       });
 
     const { hand, boards, discard } = this.sceneManager.stocks;
-    for (const card of cards) {
+    for (const card of draftedCards) {
       if (card.type === "genre") {
         await boards[playerId].removeCard(card, {
           fadeOut: true,
@@ -527,6 +521,8 @@ class NotifManager {
           : undefined,
       });
     }
+
+    this.notif_shiftScenes({ player_id: playerId, cards: shiftedCards });
 
     const counters = this.counters.player;
     counters.staff[playerId].toValue(staff);
