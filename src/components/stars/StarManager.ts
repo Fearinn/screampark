@@ -23,7 +23,7 @@ class StarManager {
       setupDiv: ({ id: playerId }, element) => {
         element.classList.add("scp_card");
 
-        const colors = ["982fff", "008000", "ff0000", "72c3b1", "ffa500"];
+        const colors = ["982fff", "008000", "ff0000", "0000ff", "ffa500"];
         const { color: playerColor } = players[playerId];
 
         const colorId = colors.indexOf(playerColor) + 1;

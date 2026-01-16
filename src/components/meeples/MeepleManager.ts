@@ -23,7 +23,7 @@ class MeepleManager {
         element.classList.add("scp_card");
 
         const { color: playerColor } = players[playerId];
-        const colors = ["982fff", "008000", "ff0000", "72c3b1", "ffa500"];
+        const colors = ["982fff", "008000", "ff0000", "0000ff", "ffa500"];
         const colorId = colors.indexOf(playerColor) + 1;
 
         element.style.backgroundImage = `url(${g_gamethemeurl}img/icons/meeple_${colorId}.png)`;

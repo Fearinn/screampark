@@ -70,7 +70,7 @@ class Template {
     const { players } = gamedatas;
     const playerColor = players[player_id]?.color;
 
-    const colors = ["982fff", "008000", "ff0000", "72c3b1", "ffa500"];
+    const colors = ["982fff", "008000", "ff0000", "0000ff", "ffa500"];
     const colorId = playerColor ? colors.indexOf(playerColor) + 1 : 1;
 
     new HelpManager(this.game, {

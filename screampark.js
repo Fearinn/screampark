@@ -432,7 +432,7 @@ var Template = /** @class */ (function () {
         var _b = this.game, gamedatas = _b.gamedatas, player_id = _b.player_id;
         var players = gamedatas.players;
         var playerColor = (_a = players[player_id]) === null || _a === void 0 ? void 0 : _a.color;
-        var colors = ["982fff", "008000", "ff0000", "72c3b1", "ffa500"];
+        var colors = ["982fff", "008000", "ff0000", "0000ff", "ffa500"];
         var colorId = playerColor ? colors.indexOf(playerColor) + 1 : 1;
         new HelpManager(this.game, {
             buttons: [
@@ -1485,7 +1485,7 @@ var MeepleManager = /** @class */ (function () {
                 var playerId = _a.id;
                 element.classList.add("scp_card");
                 var playerColor = players[playerId].color;
-                var colors = ["982fff", "008000", "ff0000", "72c3b1", "ffa500"];
+                var colors = ["982fff", "008000", "ff0000", "0000ff", "ffa500"];
                 var colorId = colors.indexOf(playerColor) + 1;
                 element.style.backgroundImage = "url(".concat(g_gamethemeurl, "img/icons/meeple_").concat(colorId, ".png)");
                 _this.game.addTooltipHtml(element.id, "<span class=\"scp_tooltip\">\n          ".concat(_this.game.format_string_recursive(_("${player_name}'s meeple"), {
@@ -1710,7 +1710,7 @@ var StarManager = /** @class */ (function () {
             setupDiv: function (_a, element) {
                 var playerId = _a.id;
                 element.classList.add("scp_card");
-                var colors = ["982fff", "008000", "ff0000", "72c3b1", "ffa500"];
+                var colors = ["982fff", "008000", "ff0000", "0000ff", "ffa500"];
                 var playerColor = players[playerId].color;
                 var colorId = colors.indexOf(playerColor) + 1;
                 element.style.backgroundImage = "url(".concat(g_gamethemeurl, "img/icons/star_").concat(colorId, ".png)");
