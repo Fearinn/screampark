@@ -73,7 +73,7 @@ class AttachGenre extends GameState
 
     public function attach(int $currentPlayerId, int $genreId, int $slot): void
     {
-        $sql = "UPDATE {$this->scenes->dbTable} SET card_location='discard', draft=2 
+        $sql = "UPDATE {$this->scenes->dbTable} SET card_location='discard', draft=3
         WHERE card_location='todiscard' AND card_location_arg={$currentPlayerId}";
         $this->game->DbQuery($sql);
 

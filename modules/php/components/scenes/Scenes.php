@@ -230,7 +230,10 @@ class Scenes extends Cards
 
     public function revealDiscardedBoth(int $playerId): void
     {
-        $cards = $this->deck->getCardsInLocation("discard", $playerId);
+        $sql = "SELECT {$this->cardFields} FROM {$this->dbTable} 
+        WHERE draft=3 AND card_location='discard' AND card_location_arg={$playerId}";
+        $cards = $this->game->getCollectionFromDB($sql);
+
         if (count($cards) !== 2) {
             return;
         }

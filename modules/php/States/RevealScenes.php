@@ -42,7 +42,7 @@ class RevealScenes extends GameState
             $this->scenes->revealDiscardedBoth($playerId);
 
             $sql = "SELECT {$this->scenes->cardFields} FROM {$this->scenes->dbTable} 
-            WHERE draft>0 AND card_location_arg={$playerId} ORDER BY draft";
+            WHERE (draft=1 OR draft=2) AND card_location_arg={$playerId} ORDER BY draft";
             $cards = $this->game->getCollectionFromDB($sql);
 
             foreach ($cards as $cardId => $card) {
