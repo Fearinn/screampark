@@ -365,6 +365,9 @@ p {
   left: 13%;
   bottom: 11%;
 }
+.scp_sceneDeck:empty {
+  visibility: hidden;
+}
 
 .scp_scenes {
   align-items: start !important;
@@ -485,6 +488,9 @@ p {
   position: absolute !important;
   right: 13%;
   bottom: 11%;
+}
+.scp_genreDeck:empty {
+  visibility: hidden;
 }
 
 .scp_scene.scp_logTooltip {

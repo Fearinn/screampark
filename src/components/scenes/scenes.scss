@@ -7,6 +7,10 @@
   position: absolute !important;
   left: 13%;
   bottom: 11%;
+
+  &:empty {
+    visibility: hidden;
+  }
 }
 
 .scp_scenes {
@@ -71,6 +75,10 @@
   position: absolute !important;
   right: 13%;
   bottom: 11%;
+
+  &:empty {
+    visibility: hidden;
+  }
 }
 
 .scp_scene {
