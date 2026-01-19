@@ -210,9 +210,13 @@
   flex-grow: 1;
 }
 .scp_zoneTitles .scp_nextPlayer {
+  font-size: 20px;
   text-overflow: ellipsis;
-  max-width: 33%;
   white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  max-width: 33%;
 }
 .scp_zoneTitles .scp_nextPlayer:hover {
   text-decoration: none;

@@ -63,9 +63,13 @@
   }
 
   .scp_nextPlayer {
+    font-size: 20px;
     text-overflow: ellipsis;
-    max-width: 33%;
     white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    max-width: 33%;
 
     &:hover {
       text-decoration: none;
