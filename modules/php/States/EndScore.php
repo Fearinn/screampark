@@ -74,7 +74,6 @@ class EndScore extends \Bga\GameFramework\States\GameState
                         ],
                     );
 
-                    $this->tableStats->set("statTheme{$themeId}", 0);
                     $this->playerScore->set($playerId, 0);
                 }
 
@@ -89,22 +88,21 @@ class EndScore extends \Bga\GameFramework\States\GameState
 
             if ($this->playerScore->getMax() === $this->playerScore->get($playerId)) {
                 $tiedPlayers[$playerId] = $themeId;
+            }
+        }
+
+        foreach ($tiedPlayers as $playerId => $themeId) {
+            if (count($tiedPlayers) > 1) {
+                if ($this->playerScoreAux->getMax() === $this->playerScoreAux->get($playerId)) {
+                    $this->tableStats->set("statTheme{$themeId}", 100);
+                }
+
                 continue;
             }
 
-            $this->tableStats->set("statTheme{$themeId}", 0);
+            $this->tableStats->set("statTheme{$themeId}", 100);
         }
 
-        if (count($tiedPlayers) > 1) {
-            foreach ($tiedPlayers as $playerId => $themeId) {
-                if ($this->playerScoreAux->getMax() === $this->playerScoreAux->get($playerId)) {
-                    $this->tableStats->set("statTheme{$themeId}", 100);
-                    continue;
-                }
-
-                $this->tableStats->set("statTheme{$themeId}", 0);
-            }
-        }
 
         return ST_END_GAME;
     }
