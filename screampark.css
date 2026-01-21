@@ -202,7 +202,6 @@
   text-align: center;
   font-size: 28px;
   font-weight: bold;
-  text-shadow: 1px 0 1px black, 0 -1px 1px black, 0 1px 1px black, -1px 0 1px black;
   padding: 4px 8px;
   width: fit-content;
 }
@@ -314,11 +313,6 @@ p {
   justify-content: center;
   background-color: black;
   height: 101%;
-}
-
-.player-name a,
-.playername {
-  text-shadow: 1px 0 1px black, 0 -1px 1px black, 0 1px 1px black, -1px 0 1px black;
 }
 
 .scp_pref-themedBg {
