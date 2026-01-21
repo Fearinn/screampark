@@ -76,7 +76,9 @@ class Scenes extends Cards
 
     public function getPublic(?int $excludedPlayerId = null): array
     {
-        $sql = "SELECT {$this->cardFields} FROM {$this->dbTable} WHERE card_location IN ('board')";
+        $sql = "SELECT {$this->cardFields},
+            CASE WHEN shifted>0 THEN slot-shifted ELSE slot END AS slot 
+            FROM {$this->dbTable} WHERE card_location IN ('board')";
 
         if ($excludedPlayerId) {
             $sql .= " AND card_location_arg<>{$excludedPlayerId}";
@@ -101,15 +103,12 @@ class Scenes extends Cards
         WHERE card_location IN ('board', 'placed', 'placedAnywhere') AND card_location_arg={$playerId}";
 
         if ($publicOnly) {
-            $sql = str_replace(
-                "('board', 'placed', 'placedAnywhere')",
-                "('board')",
-                $sql
-            );
+            $sql = "SELECT {$this->cardFields},
+            CASE WHEN shifted=1 THEN slot-1 ELSE slot END AS slot 
+            FROM {$this->dbTable} WHERE card_location IN ('board') AND card_location_arg={$playerId}";
         }
 
         $board = $this->game->getObjectListFromDB($sql);
-
         return $board;
     }
 

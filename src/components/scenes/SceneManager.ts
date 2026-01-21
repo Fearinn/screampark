@@ -58,7 +58,7 @@ class SceneManager {
             ${this.game.format_string_recursive(_("${genreLabel}"), {
               genreLabel,
             })}
-            </div>`
+            </div>`,
           );
           return;
         }
@@ -83,11 +83,11 @@ class SceneManager {
             ${
               DOWN.staffCost > 0
                 ? `<span>${_(
-                    "You must discard a staff token to play this card"
+                    "You must discard a staff token to play this card",
                   )}</span`
                 : ""
             }
-          </div>`
+          </div>`,
         );
       },
       setupBackDiv: ({ type }, element) => {
@@ -125,13 +125,13 @@ class SceneManager {
               locations.includes(location) && Number(location_arg) === playerId
             );
           },
-        }
+        },
       );
 
       fakeHands[playerId] = new BgaCards.VoidStock(
         this.manager,
         document.getElementById(`scp_fakeHand-${playerId}`),
-        {}
+        {},
       );
     });
 
@@ -148,7 +148,7 @@ class SceneManager {
             fakeCard.type = "scene";
             return fakeCard;
           },
-        }
+        },
       ),
       genreDeck: new BgaCards.Deck(
         this.manager,
@@ -160,12 +160,12 @@ class SceneManager {
             fakeCard.type = "genre";
             return fakeCard;
           },
-        }
+        },
       ),
       discard: new BgaCards.VoidStock(
         this.manager,
         document.getElementById("scp_sceneDiscard"),
-        {}
+        {},
       ),
     };
 
@@ -187,7 +187,7 @@ class SceneManager {
               Number(location_arg) === player_id
             );
           },
-        }
+        },
       );
     }
 
