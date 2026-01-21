@@ -104,7 +104,7 @@ class Scenes extends Cards
 
         if ($publicOnly) {
             $sql = "SELECT {$this->cardFields},
-            CASE WHEN shifted=1 THEN slot-1 ELSE slot END AS slot 
+            CASE WHEN shifted>0 THEN slot-shifted ELSE slot END AS slot 
             FROM {$this->dbTable} WHERE card_location IN ('board') AND card_location_arg={$playerId}";
         }
 
@@ -315,12 +315,12 @@ class Scenes extends Cards
 
     public function shift(int $playerId, int $slot): void
     {
-        $sql = "UPDATE {$this->dbTable} SET slot=slot+1, shifted=1 WHERE card_location_arg={$playerId} 
+        $sql = "UPDATE {$this->dbTable} SET slot=slot+1, shifted=shifted+1 WHERE card_location_arg={$playerId} 
         AND card_location IN ('board', 'placed', 'placedAnywhere') AND slot>={$slot}";
         $this->game->DbQuery($sql);
 
         $sql = "SELECT {$this->cardFields} FROM {$this->dbTable} 
-        WHERE shifted=1 AND card_location_arg={$playerId} ORDER BY slot DESC, position";
+        WHERE shifted>0 AND card_location_arg={$playerId} ORDER BY slot DESC, position";
         $cards = $this->game->getObjectListFromDB($sql);
 
         $this->game->notify->player(
@@ -335,7 +335,7 @@ class Scenes extends Cards
 
     public function revealShifted(int $playerId, int $slot): void
     {
-        $sql = "UPDATE {$this->dbTable} SET shifted=0 WHERE shifted=1 AND card_location_arg={$playerId}";
+        $sql = "UPDATE {$this->dbTable} SET shifted=0 WHERE shifted>0 AND card_location_arg={$playerId}";
         $this->game->DbQuery($sql);
 
         $sql = "SELECT {$this->cardFields} FROM {$this->dbTable} 

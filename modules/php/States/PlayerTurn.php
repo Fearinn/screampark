@@ -178,20 +178,20 @@ class PlayerTurn extends GameState
         $undo = $this->game->getObjectFromDB("SELECT staff, ability, candelabra, lightbulb, audio, skull 
         FROM player WHERE player_id={$currentPlayerId}");
 
-        $draftedCards = $this->game->getCollectionFromDB("SELECT {$this->scenes->cardFields} FROM {$this->scenes->dbTable} 
+        $draftedCards = $this->game->getObjectListFromDB("SELECT {$this->scenes->cardFields} FROM {$this->scenes->dbTable} 
         WHERE draft>0 AND card_location_arg={$currentPlayerId} ORDER BY draft");
 
         $this->game->DbQuery("UPDATE {$this->scenes->dbTable} SET draft=0, card_location='hand', slot=0, position=0
         WHERE draft>0 AND card_location_arg={$currentPlayerId}");
 
-        $shiftedCards = $this->game->getCollectionFromDB("SELECT {$this->scenes->cardFields} FROM {$this->scenes->dbTable} 
-        WHERE shifted=1 AND card_location_arg={$currentPlayerId} ORDER BY slot, position DESC");
+        $shiftedCards = $this->game->getObjectListFromDB("SELECT {$this->scenes->cardFields}, shifted FROM {$this->scenes->dbTable} 
+        WHERE shifted>0 AND card_location_arg={$currentPlayerId} ORDER BY slot, position DESC");
 
-        $this->game->DbQuery("UPDATE {$this->scenes->dbTable} SET slot=slot-1, shifted=0
-        WHERE shifted=1 AND card_location_arg={$currentPlayerId}");
+        $this->game->DbQuery("UPDATE {$this->scenes->dbTable} SET slot=slot-shifted, shifted=0
+        WHERE shifted>0 AND card_location_arg={$currentPlayerId}");
 
         $shiftedCards = array_map(function ($card) {
-            $card["slot"]--;
+            $card["slot"] -= $card["shifted"];
             return $card;
         }, $shiftedCards);
 
@@ -214,8 +214,8 @@ class PlayerTurn extends GameState
                 "lightbulb" => (int) $undo["lightbulb"],
                 "audio" => (int) $undo["audio"],
                 "skull" => (int) $undo["skull"],
-                "draftedCards" => array_values($draftedCards),
-                "shiftedCards" => array_values($shiftedCards),
+                "draftedCards" => $draftedCards,
+                "shiftedCards" => $shiftedCards,
                 "completedScenes" => $this->scenes->getCompleted($currentPlayerId),
                 "vipFulfilling" => $this->scenes->getVipFulfilling($currentPlayerId),
             ],
