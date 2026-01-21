@@ -31,23 +31,23 @@ class Template {
     document.getElementById("generalactions").insertAdjacentHTML(
       "beforebegin",
       `<div id="scp_defaultActions" class="scp_defaultActions"></div>
-      <div id="scp_alertActions" class="scp_alertActions"></div>`
+      <div id="scp_alertActions" class="scp_alertActions"></div>`,
     );
 
     document
       .getElementById("gotonexttable_wrap")
       .insertAdjacentHTML(
         "afterend",
-        `<div id="scp_undoActions" class="scp_undoActions"></div>`
+        `<div id="scp_undoActions" class="scp_undoActions"></div>`,
       );
 
     this.game.addTooltipHtml(
       `scp_sceneDeck`,
-      `<div class="scp_tooltip"><span>${_("scene cards")}</span></div>`
+      `<div class="scp_tooltip"><span>${_("scene cards")}</span></div>`,
     );
     this.game.addTooltipHtml(
       `scp_genreDeck`,
-      `<div class="scp_tooltip"><span>${_("genre cards")}</span></div>`
+      `<div class="scp_tooltip"><span>${_("genre cards")}</span></div>`,
     );
 
     this.loadSounds();
@@ -105,18 +105,18 @@ class Template {
               _("3 points for players with most ${lightning_icon}"),
               {
                 lightning_icon: "",
-              }
+              },
             )}</li>
             <li>${this.game.format_string_recursive(
-              _("1 point each ${staffCost_icon} icon"),
+              _("1 point per staffing ${staffCost_icon} icon"),
               {
                 staffing_icon: "",
-              }
+              },
             )}</li>
-            <li>${_("6 points for set of scenic symbols")}</li>
+            <li>${_("6 points per set of scenic symbols")}</li>
           </ul>
         </div>
-      </div>`
+      </div>`,
     );
   }
 
@@ -145,7 +145,7 @@ class Template {
         {
           arrow: `<i class="fa6 fa6-solid fa6-arrow-right"></i>`,
           player_name: nextPlayerName,
-        }
+        },
       );
       const { color: nextPlayerColor } = players[nextPlayerId];
 
@@ -156,7 +156,7 @@ class Template {
         {
           arrow: `<i class="fa6 fa6-solid fa6-arrow-right"></i>`,
           player_name: prevPlayerName,
-        }
+        },
       );
       const { color: prevPlayerColor } = players[prevPlayerId];
 
@@ -200,7 +200,7 @@ class Template {
             <div id="scp_themes-${playerId}" class="scp_themes"></div>
             <div id="scp_scenes-${playerId}" class="scp_scenes"></div>
           </div>
-        </div>`
+        </div>`,
       );
 
       if (isSolo) {
@@ -216,10 +216,10 @@ class Template {
               {
                 player_name: playerName,
                 player_name2: nextPlayerName,
-              }
+              },
             )}
             </span>
-        </div>`
+        </div>`,
       );
 
       this.game.addTooltipHtml(
@@ -231,10 +231,10 @@ class Template {
               {
                 player_name: playerName,
                 player_name2: nextPlayerName,
-              }
+              },
             )}
             </span>
-        </div>`
+        </div>`,
       );
     });
 
@@ -262,7 +262,7 @@ class Template {
     for (let points = 0; points < 80; points++) {
       starTrack.insertAdjacentHTML(
         "beforeend",
-        `<div id="scp_stars-${points}" class="scp_stars scp_stars-${points}"></div>`
+        `<div id="scp_stars-${points}" class="scp_stars scp_stars-${points}"></div>`,
       );
     }
     const starManager = new StarManager(this.game);
@@ -324,12 +324,12 @@ class Template {
         <div id="scp_skullCounter-${playerId}" class="scp_counter scp_skullCounter">
           <i id="scp_skullCounterIcon-${playerId}" class="scp_skullCounterIcon"></i>
           <span id="scp_skullCounterCount-${playerId}" class="scp_count"></span>
-        </div>`
+        </div>`,
       );
 
       this.game.addTooltipHtml(
         `scp_staffCounter-${playerId}`,
-        `<div class="scp_tooltip"><span>${_("staff tokens")}</span></div>`
+        `<div class="scp_tooltip"><span>${_("staff tokens")}</span></div>`,
       );
       const staffCounter = new ebg.counter();
       staffCounter.create(`scp_staffCounterCount-${playerId}`, {
@@ -343,8 +343,8 @@ class Template {
       this.game.addTooltipHtml(
         `scp_abilityCounter-${playerId}`,
         `<div class="scp_tooltip"><span>${_(
-          "special effects played"
-        )}</span></div>`
+          "special effects played",
+        )}</span></div>`,
       );
       const abilityCounter = new ebg.counter();
       abilityCounter.create(`scp_abilityCounterCount-${playerId}`, {
@@ -362,8 +362,8 @@ class Template {
           `scp_${scenicName}Counter-${playerId}`,
           `<div class="scp_tooltip"><span>${this.game.format_string_recursive(
             _("${scenicLabel} symbols"),
-            { scenicLabel: _(scenicName) }
-          )}</span></div>`
+            { scenicLabel: _(scenicName) },
+          )}</span></div>`,
         );
 
         const counter = new ebg.counter();

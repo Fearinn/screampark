@@ -446,9 +446,9 @@ var Template = /** @class */ (function () {
         });
         this.game.addTooltipHtml("scp_reference", "<div class=\"scp_tooltip scp_tooltip-reference\">\n        <h3 class=\"scp_title\">".concat(_("Scoring"), "</h3>\n        <div>\n          <h4 class=\"scp_title\">").concat(_("End of Round (Day)"), "</h4>\n          <ul>\n            <li>").concat(_("Up to 2 points per scene (Theme)"), "</li>\n            <li>").concat(_("2 points per scene the VIP has entered"), "</li>\n          </ul>\n        </div>\n        <div>\n          <h4 class=\"scp_title\">").concat(_("End of Game"), "</h4>\n          <ul>\n            <li>").concat(_("Score completed scenes"), "</li>\n            <li>").concat(this.game.format_string_recursive(_("3 points for players with most ${lightning_icon}"), {
             lightning_icon: "",
-        }), "</li>\n            <li>").concat(this.game.format_string_recursive(_("1 point each ${staffCost_icon} icon"), {
+        }), "</li>\n            <li>").concat(this.game.format_string_recursive(_("1 point per staffing ${staffCost_icon} icon"), {
             staffing_icon: "",
-        }), "</li>\n            <li>").concat(_("6 points for set of scenic symbols"), "</li>\n          </ul>\n        </div>\n      </div>"));
+        }), "</li>\n            <li>").concat(_("6 points per set of scenic symbols"), "</li>\n          </ul>\n        </div>\n      </div>"));
     };
     Template.prototype.setupZones = function () {
         var _this = this;
