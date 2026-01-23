@@ -61,7 +61,7 @@ class Template {
     const { sounds } = this.game;
     sounds.load("hammer", "hammer");
     sounds.load("door", "door");
-    sounds.load("violin", "violin");
+    sounds.load("insect", "insect");
     sounds.load("steps", "steps");
   }
 
