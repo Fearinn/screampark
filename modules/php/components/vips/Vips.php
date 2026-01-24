@@ -91,6 +91,9 @@ class Vips extends Cards
             return $carry - $cost;
         }, 0);
 
+        $wilds = $this->scenes->countSlotWilds($playerId, $slot);
+        $excess += $wilds;
+
         return $excess >= 2;
     }
 
