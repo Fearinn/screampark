@@ -111,6 +111,7 @@
   grid-row: 1;
   grid-column: 1;
   opacity: 0;
+  pointer-events: none;
 }
 .bga-help_expandable-button[data-folded=false] {
   width: var(--expanded-width);
@@ -119,9 +120,11 @@
 }
 .bga-help_expandable-button[data-folded=false] .bga-help_folded-content {
   opacity: 0;
+  pointer-events: none;
 }
 .bga-help_expandable-button[data-folded=false] .bga-help_unfolded-content {
   opacity: 1;
+  pointer-events: auto;
 }
 
 /* we show help button if user has no mouse ( = no tooltips) */
@@ -162,6 +165,7 @@
   box-shadow: 0 0 16px 1px #adadad;
   aspect-ratio: 1;
   width: var(--board-width);
+  scroll-margin-top: 64px;
 }
 
 .scp_playerZones {
@@ -170,6 +174,7 @@
   align-items: center;
   gap: 24px;
   width: 100%;
+  scroll-margin-top: 64px;
 }
 @media screen and (max-width: 700px) {
   .scp_playerZones {
@@ -304,10 +309,13 @@ p {
 .bga-help_button > div {
   background-color: black;
 }
+.bga-help_button a {
+  text-decoration: none !important;
+}
 
 .scp_foldedHelp {
   font-size: 32px;
-  color: white;
+  color: white !important;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -943,7 +951,7 @@ p {
   height: var(--meeple-width);
   width: var(--meeple-width);
   padding: 0 16px;
-  transform: translateX(-50%);
+  transform: translateX(-40%);
 }
 
 .scp_meeple {

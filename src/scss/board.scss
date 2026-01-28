@@ -9,6 +9,7 @@
   box-shadow: 0 0 16px 1px #adadad;
   aspect-ratio: 1;
   width: var(--board-width);
+  scroll-margin-top: 64px;
 }
 
 .scp_playerZones {
@@ -17,6 +18,7 @@
   align-items: center;
   gap: 24px;
   width: 100%;
+  scroll-margin-top: 64px;
 
   @media screen and (max-width: 700px) {
     margin-top: 120px;

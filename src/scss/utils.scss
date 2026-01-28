@@ -78,11 +78,15 @@ p {
   & > div {
     background-color: black;
   }
+
+  a {
+    text-decoration: none !important;
+  }
 }
 
 .scp_foldedHelp {
   font-size: 32px;
-  color: white;
+  color: white !important;
   display: flex;
   align-items: center;
   justify-content: center;
