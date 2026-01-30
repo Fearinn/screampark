@@ -442,18 +442,9 @@ var Template = /** @class */ (function () {
                     foldedHtml: "<div id=\"scp_foldedReference\" class=\"scp_foldedHelp\">?</div>",
                     unfoldedHtml: "<div id=\"scp_reference\" class=\"scp_card scp_reference\"\n          style=\"background-image: url(".concat(g_gamethemeurl, "img/references/reference_").concat(colorId, ".jpg)\">\n          </div>"),
                 }),
-                new BgaHelpExpandableButton({
-                    expandedHeight: "50",
-                    expandedWidth: "50",
-                    expandedRadius: "50%",
-                    foldedHtml: "<a id=\"scp_boardAnchor\" class=\"scp_foldedHelp\" href=\"#scp_board\">\n            <i style=\"color: white\" class=\"fa6 fa6-solid fa6-arrow-down\"></i>\n          </a>",
-                    unfoldedHtml: "<a id=\"scp_zonesAnchor\" class=\"scp_foldedHelp\" href=\"#scp_playerZones\">\n            <i class=\"fa6 fa6-solid fa6-arrow-up\"></i>\n          </a>",
-                }),
             ],
         });
         this.game.addTooltipHtml("scp_foldedReference", "<div class=\"scp_tooltip\"><span>".concat(_("reference card"), "</span></div>"));
-        this.game.addTooltipHtml("scp_boardAnchor", "<div class=\"scp_tooltip\"><span>".concat(_("scroll to board"), "</span></div>"));
-        this.game.addTooltipHtml("scp_zonesAnchor", "<div class=\"scp_tooltip\"><span>".concat(_("scroll to player zones"), "</span></div>"));
         this.game.addTooltipHtml("scp_reference", "<div class=\"scp_tooltip scp_tooltip-reference\">\n        <h3 class=\"scp_title\">".concat(_("Scoring"), "</h3>\n        <div>\n          <h4 class=\"scp_title\">").concat(_("End of Round (Day)"), "</h4>\n          <ul>\n            <li>").concat(_("Up to 2 points per scene (Theme)"), "</li>\n            <li>").concat(_("2 points per scene the VIP has entered"), "</li>\n          </ul>\n        </div>\n        <div>\n          <h4 class=\"scp_title\">").concat(_("End of Game"), "</h4>\n          <ul>\n            <li>").concat(_("Score completed scenes"), "</li>\n            <li>").concat(this.game.format_string_recursive(_("3 points for players with most ${lightning_icon}"), {
             lightning_icon: "",
         }), "</li>\n            <li>").concat(this.game.format_string_recursive(_("1 point per staffing ${staffCost_icon} icon"), {
@@ -488,7 +479,9 @@ var Template = /** @class */ (function () {
                 player_name: prevPlayerName,
             });
             var prevPlayerColor = players[prevPlayerId].color;
-            var zones = document.getElementById("scp_playerZones");
+            var zones = player_id === playerId
+                ? document.getElementById("scp_myPlayerZone")
+                : document.getElementById("scp_playerZones");
             zones.insertAdjacentHTML("beforeend", "<div id=\"scp_playerZone-".concat(playerId, "\" class=\"scp_playerZone ").concat(isCurrentPlayerId ? "scp_playerZone-current" : "", "\" style=\"border-color: #").concat(playerColor, ";\">\n          <div class=\"scp_zoneTitles\">\n            ").concat(isSolo
                 ? ""
                 : "<a href=\"#scp_playerZone-".concat(prevPlayerId, "\" \n                id=\"scp_prevPlayer-").concat(playerId, "\" class=\"scp_title scp_nextPlayer scp_prevPlayer\" \n                style=\"color: #").concat(prevPlayerColor, "; background-color: #").concat(prevPlayerColor, "40;\">\n              ").concat(prevPlayer, "\n            </a>"), "\n            <h3 class=\"scp_title\" style=\"color: #").concat(playerColor, "; background-color: #").concat(playerColor, "40;\">\n              ").concat(title, "\n            </h3>\n            ").concat(isSolo

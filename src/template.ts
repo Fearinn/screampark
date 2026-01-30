@@ -83,33 +83,12 @@ class Template {
           style="background-image: url(${g_gamethemeurl}img/references/reference_${colorId}.jpg)">
           </div>`,
         }),
-        new BgaHelpExpandableButton({
-          expandedHeight: "50",
-          expandedWidth: "50",
-          expandedRadius: "50%",
-          foldedHtml: `<a id="scp_boardAnchor" class="scp_foldedHelp" href="#scp_board">
-            <i style="color: white" class="fa6 fa6-solid fa6-arrow-down"></i>
-          </a>`,
-          unfoldedHtml: `<a id="scp_zonesAnchor" class="scp_foldedHelp" href="#scp_playerZones">
-            <i class="fa6 fa6-solid fa6-arrow-up"></i>
-          </a>`,
-        }),
       ],
     });
 
     this.game.addTooltipHtml(
       "scp_foldedReference",
       `<div class="scp_tooltip"><span>${_("reference card")}</span></div>`,
-    );
-
-    this.game.addTooltipHtml(
-      "scp_boardAnchor",
-      `<div class="scp_tooltip"><span>${_("scroll to board")}</span></div>`,
-    );
-
-    this.game.addTooltipHtml(
-      "scp_zonesAnchor",
-      `<div class="scp_tooltip"><span>${_("scroll to player zones")}</span></div>`,
     );
 
     this.game.addTooltipHtml(
@@ -186,7 +165,11 @@ class Template {
       );
       const { color: prevPlayerColor } = players[prevPlayerId];
 
-      const zones = document.getElementById(`scp_playerZones`);
+      const zones =
+        player_id === playerId
+          ? document.getElementById(`scp_myPlayerZone`)
+          : document.getElementById(`scp_playerZones`);
+
       zones.insertAdjacentHTML(
         "beforeend",
         `<div id="scp_playerZone-${playerId}" class="scp_playerZone ${

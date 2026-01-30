@@ -34,8 +34,7 @@
   border: 4px solid;
   border-radius: 8px;
   overflow-x: visible;
-  width: 95%;
-  max-width: calc((var(--sceneWidth) + 17px) * 8);
+  width: calc(var(--board-width) * 1.2);
   scroll-margin-top: 64px;
 
   &-current {
