@@ -1,14 +1,18 @@
 :root {
-  --board-width: 1000px;
+  --boardWidth: 1000px;
 }
 
 .scp_main {
   display: flex;
-  align-items: start;
+  align-items: end;
   justify-content: center;
   flex-wrap: wrap;
   gap: 40px;
   width: 100%;
+
+  @media (max-width: 700px) {
+    margin-top: 120px;
+  }
 }
 
 .scp_board {
@@ -17,8 +21,8 @@
   background-size: cover;
   box-shadow: 0 0 16px 1px #adadad;
   flex-shrink: 0;
-  height: var(--board-width);
-  width: var(--board-width);
+  height: var(--boardWidth);
+  width: var(--boardWidth);
 }
 
 .scp_playerZones {
@@ -28,7 +32,6 @@
   flex-wrap: wrap;
   gap: 24px;
   flex-wrap: wrap;
-  width: 1340px;
 }
 
 .scp_playerZone {
@@ -40,8 +43,9 @@
   background-color: #000000aa;
   border: 4px solid;
   border-radius: 8px;
-  width: 100%;
   scroll-margin-top: 64px;
+  min-width: calc((var(--sceneWidth) + 16px) * 7 + 8px);
+  max-width: calc((var(--sceneWidth) + 16px) * 8 + 8px);
 
   &-current {
     order: -1;

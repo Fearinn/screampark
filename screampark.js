@@ -480,7 +480,7 @@ var Template = /** @class */ (function () {
             });
             var prevPlayerColor = players[prevPlayerId].color;
             var zones = player_id === playerId
-                ? document.getElementById("scp_myPlayerZone")
+                ? document.getElementById("scp_myZoneContainer")
                 : document.getElementById("scp_playerZones");
             zones.insertAdjacentHTML("beforeend", "<div id=\"scp_playerZone-".concat(playerId, "\" class=\"scp_playerZone ").concat(isCurrentPlayerId ? "scp_playerZone-current" : "", "\" style=\"border-color: #").concat(playerColor, ";\">\n          <div class=\"scp_zoneTitles\">\n            ").concat(isSolo
                 ? ""

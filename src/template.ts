@@ -167,7 +167,7 @@ class Template {
 
       const zones =
         player_id === playerId
-          ? document.getElementById(`scp_myPlayerZone`)
+          ? document.getElementById(`scp_myZoneContainer`)
           : document.getElementById(`scp_playerZones`);
 
       zones.insertAdjacentHTML(
