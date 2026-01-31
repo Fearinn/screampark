@@ -14,7 +14,7 @@ class Template {
         zoomControls: {
           color: "white",
         },
-        defaultZoom: window.innerWidth <= 400 ? 0.3 : 1,
+        defaultZoom: window.innerWidth <= 400 ? 0.235 : 1,
       }),
       animations: new BgaAnimations.Manager({
         animationsActive: () => {

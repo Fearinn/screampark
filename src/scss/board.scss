@@ -2,39 +2,45 @@
   --board-width: 1000px;
 }
 
+.scp_main {
+  display: flex;
+  align-items: start;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 40px;
+  width: 100%;
+}
+
 .scp_board {
   position: relative;
   background-image: url("img/board.jpg");
   background-size: cover;
   box-shadow: 0 0 16px 1px #adadad;
-  aspect-ratio: 1;
+  flex-shrink: 0;
+  height: var(--board-width);
   width: var(--board-width);
-  scroll-margin-top: 64px;
 }
 
 .scp_playerZones {
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
   gap: 24px;
-  width: 100%;
-  scroll-margin-top: 64px;
-
-  @media screen and (max-width: 700px) {
-    margin-top: 120px;
-  }
+  flex-wrap: wrap;
+  width: 1340px;
 }
 
 .scp_playerZone {
   position: relative;
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
   gap: 4px;
   background-color: #000000aa;
   border: 4px solid;
   border-radius: 8px;
-  overflow-x: visible;
-  width: calc(var(--board-width) * 1.2);
+  width: 100%;
   scroll-margin-top: 64px;
 
   &-current {
@@ -64,8 +70,10 @@
     white-space: nowrap;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 4px;
-    max-width: 33%;
+    min-width: 10%;
+    max-width: 30%;
 
     &:hover {
       text-decoration: none;
@@ -78,5 +86,4 @@
   align-items: start;
   gap: 12px;
   padding: 0 12px 12px 12px;
-  overflow-x: visible;
 }
