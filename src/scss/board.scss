@@ -27,7 +27,7 @@
 
 .scp_playerZones {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
   flex-wrap: wrap;
   gap: 24px;
@@ -44,8 +44,7 @@
   border: 4px solid;
   border-radius: 8px;
   scroll-margin-top: 64px;
-  min-width: calc((var(--sceneWidth) + 16px) * 7 + 8px);
-  max-width: calc((var(--sceneWidth) + 16px) * 8 + 8px);
+  width: min(95%, calc((var(--sceneWidth) + 16px) * 8 + 8px));
 
   &-current {
     order: -1;
