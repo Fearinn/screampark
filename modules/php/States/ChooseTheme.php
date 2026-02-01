@@ -32,13 +32,15 @@ class ChooseTheme extends GameState
 
     public function getArgs(): array
     {
-        $args = [];
+        $args = [
+            "_private" => []
+        ];
 
         $players = $this->game->loadPlayersBasicInfos();
         foreach ($players as $playerId => $player) {
             $hand = $this->themes->deck->getPlayerHand($playerId);
 
-            $args[$playerId] = [
+            $args["_private"][$playerId] = [
                 "hand" => array_keys($hand),
             ];
         }
@@ -57,7 +59,7 @@ class ChooseTheme extends GameState
         #[IntParam(min: 1, max: 10)] int $cardId,
         array $args
     ): void {
-        $hand = $args[$currentPlayerId]["hand"];
+        $hand = $args["_private"][$currentPlayerId]["hand"];
 
         if (!in_array($cardId, $hand)) {
             throw new \BgaVisibleSystemException("Error code: 1");
