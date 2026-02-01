@@ -2,7 +2,7 @@
 
 <div id="scp_gameArea" class="scp_gameArea">
   <div id="scp_main" class="scp_main">
-    <div id="scp_myZoneContainer" class="scp_myZoneContainer"></div>
+    <div id="scp_myZoneWrapper" class="scp_myZoneWrapper"></div>
     <div id="scp_board" class="scp_board">
       <div id="scp_starTrack" class="scp_starTrack"></div>
       <div id="scp_vips" class="scp_vips"></div>

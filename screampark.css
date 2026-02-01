@@ -160,9 +160,8 @@
 
 .scp_main {
   display: flex;
-  align-items: end;
-  justify-content: center;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
   gap: 40px;
   width: 100%;
 }
@@ -184,11 +183,9 @@
 
 .scp_playerZones {
   display: flex;
-  align-items: stretch;
-  justify-content: center;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
   gap: 24px;
-  flex-wrap: wrap;
 }
 
 .scp_playerZone {
@@ -201,6 +198,7 @@
   border: 4px solid;
   border-radius: 8px;
   scroll-margin-top: 64px;
+  min-width: calc((var(--sceneWidth) + 16px) * 8 + 8px);
   width: min(95%, (var(--sceneWidth) + 16px) * 8 + 8px);
 }
 .scp_playerZone-current {
