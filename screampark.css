@@ -181,14 +181,23 @@
   width: var(--boardWidth);
 }
 
+.scp_myZoneWrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
 .scp_playerZones {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 24px;
+  width: 100%;
 }
 
 .scp_playerZone {
+  --minHandWidth: 1070px;
+  --maxHandWidth: calc((var(--sceneWidth) + 16px) * 8 + 8px);
   position: relative;
   flex-shrink: 0;
   display: flex;
@@ -198,8 +207,8 @@
   border: 4px solid;
   border-radius: 8px;
   scroll-margin-top: 64px;
-  min-width: calc((var(--sceneWidth) + 16px) * 8 + 8px);
-  width: min(95%, (var(--sceneWidth) + 16px) * 8 + 8px);
+  min-width: var(--minHandWidth);
+  width: min(95%, var(--maxHandWidth));
 }
 .scp_playerZone-current {
   order: -1;
