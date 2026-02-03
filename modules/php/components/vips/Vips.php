@@ -2,6 +2,7 @@
 
 namespace Bga\Games\ScreamPark\components\vips;
 
+use Bga\GameFramework\UserException;
 use Bga\Games\ScreamPark\components\Cards;
 use Bga\Games\ScreamPark\components\scenes\Scene;
 use Bga\Games\ScreamPark\components\scenes\Scenes;
@@ -75,24 +76,43 @@ class Vips extends Cards
 
     private function HauntBrat(int $playerId, int $slot): bool
     {
+        $excess = 0;
+
         $Scene = $this->scenes->getMainInSlot($playerId, $slot);
-
-        if (!$Scene->isComplete($playerId)) {
-            return false;
-        }
-
         $genreCost = $Scene->genreCost;
         $genres = $this->scenes->sumSlotGenres($playerId, $slot);
+        $wild = $this->scenes->countSlotWilds($playerId, $slot);
+
         foreach ($genres as $genreId => $value) {
+            if (
+                $wild > 0 &&
+                ($genreCost[$genreId] - $wild) < $value
+            ) {
+                if ($genreCost[$genreId] > $wild) {
+                    $wild = 0;
+                    $genreCost[$genreId] -= $wild;
+                } else {
+                    $wild -= $genreCost[$genreId];
+                    $genreCost[$genreId] = 0;
+                }
+            }
+
+            if ($genreCost[$genreId] === 0) {
+                $excess += $value;
+
+                if ($excess >= 2) {
+                    break;
+                }
+
+                continue;
+            }
+
             $genreCost[$genreId] -= $value;
+
+            if ($genreCost[$genreId] < 0) {
+                $excess += abs($genreCost[$genreId]);
+            }
         }
-
-        $excess = array_reduce($genreCost, function ($carry, $cost) {
-            return $carry - $cost;
-        }, 0);
-
-        $wilds = $this->scenes->countSlotWilds($playerId, $slot);
-        $excess += $wilds;
 
         return $excess >= 2;
     }
