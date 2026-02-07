@@ -9,9 +9,8 @@ p {
 }
 
 .scp_defaultActions,
-.scp_alertActions,
-.scp_undoActions {
-  display: inline-flex;
+.scp_alertActions {
+  display: contents;
 
   &:empty {
     display: none;

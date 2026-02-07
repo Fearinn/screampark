@@ -261,13 +261,11 @@ p {
 }
 
 .scp_defaultActions,
-.scp_alertActions,
-.scp_undoActions {
-  display: inline-flex;
+.scp_alertActions {
+  display: contents;
 }
 .scp_defaultActions:empty,
-.scp_alertActions:empty,
-.scp_undoActions:empty {
+.scp_alertActions:empty {
   display: none;
 }
 
