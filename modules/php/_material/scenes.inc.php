@@ -150,7 +150,7 @@ $this->SCENES = [
             ],
         ],
         "DOWN" => [
-            "label" => clienttranslate("Murdurous Mascot"),
+            "label" => clienttranslate("Murderous Mascot"),
             "genres" => [
                 1 => 1,
                 2 => 1,
@@ -177,7 +177,7 @@ $this->SCENES = [
             ],
         ],
         "DOWN" => [
-            "label" => clienttranslate("Manequim"),
+            "label" => clienttranslate("Mannequim"),
             "genres" => [
                 1 => 1,
                 2 => 0,
@@ -528,7 +528,7 @@ $this->SCENES = [
             ],
         ],
         "DOWN" => [
-            "label" => clienttranslate("Etheral Singing"),
+            "label" => clienttranslate("Ethereal Singing"),
             "genres" => [
                 1 => 1,
                 2 => 0,
@@ -744,7 +744,7 @@ $this->SCENES = [
             ],
         ],
         "DOWN" => [
-            "label" => clienttranslate("Dissected Pacient"),
+            "label" => clienttranslate("Dissected Patient"),
             "genres" => [
                 1 => 0,
                 2 => 0,
@@ -2218,7 +2218,7 @@ $this->SCENES = [
     83 => [
         "id" => 83,
         "UP" => [
-            "label" => clienttranslate("Maradeur Fort"),
+            "label" => clienttranslate("Marauder Fort"),
             "points" => 6,
             "genreCost" => [
                 1 => 0,
@@ -2310,7 +2310,7 @@ $this->SCENES = [
             ],
         ],
         "DOWN" => [
-            "label" => clienttranslate("Skiterring Critters"),
+            "label" => clienttranslate("Skittering Critters"),
             "genres" => [
                 1 => 0,
                 2 => 0,
@@ -2796,7 +2796,7 @@ $this->SCENES = [
             ],
         ],
         "DOWN" => [
-            "label" => clienttranslate("Chating Cultist"),
+            "label" => clienttranslate("Chanting Cultist"),
             "genres" => [
                 1 => 0,
                 2 => 0,

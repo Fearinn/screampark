@@ -37,7 +37,7 @@
     },
     "statGenre4": {
       "id": 17,
-      "name": "Mistery symbols played",
+      "name": "Mystery symbols played",
       "type": "int"
     },
     "statGenre5": {
