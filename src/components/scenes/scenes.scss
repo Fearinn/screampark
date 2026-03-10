@@ -45,20 +45,13 @@
 
 .scp_hand {
   justify-content: start !important;
+  background-color: #ffffff40;
   padding: 12px;
-
-  &:empty {
-    display: none !important;
-  }
+  min-height: var(--sceneHeight);
 
   .bga-cards_selectable-card {
     outline: none !important;
   }
-}
-
-:where(.gamestate_PassScenes, .gamestate_DealScenes, .gamestate_RevealScenes)
-  .scp_hand {
-  min-height: var(--sceneHeight);
 }
 
 .scp_fakeHand {
