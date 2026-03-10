@@ -9,7 +9,9 @@ class Template {
     this.game.managers = {
       zoom: new ZoomManager({
         element: document.getElementById("scp_gameArea"),
-        zoomLevels: [0.3, 0.375, 0.5, 0.625, 0.75, 0.875, 1, 1.125, 1.25, 1.5],
+        zoomLevels: [
+          0.3, 0.325, 0.35, 0.375, 0.5, 0.625, 0.75, 0.875, 1, 1.125, 1.25, 1.5,
+        ],
         localStorageZoomKey: "bga-zoom_screampark",
         zoomControls: {
           color: "white",

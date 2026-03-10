@@ -196,14 +196,13 @@
 }
 
 .scp_playerZone {
-  --minHandWidth: 1070px;
+  --minHandWidth: var(--boardWidth);
   --maxHandWidth: calc((var(--sceneWidth) + 16px) * 8 + 8px);
   position: relative;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  background-color: rgba(0, 0, 0, 0.6666666667);
+  background-color: rgba(0, 0, 0, 0.5019607843);
   border: 4px solid;
   border-radius: 8px;
   scroll-margin-top: 64px;
@@ -481,17 +480,12 @@ p {
 
 .scp_hand {
   justify-content: start !important;
+  background-color: rgba(255, 255, 255, 0.2509803922);
   padding: 12px;
-}
-.scp_hand:empty {
-  display: none !important;
+  min-height: var(--sceneHeight);
 }
 .scp_hand .bga-cards_selectable-card {
   outline: none !important;
-}
-
-:where(.gamestate_PassScenes, .gamestate_DealScenes, .gamestate_RevealScenes) .scp_hand {
-  min-height: var(--sceneHeight);
 }
 
 .scp_fakeHand {
