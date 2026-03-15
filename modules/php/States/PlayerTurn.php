@@ -227,20 +227,20 @@ class PlayerTurn extends GameState
 
     public function zombie(int $playerId, array $args): void
     {
-        $placeableScenes = $args["placeableScenes"];
-        $attachableScenes = $args["attachableScenes"];
+        $placeableScenes = $args["placeable"];
+        $attachableScenes = $args["attachable"];
         $canAttachGenre = $args["canAttachGenre"];
 
         $hand = $this->scenes->deck->getPlayerHand($playerId);
 
-        if ($placeableScenes && bga_rand(0, 0)) {
+        if ($placeableScenes && bga_rand(0, 1)) {
             $cardId = $this->getRandomZombieChoice($placeableScenes);
 
             $this->actPlaceScene($playerId, $cardId);
             return;
         }
 
-        if ((!$attachableScenes && !$canAttachGenre) || bga_rand(0, 0)) {
+        if ((!$attachableScenes && !$canAttachGenre) || bga_rand(0, 1)) {
             $cardsIds = array_keys($hand);
             $cardId = $this->getRandomZombieChoice($cardsIds);
 
@@ -248,7 +248,7 @@ class PlayerTurn extends GameState
             return;
         }
 
-        if ($attachableScenes && (!$canAttachGenre || bga_rand(0, 0))) {
+        if ($attachableScenes && (!$canAttachGenre || bga_rand(0, 1))) {
             $cardId = $this->getRandomZombieChoice($attachableScenes);
 
             $this->actAttachSceneStart($playerId, $cardId);
