@@ -23,7 +23,7 @@ class PlayerTurn extends State {
         this.game.performAction(
           "actUndoTurn",
           {},
-          { checkAction: false, checkPossibleActions: true }
+          { checkAction: false, checkPossibleActions: true },
         );
       },
       {
@@ -31,14 +31,14 @@ class PlayerTurn extends State {
         type: "undo",
         disabled: nbr === 2,
         confirm: _("This will restart your turn"),
-      }
+      },
     );
 
     this.game.addTooltipHtml(
       "scp_undoButton",
       `<div class="scp_tooltip">
         <span>${_("undo your turn")}</span>
-      </div>`
+      </div>`,
     );
 
     if (!this.game.isCurrentPlayerActive()) {
@@ -53,10 +53,10 @@ class PlayerTurn extends State {
       this.game.clearButtons();
 
       this.game.statusBar.setTitle(
-        _("${you} must draft a scene card (${nbr} left)"),
+        _("${you} must draft a scene card (${nbr}/2)"),
         {
           nbr,
-        }
+        },
       );
 
       if (selection.length === 0) {
@@ -65,7 +65,7 @@ class PlayerTurn extends State {
 
       if (selection.length === 2) {
         this.game.statusBar.setTitle(
-          _("${you} may discard both scenes to pick a genre card")
+          _("${you} may discard both scenes to pick a genre card"),
         );
 
         keysToNumbers(this.GENRES).forEach((genreId) => {
@@ -85,7 +85,7 @@ class PlayerTurn extends State {
                 genreId: genreId,
               });
             },
-            { title: _(label) }
+            { title: _(label) },
           );
         });
 
@@ -108,7 +108,7 @@ class PlayerTurn extends State {
         },
         {
           disabled: !placeable.includes(cardId),
-        }
+        },
       );
 
       this.game.addButton(
@@ -118,20 +118,20 @@ class PlayerTurn extends State {
             cardId: cardId,
           });
         },
-        { disabled: !attachable.includes(cardId) }
+        { disabled: !attachable.includes(cardId) },
       );
 
       this.game.addButton(
         this.game.format_string_recursive(
           _("place to the left (-1 ${staff_icon})"),
-          {}
+          {},
         ),
         () => {
           this.game.performAction("actPlaceAnywhereStart", {
             cardId: cardId,
           });
         },
-        { disabled: !placeableAnywhere.includes(cardId) }
+        { disabled: !placeableAnywhere.includes(cardId) },
       );
 
       this.game.addButton(
@@ -141,7 +141,7 @@ class PlayerTurn extends State {
             cardId: cardId,
           });
         },
-        { type: "alert" }
+        { type: "alert" },
       );
     };
   }

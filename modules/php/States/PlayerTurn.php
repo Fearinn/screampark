@@ -31,7 +31,7 @@ class PlayerTurn extends GameState
             id: 50,
             type: StateType::PRIVATE,
             description: clienttranslate('Other player(s) must draft 2 scene cards'),
-            descriptionMyTurn: clienttranslate('${you} must draft a scene card (${nbr} left)'),
+            descriptionMyTurn: clienttranslate('${you} must draft a scene card (${nbr}/2)'),
         );
 
         $this->scenes = new Scenes($this->game);
@@ -46,7 +46,7 @@ class PlayerTurn extends GameState
         $draftCount = $this->draftCounter->get($playerId);
 
         $args = [
-            "nbr" => 2 - $draftCount,
+            "nbr" => $draftCount,
             "canAttachGenre" => $maxSlot > 0 && $draftCount === 0,
             "placeable" => $this->scenes->getPlaceable($playerId),
             "attachable" => $this->scenes->getAttachable($playerId),
