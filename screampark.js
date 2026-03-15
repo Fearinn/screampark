@@ -1289,13 +1289,22 @@ var NotifManager = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             var playerId, points, boards, board, card, cardElement;
             return __generator(this, function (_a) {
-                playerId = args.player_id, points = args.points;
-                boards = this.themeManager.stocks.boards;
-                board = boards[playerId];
-                card = board.getCards()[0];
-                cardElement = board.getCardElement(card);
-                this.displayScoring(playerId, points, cardElement);
-                return [2 /*return*/];
+                switch (_a.label) {
+                    case 0:
+                        playerId = args.player_id, points = args.points;
+                        document.getElementById("scp_playerZone-".concat(playerId)).scrollIntoView();
+                        return [4 /*yield*/, this.game.wait(100)];
+                    case 1:
+                        _a.sent();
+                        boards = this.themeManager.stocks.boards;
+                        board = boards[playerId];
+                        card = board.getCards()[0];
+                        cardElement = board.getCardElement(card);
+                        return [4 /*yield*/, this.displayScoring(playerId, points, cardElement)];
+                    case 2:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
             });
         });
     };
@@ -1309,17 +1318,15 @@ var NotifManager = /** @class */ (function () {
                         playerId = args.player_id, card = args.card, slot = args.slot;
                         tracks = this.meepleManager.stocks.tracks;
                         track = tracks[playerId];
-                        return [4 /*yield*/, track[slot].addCard({ id: playerId }, {
-                                forceToElement: document.querySelector("#scp_scenes-".concat(playerId, " [data-slot-id=\"").concat(slot, "\"]")),
-                                fromPlaceholder: "off",
-                                toPlaceholder: "off",
-                            })];
-                    case 1:
-                        _a.sent();
+                        track[slot].addCard({ id: playerId }, {
+                            forceToElement: document.querySelector("#scp_scenes-".concat(playerId, " [data-slot-id=\"").concat(slot, "\"]")),
+                            fromPlaceholder: "off",
+                            toPlaceholder: "off",
+                        });
                         boards = this.sceneManager.stocks.boards;
                         cardElement = boards[playerId].getCardElement(card);
                         return [4 /*yield*/, this.displayScoring(playerId, 2, cardElement)];
-                    case 2:
+                    case 1:
                         _a.sent();
                         return [2 /*return*/];
                 }
@@ -2206,7 +2213,7 @@ var PlayerTurn = /** @class */ (function (_super) {
         hand.setSelectionMode(canAttachGenre ? "multiple" : "single");
         hand.onSelectionChange = function (selection, lastChange) {
             _this.game.clearButtons();
-            _this.game.statusBar.setTitle(_("${you} must draft a scene card (${nbr} left)"), {
+            _this.game.statusBar.setTitle(_("${you} must draft a scene card (${nbr}/2)"), {
                 nbr: nbr,
             });
             if (selection.length === 0) {

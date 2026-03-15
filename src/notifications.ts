@@ -34,7 +34,7 @@ class NotifManager {
         (notif: Notif<{ player_id: number }>) => {
           const { player_id: playerId } = notif.args;
           return playerId === player_id;
-        }
+        },
       );
     });
 
@@ -43,7 +43,7 @@ class NotifManager {
       (notif: Notif<{ playerId: number; ignore: boolean }>) => {
         const { playerId, ignore } = notif.args;
         return playerId === player_id && ignore;
-      }
+      },
     );
   }
 
@@ -57,7 +57,7 @@ class NotifManager {
 
     await boards[playerId].removeCard(
       { id: cardId },
-      { fadeOut: true, slideTo: document.getElementById("player_boards") }
+      { fadeOut: true, slideTo: document.getElementById("player_boards") },
     );
   }
 
@@ -72,7 +72,7 @@ class NotifManager {
       { id: cardId },
       {
         fromElement: document.getElementById("player_boards"),
-      }
+      },
     );
   }
 
@@ -322,7 +322,7 @@ class NotifManager {
     keysToNumbers(players).forEach((playerId) => {
       tracks[playerId][0].addCard(
         { id: playerId },
-        { fromPlaceholder: "off", toPlaceholder: "off" }
+        { fromPlaceholder: "off", toPlaceholder: "off" },
       );
     });
 
@@ -346,12 +346,16 @@ class NotifManager {
     points: number;
   }): Promise<void> {
     const { player_id: playerId, points } = args;
+
+    document.getElementById(`scp_playerZone-${playerId}`).scrollIntoView();
+    await this.game.wait(100);
+
     const { boards } = this.themeManager.stocks;
     const board = boards[playerId];
 
     const card = board.getCards()[0];
     const cardElement = board.getCardElement(card);
-    this.displayScoring(playerId, points, cardElement);
+    await this.displayScoring(playerId, points, cardElement);
   }
 
   public async notif_scoreVip(args: {
@@ -365,15 +369,15 @@ class NotifManager {
 
     const { tracks } = this.meepleManager.stocks;
     const track = tracks[playerId];
-    await track[slot].addCard(
+    track[slot].addCard(
       { id: playerId },
       {
         forceToElement: document.querySelector(
-          `#scp_scenes-${playerId} [data-slot-id="${slot}"]`
+          `#scp_scenes-${playerId} [data-slot-id="${slot}"]`,
         ),
         fromPlaceholder: "off",
         toPlaceholder: "off",
-      }
+      },
     );
 
     const { boards } = this.sceneManager.stocks;
@@ -490,7 +494,7 @@ class NotifManager {
 
       cardElement.classList.toggle(
         "scp_scene-completed",
-        completedScenes.includes(cardId)
+        completedScenes.includes(cardId),
       );
     });
 
@@ -501,7 +505,7 @@ class NotifManager {
 
         cardElement.classList.toggle(
           "scp_scene-vipFulfilling",
-          vipFulfilling.includes(cardId)
+          vipFulfilling.includes(cardId),
         );
       });
 
@@ -536,7 +540,7 @@ class NotifManager {
   private async displayScoring(
     playerId: number,
     points: number,
-    cardElement: HTMLElement
+    cardElement: HTMLElement,
   ): Promise<void> {
     const { gamedatas, managers } = this.game;
     const { players } = gamedatas;
