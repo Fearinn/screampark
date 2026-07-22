@@ -80,21 +80,15 @@ class Vips extends Cards
 
         $Scene = $this->scenes->getMainInSlot($playerId, $slot);
         $genreCost = $Scene->genreCost;
+
         $genres = $this->scenes->sumSlotGenres($playerId, $slot);
         $wild = $this->scenes->countSlotWilds($playerId, $slot);
 
         foreach ($genres as $genreId => $value) {
-            if (
-                $wild > 0 &&
-                ($genreCost[$genreId] - $wild) < $value
-            ) {
-                if ($genreCost[$genreId] > $wild) {
-                    $wild = 0;
-                    $genreCost[$genreId] -= $wild;
-                } else {
-                    $wild -= $genreCost[$genreId];
-                    $genreCost[$genreId] = 0;
-                }
+            if ($wild > 0 && $genreCost[$genreId] > 0) {
+                $usedWild = min($wild, $genreCost[$genreId]);
+                $genreCost[$genreId] -= $usedWild;
+                $wild -= $usedWild;
             }
 
             if ($genreCost[$genreId] === 0) {
