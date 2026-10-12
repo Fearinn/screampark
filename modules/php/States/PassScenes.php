@@ -73,7 +73,7 @@ class PassScenes extends GameState
                 $playerId2 = $this->game->getPlayerAfter($playerId);
             }
 
-            $this->scenes->deck->moveAllCardsInLocation("hand", "prehand", $playerId2, $playerId);
+            $this->scenes->deck->moveAllCardsInLocation("hand", "prehand", $playerId, $playerId2);
 
             $this->notify->player(
                 $playerId,
@@ -88,7 +88,7 @@ class PassScenes extends GameState
         foreach ($players as $playerId => $player) {
             $playerId2 = $this->game->getPlayerBefore($playerId);
 
-            if ($direction === "clockwise") {
+            if ($direction !== "clockwise") {
                 $playerId2 = $this->game->getPlayerAfter($playerId);
             }
 

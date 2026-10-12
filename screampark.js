@@ -463,7 +463,7 @@ var Template = /** @class */ (function () {
             var playerName = _this.game.getFormattedPlayerName(playerId);
             var isCurrentPlayerId = player_id === playerId;
             var title = isCurrentPlayerId
-                ? _this.game.format_string_recursive(_("${player_name} (You)"), {
+                ? _this.game.format_string_recursive(_("${player_name}"), {
                     player_name: playerName,
                 })
                 : playerName;
@@ -1009,7 +1009,7 @@ var NotifManager = /** @class */ (function () {
     };
     NotifManager.prototype.notif_placeScenePrivate = function (args) {
         return __awaiter(this, void 0, void 0, function () {
-            var playerId, card, _a, boards, genreDeck;
+            var playerId, card, _a, boards, genreDeck, hand;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -1017,9 +1017,9 @@ var NotifManager = /** @class */ (function () {
                         if (card.type === "scene") {
                             this.playSound("hammer");
                         }
-                        _a = this.sceneManager.stocks, boards = _a.boards, genreDeck = _a.genreDeck;
+                        _a = this.sceneManager.stocks, boards = _a.boards, genreDeck = _a.genreDeck, hand = _a.hand;
                         return [4 /*yield*/, boards[playerId].addCard(card, {
-                                fromStock: card.type === "genre" ? genreDeck : undefined,
+                                fromStock: card.type === "genre" ? genreDeck : hand,
                                 toPlaceholder: "off",
                             })];
                     case 1:

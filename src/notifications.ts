@@ -126,10 +126,10 @@ class NotifManager {
       this.playSound("hammer");
     }
 
-    const { boards, genreDeck } = this.sceneManager.stocks;
+    const { boards, genreDeck, hand } = this.sceneManager.stocks;
 
     await boards[playerId].addCard(card, {
-      fromStock: card.type === "genre" ? genreDeck : undefined,
+      fromStock: card.type === "genre" ? genreDeck : hand,
       toPlaceholder: "off",
     });
   }

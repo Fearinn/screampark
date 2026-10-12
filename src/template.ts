@@ -140,7 +140,7 @@ class Template {
       const isCurrentPlayerId = player_id === playerId;
 
       const title = isCurrentPlayerId
-        ? this.game.format_string_recursive(_("${player_name} (You)"), {
+        ? this.game.format_string_recursive(_("${player_name}"), {
             player_name: playerName,
           })
         : playerName;

@@ -61,6 +61,12 @@ class Scene extends Scenes
         return $staffCost <= $this->staffCounterPrivate->get($playerId);
     }
 
+    private function isInHand(int $playerId): bool
+    {
+        $card = $this->getCard($this->cardId);
+        return $card["location"] === "hand" && (int) $card["location_arg"] === $playerId;
+    }
+
     public function updateStaff(int $playerId, ?bool $anywhere = false): void
     {
         if ($this->staffCost > 0) {
@@ -134,7 +140,8 @@ class Scene extends Scenes
 
     public function isPlaceable(int $playerId): bool
     {
-        return $this->points >= $this->getMinPoints($playerId)
+        return $this->isInHand($playerId)
+            && $this->points >= $this->getMinPoints($playerId)
             && $this->canPayCost($playerId);
     }
 
